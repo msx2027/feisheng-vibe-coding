@@ -135,6 +135,39 @@ function Test-PathContainsSegment {
     return $RelativePath -match ('(^|/)' + [regex]::Escape($Segment) + '(/|$)')
 }
 
+function Get-RecordBundleFilePaths {
+    param(
+        [Parameter(Mandatory = $true)]$Record
+    )
+
+    # 记录自身的那个文件始终属于该记录（单文件单位 = 这个文件；目录单位 = 必含它）。
+    $recordPath = [string]$Record.path
+    if ([string]::IsNullOrWhiteSpace($recordPath)) {
+        throw "record '$($Record.id)' 缺少 path。"
+    }
+
+    if ($Record.PSObject.Properties.Name -notcontains 'bundle' -or $null -eq $Record.bundle) {
+        return @($recordPath)
+    }
+
+    $paths = @()
+    foreach ($file in @($Record.bundle.files)) {
+        $filePath = [string]$file.path
+        if ([string]::IsNullOrWhiteSpace($filePath)) {
+            throw "record '$($Record.id)' 的 bundle 里存在空 path。"
+        }
+        $paths += $filePath
+    }
+    if ($paths.Count -eq 0) {
+        throw "record '$($Record.id)' 的 bundle 没有任何文件；拒绝空 bundle（fail-closed）。"
+    }
+    if ($paths -notcontains $recordPath) {
+        throw "record '$($Record.id)' 的 bundle 不包含记录自身的 path: $recordPath"
+    }
+
+    return @($paths)
+}
+
 function Get-ProjectionPlan {
     param(
         [Parameter(Mandatory = $true)]
@@ -194,17 +227,23 @@ function Get-ProjectionPlan {
     $blockedRecords = @($records | Where-Object { $_.status -like 'blocked-*' })
 
     $includedRecords = @($controlPlaneRecords + $acceptedPrimitiveRecords)
+    # bundle 展开（唯一实现）：
+    #   记录带 bundle → 用 bundle.files 作为该记录的投影文件清单（生成器已逐文件记 sha，仍是显式白名单）
+    #   记录无 bundle → 退化为单文件（record.path）
+    # 这样「runtime 单位是目录还是单文件」由 catalog 的 bundlePolicy 决定，而不是在门禁里硬编码。
     $includedPaths = @($entryPath)
+    $filePlan = @()
     foreach ($record in $includedRecords) {
         if ([string]::IsNullOrWhiteSpace([string]$record.id)) {
             throw 'catalog 中的 included record 缺少 id。'
         }
-
-        $recordPath = ConvertTo-SafeRelativePath -Path ([string]$record.path) -Label "record $($record.id) 的 path"
-        if ($includedPaths -contains $recordPath) {
-            throw "catalog include 路径重复: $recordPath"
+        foreach ($bundleRelativePath in @(Get-RecordBundleFilePaths -Record $record)) {
+            $bundlePath = ConvertTo-SafeRelativePath -Path $bundleRelativePath -Label "record $($record.id) 的 bundle 文件"
+            if ($includedPaths -contains $bundlePath) {
+                throw "catalog include 路径重复: $bundlePath"
+            }
+            $includedPaths += $bundlePath
         }
-        $includedPaths += $recordPath
     }
 
     foreach ($blockedRecord in $blockedRecords) {
@@ -253,6 +292,20 @@ function Get-ProjectionPlan {
     }
     $entryAliases = @($entryAliases | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) } | Select-Object -Unique)
 
+    # 禁止路径段从 catalog 的 bundlePolicy 读（真源 = SKILL-CLASSIFICATION.json 的 bundlePolicy），
+    # 不在每个 builder 里各写一份。缺失时回退到内置默认值，并始终合并入口别名。
+    $forbiddenSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors')
+    if ($catalog.PSObject.Properties.Name -contains 'bundlePolicy' -and $null -ne $catalog.bundlePolicy) {
+        if ($catalog.bundlePolicy.PSObject.Properties.Name -contains 'forbiddenSegments') {
+            $policySegments = @($catalog.bundlePolicy.forbiddenSegments | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+            if ($policySegments.Count -eq 0) {
+                throw 'catalog.bundlePolicy.forbiddenSegments 为空；拒绝在缺失策略时继续（fail-closed）。'
+            }
+            $forbiddenSegments = @($policySegments)
+        }
+    }
+    $forbiddenSegments = @($forbiddenSegments + $entryAliases | Select-Object -Unique)
+
     $filePlan = @()
     $sourceEntryPath = Join-ContainedPath -Root $Root -RelativePath $entryPath
     if (-not (Test-Path -LiteralPath $sourceEntryPath -PathType Leaf)) {
@@ -268,23 +321,26 @@ function Get-ProjectionPlan {
     }
 
     foreach ($record in $includedRecords) {
-        $recordPath = ConvertTo-SafeRelativePath -Path ([string]$record.path) -Label "record $($record.id) 的 path"
-        $sourcePath = Join-ContainedPath -Root $Root -RelativePath $recordPath
-        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
-            throw "缺少 catalog 批准的文件: $sourcePath"
-        }
-        $sourceItem = Get-Item -LiteralPath $sourcePath
-        if (($sourceItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
-            throw "catalog 批准的文件不能是 reparse point: $sourcePath"
-        }
+        $recordRevision = if ($record.PSObject.Properties.Name -contains 'sourceRevision' -and $null -ne $record.sourceRevision) { [string]$record.sourceRevision } else { $null }
+        foreach ($bundleRelativePath in @(Get-RecordBundleFilePaths -Record $record)) {
+            $recordPath = ConvertTo-SafeRelativePath -Path $bundleRelativePath -Label "record $($record.id) 的文件"
+            $sourcePath = Join-ContainedPath -Root $Root -RelativePath $recordPath
+            if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+                throw "缺少 catalog 批准的文件: $sourcePath"
+            }
+            $sourceItem = Get-Item -LiteralPath $sourcePath
+            if (($sourceItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "catalog 批准的文件不能是 reparse point: $sourcePath"
+            }
 
-        $filePlan += [pscustomobject]@{
-            id = [string]$record.id
-            kind = [string]$record.status
-            source = [string]$record.source
-            sourceRevision = if ($record.PSObject.Properties.Name -contains 'sourceRevision' -and $null -ne $record.sourceRevision) { [string]$record.sourceRevision } else { $null }
-            relativePath = $recordPath
-            sourcePath = $sourcePath
+            $filePlan += [pscustomobject]@{
+                id = [string]$record.id
+                kind = [string]$record.status
+                source = [string]$record.source
+                sourceRevision = $recordRevision
+                relativePath = $recordPath
+                sourcePath = $sourcePath
+            }
         }
     }
 
@@ -304,6 +360,7 @@ function Get-ProjectionPlan {
             }
         })
         entryAliases = $entryAliases
+        forbiddenSegments = $forbiddenSegments
     }
 }
 

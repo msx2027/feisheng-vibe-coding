@@ -6,13 +6,15 @@
 ## 0. 仓库状态
 
 - 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`（Vibe 检查器接入）、
-  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁），之后仅剩本交接刷新提交，**工作树干净**。
-- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **11/11 PASS**（发布包 32 文件、0 违规）；
+  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁），以及目录忠实 runtime 单位与文档刷新，
+  **工作树干净**。
+- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **11/11 PASS**（发布包 48 文件、0 违规）；
   `pwsh`（7）与 Windows PowerShell 5.1 均为 11/11。
-- **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` / `input` 三种配置下各 clone 一次，均 11/11。
-- runtime 覆盖：**4 → 8**（Sliver control-plane + 3 Matt 原语 + 4 Vibe 检查器）。
+- **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` / `input` 三种配置下各 clone 一次，均全绿。
+- runtime 覆盖：**8 条记录 / 16 个文件**（Sliver control-plane + 3 Matt 原语 + 4 Vibe 检查器）；
+  技能目录为目录单位（带 `reference/`、`templates/`、`scripts/` 等同目录引用文件）。
 - 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要一致。
-- 存量：`evidence/` 34 份、`tasks/` 35 份、`scripts/` 18 个。
+- 存量：`evidence/` 35 份、`tasks/` 36 份、`scripts/` 18 个。
 - 脚手架 `_smoke/`（169 个文件，已 gitignore）：**总目标完成后统一清理**，勿提前删。
 
 ## 1. 本轮完成：首批 Vibe 技能物理导入 + 运行时门禁策略化
@@ -99,26 +101,59 @@
 （`Set-Content` 追加的行尾与字符串内部 `\n` 不一致）。新鲜度校验做归一化比较所以无影响；
 本轮**故意未改**生成器写入方式，避免把改动面扩到「所有生成物字节」。
 
-## 3. 【下一步第一优先】让 runtime 单位「目录忠实」
+## 3. 【本轮已完成】runtime 单位升级为「目录忠实」
 
-当前 `path` 是**单个文件**，所以被接受的技能在 bundle 里只有 `SKILL.md`（缺 `reference/`、`templates/`、
-`scripts/`，也缺 Matt 原语的 `DEEPENING.md` 等）。这让「已接入」在功能上不完整：
-`critique` 的 `reference/*.md` 与 4 个 Vibe 检查器依赖的未接入 `impeccable` 父技能都证明了这一点。
+之前 `path` 是**单个文件**，所以被接受的技能在 bundle 里只有 `SKILL.md`：
+`critique` 正文反复要求的 `reference/personas.md` 等三个文件、Matt 原语的 `DEEPENING.md` / `DESIGN-IT-TWICE.md` /
+`ADR-FORMAT.md` / `CONTEXT-FORMAT.md` / `scripts/hitl-loop.template.sh` 全部缺失。
+即「已接入」在功能上是不完整的（宿主拿到引用不存在文件的 SKILL.md）。
 
-做法（有界、可验证）：catalog 记录增加「导入根 + 文件清单」字段（由导入目录生成，仍是显式白名单），
-`runtime-projection-guard.ps1` 按该清单展开 `filePlan`，manifest 记录每个文件。
-必须同时覆盖既有 Matt 原语，否则又是一次不一致。**不要**直接把整个目录塞进 bundle（会破坏显式白名单语义）。
+现已改为目录忠实的**显式白名单**：
 
-验收建议：目录内文件全进 bundle 且 manifest 逐文件记录；new-directory clone 后门禁仍全绿。
+- 策略真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`
+  （目录范围正则、`directoryExcludedSegments`、`forbiddenSegments`）；
+- 唯一实现：`build-canonical-catalog.ps1`（生成时枚举目录、逐文件记 sha256、生成期 fail-closed），
+  产物是 `CANONICAL-CATALOG.json` 的 `bundlePolicy` + 每条记录的 `bundle`；
+- 消费者读生成物：投影门禁按 `bundle.files` 展开 `filePlan`，verify 逐文件比 sha，
+  发布包与两个 builder 的禁止段也改从 catalog 策略读。
 
-## 4. 【最后做】Hook 解锁（风险最大）
+效果：runtime include 文件数 8 → **16**；Codex 投影 13 → 20 文件；发布包 32 → 48 文件。
+三个反例实测：引用文件漂移、目录内新增未登记文件、目录内出现 `hooks/` 段 —— 均按预期拒绝。
+
+关键设计点（不要退化）：
+
+- **`agents/` 不进产物**（宿主编排/插件资产，如 `agents/openai.yaml`，未被正文引用）；
+  被排除的路径记录在 `bundle.excluded` 里，判断可审查。
+- **控制面保持单文件**：`governance/sliver-core/` 含 hooks / packaging / tests，整体目录会撞上禁止段。
+- **新增文件必须重新生成 catalog 并提交**（否则 catalog 新鲜度门禁失败）——这是有意的 fail-closed。
+
+证据：`evidence/20260910-directory-faithful-runtime-unit.md`；任务：`tasks/20260910-directory-faithful-runtime-unit.md`。
+
+## 4. 【下一步第一优先】路由绑定：让技能真的被路由到
+
+这是本仓库现在**最大的功能性缺口**，比 Hook 更值得先做：
+
+```
+路由绑定   0 条   ← Sliver 的 22 条路由不引用这 82 个技能
+```
+
+即：即使技能已经在 runtime bundle 里（8 条记录 / 16 文件），项目唯一入口的路由表里**没有任何一条指向它们**，
+所以模型看不到「什么场景该用 `critique`、什么场景该用 `audit`」。已完成的 `duplicateGroups`（11 组）
+已经给出了**每个能力簇的唯一 owner 与分工规则**，把它变成路由绑定是顺其自然的下一步。
+
+建议做法（有界）：从 `SKILL-CLASSIFICATION.json` 的 `duplicateGroups[].rule` 出发，
+为 runtime 已接入的技能在 `governance/sliver-core/references/routes-index.md` 中加路由条目，
+并加一条门禁：已接入技能必须在路由表里有唯一命中（且不得引入第二入口）。
+注意路由 owner 是 `route-catalog`（排他），不得在别处平行写路由。
+
+## 5. 【最后做】Hook 解锁（风险最大）
 
 **尚未开始**。门槛：per-skill license（部分具备）+ host discovery + 事件顺序/并发验证 + 写白名单/回滚
 + **独立逻辑审查**（当前主 Agent 难以自供，子 Agent 多次 503/中断）。Hook 会写进宿主、影响每次工具调用、
 可阻断操作 → 需 owner 明确授权并在专门会话中做。注意：`vibe-original-*` 族 `runtimeEligible=false`，
 该族技能不得因 Hook 解锁而绕过许可证门禁。
 
-## 5. 82 个技能的构成与当前可用集合
+## 6. 82 个技能的构成与当前可用集合
 
 | 来源 | 源侧 SKILL.md | 我们登记 | 说明 |
 |---|---|---|---|
@@ -130,12 +165,12 @@
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 文件内容   全量       能力性文件无缺失（Vibe tools 145/145、hooks 10/10、codex-hooks 22/22）
 功能裁决   11/11 簇   已完成（evidence/20260910-overlap-arbitration.md）
-交付runtime 8/82      Sliver + 3 Matt 原语 + 4 Vibe 检查器（本批）
+交付runtime 8/82      8 条记录 / 16 个文件（Sliver + 3 Matt 原语 + 4 Vibe 检查器；技能为目录单位）
 许可证策略 8 族全显式 4 族 runtimeEligible=true、5 族 false（不可用族见第 1 节）
-路由绑定   0 条       ← Sliver 的 22 路由不引用这 82 个技能（更深层缺口，未开工）
+路由绑定   0 条       ← Sliver 的 22 路由不引用这 82 个技能（下一步第一优先，见第 4 节）
 ```
 
-## 6. 历史踩坑（照抄省时间）
+## 7. 历史踩坑（照抄省时间）
 
 1. **heredoc 会吞反斜杠**（shell 层）→ 用 `chr(92)`、`DirectorySeparatorChar`，或改用 write/edit 工具写文件。
 2. **`@()` 经 if/函数返回值会解包成标量** → 函数别返回裸集合，调用处统一 `@(...)` 包裹。
@@ -172,8 +207,13 @@
 19. **大范围 blob 改写必须附等价证明**：不要只说「只改了换行」——逐文件测「工作树字节未变 /
     索引==工作树 / 新旧 blob 归一化后相同 / 除换行外差异为 0」四个数字，写进证据。
     另外值得知道：磁盘上的工作树字节不变，所以**登记 sha 不需要重算**。
+20. **runtime 单位是目录（bundle）**：技能目录内新增/删除/修改任何文件，都必须重新生成 catalog 并提交，
+    否则 `catalog 与分类真源同步` 与 `runtime include 内容完整性` 会失败。
+    新增文件**不会**被静默忽略（生成器会纳入并导致不同步）——这是有意的 fail-closed。
+    另外：`agents/` 与 `.git` 永不进产物（`bundlePolicy.directoryExcludedSegments`），
+    目录内出现 `hooks`/`.claude`/`sources` 等禁止段时**生成器直接报错**。
 
-## 7. 入口速查
+## 8. 入口速查
 
 ```
 真源（唯一写入点）
@@ -215,7 +255,7 @@ pwsh -NoProfile -File 'scripts/build-capability-index.ps1' -RepositoryRoot 'F:\s
 git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/verify.ps1' -IncludePackage
 ```
 
-## 8. 仍未验证（不要越界声明）
+## 9. 仍未验证（不要越界声明）
 
 - 宿主 **trust**、技能**真实行为正确性**、**Hook 强制** —— 三者均 `UNVERIFIED`。
 - 发布 CI **从未在真实 GitHub runner 跑过**（工作流已接入，仅本地校验 YAML）。
@@ -223,9 +263,11 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
   `false`（Linux/macOS runner 默认）也为 11/11。仍需一次真实 CI 运行确认。
 - **fresh clone 可复现性已修复**（第 2 节）：三种 `core.autocrlf` 配置均 11/11；本机工作树 11/11。
 - 我们自己的 Codex 投影**尚未**做其自身的 discovery smoke（已实测的是 Sliver 控制面 bundle）。
+  尤其注意：bundle 刚从 13 增到 20 个文件（目录忠实），**扩大后的 bundle 没有重新做过任何宿主侧验证**。
 - 宿主证据只证明「被识别」，**不证明行为正确**；本轮也未重采。
+- **路由绑定仍为 0 条**（第 4 节）：技能在 bundle 里，但入口路由表不指向它们。
 
-## 9. 不可突破的边界
+## 10. 不可突破的边界
 
 - 不修改三个来源项目（只读）；`git fetch` 之类只写来源 `.git`，需 owner 授权。
 - **本仓库自持，不依靠任何上游**：不产出上游问题报告、不等上游确认；上游差异只作事实记录 + 周期复核。

@@ -10,16 +10,19 @@
 
 仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker` 可进入 runtime；其余一律排除。
 
-| id | 来源 | 域 | 状态 | 可写（writeAuthority） | 路径 |
-|---|---|---|---|---|---|
-| `audit` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/audit/SKILL.md` |
-| `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/codebase-design/SKILL.md` |
-| `critique` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/critique/SKILL.md` |
-| `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/diagnosing-bugs/SKILL.md` |
-| `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `skills/engineering/domain-modeling/SKILL.md` |
-| `harden` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/harden/SKILL.md` |
-| `optimize` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/optimize/SKILL.md` |
-| `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `governance/sliver-core/SKILL.md` |
+| id | 来源 | 域 | 状态 | 可写（writeAuthority） | runtime 单位 | 文件 |
+|---|---|---|---|---|---|---|
+| `audit` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
+| `critique` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 4 |
+| `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
+| `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `directory` | 3 |
+| `harden` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `optimize` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `file` | 1 |
+
+runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
+
 
 再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。
 

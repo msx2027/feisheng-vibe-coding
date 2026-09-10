@@ -93,15 +93,26 @@ $lines += '## 现在可用（进入 runtime 静态投影）'
 $lines += ''
 $lines += ('仅 `decisionPolicy.acceptedStatuses` = `' + ($acceptedStatuses -join '`, `') + '` 可进入 runtime；其余一律排除。')
 $lines += ''
-$lines += '| id | 来源 | 域 | 状态 | 可写（writeAuthority） | 路径 |'
-$lines += '|---|---|---|---|---|---|'
+$lines += '| id | 来源 | 域 | 状态 | 可写（writeAuthority） | runtime 单位 | 文件 |'
+$lines += '|---|---|---|---|---|---|---|'
 foreach ($record in $runtime) {
     $authority = @()
     if ($record.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $record.writeAuthority) {
         $authority = @($record.writeAuthority)
     }
     $authorityText = if ($authority.Count -eq 0) { '未声明' } else { (@($authority) -join '、') }
-    $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.status + ' | ' + $authorityText + ' | `' + $record.path + '` |')
+    $bundleScope = 'file'
+    $bundleCount = 1
+    if ($record.PSObject.Properties.Name -contains 'bundle' -and $null -ne $record.bundle) {
+        $bundleScope = [string]$record.bundle.scope
+        $bundleCount = @($record.bundle.files).Count
+    }
+    $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.status + ' | ' + $authorityText + ' | `' + $bundleScope + '` | ' + $bundleCount + ' |')
+}
+$lines += ''
+if ($catalog.PSObject.Properties.Name -contains 'bundlePolicy' -and $null -ne $catalog.bundlePolicy) {
+    $lines += 'runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。'
+    $lines += ''
 }
 $lines += ''
 $lines += '再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。'

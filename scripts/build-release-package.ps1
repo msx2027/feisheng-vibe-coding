@@ -216,7 +216,7 @@ $releaseManifest = [ordered]@{
         blockedSkills = @($catalog.records | Where-Object { $_.status -like 'blocked-*' } | ForEach-Object { $_.id })
         vibeRuntimeEligibleFamilies = @($licenseMap.vibePerSkill.families.PSObject.Properties | Where-Object { $_.Value.runtimeEligible } | ForEach-Object { $_.Name })
         vibeRuntimeIneligibleFamilies = @($licenseMap.vibePerSkill.families.PSObject.Properties | Where-Object { -not $_.Value.runtimeEligible } | ForEach-Object { $_.Name })
-        generatedMirrorAndHookSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors')
+        forbiddenSegments = @($catalog.bundlePolicy.forbiddenSegments)
     }
     note = 'static package assembly only; does not prove host discovery, trust, or fresh-session behavior'
 }
@@ -249,7 +249,7 @@ $result = [ordered]@{
     packageFileCount = $packageFiles.Count
     forbiddenSegmentViolations = @($packageFiles | Where-Object { $_ -like 'runtime/*' } | Where-Object {
         $candidate = $_
-        @('sources', '.agents', '.claude', '.codex', 'codex-hooks', '-hooks/') | Where-Object { Test-PathContainsSegment -RelativePath $candidate -Segment $_ }
+        @($catalog.bundlePolicy.forbiddenSegments) | Where-Object { Test-PathContainsSegment -RelativePath $candidate -Segment $_ }
     })
     note = 'static candidate package; NOT a release authorization; does not prove host installation or fresh-session smoke'
 }

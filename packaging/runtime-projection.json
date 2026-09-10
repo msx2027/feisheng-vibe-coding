@@ -3,27 +3,24 @@
   "owner": "runtime-projection",
   "status": "static-candidate; runtime-not-enabled; host behavior UNVERIFIED",
   "includeNotes": {
+    "runtimeUnit": "每条 accepted 记录的 runtime 文件清单由 provenance/CANONICAL-CATALOG.json 的 records[].bundle.files 决定（逐文件 sha256）。目录单位（scope=directory）带走整个导入目录中被 policy 许可的文件（如 reference/、templates/、scripts/ 与同级 *.md 格式文件），单文件单位（如控制面 SKILL.md）只带单个文件。策略真源：SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy。",
+    "noDuplicatedFileList": "本文件不再复制 runtime 文件清单：之前那样会在 catalog 与实际 bundle 之间制造一个会漂移的第三份清单。要看完整清单请看 CANONICAL-CATALOG.json 的 bundle、docs/CAPABILITY-INDEX.md 或投影 manifest。",
     "vibeCheckerBatch": "audit/critique/harden/optimize are physically imported to skills/checker/<id>/ and registered in provenance/VIBE-IMPORTS.json; their license policy is per-family (provenance/LICENSE-MAP.json vibePerSkill.families[].runtimeEligible).",
-    "knownLimitation": "the projection contract is one approved file per catalog record, so a record's sibling files are not projected (applies to the Vibe checkers' reference/ files and to the Matt primitives' DEEPENING.md / ADR-FORMAT.md / agents). Making the runtime unit directory-faithful is a separate bounded task."
+    "excludedByBundlePolicy": "导入目录内的 agents/（宿主编排与插件资产）不进产物：它不被技能正文引用，且与单文件时代的投影行为一致；被排除的路径记录在 catalog 的 bundle.excluded 里。"
   },
   "sourceOwners": ["route-catalog", "skill-catalog", "target-truth"],
   "hosts": {
     "codex": {
       "status": "candidate-unverified",
-      "include": [
-        "SKILL.md",
-        "governance/sliver-core/SKILL.md",
-        "skills/engineering/diagnosing-bugs/SKILL.md",
-        "skills/engineering/codebase-design/SKILL.md",
-        "skills/engineering/domain-modeling/SKILL.md",
-        "skills/checker/audit/SKILL.md",
-        "skills/checker/critique/SKILL.md",
-        "skills/checker/harden/SKILL.md",
-        "skills/checker/optimize/SKILL.md",
-        "adapters/codex/agents/openai.yaml",
-        "adapters/codex/references/studio-codex.md",
-        "adapters/codex/references/execution-liveness-host.md"
-      ],
+      "include": {
+        "projectEntry": "SKILL.md",
+        "runtimeRecords": "由 provenance/CANONICAL-CATALOG.json 中 status ∈ decisionPolicy.acceptedStatuses 的 records[].bundle.files 决定（每条记录的 runtime 单位见 catalog.bundlePolicy）。",
+        "hostFacts": [
+          "adapters/codex/agents/openai.yaml",
+          "adapters/codex/references/studio-codex.md",
+          "adapters/codex/references/execution-liveness-host.md"
+        ]
+      },
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party", "vibe-families-with-runtimeEligible-false"],
       "hostFacts": "mirrors Sliver's runtime-manifest targets.codex.overlay_files; symmetric with the claude projection which ships CLAUDE.md plus adapters/claude/runtime-adapter.md",
       "entryFileNote": "no AGENTS.md is shipped: those three files are the codex host facts. Codex reads the target project's own AGENTS.md natively (observed in the host smoke), and that constitution belongs to the target project and is materialised by Sliver's bootstrap/adoption templates - the claude projection does not ship AGENTS.md either, it ships a thin CLAUDE.md whose only content is @AGENTS.md",
@@ -33,19 +30,14 @@
     },
     "claude": {
       "status": "candidate-unverified; static-smoke-only; host-discovery-verified",
-      "include": [
-        "SKILL.md",
-        "governance/sliver-core/SKILL.md",
-        "skills/engineering/diagnosing-bugs/SKILL.md",
-        "skills/engineering/codebase-design/SKILL.md",
-        "skills/engineering/domain-modeling/SKILL.md",
-        "skills/checker/audit/SKILL.md",
-        "skills/checker/critique/SKILL.md",
-        "skills/checker/harden/SKILL.md",
-        "skills/checker/optimize/SKILL.md",
-        "CLAUDE.md",
-        "adapters/claude/runtime-adapter.md"
-      ],
+      "include": {
+        "projectEntry": "SKILL.md",
+        "runtimeRecords": "由 provenance/CANONICAL-CATALOG.json 中 status ∈ decisionPolicy.acceptedStatuses 的 records[].bundle.files 决定（与 codex 侧同一份 catalog 策略）。",
+        "hostFacts": [
+          "CLAUDE.md",
+          "adapters/claude/runtime-adapter.md"
+        ]
+      },
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party", "vibe-families-with-runtimeEligible-false"],
       "freshSessionDiscovery": "VERIFIED",
       "freshSessionDiscoveryMethod": "A/B fresh session on Claude Code 2.1.266: 169 skills loaded with the installed skill vs 168 without (delta 1); load root user=~/.claude/skills",

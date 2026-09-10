@@ -87,8 +87,8 @@ try {
 
     # 1b) runtime include 内容完整性
     #     「接受」在本仓库意味着把内容导入 sources/ 之外的一等位置；那么一等副本与登记的
-    #     sourceSha256 就不能静默漂移。这道门禁把「导入的内容 == 登记的内容」变成可验证事实，
-    #     而不是靠人工记忆。（控制面记录同样纳入：sliver-core/SKILL.md 也在 catalog 里有 sha。）
+    #     sha256 就不能静默漂移。覆盖范围是**整个 bundle**（catalog 的 bundle.files 逐文件 sha），
+    #     而不只是 SKILL.md —— 否则引用的 reference/ 等文件漂移不会被发现。
     try {
         $catalogDoc = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/CANONICAL-CATALOG.json') | ConvertFrom-Json
         $runtimeStatuses = @($catalogDoc.decisionPolicy.acceptedStatuses)
@@ -96,17 +96,36 @@ try {
         $runtimeChecked = 0
         foreach ($runtimeRecord in @($catalogDoc.records)) {
             if ($runtimeStatuses -notcontains $runtimeRecord.status) { continue }
-            $runtimeRelativePath = ([string]$runtimeRecord.path).Replace('\', '/')
-            $runtimeFullPath = Join-Path $repoRoot ($runtimeRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
-            if (-not (Test-Path -LiteralPath $runtimeFullPath -PathType Leaf)) {
-                $runtimeDrift += ($runtimeRecord.id + ' (文件缺失)')
-                continue
+
+            $runtimeFiles = @()
+            $hasBundle = ($runtimeRecord.PSObject.Properties.Name -contains 'bundle') -and ($null -ne $runtimeRecord.bundle)
+            if ($hasBundle) {
+                foreach ($bundleFile in @($runtimeRecord.bundle.files)) {
+                    $runtimeFiles += [pscustomobject]@{ path = [string]$bundleFile.path; sha256 = [string]$bundleFile.sha256 }
+                }
+                # 纵深防御：bundle 必须含记录自身的文件（手工改 catalog 时也能拦住）
+                $selfFile = @($runtimeFiles | Where-Object { $_.path -eq [string]$runtimeRecord.path })
+                if ($selfFile.Count -ne 1) {
+                    $runtimeDrift += ([string]$runtimeRecord.id + ' (bundle 不含记录自身 path)')
+                    continue
+                }
+            } else {
+                $runtimeFiles += [pscustomobject]@{ path = [string]$runtimeRecord.path; sha256 = [string]$runtimeRecord.sourceSha256 }
             }
-            $runtimeActualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeFullPath).Hash.ToLowerInvariant()
-            if ($runtimeActualHash -ne [string]$runtimeRecord.sourceSha256) {
-                $runtimeDrift += ($runtimeRecord.id + ' (sha 与登记不一致)')
+
+            foreach ($runtimeFile in $runtimeFiles) {
+                $runtimeRelativePath = ([string]$runtimeFile.path).Replace('\', '/')
+                $runtimeFullPath = Join-Path $repoRoot ($runtimeRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+                if (-not (Test-Path -LiteralPath $runtimeFullPath -PathType Leaf)) {
+                    $runtimeDrift += ($runtimeRelativePath + ' (文件缺失)')
+                    continue
+                }
+                $runtimeActualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeFullPath).Hash.ToLowerInvariant()
+                if ($runtimeActualHash -ne [string]$runtimeFile.sha256) {
+                    $runtimeDrift += ($runtimeRelativePath + ' (sha 与登记不一致)')
+                }
+                $runtimeChecked++
             }
-            $runtimeChecked++
         }
         if ($runtimeDrift.Count -gt 0) {
             Add-Result -Step 'runtime include 内容完整性' -Passed $false -Detail ($runtimeDrift -join '; ')

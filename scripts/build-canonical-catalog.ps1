@@ -119,6 +119,152 @@ function Get-RecordPath {
     return $Relative
 }
 
+# ---------------------------------------------------------------------------
+# bundle 单位策略（真源在 SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy）
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# runtime 状态（由 runtimePolicy 派生；bundle 生成需要提前知道哪些记录进投影）
+# ---------------------------------------------------------------------------
+$controlPlaneStatus = [string]$classification.runtimePolicy.controlPlaneStatus
+$acceptedStatuses = @($classification.runtimePolicy.acceptedStatuses)
+if ($acceptedStatuses -notcontains $controlPlaneStatus) {
+    throw "runtimePolicy.acceptedStatuses 必须包含 controlPlaneStatus。"
+}
+
+function Get-Sha256 {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
+}
+
+function Test-PathContainsSegment {
+    param(
+        [Parameter(Mandatory = $true)][string]$RelativePath,
+        [Parameter(Mandatory = $true)][string]$Segment
+    )
+    return $RelativePath -match ('(^|/)' + [regex]::Escape($Segment) + '(/|$)')
+}
+
+$bundlePolicySource = $classification.runtimePromotionPolicy.bundlePolicy
+if ($null -eq $bundlePolicySource) {
+    throw 'classification 缺少 runtimePromotionPolicy.bundlePolicy；无法确定 runtime 单位策略。'
+}
+$bundleExcludedSegments = @()
+foreach ($segment in @($bundlePolicySource.directoryExcludedSegments)) { $bundleExcludedSegments += [string]$segment }
+$bundleForbiddenSegments = @()
+foreach ($segment in @($bundlePolicySource.forbiddenSegments)) { $bundleForbiddenSegments += [string]$segment }
+if ($bundleExcludedSegments.Count -eq 0 -or $bundleForbiddenSegments.Count -eq 0) {
+    throw 'bundlePolicy 的 directoryExcludedSegments / forbiddenSegments 不能为空。'
+}
+
+# 投影路径的禁止段 = bundlePolicy.forbiddenSegments + project-entry 的别名
+# （入口别名不得成为第二入口，也不得出现在运行时代码路径里）
+$entryAliasSegments = @()
+foreach ($group in @($classification.duplicateGroups)) {
+    if ([string]$group.id -ne 'project-entry') { continue }
+    if ($group.PSObject.Properties.Name -contains 'aliases') {
+        foreach ($alias in @($group.aliases)) {
+            if (-not [string]::IsNullOrWhiteSpace([string]$alias)) { $entryAliasSegments += [string]$alias }
+        }
+    }
+}
+$projectionForbiddenSegments = @($bundleForbiddenSegments + $entryAliasSegments | Select-Object -Unique)
+
+# 目录忠实的导入根：path 必须形如 skills/<group>/<id>/SKILL.md
+$importedSkillDirectoryPattern = '^skills/[^/]+/(?<id>[^/]+)/SKILL\.md$'
+
+# 生成一条记录的 bundle 白名单。
+#   - 目录单位：枚举导入目录，排除 host/编排资产，逐文件记录 sha256（显式白名单，不是「目录里有什么就发什么」）。
+#   - 单文件单位：只带记录自己的那个文件。
+function Get-BundlePlan {
+    param(
+        [Parameter(Mandatory = $true)][string]$Id,
+        [Parameter(Mandatory = $true)][string]$RepoRoot,
+        [Parameter(Mandatory = $true)][string]$RecordPath,
+        [Parameter(Mandatory = $true)][string]$SourceSha256
+    )
+
+    $recordFullPath = Join-Path $RepoRoot ($RecordPath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    if (-not (Test-Path -LiteralPath $recordFullPath -PathType Leaf)) {
+        throw "catalog 记录指向的文件不存在: $RecordPath（skill '$Id'）"
+    }
+
+    $match = [regex]::Match($RecordPath, $script:importedSkillDirectoryPattern)
+    if (-not $match.Success) {
+        return [pscustomobject]@{
+            scope = 'file'
+            root = $null
+            files = @([pscustomobject]@{ path = $RecordPath; sha256 = Get-Sha256 -Path $recordFullPath })
+            excluded = @()
+        }
+    }
+
+    $directoryName = $match.Groups['id'].Value
+    if ($directoryName -ne $Id) {
+        throw "导入目录名与 canonical id 不一致: skill '$Id' 的 path 目录名为 '$directoryName'（目录名必须等于 canonical id）"
+    }
+    $rootRelative = $RecordPath.Substring(0, $RecordPath.Length - '/SKILL.md'.Length)
+    $rootFull = Join-Path $RepoRoot ($rootRelative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    if (-not (Test-Path -LiteralPath $rootFull -PathType Container)) {
+        throw "导入目录不存在: $rootRelative（skill '$Id'）"
+    }
+
+    $rootFullTrimmed = $rootFull.TrimEnd([char[]]@(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ))
+    $prefixLength = $rootFullTrimmed.Length + 1
+
+    $files = @()
+    $excluded = @()
+    foreach ($item in @(Get-ChildItem -LiteralPath $rootFull -Recurse -Force -File)) {
+        $relativeInside = $item.FullName.Substring($prefixLength).Replace('\', '/')
+        $absoluteRelative = $rootRelative + '/' + $relativeInside
+
+        $isExcluded = $false
+        foreach ($segment in $bundleExcludedSegments) {
+            if (Test-PathContainsSegment -RelativePath $relativeInside -Segment $segment) { $isExcluded = $true; break }
+        }
+        if ($isExcluded) {
+            $excluded += [pscustomobject]@{ path = $absoluteRelative; reason = '宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）' }
+            continue
+        }
+
+        # 生成期 fail-closed：白名单文件不得落在投影明令禁止的路径段里
+        foreach ($forbidden in $projectionForbiddenSegments) {
+            if (Test-PathContainsSegment -RelativePath $absoluteRelative -Segment $forbidden) {
+                throw "bundle 白名单文件落在禁止路径段 '$forbidden': $absoluteRelative（skill '$Id'）"
+            }
+        }
+
+        $files += [pscustomobject]@{ path = $absoluteRelative; sha256 = Get-Sha256 -Path $item.FullName }
+    }
+
+    if ($files.Count -eq 0) { throw "导入目录没有任何可投影文件: $rootRelative（skill '$Id'）" }
+
+    $pathToFile = @{}
+    foreach ($file in $files) { $pathToFile[[string]$file.path] = $file }
+    $sortedPaths = [string[]]@($pathToFile.Keys)
+    [Array]::Sort($sortedPaths, [System.StringComparer]::Ordinal)
+    $orderedFiles = @($sortedPaths | ForEach-Object { $pathToFile[$_] })
+
+    # 自洽校验：目录内必须包含记录本身的文件，且其 sha 与登记值一致
+    $selfEntries = @($orderedFiles | Where-Object { $_.path -eq $RecordPath })
+    if ($selfEntries.Count -ne 1) {
+        throw "导入目录里没有记录指向的文件: $RecordPath（skill '$Id'）"
+    }
+    if ([string]$selfEntries[0].sha256 -ne $SourceSha256) {
+        throw "导入副本与登记 sha 不一致: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+    }
+
+    return [pscustomobject]@{
+        scope = 'directory'
+        root = $rootRelative
+        files = $orderedFiles
+        excluded = $excluded
+    }
+}
+
 $records = @()
 $seenIds = @{}
 $usedClassificationIds = @{}
@@ -150,6 +296,14 @@ foreach ($row in @($inventory.skills)) {
 
     $path = Get-RecordPath -Id $id -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness
     $status = Get-DerivedStatus -Id $id -Domain $domain -Readiness $readiness
+
+    # bundle 白名单：只对进入 runtime 投影的记录生成（bundle 是 runtime 概念）。
+    # 目录忠实与否由 Get-BundlePlan 的路径规则决定；
+    # 不在投影集合里的记录没有 bundle 字段。
+    $bundle = $null
+    if ($acceptedStatuses -contains $status) {
+        $bundle = Get-BundlePlan -Id $id -RepoRoot $RepoRoot -RecordPath $path -SourceSha256 ([string]$row.sha256)
+    }
 
     # 结构前提门禁（fail-closed）：accepted 的 Vibe 记录必须声明 sourceDir，
     # 且必须等于上游 skills/ 下的目录名（= inventory 的 canonicalCandidate），
@@ -189,6 +343,7 @@ foreach ($row in @($inventory.skills)) {
         id = $id
         source = $source
         path = $path
+        bundle = $bundle
         sourceRevision = $revision
         invocation = [string]$row.invocation
         domain = $domain
@@ -216,11 +371,7 @@ $sortedIds = [string[]]@($recordById.Keys)
 $records = @($sortedIds | ForEach-Object { $recordById[$_] })
 
 # decisionPolicy 由 runtimePolicy 派生；runtimeExcludedStatuses 自动补集（fail-closed）
-$controlPlaneStatus = [string]$classification.runtimePolicy.controlPlaneStatus
-$acceptedStatuses = @($classification.runtimePolicy.acceptedStatuses)
-if ($acceptedStatuses -notcontains $controlPlaneStatus) {
-    throw "runtimePolicy.acceptedStatuses 必须包含 controlPlaneStatus。"
-}
+# （controlPlaneStatus / acceptedStatuses 已在记录循环前算出，bundle 生成需要它们）
 $allStatuses = @()
 foreach ($row in @($classification.statusPolicy.PSObject.Properties | Sort-Object Name)) {
     $value = [string]$row.Value
@@ -280,6 +431,14 @@ $output = [ordered]@{
     sourceInventory = 'provenance/SKILL-INVENTORY.json'
     sourceClassification = 'provenance/SKILL-CLASSIFICATION.json'
     records = $records
+    bundlePolicy = [ordered]@{
+        directoryScopePattern = $importedSkillDirectoryPattern
+        directoryExcludedSegments = @($bundleExcludedSegments)
+        directoryExcludedReason = [string]$bundlePolicySource.directoryExcludedReason
+        forbiddenSegments = @($projectionForbiddenSegments)
+        note = 'bundle 字段只出现在 acceptedStatuses 记录上：它是该记录的 runtime 文件白名单（逐文件 sha256）。
+        规则与排除理由的真源是 SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy。'
+    }
     duplicateGroups = $duplicateGroups
     decisionPolicy = [ordered]@{
         controlPlaneStatus = $controlPlaneStatus

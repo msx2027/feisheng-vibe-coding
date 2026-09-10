@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T12:10:16.0927693Z",
+  "generatedAt": "2026-09-10T12:29:34.0943619Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -11,6 +11,7 @@
       "id": "adapt",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/adapt/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -24,6 +25,7 @@
       "id": "animate",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/animate/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -37,6 +39,7 @@
       "id": "architecture-foundation",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/architecture-foundation/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -50,6 +53,7 @@
       "id": "ask-matt",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/ask-matt/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "selector",
@@ -63,6 +67,17 @@
       "id": "audit",
       "source": "vibe-coding-skills",
       "path": "skills/checker/audit/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/checker/audit",
+        "files": [
+          {
+            "path": "skills/checker/audit/SKILL.md",
+            "sha256": "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "checker",
@@ -78,6 +93,7 @@
       "id": "beginner-flow-guide",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/beginner-flow-guide/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "unreviewed",
@@ -91,6 +107,7 @@
       "id": "bolder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/bolder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -104,6 +121,7 @@
       "id": "brand",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/brand/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -117,6 +135,7 @@
       "id": "bug-fixer",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/bug-fixer/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -130,6 +149,7 @@
       "id": "clarify",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/clarify/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "unreviewed",
@@ -143,6 +163,7 @@
       "id": "claude-handoff",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/claude-handoff/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -156,6 +177,7 @@
       "id": "code-review",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "checker",
@@ -169,6 +191,30 @@
       "id": "codebase-design",
       "source": "mattpocock-skills",
       "path": "skills/engineering/codebase-design/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/codebase-design",
+        "files": [
+          {
+            "path": "skills/engineering/codebase-design/DEEPENING.md",
+            "sha256": "4efd2bda207d3c41d651558a61a1faf38a97f9f8fbcb6ce4d6d1bf546a4c70c6"
+          },
+          {
+            "path": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+            "sha256": "6c923142630bb9de3113e2708604917e5ea51f725a876e9eefdb1cd75385f815"
+          },
+          {
+            "path": "skills/engineering/codebase-design/SKILL.md",
+            "sha256": "034a2108095725d36964b49c6160d7bc6c4189db8fdaacecb235bf50975db19d"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/codebase-design/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -184,6 +230,7 @@
       "id": "codebase-memory-scout",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/codebase-memory-scout/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -197,6 +244,7 @@
       "id": "colorize",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/colorize/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -210,6 +258,29 @@
       "id": "critique",
       "source": "vibe-coding-skills",
       "path": "skills/checker/critique/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/checker/critique",
+        "files": [
+          {
+            "path": "skills/checker/critique/SKILL.md",
+            "sha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91"
+          },
+          {
+            "path": "skills/checker/critique/reference/cognitive-load.md",
+            "sha256": "7653f0a2f60f6d0471581f4b84c24df5408e70f8e2b727a6cdf3872dcf42676f"
+          },
+          {
+            "path": "skills/checker/critique/reference/heuristics-scoring.md",
+            "sha256": "c047724521f6f73e2eecacf62e77498848370a8e4a0b32c900bd87ae9f1134ea"
+          },
+          {
+            "path": "skills/checker/critique/reference/personas.md",
+            "sha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "checker",
@@ -225,6 +296,7 @@
       "id": "delight",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/delight/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -238,6 +310,7 @@
       "id": "design-brief-builder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/design-brief-builder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -251,6 +324,7 @@
       "id": "design-maker",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/design-maker/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -264,6 +338,7 @@
       "id": "design-system",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/design-system/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -277,6 +352,7 @@
       "id": "dev-builder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -290,6 +366,7 @@
       "id": "dev-planner",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/dev-planner/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -303,6 +380,26 @@
       "id": "diagnosing-bugs",
       "source": "mattpocock-skills",
       "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/diagnosing-bugs",
+        "files": [
+          {
+            "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+            "sha256": "279dc45fa48f3f53f1e156f2401f2c0799a5adcb0af419ce1bdeafc901644fb4"
+          },
+          {
+            "path": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+            "sha256": "fca402e2beb6dd3e98eb23a36e39ec607646b7f4d956adf3f0074ed9cc2c0745"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -318,6 +415,7 @@
       "id": "distill",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/distill/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -331,6 +429,7 @@
       "id": "doc-sync-guardian",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/doc-sync-guardian/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -344,6 +443,30 @@
       "id": "domain-modeling",
       "source": "mattpocock-skills",
       "path": "skills/engineering/domain-modeling/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/domain-modeling",
+        "files": [
+          {
+            "path": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+            "sha256": "247053e1d3f96f8d22268636820f5141b713d93bd82a973a984589bb6fd1fc84"
+          },
+          {
+            "path": "skills/engineering/domain-modeling/CONTEXT-FORMAT.md",
+            "sha256": "5b2346251b6a517636e925ed185d89ff3994cdb5ef7efe09085c7cba1e175b68"
+          },
+          {
+            "path": "skills/engineering/domain-modeling/SKILL.md",
+            "sha256": "1c65adfbf5ec15ed90375e3227225df49b8f79355a4141b13c745ebb5bbb0975"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/domain-modeling/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -359,6 +482,7 @@
       "id": "evolution-engine",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/evolution-engine/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
@@ -372,6 +496,7 @@
       "id": "experience-elevator",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/experience-elevator/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
@@ -385,6 +510,7 @@
       "id": "feedback-writer",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/feedback-writer/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
@@ -398,6 +524,7 @@
       "id": "git-guardrails-claude-code",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/misc/git-guardrails-claude-code/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -411,6 +538,7 @@
       "id": "grill-me",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/grill-me/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -424,6 +552,7 @@
       "id": "grill-with-docs",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/grill-with-docs/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -437,6 +566,7 @@
       "id": "grilling",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/grilling/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -450,6 +580,7 @@
       "id": "handoff",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/handoff/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -463,6 +594,17 @@
       "id": "harden",
       "source": "vibe-coding-skills",
       "path": "skills/checker/harden/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/checker/harden",
+        "files": [
+          {
+            "path": "skills/checker/harden/SKILL.md",
+            "sha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "checker",
@@ -478,6 +620,7 @@
       "id": "hotspot-governor",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/hotspot-governor/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -491,6 +634,7 @@
       "id": "impeccable",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/impeccable/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -504,6 +648,7 @@
       "id": "implement",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/implement/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -517,6 +662,7 @@
       "id": "improve-codebase-architecture",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/improve-codebase-architecture/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -530,6 +676,7 @@
       "id": "layout",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/layout/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -543,6 +690,7 @@
       "id": "loop-me",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/loop-me/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -556,6 +704,7 @@
       "id": "migrate-to-shoehorn",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/misc/migrate-to-shoehorn/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -569,6 +718,17 @@
       "id": "optimize",
       "source": "vibe-coding-skills",
       "path": "skills/checker/optimize/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/checker/optimize",
+        "files": [
+          {
+            "path": "skills/checker/optimize/SKILL.md",
+            "sha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "checker",
@@ -584,6 +744,7 @@
       "id": "overdrive",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/overdrive/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -597,6 +758,7 @@
       "id": "polish",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/polish/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -610,6 +772,7 @@
       "id": "product-spec-builder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/product-spec-builder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -623,6 +786,7 @@
       "id": "prototype",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/prototype/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -636,6 +800,7 @@
       "id": "quieter",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/quieter/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -649,6 +814,7 @@
       "id": "release-builder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/release-builder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -662,6 +828,7 @@
       "id": "requirements-test-designer",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/requirements-test-designer/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -675,6 +842,7 @@
       "id": "research",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/research/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -688,6 +856,7 @@
       "id": "resolving-merge-conflicts",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/resolving-merge-conflicts/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -701,6 +870,7 @@
       "id": "rule-harvester",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/rule-harvester/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -714,6 +884,7 @@
       "id": "scaffold-exercises",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/misc/scaffold-exercises/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -727,6 +898,7 @@
       "id": "setup-matt-pocock-skills",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -740,6 +912,7 @@
       "id": "setup-pre-commit",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/misc/setup-pre-commit/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -753,6 +926,7 @@
       "id": "setup-ts-deep-modules",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/setup-ts-deep-modules/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -766,6 +940,7 @@
       "id": "shape",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/shape/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "unreviewed",
@@ -779,6 +954,7 @@
       "id": "skill-builder",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/skill-builder/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -792,6 +968,17 @@
       "id": "sliver-vibe-coding",
       "source": "sliver-vibe-coding",
       "path": "governance/sliver-core/SKILL.md",
+      "bundle": {
+        "scope": "file",
+        "root": null,
+        "files": [
+          {
+            "path": "governance/sliver-core/SKILL.md",
+            "sha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "control-plane",
@@ -809,6 +996,7 @@
       "id": "target-constitution-setup",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/target-constitution-setup/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -822,6 +1010,7 @@
       "id": "target-runtime-setup",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/target-runtime-setup/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -835,6 +1024,7 @@
       "id": "tdd",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/tdd/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -848,6 +1038,7 @@
       "id": "teach",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/teach/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -861,6 +1052,7 @@
       "id": "test-automation",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/test-automation/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -874,6 +1066,7 @@
       "id": "to-questionnaire",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/to-questionnaire/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -887,6 +1080,7 @@
       "id": "to-spec",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/to-spec/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -900,6 +1094,7 @@
       "id": "to-tickets",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/to-tickets/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -913,6 +1108,7 @@
       "id": "triage",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/triage/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -926,6 +1122,7 @@
       "id": "typeset",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/typeset/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -939,6 +1136,7 @@
       "id": "ui-styling",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/ui-styling/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -952,6 +1150,7 @@
       "id": "ui-system-guardian",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/ui-system-guardian/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
@@ -965,6 +1164,7 @@
       "id": "ui-ux-pro-max",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/ui-ux-pro-max/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
@@ -978,6 +1178,7 @@
       "id": "vibe-code-review",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/code-review/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "checker",
@@ -991,6 +1192,7 @@
       "id": "vibe-coding-skills",
       "source": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills/skills/vibe-coding-skills/SKILL.md",
+      "bundle": null,
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "alias",
@@ -1004,6 +1206,7 @@
       "id": "wait-what",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/wait-what/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
@@ -1017,6 +1220,7 @@
       "id": "wayfinder",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/wayfinder/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "adapter",
@@ -1030,6 +1234,7 @@
       "id": "wizard",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/engineering/wizard/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -1043,6 +1248,7 @@
       "id": "writing-beats",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/writing-beats/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -1056,6 +1262,7 @@
       "id": "writing-for-agents",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/productivity/writing-for-agents/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
@@ -1069,6 +1276,7 @@
       "id": "writing-fragments",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/writing-fragments/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -1082,6 +1290,7 @@
       "id": "writing-shape",
       "source": "mattpocock-skills",
       "path": "sources/mattpocock-skills/skills/in-progress/writing-shape/SKILL.md",
+      "bundle": null,
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "in-progress",
@@ -1092,6 +1301,26 @@
       "writeAuthority": []
     }
   ],
+  "bundlePolicy": {
+    "directoryScopePattern": "^skills/[^/]+/(?<id>[^/]+)/SKILL\\.md$",
+    "directoryExcludedSegments": [
+      "agents",
+      ".git"
+    ],
+    "directoryExcludedReason": "agents/ 是宿主编排与插件资产（interface / display_name 等元数据），不是技能运行时内容，且与既有单文件投影行为一致；.git 是版本控制内部状态，永远不算技能内容。被排除的路径会记录在 catalog 的 bundle.excluded 里以便审查。",
+    "forbiddenSegments": [
+      "sources",
+      ".agents",
+      ".claude",
+      ".codex",
+      "hooks",
+      "codex-hooks",
+      "generated-mirrors",
+      "vibe-coding-skills",
+      "ask-matt"
+    ],
+    "note": "bundle 字段只出现在 acceptedStatuses 记录上：它是该记录的 runtime 文件白名单（逐文件 sha256）。\n        规则与排除理由的真源是 SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy。"
+  },
   "duplicateGroups": [
     {
       "id": "project-entry",

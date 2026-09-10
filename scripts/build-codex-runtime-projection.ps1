@@ -78,6 +78,7 @@ function Get-CodexProjectionPlan {
         acceptedPrimitiveIds = $basePlan.acceptedPrimitiveIds
         blockedRecords = $basePlan.blockedRecords
         entryAliases = $basePlan.entryAliases
+        forbiddenSegments = $basePlan.forbiddenSegments
     }
 }
 
@@ -141,7 +142,7 @@ function Test-CodexRuntimeProjection {
         throw "projection 顶层只能包含唯一项目入口和 manifest，实际为: $($rootFiles -join ', ')"
     }
 
-    $forbiddenSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors') + $plan.entryAliases
+    $forbiddenSegments = @($plan.forbiddenSegments)
     $allRuntimePaths = @($actualFiles + $actualDirectories)
     foreach ($segment in $forbiddenSegments | Select-Object -Unique) {
         $matches = @($allRuntimePaths | Where-Object { Test-PathContainsSegment -RelativePath $_ -Segment $segment })
@@ -203,7 +204,7 @@ function Test-CodexRuntimeProjection {
         })
         exclude = [ordered]@{
             blocked = @($plan.blockedRecords)
-            generatedMirrorAndHookSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors')
+            forbiddenSegments = @($plan.forbiddenSegments)
             projectEntryAliases = @($plan.entryAliases)
         }
         fileCounts = [ordered]@{
@@ -273,22 +274,25 @@ try {
                 path = $plan.entryPath
                 unique = $true
             }
-            controlPlane = @($plan.files | Where-Object { $_.kind -eq 'control-plane' } | ForEach-Object {
+            controlPlane = @($plan.files | Where-Object { $_.kind -eq 'control-plane' } | Group-Object id | ForEach-Object {
+                $groupItems = @($_.Group)
                 [ordered]@{
-                    id = $_.id
-                    path = $_.relativePath
+                    id = [string]$_.Name
+                    status = [string]$groupItems[0].kind
+                    files = @($groupItems | ForEach-Object { $_.relativePath })
                 }
             })
-            accepted = @($plan.files | Where-Object { $_.kind -ne 'control-plane' -and $_.kind -notlike 'host-*' } | ForEach-Object {
+            accepted = @($plan.files | Where-Object { $_.kind -ne 'control-plane' -and $_.kind -notlike 'host-*' } | Group-Object id | ForEach-Object {
+                $groupItems = @($_.Group)
                 [ordered]@{
-                    id = $_.id
-                    status = $_.kind
-                    path = $_.relativePath
+                    id = [string]$_.Name
+                    status = [string]$groupItems[0].kind
+                    files = @($groupItems | ForEach-Object { $_.relativePath })
                 }
             })
             excluded = [ordered]@{
                 blocked = @($plan.blockedRecords)
-                generatedMirrorAndHookSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors')
+                forbiddenSegments = @($plan.forbiddenSegments)
                 projectEntryAliases = @($plan.entryAliases)
             }
             files = $manifestFiles
