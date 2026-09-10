@@ -1,17 +1,18 @@
-# 接手必读（2026-09-10，首批 Vibe 检查器接入后刷新）
+# 接手必读（2026-09-10，换行可复现性修复后刷新）
 
 > 本文是**最新交接**，优先级高于 `docs/HANDOFF.md` 中的所有历史轮次记录。冲突时以本文为准。
-> 上一版交接（当时第一优先是「物理导入 + 门禁策略化」）已被本轮完成。
+> 上一版交接的两个第一优先（「物理导入 + 门禁策略化」与「换行可复现性」）均已被本轮完成。
 
 ## 0. 仓库状态
 
-- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`，
-  之后仅剩本交接刷新提交，**工作树干净**。
-- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **10/10 PASS**（本轮新增 2 项内容完整性门禁；
-  发布包 32 文件、0 违规）。提交后已复跑确认（`core.autocrlf=true` 会改写换行，见踩坑 10）。
+- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`（Vibe 检查器接入）、
+  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁），之后仅剩本交接刷新提交，**工作树干净**。
+- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **11/11 PASS**（发布包 32 文件、0 违规）；
+  `pwsh`（7）与 Windows PowerShell 5.1 均为 11/11。
+- **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` / `input` 三种配置下各 clone 一次，均 11/11。
 - runtime 覆盖：**4 → 8**（Sliver control-plane + 3 Matt 原语 + 4 Vibe 检查器）。
 - 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要一致。
-- 存量：`evidence/` 33 份、`tasks/` 35 份、`scripts/` 18 个。
+- 存量：`evidence/` 34 份、`tasks/` 35 份、`scripts/` 18 个。
 - 脚手架 `_smoke/`（169 个文件，已 gitignore）：**总目标完成后统一清理**，勿提前删。
 
 ## 1. 本轮完成：首批 Vibe 技能物理导入 + 运行时门禁策略化
@@ -65,55 +66,50 @@
 
 证据：`evidence/20260910-vibe-checker-promotion.md`；任务：`tasks/20260910-vibe-checker-promotion.md`。
 
-## 2. 【下一步第一优先】换行可复现性：既有核心缺陷，很可能同时压着 CI
+## 2. 【本轮已完成】换行可复现性：修好了一个压着 CI 与核心主张的既有缺陷
 
-**这是本轮验证时附带发现的既有缺陷，与本批改动无关（HEAD `591710a` 即可复现）。**
+**本轮验证时附带发现的既有缺陷，与本批 Vibe 接入无关（修复前的 HEAD `591710a` 即可复现）。**
+现已修复并有防回归门禁。提交 `8e30d2f` + `00451d6`，证据 `evidence/20260910-line-ending-reproducibility.md`。
 
-实测（`git clone` 到新目录后跑门禁）：
+修复前实测（`git clone` 到新目录后跑门禁）：
 
 | 门禁 | 本机工作树 | fresh clone |
 |---|---|---|
 | `runtime include 内容完整性` | PASS (8) | **FAIL**（4 条 Vibe 记录 sha 与登记不一致） |
-| `导入副本与快照一致性` | PASS (7) | **PASS (7)**（刻意设计为与 eol 无关） |
+| `导入副本与快照一致性` | PASS (7) | PASS (7)（刻意设计为与 eol 无关） |
 | `来源快照完整性` | PASS | **FAIL**（vibe 快照 492 文件 content-vs-source） |
-| fresh clone 总计数 | 10/10 | **8/10** |
+| 总计数 | 10/10 | **8/10** |
 
-根因：
+根因：仓库没有 `.gitattributes`，换行完全由使用者本地 `core.autocrlf` 决定；git 索引只存
+**规范化后的 LF blob**，而三处登记 sha（`PROVENANCE-INTEGRITY` 的 `treeHash`、catalog 的
+`sourceSha256`、`VIBE-IMPORTS` 的逐文件 sha）都是在**工作树字节**上算的。而三个来源字节本就不同：
+`vibe-coding-skills` = LF、`mattpocock-skills` = CRLF、`sliver-core` = CRLF。
+所以**两个值总有一个是错的**：`autocrlf=true` 时 LF 来源的 vibe 快照失败；
+`autocrlf=false` 时 CRLF 来源的 matt / sliver 快照失败。
 
-1. 仓库**没有 `.gitattributes`**，换行完全由使用者本地 `core.autocrlf` 决定（本机 `true`）。
-2. git 索引只保存规范化后的 **LF** blob；而 `PROVENANCE-INTEGRITY.json` 的 `treeHash`、catalog 的
-   `sourceSha256`、`VIBE-IMPORTS.json` 的逐文件 sha 全都是在**工作树字节**上算的。
-3. 三个来源的工作树字节与来源项目**逐字节相等**且换行不同：
-   `vibe-coding-skills` = LF、`mattpocock-skills` = CRLF、`sliver-core` = CRLF（本轮实测 3/3 EQUAL）。
-4. fresh clone 时 LF blob 被 materialize 成 CRLF ⇒ 与 Vibe 的 LF 来源不一致 ⇒ 门禁失败。
+修法（比看上去便宜）：`.gitattributes` 给 `sources/**`、`skills/**`、`governance/sliver-core/**` 声明
+`-text`（两个方向都不转换 ⇒ 提交的 blob 就是来源字节），再用 `git add --renormalize` 以工作树原始字节
+重新登记。**因为工作树字节不变，所有已登记 sha 仍然有效，无需重算**。
 
-**为什么这是第一优先**：`.github/workflows/release-gate.yml` 在 fresh checkout 上跑 `verify.ps1`；
-Windows runner 的 git 默认 `core.autocrlf=true`，因此**CI 很可能是红的**（CI 从未真跑过，
-见第 6 节）。同时这条缺陷让「逐字节一致的来源快照」这个核心主张在别的机器上不成立。
+> 遗留教训（下次做这类大范围 blob 改写要照做）：提交前必须给出「只改换行」的逐文件等价证明。
+> 本轮对全部 1274 个文件测得：工作树字节未变 1274/1274、索引 blob == 工作树 1274/1274、
+> 新旧 blob 归一化后相同 1274/1274、blob 变化 383、**除换行外内容不同 0**。
 
-**修复方案（已探明成本很低，因为工作树字节不需要动）**：
+**注意**：`docs/CAPABILITY-INDEX.md`、`provenance/SLIVER-IMPORT.json` 等生成物仍是 **mixed 换行**
+（`Set-Content` 追加的行尾与字符串内部 `\n` 不一致）。新鲜度校验做归一化比较所以无影响；
+本轮**故意未改**生成器写入方式，避免把改动面扩到「所有生成物字节」。
 
-1. 新增 `.gitattributes`，对必须保真的树声明不转换：`sources/** -text`、`skills/** -text`、
-   `governance/sliver-core/** -text`（`-text` = 检出时原样写出 blob）。
-2. 用**当前工作树字节**重新 add 这些树（`git -c core.autocrlf=false add`；**不要**用
-   `git add --renormalize`，它会全收敛成 LF，与 Matt/Sliver 的 CRLF 来源相反）。
-3. 因为工作树字节不变，**所有已记录 sha 仍然有效**（无需重算 `PROVENANCE-INTEGRITY` / catalog /
-   `VIBE-IMPORTS`）。唯一变化是 blob 内容。
-4. 验收必须是**新目录 clone 后 `verify.ps1 -IncludePackage` = 10/10**（本机跑绿不算数）。
-
-风险：这是一次**大范围一次性 blob 规范化**（约 909 个文件），必须在**同一次提交**里完成
-`.gitattributes` + 重新 add，否则中间态门禁变红。详细边界见 `tasks/20260910-line-ending-reproducibility.md`。
-
-> 建议：这一步会改写大量已提交 blob，属于宽影响操作，**执行前请 owner 明确确认**再动手。
-
-## 3. 【下一步第二优先】让 runtime 单位「目录忠实」
+## 3. 【下一步第一优先】让 runtime 单位「目录忠实」
 
 当前 `path` 是**单个文件**，所以被接受的技能在 bundle 里只有 `SKILL.md`（缺 `reference/`、`templates/`、
-`scripts/`，也缺 Matt 原语的 `DEEPENING.md` 等）。这让「已接入」在功能上不完整。
+`scripts/`，也缺 Matt 原语的 `DEEPENING.md` 等）。这让「已接入」在功能上不完整：
+`critique` 的 `reference/*.md` 与 4 个 Vibe 检查器依赖的未接入 `impeccable` 父技能都证明了这一点。
 
 做法（有界、可验证）：catalog 记录增加「导入根 + 文件清单」字段（由导入目录生成，仍是显式白名单），
 `runtime-projection-guard.ps1` 按该清单展开 `filePlan`，manifest 记录每个文件。
 必须同时覆盖既有 Matt 原语，否则又是一次不一致。**不要**直接把整个目录塞进 bundle（会破坏显式白名单语义）。
+
+验收建议：目录内文件全进 bundle 且 manifest 逐文件记录；new-directory clone 后门禁仍全绿。
 
 ## 4. 【最后做】Hook 解锁（风险最大）
 
@@ -153,8 +149,8 @@ Windows runner 的 git 默认 `core.autocrlf=true`，因此**CI 很可能是红�
 8. **投影禁止 `sources` 段** → 提升必须先物理导入（第 1 节）。
 9. **NOTICE 门禁不再硬编码 Vibe flag**（本轮起读 `vibePerSkill.families[].runtimeEligible`）；
    新增/修改许可证族时**必须**声明该字段，缺字段即 fail-closed。
-10. **`core.autocrlf=true`**：提交会警告换行将被改写 → **每次提交后都要重跑 `verify.ps1`**；
-    更要紧的是它导致 fresh clone 字节不同（见第 2 节）。
+10. **`core.autocrlf=true`**：提交会警告换行将被改写 → **每次提交后都要重跑 `verify.ps1`**。
+    由它引起的 fresh clone 字节不一致已修（第 2 节 + 踩坑 18）；保真树的字节现在与本地配置无关。
 11. **宿主布局**：`~/.claude/skills` 与 `F:/skiils工具/_adapters/shared/skills` 是**同一目录**（junction）；
     `~/.codex/skills` 原有 157 个 junction 已清空。删 junction 只能用 `os.rmdir`。
 12. **`codex debug prompt-input` 的 JSON 里换行是转义的两字符**（反斜杠+n）→ 解析前先替换成真换行。
@@ -165,6 +161,17 @@ Windows runner 的 git 默认 `core.autocrlf=true`，因此**CI 很可能是红�
 16. **新增 `accepted` 的 Vibe 技能的正确顺序**：改 `SKILL-CLASSIFICATION.json`（含 `sourceDir`、`writeAuthority`）
     → 跑 `scripts/import-vibe-skills.ps1`（它按分类驱动导入，目标已存在则拒绝）→ 重生成 catalog/index → 跑门禁。
     顺序反了会被门禁拒绝（这正是设计意图）。
+17. **`git ls-files --eol` 的输出格式**：`i/<eol>` `w/<eol>` `attr/<attr>` 三段用**空格对齐**，
+    之后才是一个 TAB 再跟路径。只按 TAB 切会得到 2 段，**每一行都被跳过 → 门禁假通过**。
+    另外 `i/` 与 `w/` 前缀天生不同，比较前必须各自剥掉，否则会把全部文件假报成违规。
+    写解析类门禁时务必加「解析行数 == 输入行数」自检：本轮这两类 bug **都真实发生过**，且都不会报错。
+18. **保真树的换行**：`sources/**`、`skills/**`、`governance/sliver-core/**` 由 `.gitattributes` 固定为 `-text`
+    （提交字节 == 来源字节）。**改动这些树或新增快照前先看 `.gitattributes`**；
+    在自动转换生效时重新 add 会让 `保真树换行可复现性` 门禁失败（这是有意的），
+    正确做法是用工作树原始字节重新登记（`git add --renormalize`）。
+19. **大范围 blob 改写必须附等价证明**：不要只说「只改了换行」——逐文件测「工作树字节未变 /
+    索引==工作树 / 新旧 blob 归一化后相同 / 除换行外差异为 0」四个数字，写进证据。
+    另外值得知道：磁盘上的工作树字节不变，所以**登记 sha 不需要重算**。
 
 ## 7. 入口速查
 
@@ -176,10 +183,11 @@ Windows runner 的 git 默认 `core.autocrlf=true`，因此**CI 很可能是红�
   provenance/OWNER-LEDGER.json             ← owner 机器可读记录
   provenance/HOST-DISCOVERY-EVIDENCE.json  ← 逐技能宿主证据
   provenance/VIBE-IMPORTS.json             ← Vibe 物理导入派生来源台账（逐文件 sha，脚本生成）
+  .gitattributes                           ← 保真树 -text（提交字节 == 来源字节，与本地 core.autocrlf 无关）
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                       ← 单入口（10 项；含 runtime 内容完整性 + 导入一致性）
+  scripts/verify.ps1                       ← 单入口（11 项；含内容完整性、导入一致性、保真树换行）
   scripts/runtime-projection-guard.ps1     ← 共享投影门禁（唯一实现）
   scripts/validate-release-notices.ps1     ← NOTICE 门禁（逐族策略驱动）
   scripts/build-canonical-catalog.ps1      ← duplicateGroups owner/成员 + sourceDir fail-closed 校验
@@ -210,9 +218,10 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 ## 8. 仍未验证（不要越界声明）
 
 - 宿主 **trust**、技能**真实行为正确性**、**Hook 强制** —— 三者均 `UNVERIFIED`。
-- 发布 CI **从未在真实 GitHub runner 跑过**（工作流已接入，仅本地校验 YAML）；
-  且按第 2 节推断，跑起来大概率因换行缺陷失败。
-- **fresh clone 可复现性**：当前 8/10（第 2 节）；本机工作树 10/10。
+- 发布 CI **从未在真实 GitHub runner 跑过**（工作流已接入，仅本地校验 YAML）。
+  但本地已等价复现最危险的情形：fresh clone + `core.autocrlf=true`（Windows runner 默认）为 11/11，
+  `false`（Linux/macOS runner 默认）也为 11/11。仍需一次真实 CI 运行确认。
+- **fresh clone 可复现性已修复**（第 2 节）：三种 `core.autocrlf` 配置均 11/11；本机工作树 11/11。
 - 我们自己的 Codex 投影**尚未**做其自身的 discovery smoke（已实测的是 Sliver 控制面 bundle）。
 - 宿主证据只证明「被识别」，**不证明行为正确**；本轮也未重采。
 
@@ -229,3 +238,5 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 - 测试脚手架只放 `<repo>/_smoke/`；不覆盖宿主既有技能；不把 static smoke 写成真实宿主可用。
 - `duplicateGroups[].owner` 必须是 `OWNER-LEDGER.json` 中登记的 owner；新增 owner 先登记再引用。
 - 新增 accepted 的 Vibe 技能必须声明 `sourceDir` 且等于上游目录名（生成器 fail-closed 强制）。
+- 保真树（`sources/**`、`skills/**`、`governance/sliver-core/**`）必须保持 `.gitattributes` 的 `-text`；
+  **不得**为了省事把 sha 比对改成 eol 归一化 —— 那等于放弃「字节可复现」这个主张本身。
