@@ -29,6 +29,7 @@
     "requiresSourceRevision": true,
     "requiresLicenseMapping": true
   },
+  "builder": "scripts/build-codex-runtime-projection.ps1",
   "rollback": {
     "required": true,
     "condition": "any manifest, hook, plugin, provenance, or fresh-session smoke failure"

@@ -6,7 +6,7 @@ accepted
 
 ## 验收备注
 
-最小 Codex 候选投影在新临时目录生成成功，共 12 个文件；blocked 技能和旧生成清单未进入输出。真实宿主安装与 fresh-session smoke 仍为 `UNVERIFIED`。
+最小 Codex 候选投影由唯一 writer `scripts/build-codex-runtime-projection.ps1` 在新临时目录 Build/Validate 均成功；输出共 6 个文件（含 manifest），blocked 技能和旧生成清单未进入输出。真实宿主安装与 fresh-session smoke 仍为 `UNVERIFIED`。
 
 ## 唯一目标
 
