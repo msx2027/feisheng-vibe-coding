@@ -6,9 +6,11 @@
 
 ## 当前状态
 
-当前处于阶段 2 的受控迁移：三个源项目均保留只读快照，源目录不会被本仓库修改。82 个技能已全量登记；当前正式候选运行包包含 Sliver 控制面、3 个已验收 Matt 工程原语，以及 4 个已验收 Vibe 只读检查器（`audit`、`critique`、`harden`、`optimize`，impeccable 侧 Apache-2.0 族）。其余 Vibe 产品/UI、Matt 其余技能和真实宿主 Hook 仍在门禁之外。
+处于闭环后受控运行阶段（2026-09-11）：三个源项目均保留只读快照，源目录不会被本仓库修改。82 个技能已全量登记，其中 **39 条进入 runtime**（Sliver 控制面 + 5 个 Matt 工程原语 + 33 个 Vibe 能力），runtime bundle 共 **399 文件**。纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿；Vibe Hook 适配器已按契约 v2 解锁**纠错信号采集**两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集 + Digest 消化标记）。
 
-迁移前必须通过 `provenance/` 中的来源、调用类型、许可证、owner 和运行时清单门禁。
+仍保持 `UNVERIFIED` 的：宿主 trust、逐技能行为质量（用一次验一次）、Hook 的宿主 fresh-session 冒烟（无仓库内留痕物）、沉淀消费技能（三件套）的接入，以及发布 CI（尚未配置远端）。
+
+迁移前必须通过 `provenance/` 中的来源、调用类型、许可证、owner 和运行时清单门禁；决策唯一写入点是 `provenance/SKILL-CLASSIFICATION.json`，`CANONICAL-CATALOG.json` 只能再生。
 
 ## 唯一 Owner
 

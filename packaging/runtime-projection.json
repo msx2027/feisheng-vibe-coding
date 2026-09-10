@@ -125,13 +125,13 @@
   "hookAdapters": {
     "vibe": {
       "contract": "adapters/vibe-hooks/contract.json",
-      "status": "enabled-experience-sedimentation-v1 (SessionStart read-only reminder + UserPromptSubmit correction capture; governance gate events intentionally disabled, control-plane-owned)",
+      "status": "enabled-experience-sedimentation-v1 (capture scope: SessionStart read-only reminder + UserPromptSubmit correction capture + runner -Mode Digest digestion markers; the digestion/consumption skills trio is NOT yet admitted - do not claim full sedimentation closure; governance gate events intentionally disabled, control-plane-owned)",
       "include": [],
       "exclude": [
         "sources/vibe-coding-skills/codex-hooks",
         "sources/vibe-coding-skills/codex-hooks.json"
       ],
-      "freshSessionSmoke": "UNVERIFIED"
+      "freshSessionSmoke": "UNVERIFIED (no in-repo artifacts; the installer refuses to install into this repo by design, so real-session smoke artifacts live outside it - claim stays conservative per AGENTS.md)"
     }
   },
   "rollback": {

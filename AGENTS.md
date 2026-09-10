@@ -4,7 +4,8 @@
 
 - `governance/` 是项目级决策控制面。
 - `provenance/OWNER-LEDGER.json` 是 owner、投影和写入权限的机器可读记录。
-- `provenance/SKILL-INVENTORY.json` 是三份源项目的事实快照，不是运行时决策真源；统一技能决策只能写入 `provenance/CANONICAL-CATALOG.json`。
+- `provenance/SKILL-INVENTORY.json` 是三份源项目的事实快照，不是运行时决策真源。
+- 技能分类决策的唯一写入点是 `provenance/SKILL-CLASSIFICATION.json`；`provenance/CANONICAL-CATALOG.json` 是由 `scripts/build-canonical-catalog.ps1` 从分类与清单生成的统一决策投影，只能再生、不得手工编辑。
 - `provenance/SOURCE-INVENTORY.json` 是三个源项目的来源和迁移状态记录。
 - 生成镜像不得手工修改；源文件、生成器和投影必须可区分。
 

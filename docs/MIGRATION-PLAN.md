@@ -1,5 +1,9 @@
 # 迁移计划
 
+> **进度回填说明（2026-09-11）**：本文件是阶段计划的历史基线，正文的"当前/截至"措辞可能滞后。
+> 各阶段实际进度的权威对表在 `docs/HANDOFF-NEXT.md` §3.4（当前：阶段 0–3 完成，阶段 4 主体完成，
+> 阶段 5 进行中）；可用集合的权威快照在 `docs/CAPABILITY-INDEX.md`。本文件不随批次逐句更新。
+
 ## 阶段 0：冻结取证
 
 - 记录三个源项目的路径、revision、工作树状态和清单摘要。
@@ -9,7 +13,7 @@
 
 当前证据：Vibe `MANIFEST.json` 有 1,341 条记录，其中 50 条 SHA-256 不匹配；quick strict health 有 97 项失败，其中 95 项为镜像漂移，routing manifest 过期；Matt 有 4 个未提交 Skill 修改。阶段 0 的结构取证已完成，内容迁移门禁仍为阻塞。
 
-阶段 0 收口结果：Vibe 已形成 550 文件、逐文件 SHA-256 一致的正式快照；Matt 已形成绑定 HEAD `9fe7e7a3bb352851b986725bab1c7cfb17610a97` 的 132 文件快照，4 个未提交文件明确排除；82 个技能已在 `provenance/CANONICAL-CATALOG.json` 分类。截至 2026-09-10，候选运行包包含 Sliver control-plane、3 个 Matt 原语，以及首批 4 个 Vibe 只读检查器（`audit`、`critique`、`harden`、`optimize`）；当前可用集合的权威快照见 `docs/CAPABILITY-INDEX.md`。
+阶段 0 收口结果：Vibe 已形成 550 文件、逐文件 SHA-256 一致的正式快照；Matt 已形成绑定 HEAD `9fe7e7a3bb352851b986725bab1c7cfb17610a97` 的 132 文件快照，4 个未提交文件明确排除；82 个技能已在 `provenance/CANONICAL-CATALOG.json` 分类。截至 2026-09-10，候选运行包包含 Sliver control-plane、3 个 Matt 原语，以及首批 4 个 Vibe 只读检查器（`audit`、`critique`、`harden`、`optimize`）；当前可用集合的权威快照见 `docs/CAPABILITY-INDEX.md`。（历史快照：现已是 39 条 runtime / 399 文件，见 HANDOFF-NEXT。）
 
 ## 阶段 1：控制面
 

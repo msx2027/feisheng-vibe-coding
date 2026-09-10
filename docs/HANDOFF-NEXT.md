@@ -16,7 +16,7 @@
 | D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `feisheng-vibe-coding` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
-| D4 | **门禁全绿** | `verify.ps1 -IncludePackage` = 12/12，且 **fresh clone** 下 12/12（`autocrlf` true/false × pwsh/PS5.1） |
+| D4 | **门禁全绿** | `verify.ps1`（默认 12 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
@@ -29,15 +29,15 @@
 ## 2. 一分钟现状（数字快照）
 
 - 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
-- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **13/13**；fresh clone 两种 shell × 两种 `autocrlf` 均 13/13（2026-09-11 起为 13 步：新增宿主中性投影步骤）
-- 分类：**82 条记录**，其中 **39 条 runtime 已接入**（控制面 1 + mattpocock 来源 5 + vibe 来源 33：checker 4 + product 13 + ui 16）；runtime bundle 共 **399** 文件
+- 门禁：`verify.ps1` 默认 **12 步**；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步。2026-09-11 治理对齐批实测 `-IncludeHostEvidence -IncludePackage` = **14/14**；fresh clone 两种 shell × 两种 `autocrlf` 全过
+- 分类：**82 条记录**，其中 **39 条 runtime 已接入**（控制面 1 + mattpocock 来源 5 + vibe 来源 33：checker 4 + product 13 + ui 16）；runtime bundle 共 **399** 文件；**1 条已退役**（`vibe-coding-skills` 别名，2026-09-11 数据层状态补齐）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**176 条**（2026-09-11 退役 4 个重名链接后），其中我们的包 `feisheng-vibe-coding` **96 文件**（宿主中性投影，含 tdd/code-review）
+- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**176 条**（2026-09-11 退役 4 个重名链接后），其中我们的包 `feisheng-vibe-coding` **401 文件**（宿主中性投影，含控制面 + 全部 38 个技能）
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
-- Hook 状态（2026-09-11 T6 解锁）：经验沉淀两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集）已启用并通过全部安全门；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面
-- 存量：`evidence/` 43、`tasks/` 37、`scripts/` 21
+- Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
+- 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
 
 ---
 
@@ -84,9 +84,9 @@
 | 0 冻结取证 | ✅ 完成（三源快照逐字节一致，82 技能已分类） |
 | 1 控制面 | ✅ 基本完成（唯一入口、catalog、schema、投影、allowlist、revision、回滚点齐备） |
 | 2 工程原语 | ✅ 完成（tdd/code-review/codebase-design/diagnosing-bugs/domain-modeling 已接入；7 个 adapter-candidate 未接） |
-| 3 宿主适配 | ✅ 完成（中性安装、D2/D3 实测转绿、Hook 经验沉淀已启用通过安全门；trust 仍 UNVERIFIED） |
-| 4 产品/UI/第三方 | 🟡 早期（Vibe 46 条里只接 4 条） |
-| 5 灰度退役 | 🟡 旧入口已退役（本批），但新入口行为尚未验证 |
+| 3 宿主适配 | ✅ 完成（中性安装、D2/D3 实测转绿、Hook 纠错信号采集已启用 + Digest 消化标记；trust 与 Hook fresh-session 冒烟仍 UNVERIFIED） |
+| 4 产品/UI/第三方 | ✅ 主体完成（Vibe 46 条已接 33：checker 4 + product 13 + ui 16；剩 13 条按 §14 原因留待后续） |
+| 5 灰度退役 | 🟡 进行中（4 个重名链接已退役 + `vibe-coding-skills` 别名数据层已补齐 retired；**64 个源仓库链接**已由 `scripts/audit-host-legacy-links.ps1` 清点，退役口径待 owner） |
 
 ---
 
@@ -98,7 +98,7 @@
   provenance/LICENSE-MAP.json            许可证台账（9 族，逐族 runtimeEligible）
   provenance/LOCAL-PATCHES.json          本地补丁登记（未登记偏差即漂移）
   provenance/OWNER-LEDGER.json           owner 机器可读记录
-  provenance/HOST-DISCOVERY-EVIDENCE.json 逐技能宿主证据（注意：已过期，见 7.3）
+  provenance/HOST-DISCOVERY-EVIDENCE.json 逐技能宿主证据（2026-09-11 治理对齐批重采：path 精确归属，39 admitted 全部经统一包可见）
   .gitattributes                         保真树 -text + scripts/** eol=lf
 
 生成物（禁止手工编辑）
@@ -106,10 +106,12 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口，13 步）
+门禁（scripts/verify.ps1，单入口；默认 12 步，可选步另计）
   1 catalog 同步 · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
-  5 Vibe Hook 保持禁用 · 6 Codex/Claude/宿主中性投影 · 7 发布包（-IncludePackage）
+  5 Vibe Hook 适配器安全契约（采集面 + Digest）
+  6 Codex/Claude/宿主中性投影 · 5b 宿主证据门（-IncludeHostEvidence，2026-09-11 新增）
+  7 发布包（-IncludePackage）
 
 投影（runtime-projection）
   scripts/build-codex-runtime-projection.ps1    → 95 文件
@@ -165,6 +167,8 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 8 | `4fe8f43` `cb05fb1` `1155d8a` | **T1 选项 A 实施**：宿主中性投影（共享主体抽进 guard，三 writer 薄壳）+ 安装默认 Shared + 门禁 13 步 + DryRun 副作用修复 | `evidence/20260911-host-neutral-shared-projection.md` |
 | 9 | `507a07f` | **T2 触发行为实测 + T3 入口修复**：D3 链路全通、紧急检查点通过（包内文件可读可执行）；D2 卡在宿主全局路由块（owner 决定）；入口加「启动动作」第一跳 | `evidence/20260911-trigger-behavior-and-entry-fix.md` |
 | 10 | `e224c03` | **owner 确认批**：全局路由块更新（两文件）→ D2 复测转绿（纯中文首动作即调入口，全链路到体检报告）→ T4 接入 tdd/code-review（绑定 9/9）→ 4 个重名链接退役（共享根 180→176，包 96 文件） | `evidence/20260911-d2-green-t4-and-retirement.md` |
+| 11 | `6161ddc`..`7c33764` | 闭环批 + T6 解锁：27+2 能力接入（39 条/399 文件）、D2/D3 转绿留档、Hook 契约 v2 解锁 | `evidence/20260911-loop-closure-batch.md`、`evidence/20260911-t6-hook-unlock.md` |
+| 12 | 本批 | **治理对齐批**：AGENTS.md 决策写入规则修正、README/SKILL 阶段刷新、Hook 正名（采集面）+ Digest 消化状态机、宿主证据门（verify 5b）+ collector 伪影修复、retired readiness + 退役工具 + `vibe-coding-skills` 别名试点退役、遗留链接清点（64 条） | `evidence/20260911-governance-alignment.md` |
 
 ---
 
@@ -201,19 +205,20 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | Claude | 169 | 170 | **162**（=169−8+1） |
 | Codex | 203 | 212 | **204**（=203−8+9） |
 
-### 7.3 已知过期物（引用前必须重采）
+### 7.3 宿主证据（已重采，2026-09-11）
 
-`provenance/HOST-DISCOVERY-EVIDENCE.json` 的 `capturedAt` 是 `2026-09-10T11:39:40Z`，
-比 Vibe 检查器接入提交（`3e14dd3`，20:14 +0800）**早约 34 分钟**。它记录的 4 个 checker 仍写 `source-only`，
-且描述的是「控制面 1 文件时代」的 bundle。**不得**当作当前运行时集合的宿主证据。
+`provenance/HOST-DISCOVERY-EVIDENCE.json` 已由治理对齐批重采并修复采集器：
+归属判定从「目录名扫描」改为 **catalog path 精确匹配**（修复了 `vibe-code-review` 因目录名相同被记成
+Matt 版已装、以及控制面被记 not-installed 两个伪影）。当前口径：39 条 admitted 全部经统一包
+model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留链接暴露（`installedInSharedRoot`）。
+历史版本（capturedAt 2026-09-10T11:39 / 19:32）只入 git 历史，不要再引用。
 
 ---
 
 ## 8. 未验证清单（不要越界声明）
 
-- 宿主 **trust** —— `UNVERIFIED`；Hook：经验沉淀两事件已启用并通过安全门（见 T6），治理门禁事件有意禁用
-- **纯自然语言自动触发（D2）**：未达成，阻塞在宿主侧全局路由块（owner 决定，见 9.2/9.3）；
-  入口被显式引用后的完整链路已实测走通（D3）
+- 宿主 **trust** —— `UNVERIFIED`；Hook：**纠错信号采集面已启用**（SessionStart 待消化提醒 + UserPromptSubmit 采集 + `-Mode Digest` 消化标记，见 9.6/9.8），但宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`；治理门禁事件有意禁用
+- ~~纯自然语言自动触发（D2）：未达成~~ **已转绿（2026-09-11）**：owner 批准更新宿主全局路由块后，纯中文需求首动作即调用统一入口（证据见第 1 节注与 `evidence/20260911-d2-green-t4-and-retirement.md`）
 - `-p` 会话中技能**描述**是否进入模型决策上下文 —— UNVERIFIED（模型自述没有；无宿主日志可证）
 - 发布 CI **从未在真实 GitHub runner 跑过**（本地已等价复现 fresh clone 情形）
 - 宿主侧对 `assets/` 模板的实际使用 —— 未验证（`agents/openai.yaml` 只属宿主专属投影，共享根已不含）
@@ -259,19 +264,24 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 「宿主行为 smoke」阻塞由统一入口链路实测解除。共享根 4 个重名链接已退役（源仓库未动，回滚命令在证据里）。
 注意：共享根其余 ~66 个源仓库链接**未动**（阶段 5 口径待 owner 定）。
 
-### 9.5 T5 **阶段 4 批次**（需 owner 定批次口径）
+### 9.5 T5 ~~阶段 4 批次~~【已被闭环批超越 2026-09-11】
 
-Vibe 46 条中：4 条已接入；**18 条许可证已放行但未接入**（16 个 `source-only-ui` + 2 个 `source-only-unreviewed`，MIT/Apache-2.0）；
-**24 条被许可证挡住**（`vibe-original-*` / event-only / alias：私有分发包无逐技能许可证文本）。
+本节的原口径（"4 条已接入 / 18 条待接 / 24 条被许可证挡住"）已被闭环批（`8c800d7`）推翻：
+owner 对 `vibe-original-*` 族做了自用豁免后，一批接入 27 条，Vibe 现共 33 条已接入。
+剩余 13 条的留待原因见第 14 节；后续新批次以第 14 节为准，不要再按本节旧数字推进。
 
-### 9.6 T6【已完成 2026-09-11】**Hook 解锁**（经验沉淀启用；治理门禁保持禁用）
+### 9.6 T6【已完成 2026-09-11；口径已在治理对齐批精确化】**Hook 解锁**（纠错信号采集启用；治理门禁保持禁用）
 
 owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `evidence/20260911-t6-hook-unlock.md`）：
-- 启用面：SessionStart（只读经验提醒）+ UserPromptSubmit（纠错信号采集，白名单内追加）；治理门禁事件禁用（exit 3）
+- 启用面：SessionStart（只读**待消化**提醒）+ UserPromptSubmit（纠错信号采集，白名单内追加）；治理门禁事件禁用（exit 3）
 - 六项门槛全 PASS：许可证（owner 自用豁免）、快照 revision、宿主发现性（重采）、事件顺序/并发
   （含幂等过期、junction 逃逸负面用例）、写白名单（规范化先行 + reparse 祖先守卫封顶 TargetRoot）+ 回滚、
   独立子代理审查两轮（APPROVE-WITH-FINDINGS，P1 已闭合）
-- 遗留：自动沉淀三技能的技能级接入（信号采集已通，技能化处理待后续批次）
+- **口径修正（2026-09-11 治理对齐批）**：T6 的"解锁"指**采集面**。当时证据文件里"真实会话冒烟（两次）"
+  在仓库内外均无留痕物（安装器按设计拒绝装进本仓库，产物外置不可复核），按 AGENTS.md 验收规则
+  `freshSessionSmoke` 维持 `UNVERIFIED`；"经验沉淀闭环"的说法收缩为"纠错信号采集已启用"。
+- 遗留（部分已在 9.8 补上）：沉淀消费三技能（experience-elevator / evolution-engine / feedback-writer）
+  的技能级接入仍待后续批次；消化动作现可由 runner `-Mode Digest` 做状态标记（见 9.8）
 
 ### 9.7 T7【部分完成 2026-09-11】**收尾清理**
 
@@ -281,6 +291,32 @@ owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `eviden
 - ⏸️ 新接入技能 frontmatter 描述里的旧入口名（`vibe-coding-skills`）：委派不受影响；改名需动导入保真机制，暂缓
 - ⏸️ 共享根其余 ~66 个源仓库链接退役：阶段 5，需 owner 口径
 - 若 T2 推翻了形态决策，回头更新第 6 节决策日志（标注被推翻的原因）
+
+### 9.8 GA【已完成 2026-09-11】**治理对齐批**（6 子 Agent 交叉复核后的五项修复）
+
+owner 批准的五个优先级修复，全部完成并通过 `verify.ps1 -IncludeHostEvidence -IncludePackage` 14/14（见 `evidence/20260911-governance-alignment.md`）：
+
+- **F1 口径对齐**：AGENTS.md 决策唯一写入点改为 `SKILL-CLASSIFICATION.json`（catalog 明确为只能再生的投影）；
+  README/SKILL.md 阶段刷新到闭环后；verify 头注释、能力索引模板、packaging hook 段全部精确化；本文档 6 处内部矛盾清理。
+- **F2 T6 正名 + 消化状态机**：契约加 `enablementScope`/`digestion`；runner 新增 `-Mode Digest`
+  （40 位十六进制 dedupKey 严格校验后写 `<dedupKey>.digested` 标记；SessionStart 只报 `PENDING=` 未消化数）；
+  测试补 Digest/恶意 dedupKey/幂等用例。
+- **F3 纸面门变脚本门**：collector 归属判定改 catalog path 精确匹配（修复控制面 not-installed 与
+  `vibe-code-review` 重名两个伪影，新增 `visibleVia`/`sharedRootEntryKind` 字段）；
+  verify 新增 `-IncludeHostEvidence` 宿主证据门（证据新鲜度 + admitted 不得 not-installed + 统一包影子入口检测）。
+- **F4 退役状态化**：`alias|retired → retired-alias` 策略行；`scripts/retire-capability.ps1`
+  （fail-closed：缺策略行即拒；文本手术编辑 + 重生成 + 绑定校验）；试点退役 `vibe-coding-skills` 别名；
+  `scripts/audit-host-legacy-links.ps1` 清点共享根：**64 个源仓库链接**（退役口径待 owner）、83 个与本项目无关链接（不动）、28 个普通目录。
+- **F5 CI/remote 准备**：gh CLI 已认证（msx2027，repo+workflow scope）；远端仓库的创建/推送是外发动作，
+  由 owner 决定名称与可见性后执行：
+  ```powershell
+  gh repo create <owner>/<name> --private --source . --remote origin --push
+  # push 后 .github/workflows/release-gate.yml 即在每次 push/PR 自动跑 verify.ps1（注意 CI 无宿主环境，勿加 -IncludeHostEvidence）
+  ```
+
+GA 批后遗留（按优先级）：① 沉淀消费三技能的迁移批次（需许可证族决策 + statusPolicy 决策 + 绑定变更）；
+② 64 个源仓库链接的退役口径（owner）；③ 挂远端让 CI 真跑（owner 提供仓库地址）；
+④ OWNER-LEDGER 的结构性议题（"Sliver" 实体未登记、裁决 owner 无落点文件、OWNER-LEDGER 等 owner 文件不在完整性基线内）。
 
 ---
 
@@ -334,6 +370,8 @@ owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `eviden
 28. **验证要看「谁真正读那个文件」**：只比对输出目录里同名文件的哈希是不够的 —— 必须确认它落在**协议实际解析的路径**上（我因此错过一次）
 29. **安装脚本要 fail-closed**：拒绝覆盖非本仓库标记的目录；装完用 builder 的 `Validate` 复核**已安装目录**，不只看源
 30. **共享根不能承载宿主专属适配**：一个槽位文件放不了两个宿主的内容（Claude 专用版与核心中性版差 58 行，且 Codex 不覆盖该槽位）→ 共享根用中性版
+31. **`[string]` 套在布尔表达式上会把条件变成恒真**：`[string]$x.EndsWith(...)` 转换的是**整个方法调用结果**，布尔被转成 `"True"/"False"` 字符串，而非空字符串在 PowerShell 里是真值 → 条件永远成立（GA 批 collector 真实踩过：82 条记录全部误匹配 231 条目）。判定必须先赋给布尔变量再进 if
+32. **同一份数据别让两种匹配规则并存**：目录名匹配会认领重名技能（vibe `code-review` ↔ Matt `code-review`），宿主归属判定一律用 catalog path 精确匹配（GA 批已改，见 `collect-host-skill-evidence.ps1`）
 
 ---
 
@@ -349,11 +387,14 @@ owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `eviden
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                     单入口（12 步）
+  scripts/verify.ps1                     单入口（默认 12 步；-IncludeHostEvidence / -IncludePackage 各 +1）
   scripts/runtime-projection-guard.ps1   共享投影门禁 + 计划 + overlay 实现（唯一）
   scripts/validate-release-notices.ps1   NOTICE（逐族策略）
   scripts/validate-route-bindings.ps1    路由绑定（唯一命中 / 不得第二入口）
   scripts/build-canonical-catalog.ps1    分类 → catalog（bundlePolicy + bundlePathsFrom fail-closed）
+退役 / 宿主清点
+  scripts/retire-capability.ps1          单技能退役（fail-closed；翻 readiness + 重生成 + 绑定校验）
+  scripts/audit-host-legacy-links.ps1    共享根顶层条目清点（只读；阶段 5 口径输入）
 导入 / 投递
   scripts/import-vibe-skills.ps1         Vibe 技能物理导入（唯一路径）
   scripts/import-{matt-source,sliver-core,vibe-source}.ps1  来源快照导入
@@ -392,14 +433,15 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 
 ```powershell
 cd F:/skiils工具/feisheng-vibe-coding
-git log --oneline -3                      # 起点应为 527b1bc
+git log --oneline -3                      # 治理对齐批（2026-09-11）之后的提交；批次前基线是 7c33764
 git status --porcelain                    # 应为空
-pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludePackage
-                                          # 应为 13/13
+pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludeHostEvidence -IncludePackage
+                                          # 应为 14/14
 ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 176
 ```
 
-然后按顺序：**9.5（T5 批次口径待 owner）→ 9.6（Hook，最后）→ 9.7 收尾**（9.1–9.4 均已完成）。
+然后按顺序：T1–T7 与 GA 批均已完成。后续入口：**9.8 末尾的遗留清单**（沉淀消费三技能批次 →
+64 链接退役口径 → 挂远端跑 CI → OWNER-LEDGER 结构性议题）；新增能力接入照 §11 #16 的顺序。
 
 ---
 
@@ -408,7 +450,7 @@ ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 176
 | 来源 | 登记 | 已接入 | 说明 |
 |---|---|---|---|
 | sliver-vibe-coding | 1 | **1** | 控制面（22 主路由 + 8 lens 是 `references/*.md`，非独立技能） |
-| vibe-coding-skills | 46 | **33** | 2026-09-11 闭环批后：checker 4 + product 13（含 dev-builder 编码主手）+ ui 16 已接入；13 个留待后续（Hook 驱动 3、MCP 依赖 2、语义未审 3、真源重叠 2、职能重叠 1、别名 1、边缘 1）；许可证族经 owner 豁免（自用） |
+| vibe-coding-skills | 46 | **33** | 2026-09-11 闭环批后：checker 4 + product 13（含 dev-builder 编码主手）+ ui 16 已接入；13 个留待后续（Hook 驱动 3、MCP 依赖 2、语义未审 3、真源重叠 2、职能重叠 1、边缘 1、别名 1 已于 GA 批退役）；许可证族经 owner 豁免（自用） |
 | mattpocock-skills | 35 | **5** | 4 个原语 + code-review（checker）已接入（2026-09-11）；10 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（上游 in-progress）；6 个 user-tool；1 compat |
 
 ```text
@@ -419,4 +461,5 @@ ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 176
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）
 行为验证   D2/D3 已实测转绿（2026-09-11，见 9.2 与 evidence/20260911-*）
+退役       1 条 retired-alias（vibe-coding-skills 别名，GA 批）+ 64 个源仓库链接待 owner 口径
 ```
