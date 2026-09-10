@@ -1,20 +1,25 @@
-# 接手必读（2026-09-10，换行可复现性修复后刷新）
+# 接手必读（2026-09-10，控制面 runtime 闭包 + 路由绑定后刷新）
 
 > 本文是**最新交接**，优先级高于 `docs/HANDOFF.md` 中的所有历史轮次记录。冲突时以本文为准。
-> 上一版交接的两个第一优先（「物理导入 + 门禁策略化」与「换行可复现性」）均已被本轮完成。
+> 历史轮次的四个第一优先（「物理导入 + 门禁策略化」「换行可复现性」「目录忠实 runtime 单位」「路由绑定」）**均已做完**。
+> 本轮在动手做路由绑定前，先发现并修好了它的前提缺口（控制面在 bundle 里根本跑不起来）。
 
 ## 0. 仓库状态
 
-- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`（Vibe 检查器接入）、
-  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁）、`4fe6951`（目录忠实 runtime 单位）、
-  `33ebb79`（生成物不再继承脚本源码换行），以及文档刷新，**工作树干净**。
-- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **11/11 PASS**（发布包 48 文件、0 违规）；
-  `pwsh`（7）与 Windows PowerShell 5.1 均为 11/11。
-- **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` / `input` 三种配置下各 clone 一次，均全绿。
-- runtime 覆盖：**8 条记录 / 16 个文件**（Sliver control-plane + 3 Matt 原语 + 4 Vibe 检查器）；
-  技能目录为目录单位（带 `reference/`、`templates/`、`scripts/` 等同目录引用文件）。
+- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `8e91e72`（控制面 runtime 闭包）、
+  `955577e`（记录阻塞直观方案的真实约束）、`091b6f2`（路由绑定 + 门禁），其前为
+  `3e14dd3`（Vibe 检查器接入）、`8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁）、
+  `4fe6951`（目录忠实 runtime 单位）、`33ebb79`（生成物不再继承脚本源码换行），**工作树干净**。
+- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **12/12 PASS**（发布包 48 文件、0 违规）；
+  `pwsh`（7）与 Windows PowerShell 5.1 均为 12/12。新步骤 `3b) 路由绑定`。
+- **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` 各 clone 一次，两种 shell 均 12/12；
+  已登记补丁在两种配置下都逐字节可复现（`patchedSha256` 一致、CRLF 保留、`git status` 干净）。
+- runtime 覆盖：**8 条记录 / 65 个文件**，其中控制面 **50 个**（SKILL.md + LICENSE + 44 个 `references/*.md`
+  + 4 个契约脚本，由显式白名单 `bundlePaths` 展开）；技能 7 条 / 15 个文件
+  （3 Matt 原语 + 4 Vibe 检查器；技能目录为目录单位）。`packaging/tests/plugins/assets` 一律不进。
+- **7 条已接入技能全部被路由 owner 引用**（唯一命中），由 `scripts/validate-route-bindings.ps1` 强制。
 - 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要一致。
-- 存量：`evidence/` 35 份、`tasks/` 36 份、`scripts/` 18 个。
+- 存量：`evidence/` 37 份、`tasks/` 37 份、`scripts/` 19 个。
 - 脚手架 `_smoke/`（169 个文件，已 gitignore）：**总目标完成后统一清理**，勿提前删。
 
 ## 1. 本轮完成：首批 Vibe 技能物理导入 + 运行时门禁策略化
@@ -129,22 +134,43 @@
 
 证据：`evidence/20260910-directory-faithful-runtime-unit.md`；任务：`tasks/20260910-directory-faithful-runtime-unit.md`。
 
-## 4. 【下一步第一优先】路由绑定：让技能真的被路由到
+## 4. 【本轮已完成】控制面 runtime 闭包 + 路由绑定：技能现在真的被路由到
 
-这是本仓库现在**最大的功能性缺口**，比 Hook 更值得先做：
+### 4.1 前提缺口（做绑定侦察时撞到的，比缺绑定更严重）
 
-```
-路由绑定   0 条   ← Sliver 的 22 条路由不引用这 82 个技能
-```
+原投影里控制面只有 `governance/sliver-core/SKILL.md` 一个文件，而这个文件自己的 Startup Protocol 要求
+加载 `references/runtime-adapter.md` 并运行 `scripts/runtime_decision_contract.py` —— 21 个直接引用、
+41 个由路由表引用的文件、两个契约脚本**全都不在 bundle 里**。即：**唯一入口在自己的 runtime bundle 里启动不了**，
+这也解释了为什么「路由绑定」当时不可能有实际效果（路由表本身都不在 bundle 里）。
 
-即：即使技能已经在 runtime bundle 里（8 条记录 / 16 文件），项目唯一入口的路由表里**没有任何一条指向它们**，
-所以模型看不到「什么场景该用 `critique`、什么场景该用 `audit`」。已完成的 `duplicateGroups`（11 组）
-已经给出了**每个能力簇的唯一 owner 与分工规则**，把它变成路由绑定是顺其自然的下一步。
+修法 = 第三种 bundle 单位（控制面既不适合整目录也不适合单文件）：分类真源声明 `bundleRoot` + 显式 `bundlePaths`，
+生成器展开（目录递归、文件单个、未列出的不进）。
+**功能验证**：把投影构建到仓库外的临时目录，在**该 bundle 内部**运行契约脚本，成功解析出 22 条主路由。
 
-建议做法（有界）：从 `SKILL-CLASSIFICATION.json` 的 `duplicateGroups[].rule` 出发，
-为 runtime 已接入的技能在 `governance/sliver-core/references/routes-index.md` 中加路由条目，
-并加一条门禁：已接入技能必须在路由表里有唯一命中（且不得引入第二入口）。
-注意路由 owner 是 `route-catalog`（排他），不得在别处平行写路由。
+### 4.2 路由绑定（证据：evidence/20260910-route-binding.md）
+
+**最直观的做法被机器校验排除**：`runtime_decision_contract.py` 里 `"skill"` 出现 **0 次**；路由表 `Load` 列
+受校验，但 `LOADED_OWNER_IDS` 是 **10 个抽象 owner 类别**（`routes`/`task_depth`/`testing`/…），**不是文件路径**。
+⇒ 往 `Load` 列塞 `skills/…/SKILL.md` 不是合法绑定，绑定只能落在 **Load 已指向的 owner 文档内容里**。
+
+落地：在 `references/engineering-execution.md`（被 Load 命中 **9 次**的执行主干 owner，已拥有
+`Owner-Layer Rules` / `Debug Evidence Ladder` / `Verification Matrix`）新增 `## Internal Capability Providers` 小节，
+写清 provider 只返回 finding / 诊断，绝不选路由、不改深度、不写真源。7 个加载条件全部来自既有
+`duplicateGroups[].rule`（**没有新决策**，也没有第二份 route→reference 表）。
+
+强制：`scripts/validate-route-bindings.ps1`（verify 步骤 `3b)`），策略真源 = classification 的 `routeBinding`。
+4 条 fail-closed：命中次数必须恰为 1（0 = 看不见，>1 = 重复入口）／owner 之外出现技能路径即 FAIL（第二入口）／
+owner 里出现未接入技能即 FAIL／缺策略或缺 owner 文件直接 throw。**7 个反例实测全部按预期失败**。
+
+vendored 修改已按规矩登记 `LOCAL-PATCHES.json`（`originalSha256` → `patchedSha256`，+24 行、0 删除、CRLF 保留），
+并用 `record-provenance-integrity.ps1` 重算 `PROVENANCE-INTEGRITY.json`（该脚本接受已登记补丁）。
+
+### 4.3 下一步第一优先：宿主 fresh-session smoke（本地门禁已到顶）
+
+本地静态门禁已经做透（12/12、反例、fresh clone、两种 shell）。**当前最大的未知已经不在本地，而在宿主**：
+没有任何证据表明宿主会真的按这个绑定去委派技能，而且 bundle 从 16 增到 65 个文件后**宿主侧从未重验**。
+建议：用 `scripts/smoke-host-skill-discovery.ps1` + `scripts/collect-host-skill-evidence.ps1` 在新会话中采一次，
+并明确区分「被识别」与「行为正确」（后者仍需单独证据）。
 
 ## 5. 【最后做】Hook 解锁（风险最大）
 
@@ -165,9 +191,9 @@
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 文件内容   全量       能力性文件无缺失（Vibe tools 145/145、hooks 10/10、codex-hooks 22/22）
 功能裁决   11/11 簇   已完成（evidence/20260910-overlap-arbitration.md）
-交付runtime 8/82      8 条记录 / 16 个文件（Sliver + 3 Matt 原语 + 4 Vibe 检查器；技能为目录单位）
+交付runtime 8/82      8 条记录 / 65 个文件（控制面 50 + 7 技能 15；控制面用显式 bundlePaths 白名单）
 许可证策略 8 族全显式 4 族 runtimeEligible=true、5 族 false（不可用族见第 1 节）
-路由绑定   0 条       ← Sliver 的 22 路由不引用这 82 个技能（下一步第一优先，见第 4 节）
+路由绑定   7/7        已接入技能全部在 references/engineering-execution.md 里唯一命中（步骤 3b 强制）
 ```
 
 ## 7. 历史踩坑（照抄省时间）
@@ -218,11 +244,26 @@
     已修：①生成物字符串不从源码字面字符串来（从真源数据读）；②`.gitattributes` 加了 `scripts/** text eol=lf`。
     **凡是改动生成器（尤其新增字符串/字段），必须跑一次新目录 clone 验收。**
 
+22. **路由表的 `Load` 列不是文件清单**：`runtime_decision_contract.py` 的 `LOADED_OWNER_IDS` 是 **10 个抽象 owner 类别**
+    （`routes`/`task_depth`/`testing`/…），不是路径；`"skill"` 在该脚本里出现 **0 次**。
+    把 `skills/…/SKILL.md` 塞进 `Load` 会直接 `raise` —— 技能绑定只能写进 Load 已指向的 owner **文档内容**里。
+23. **vendored 内容的正确修改姿势**：改 `governance/sliver-core/**` → 登记 `LOCAL-PATCHES.json`（`originalSha256`+`patchedSha256`）
+    → 跑 `scripts/record-provenance-integrity.ps1` 重算 `PROVENANCE-INTEGRITY.json`。
+    记录脚本**接受已登记补丁**（快照须 == `patchedSha256`，来源须仍 == `originalSha256`），所以补丁不会把基线卡死；
+    但顺序反了（先记录后登记）会被拒。
+24. **改 vendored 文件要保住原换行**：`governance/sliver-core/**` 是 CRLF 且 `-text`。用 Python 逐字节插入
+    （按检测到的 `\r\n` 拼接）后，`git diff --stat` 应只显示新增行、**0 删除** —— 这就是「没有换行漂移」的判据；
+    混入 LF 会显示整块改写。
+25. **PowerShell stdout 编码随「重定向到文件」与「管道捕获」而变**（本机实测：文件里是 GBK、管道给 Python 时像 UTF-8）。
+    所以机器可读 JSON 的判定字段用 ASCII（`status` = `PASS`/`FAIL`），中文只放 Detail。
+26. **比较两种 shell 的步骤数必须传相同参数**：`-IncludePackage` 与否差一步（11 vs 12）。
+    本 Agent 就先误判过一次「5.1 少了一步」，其实是自己没带参数。
+
 ## 8. 入口速查
 
 ```
 真源（唯一写入点）
-  provenance/SKILL-CLASSIFICATION.json     ← 分类 + 裁决（domain/readiness/writeAuthority/sourceDir/duplicateGroups/policy）
+  provenance/SKILL-CLASSIFICATION.json     ← 分类 + 裁决（domain/readiness/writeAuthority/sourceDir/duplicateGroups/policy/routeBinding）
   provenance/LICENSE-MAP.json              ← 许可证台账（entries + vibePerSkill.families[].runtimeEligible 逐族 runtime 策略）
   provenance/LOCAL-PATCHES.json            ← 本地补丁登记（未登记偏差即漂移）
   provenance/OWNER-LEDGER.json             ← owner 机器可读记录
@@ -232,10 +273,11 @@
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                       ← 单入口（11 项；含内容完整性、导入一致性、保真树换行）
+  scripts/verify.ps1                       ← 单入口（12 项；含内容完整性、导入一致性、保真树换行、路由绑定）
   scripts/runtime-projection-guard.ps1     ← 共享投影门禁（唯一实现）
   scripts/validate-release-notices.ps1     ← NOTICE 门禁（逐族策略驱动）
-  scripts/build-canonical-catalog.ps1      ← duplicateGroups owner/成员 + sourceDir fail-closed 校验
+  scripts/validate-route-bindings.ps1      ← 路由绑定门禁（唯一命中 + 不得第二入口/未接入；策略在 classification.routeBinding）
+  scripts/build-canonical-catalog.ps1      ← duplicateGroups owner/成员 + sourceDir + bundlePolicy fail-closed 校验
 导入
   scripts/import-vibe-skills.ps1           ← Vibe 技能物理导入（唯一路径，数据驱动）
   scripts/import-matt-source.ps1 / import-sliver-core.ps1 / import-vibe-source.ps1 ← 来源快照导入
@@ -258,19 +300,33 @@ pwsh -NoProfile -File 'scripts/build-capability-index.ps1' -RepositoryRoot 'F:\s
 
 # 换行可复现性验收（唯一可信的验收方式）
 git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/verify.ps1' -IncludePackage
+
+# 修改 vendored 内容（顺序不能反）
+# 1. 改 governance/sliver-core/**
+# 2. 登记 provenance/LOCAL-PATCHES.json（originalSha256 + patchedSha256，原 sha 取来源同路径文件）
+pwsh -NoProfile -File 'scripts/record-provenance-integrity.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils工具\feisheng-vibe-coding'
+
+# 新增 runtime 技能后的路由绑定（门禁会强制，不加绑定则 verify 步骤 3b 失败）
+# 在 classification.routeBinding.ownerFiles 指向的文件里，为该技能的 catalog path 加恰好一行引用
+pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
 ```
 
 ## 9. 仍未验证（不要越界声明）
 
 - 宿主 **trust**、技能**真实行为正确性**、**Hook 强制** —— 三者均 `UNVERIFIED`。
 - 发布 CI **从未在真实 GitHub runner 跑过**（工作流已接入，仅本地校验 YAML）。
-  但本地已等价复现最危险的情形：fresh clone + `core.autocrlf=true`（Windows runner 默认）为 11/11，
-  `false`（Linux/macOS runner 默认）也为 11/11。仍需一次真实 CI 运行确认。
-- **fresh clone 可复现性已修复**（第 2 节）：三种 `core.autocrlf` 配置均 11/11；本机工作树 11/11。
-- 我们自己的 Codex 投影**尚未**做其自身的 discovery smoke（已实测的是 Sliver 控制面 bundle）。
-  尤其注意：bundle 刚从 13 增到 20 个文件（目录忠实），**扩大后的 bundle 没有重新做过任何宿主侧验证**。
+  但本地已等价复现最危险的情形：fresh clone + `core.autocrlf=true`（Windows runner 默认）为 12/12，
+  `false`（Linux/macOS runner 默认）也为 12/12，两种 shell 均如此。仍需一次真实 CI 运行确认。
+- **fresh clone 可复现性已修复**（第 2 节）：本机工作树与两种 `core.autocrlf` 配置均 12/12；
+  已登记补丁在两种配置下都逐字节可复现（CRLF 保留）。
+- **已接入技能的宿主委派行为未验证**（第 4.3 节）：路由绑定只在静态层被门禁强制；
+  没有任何证据表明宿主会按 `Internal Capability Providers` 的 7 个条件去委派技能。
+- 宿主侧**从未在扩大后的 bundle 上重验**：控制面 bundle 从 1 个文件增到 **50 个**（总投影 65 文件），
+  宿主发现性/行为都没有重新采证。
 - 宿主证据只证明「被识别」，**不证明行为正确**；本轮也未重采。
-- **路由绑定仍为 0 条**（第 4 节）：技能在 bundle 里，但入口路由表不指向它们。
+- 控制面的 `assets/` **有意未纳入 bundle**（references 里有 `assets/project-adoption/**` 等引用，目前是悬空引用）。
+  加 `"assets"` 到 `bundlePaths` 即可翻转，但那是「bootstrap 进目标项目的模板」还是「运行时 owner」，需 owner 拍定。
 
 ## 10. 不可突破的边界
 
@@ -287,3 +343,6 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 - 新增 accepted 的 Vibe 技能必须声明 `sourceDir` 且等于上游目录名（生成器 fail-closed 强制）。
 - 保真树（`sources/**`、`skills/**`、`governance/sliver-core/**`）必须保持 `.gitattributes` 的 `-text`；
   **不得**为了省事把 sha 比对改成 eol 归一化 —— 那等于放弃「字节可复现」这个主张本身。
+- **路由绑定只能有一个 owner**：写在 `classification.routeBinding.ownerFiles` 指向的文件里；
+  不得在 `routes-index.md` 的 `Load` 列、根 `SKILL.md`、README 或适配器里平行再写一份
+  （`Load` 列还受 `LOADED_OWNER_IDS` 抽象类别校验，塞技能路径根本不合法）。
