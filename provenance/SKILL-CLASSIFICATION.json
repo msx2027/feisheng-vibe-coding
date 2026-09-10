@@ -522,6 +522,16 @@
       "domain": "control-plane",
       "readiness": "runtime",
       "source": "sliver-vibe-coding",
+      "bundleRoot": "governance/sliver-core",
+      "bundlePaths": [
+        "SKILL.md",
+        "LICENSE",
+        "references",
+        "scripts/runtime_decision_contract.py",
+        "scripts/validation_support.py",
+        "scripts/runtime_governance_contract.py",
+        "scripts/check_project_guardrails.py"
+      ],
       "writeAuthority": [
         "route-catalog",
         "target-truth",

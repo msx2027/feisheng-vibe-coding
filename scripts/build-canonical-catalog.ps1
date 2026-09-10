@@ -173,20 +173,106 @@ $projectionForbiddenSegments = @($bundleForbiddenSegments + $entryAliasSegments 
 # 目录忠实的导入根：path 必须形如 skills/<group>/<id>/SKILL.md
 $importedSkillDirectoryPattern = '^skills/[^/]+/(?<id>[^/]+)/SKILL\.md$'
 
+# 显式路径单位的展开（控制面用）。
+# bundlePaths 的每一项要么是一个文件，要么是一个目录（递归）。
+# 未列出的路径一律不进 —— 这是控制面「目录里大量非运行时材料」的安全做法。
+function Get-ExplicitBundlePlan {
+    param(
+        [Parameter(Mandatory = $true)][string]$Id,
+        [Parameter(Mandatory = $true)][string]$RepoRoot,
+        [Parameter(Mandatory = $true)][string]$RecordPath,
+        [Parameter(Mandatory = $true)][string]$SourceSha256,
+        [Parameter(Mandatory = $true)]$Entry
+    )
+
+    $bundleRoot = ([string]$Entry.bundleRoot).Replace('\', '/')
+    if ([string]::IsNullOrWhiteSpace($bundleRoot)) { throw "显式单位缺少 bundleRoot: skill '$Id'" }
+    $bundleRootFull = Join-Path $RepoRoot ($bundleRoot.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    if (-not (Test-Path -LiteralPath $bundleRootFull -PathType Container)) {
+        throw "bundleRoot 不存在: $bundleRoot（skill '$Id'）"
+    }
+
+    $explicitPaths = @($Entry.bundlePaths | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+    if ($explicitPaths.Count -eq 0) { throw "显式单位缺少 bundlePaths: skill '$Id'" }
+
+    $files = @()
+    $rootTrimmed = $bundleRootFull.TrimEnd([char[]]@(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ))
+    $prefixLength = $rootTrimmed.Length + 1
+
+    foreach ($explicitPath in $explicitPaths) {
+        $relative = ([string]$explicitPath).Replace('\', '/').TrimStart('/')
+        $candidateFull = Join-Path $bundleRootFull ($relative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        if (-not (Test-Path -LiteralPath $candidateFull)) {
+            throw "bundlePaths 条目不存在: $bundleRoot/$relative（skill '$Id'）"
+        }
+        $candidates = @()
+        if (Test-Path -LiteralPath $candidateFull -PathType Container) {
+            $candidates = @(Get-ChildItem -LiteralPath $candidateFull -Recurse -Force -File)
+            if ($candidates.Count -eq 0) { throw "bundlePaths 目录为空: $bundleRoot/$relative（skill '$Id'）" }
+        } else {
+            $candidates = @(Get-Item -LiteralPath $candidateFull)
+        }
+        foreach ($item in $candidates) {
+            $absoluteRelative = ($bundleRoot + '/' + $item.FullName.Substring($prefixLength).Replace('\', '/'))
+            foreach ($forbidden in $projectionForbiddenSegments) {
+                if (Test-PathContainsSegment -RelativePath $absoluteRelative -Segment $forbidden) {
+                    throw "bundle 白名单文件落在禁止路径段 '$forbidden': $absoluteRelative（skill '$Id'）"
+                }
+            }
+            $files += [pscustomobject]@{ path = $absoluteRelative; sha256 = Get-Sha256 -Path $item.FullName }
+        }
+    }
+
+    $pathToFile = @{}
+    foreach ($file in $files) { $pathToFile[[string]$file.path] = $file }
+    $sortedPaths = [string[]]@($pathToFile.Keys)
+    [Array]::Sort($sortedPaths, [System.StringComparer]::Ordinal)
+    $orderedFiles = @($sortedPaths | ForEach-Object { $pathToFile[$_] })
+
+    $selfEntries = @($orderedFiles | Where-Object { $_.path -eq $RecordPath })
+    if ($selfEntries.Count -ne 1) {
+        throw "显式 bundle 里没有记录指向的文件: $RecordPath（skill '$Id'）"
+    }
+    if ([string]$selfEntries[0].sha256 -ne $SourceSha256) {
+        throw "一等副本与登记 sha 不一致: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+    }
+
+    return [pscustomobject]@{
+        scope = 'explicit'
+        root = $bundleRoot
+        files = $orderedFiles
+        excluded = @()
+    }
+}
+
 # 生成一条记录的 bundle 白名单。
-#   - 目录单位：枚举导入目录，排除 host/编排资产，逐文件记录 sha256（显式白名单，不是「目录里有什么就发什么」）。
-#   - 单文件单位：只带记录自己的那个文件。
+#   - 显式路径单位（scope=explicit）：记录声明 bundleRoot + bundlePaths（目录项递归展开，文件项单文件）。
+#     用于控制面这类「目录里有大量非运行时材料」的情况：packaging/tests/plugins/assets 一律不进。
+#   - 目录单位（scope=directory）：枚举导入目录，排除 host/编排资产，逐文件记 sha256。
+#   - 单文件单位（scope=file）：只带记录自己的那个文件。
+# 三种单位都是**显式白名单**：未列出的路径不会进产物。
 function Get-BundlePlan {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
         [Parameter(Mandatory = $true)][string]$RepoRoot,
         [Parameter(Mandatory = $true)][string]$RecordPath,
-        [Parameter(Mandatory = $true)][string]$SourceSha256
+        [Parameter(Mandatory = $true)][string]$SourceSha256,
+        [Parameter(Mandatory = $false)]$ClassificationEntry = $null
     )
 
     $recordFullPath = Join-Path $RepoRoot ($RecordPath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
     if (-not (Test-Path -LiteralPath $recordFullPath -PathType Leaf)) {
         throw "catalog 记录指向的文件不存在: $RecordPath（skill '$Id'）"
+    }
+
+    $hasExplicitPaths = ($null -ne $ClassificationEntry) -and
+        ($ClassificationEntry.PSObject.Properties.Name -contains 'bundlePaths') -and
+        ($ClassificationEntry.PSObject.Properties.Name -contains 'bundleRoot')
+    if ($hasExplicitPaths) {
+        return Get-ExplicitBundlePlan -Id $Id -RepoRoot $RepoRoot -RecordPath $RecordPath -SourceSha256 $SourceSha256 -Entry $ClassificationEntry
     }
 
     $match = [regex]::Match($RecordPath, $script:importedSkillDirectoryPattern)
@@ -302,7 +388,7 @@ foreach ($row in @($inventory.skills)) {
     # 不在投影集合里的记录没有 bundle 字段。
     $bundle = $null
     if ($acceptedStatuses -contains $status) {
-        $bundle = Get-BundlePlan -Id $id -RepoRoot $RepoRoot -RecordPath $path -SourceSha256 ([string]$row.sha256)
+        $bundle = Get-BundlePlan -Id $id -RepoRoot $RepoRoot -RecordPath $path -SourceSha256 ([string]$row.sha256) -ClassificationEntry $entry
     }
 
     # 结构前提门禁（fail-closed）：accepted 的 Vibe 记录必须声明 sourceDir，

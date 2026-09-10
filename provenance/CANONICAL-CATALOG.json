@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T12:34:43.6319592Z",
+  "generatedAt": "2026-09-10T12:38:49.7772039Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -969,12 +969,208 @@
       "source": "sliver-vibe-coding",
       "path": "governance/sliver-core/SKILL.md",
       "bundle": {
-        "scope": "file",
-        "root": null,
+        "scope": "explicit",
+        "root": "governance/sliver-core",
         "files": [
+          {
+            "path": "governance/sliver-core/LICENSE",
+            "sha256": "481024f979e27e66458d0097465b32703f81b576d2ceac4b677e94022a78f7ec"
+          },
           {
             "path": "governance/sliver-core/SKILL.md",
             "sha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c"
+          },
+          {
+            "path": "governance/sliver-core/references/agent-constitution-template.md",
+            "sha256": "667614f5890b9d797f85ff1e1424f85cc3b4d9fca1e01aa7bb052faca113fd5e"
+          },
+          {
+            "path": "governance/sliver-core/references/agent-constitution.md",
+            "sha256": "69dfee85400231d9920edb15a28208f22e2b038bb1eb37d40fbeab8e08293a1b"
+          },
+          {
+            "path": "governance/sliver-core/references/architecture-patterns.md",
+            "sha256": "a4584a70a28a76fb18212ab1f52cbaf0b47a9e2c063ff14a87f630483a433579"
+          },
+          {
+            "path": "governance/sliver-core/references/audit-artifact.md",
+            "sha256": "93f41349a1f9f7d00054c243c9051c7f5f933e8c457b674cb1520151a7918f29"
+          },
+          {
+            "path": "governance/sliver-core/references/backend-boundary.md",
+            "sha256": "6c84675d348ead988777f26e5bd307fa1bce6e33c6bf5e773ef4989a8d03d5fb"
+          },
+          {
+            "path": "governance/sliver-core/references/backend-skeleton.md",
+            "sha256": "6a7b87649d533afce7335ff79cb6bb16dafc6f5ddedfe935de138456eabddf27"
+          },
+          {
+            "path": "governance/sliver-core/references/beginner-failure-modes.md",
+            "sha256": "60bf3dbbe3890841fab4b108cd6eeef679a543d64471415082939f96f47e74d2"
+          },
+          {
+            "path": "governance/sliver-core/references/context-handoff.md",
+            "sha256": "0807f8f374cea9799884b88391dd5877eb1f872fc6580883c3d32b7a1b277857"
+          },
+          {
+            "path": "governance/sliver-core/references/database-design.md",
+            "sha256": "ae8fed6553291d6139c4f7e0a19addef8b1dac5794877cd8c6f2d34ce249dd36"
+          },
+          {
+            "path": "governance/sliver-core/references/development-execution-core.md",
+            "sha256": "964ac7fed2dc94f187bcd4bac5499cfe83aea6122cf93f56a9cf5b618191b3ce"
+          },
+          {
+            "path": "governance/sliver-core/references/effect-recovery-gates.md",
+            "sha256": "e871d133d14956e6075e53466bd48e632bbe5cb4c3a5534075f653ac19f8f36c"
+          },
+          {
+            "path": "governance/sliver-core/references/engineering-execution.md",
+            "sha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1"
+          },
+          {
+            "path": "governance/sliver-core/references/execution-liveness.md",
+            "sha256": "74b0e7284444ca104d18515471eeab0074a710649c38124e59c14391e711f78e"
+          },
+          {
+            "path": "governance/sliver-core/references/formal-materialization.md",
+            "sha256": "23902ac967489adca60dbe80ad5d07b272bd161f6f60ee82190b9a306e9a439f"
+          },
+          {
+            "path": "governance/sliver-core/references/frontend-skeleton.md",
+            "sha256": "e02f0033a58084ad41560790549a3aab7ac118529b6469c85eb67cf2ee14516a"
+          },
+          {
+            "path": "governance/sliver-core/references/git-and-delivery.md",
+            "sha256": "1e31e1bfc1b3c451adaab2ce3dd32816084c16d7198fb9c13e2cb50f061e63cb"
+          },
+          {
+            "path": "governance/sliver-core/references/monetization-and-entitlements.md",
+            "sha256": "2cb9b0e788ea984106b77266df85e6d4958efa6bbf6189e6c570d0c733354f4b"
+          },
+          {
+            "path": "governance/sliver-core/references/plan-artifact.md",
+            "sha256": "6376daea8bb8cd744166731ee5e0a0b609ff9e9c0e7053a0fbdee55268e4a476"
+          },
+          {
+            "path": "governance/sliver-core/references/project-flow.md",
+            "sha256": "778f6caa75ae833eb2333644df737eebda4571c743f414d8c99a9e1214f26c88"
+          },
+          {
+            "path": "governance/sliver-core/references/project-intake.md",
+            "sha256": "260a43fc6c5842ab8a9b5c1d4a7cd0fa578aaa5c320053726f8d0a8bb77cff37"
+          },
+          {
+            "path": "governance/sliver-core/references/project-templates.md",
+            "sha256": "dfbf62b8cb9df784c255bd0ed06f957827be10b289ef06e98c6d13da999857bd"
+          },
+          {
+            "path": "governance/sliver-core/references/question-bank.md",
+            "sha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8"
+          },
+          {
+            "path": "governance/sliver-core/references/risk-control-gates.md",
+            "sha256": "a1dd4f996ac85af4ecbedcb652df1ea573604f708ed5cd48cec36f11afa67c68"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-backend.md",
+            "sha256": "d463a209de866d0f90421f40cc9cc60a995f443fb69d07051786e19f107ddcf6"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-constitution.md",
+            "sha256": "34e5d2ab3e21c8a7c60320a21e1ece9e4b1e79cc1c321a481320b48f8175cc94"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-feature.md",
+            "sha256": "6ba8fe3cd2faa47732256a68a085b2706a762c0e181521c7ed687f5421c276a4"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-git.md",
+            "sha256": "0478a5a91d261b64ad2d401ccc38ee76e0d98cf84220ab3c4c04dc7e011bcfb6"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-index.md",
+            "sha256": "1b44e3a84e7aae61629755935e484a75c0d8424422d1ecc3e2c1e3a0024206c2"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-intake.md",
+            "sha256": "c971b3cc54b12f63874446f82f1444751d7e4aad00f04d336e4bf0aae166e548"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-release.md",
+            "sha256": "6e1ce8870f2373f1bd98cf6b0d6b5b055e5eb9e9d3a649bdef7b18231b880a31"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-rescue.md",
+            "sha256": "98911a0a6d7f055a6118b63c92a4fa93e3b1e76e82a72f1dfb2956e579d2b0a1"
+          },
+          {
+            "path": "governance/sliver-core/references/routes-validation.md",
+            "sha256": "a9b9b1c586ee6975d0a8845b63d7efabccdd35d6bddd468f886589dcea44f0da"
+          },
+          {
+            "path": "governance/sliver-core/references/runtime-adapter.md",
+            "sha256": "4c7b5db64a83865a947185b4fed61e5b64460be5239f9c4d77b028a73a039eff"
+          },
+          {
+            "path": "governance/sliver-core/references/security.md",
+            "sha256": "190cb9d4421124cac542ad2f27ff8b8c8ff40e775eb26202fb17590986f29282"
+          },
+          {
+            "path": "governance/sliver-core/references/studio-execution.md",
+            "sha256": "a46ef3d83a5ef86324411e103ff7012408b221aab1c94893bb80a07a8e25d9d2"
+          },
+          {
+            "path": "governance/sliver-core/references/task-decision-contract.md",
+            "sha256": "f224c62c42fe9462a765340bc1eecf54689c83889914b1dbfe5757c16f795fe4"
+          },
+          {
+            "path": "governance/sliver-core/references/task-risk-gates.md",
+            "sha256": "05a4016cd37ef43a7fc240fe3ae68a68999b237de1e6efc2de15f2a5c9500350"
+          },
+          {
+            "path": "governance/sliver-core/references/tech-stack.md",
+            "sha256": "67c5810cdcc9401e521c590830e1baae35e11a3ab8a99f2af259e3a8b0cafa70"
+          },
+          {
+            "path": "governance/sliver-core/references/testing-execution-gates.md",
+            "sha256": "2e02e32a3d9b68031aee5e74dc4e2f235cbb6211ec4e64f6cbe00dfe7c71c1db"
+          },
+          {
+            "path": "governance/sliver-core/references/testing-strategy.md",
+            "sha256": "995664aa56daff1d92edaf7b4252a21961dbe38946d80f283b891e652362049b"
+          },
+          {
+            "path": "governance/sliver-core/references/third-party-integration.md",
+            "sha256": "541d96e94c95a1e53f7646eb94c08b5d19fcce09249b78e3c040c8f08ba87acf"
+          },
+          {
+            "path": "governance/sliver-core/references/truth-capture.md",
+            "sha256": "4f67efb515cfc3d5fb3f7b01c6d65d075e7ea6ab98d350c905cc06812ea92d60"
+          },
+          {
+            "path": "governance/sliver-core/references/truth-resolution.md",
+            "sha256": "2c7bf0812d8267125e7af153c9a3d43ba61140b5910a1eb05ff89ba35f5535f6"
+          },
+          {
+            "path": "governance/sliver-core/references/ui-design-lifecycle.md",
+            "sha256": "f84352c367af9b43e93ce022c82b874cf86d53b10feaed593440345e5aeab3b9"
+          },
+          {
+            "path": "governance/sliver-core/scripts/check_project_guardrails.py",
+            "sha256": "1b55f26f2e10d2cb66a1cf942b954d1eb8522264f4db15b1ce3f83029726ea34"
+          },
+          {
+            "path": "governance/sliver-core/scripts/runtime_decision_contract.py",
+            "sha256": "2b7dc4cc5f5ec61c8ecefca1e2609f2725af1a963567a2afb71ffaa8d9d0fd13"
+          },
+          {
+            "path": "governance/sliver-core/scripts/runtime_governance_contract.py",
+            "sha256": "4966c680e01bbe53d2017ad5bdaf713bd291affe382c1ab8eb9ba15bd1818af8"
+          },
+          {
+            "path": "governance/sliver-core/scripts/validation_support.py",
+            "sha256": "70f512855d5101ecf0418756a646a4665846e4ee648392d3a30f7008e82f5a2c"
           }
         ],
         "excluded": []
