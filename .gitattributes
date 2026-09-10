@@ -1,0 +1,23 @@
+# Byte-exact fidelity trees.
+#
+# The source snapshots, the first-class imported skill copies and the control-plane snapshot are
+# verified against recorded SHA-256 values and tree hashes (provenance/PROVENANCE-INTEGRITY.json,
+# CANONICAL-CATALOG.json sourceSha256, provenance/VIBE-IMPORTS.json). Those hashes were computed
+# over WORKTREE bytes, so git must not rewrite newlines on checkout, or the bytes stop matching on
+# a fresh clone / on another machine / in CI.
+#
+# Without this file the outcome depends on the local core.autocrlf setting, and one of the two
+# settings always breaks:
+#   core.autocrlf=true   -> LF blobs are checked out as CRLF, so sources/vibe-coding-skills
+#                           (LF source) fails with 492 content-vs-source mismatches
+#   core.autocrlf=false  -> LF blobs stay LF, so sources/mattpocock-skills and
+#                           governance/sliver-core (CRLF sources) fail instead
+#
+# `-text` means "no end-of-line conversion in either direction", so the committed blob is
+# byte-identical to the source and every clone reproduces it whatever core.autocrlf says.
+#
+# Deliberately NOT applied repository-wide: no other path carries a byte-fidelity gate, and a
+# global rule would change checkout behaviour for ~1400 files for no verified benefit.
+sources/** -text
+skills/** -text
+governance/sliver-core/** -text
