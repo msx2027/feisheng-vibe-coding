@@ -184,8 +184,10 @@ A/B 发现性（沿用 Sliver 自己的口径）：**Claude 169 → 170（+1）*
 `references/runtime-adapter.md`、`assets/project-claude/CLAUDE.md` 改写成了 `adapters/*` 与根 `CLAUDE.md`），
 其中最实质的是 Claude 会读到写着「本包不声明宿主适配」的核心 `runtime-adapter`。判断需宿主行为证据，本轮未改。
 
-**「单一入口」尚未达成**：共享根里现在**新旧两个控制面同时存在**（`sliver-vibe-coding` 旧 + `feisheng-vibe-coding` 新），
-7 个专项技能也仍有各自顶层目录。本次只是新增，没有退役旧条目。
+**旧入口已退役（用户批准）**：共享根里 8 个与运行包重复的旧条目（旧控制面 `sliver-vibe-coding` + 7 个专项）
+已移除，共享根 188 → **180**。退役后 A/B 与算术预测完全吻合：Claude **162**（169−8+1）、Codex **204**（203−8+9）。
+⇒ Claude 上现在**只有我们一个入口**；Codex 上仍是包内 9 个条目（第 4.3 节的「Codex 递归枚举」行为不变）。
+移除全靠 `os.rmdir`（遇到真目录会报错，是安全的失败方向），且**源仓库逐文件 sha256 前后一致**。
 
 ### 4.4 其余待 owner 拍的口径
 
