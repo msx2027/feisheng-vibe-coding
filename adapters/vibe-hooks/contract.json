@@ -2,6 +2,14 @@
   "schema": "feisheng-vibe-hook-adapter/v2",
   "owner": "runtime-projection",
   "status": "enabled-experience-sedimentation-v1",
+  "enablementScope": "correction-signal CAPTURE only: SessionStart reminder + UserPromptSubmit capture + runner -Mode Digest digestion markers. The digestion/consumption skills (experience-elevator / evolution-engine / feedback-writer) are NOT admitted to runtime; claims must not describe this as a closed sedimentation loop.",
+  "digestion": {
+    "mode": "Digest",
+    "markerStore": "target-repository/.feisheng/vibe-hook-state/<dedupKey>.digested",
+    "dedupKeyValidation": "strict 40-char lowercase hex, otherwise the entry is counted as unmarkable (prevents path injection via crafted index lines)",
+    "semantics": "maintenance command invoked after a session digests the signals; SessionStart then reminds only about pending (undigested) entries",
+    "consumptionSkillsAdmitted": false
+  },
   "ownerAuthorization": "2026-09-11 owner approved unlock with full safety gates (对话确认「解锁，做全套安全门」)",
   "source": {
     "id": "vibe-coding-skills",
@@ -22,7 +30,7 @@
       "enabled": true,
       "timeoutSeconds": 10,
       "handler": "session-start",
-      "behavior": "read-only: summarize .claude/feedback/FEEDBACK-INDEX.md pending items as context; writes nothing",
+      "behavior": "read-only: summarize pending (undigested) correction signals in .claude/feedback/FEEDBACK-INDEX.md as context; writes nothing; silent when nothing is pending",
       "vibeOrigin": "codex-hooks/check-evolution.ps1 (reminder semantics re-implemented natively)"
     },
     "UserPromptSubmit": {

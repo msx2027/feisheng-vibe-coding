@@ -13,6 +13,7 @@ Set-StrictMode -Version Latest
 #   2) 未启用事件（Stop / PreToolUse / PostToolUse）Invoke 必须 exit 3
 #   3) SessionStart：无索引 → exit 0 且零写入；有索引 → 输出待处理条数，仍零写入
 #   4) UserPromptSubmit：纠错信号 → 白名单索引恰好新增一行；重复事件幂等；普通输入零写入；非法 payload 静默
+#   4f) Digest：消化标记使 SessionStart 只计未消化条数；恶意 dedupKey 不可标记不逃逸；幂等
 #   5) 写入边界：全部动作结束后，目标目录里除白名单外不得出现任何新文件
 #
 # 全部使用临时沙箱目标目录，不碰真实项目。
@@ -83,7 +84,7 @@ try {
     Set-Content -LiteralPath $feedbackIndex -Encoding UTF8 -Value @('# 经验索引（测试）', '{"ts":"2026-09-11T00:00:00Z","note":"a"}', '{"ts":"2026-09-11T00:00:01Z","note":"b"}')
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target
     if ($r.ExitCode -ne 0) { throw "SessionStart（有索引）应 exit 0，实际 $($r.ExitCode)" }
-    if ($r.Output -notmatch '2') { throw "SessionStart 应报告 2 条待处理，实际输出: $($r.Output)" }
+    if ($r.Output -notmatch 'PENDING=2') { throw "SessionStart 应报告 PENDING=2，实际输出: $($r.Output)" }
     $count = @(Get-Content -LiteralPath $feedbackIndex -Encoding UTF8 | Where-Object { $_ -match '^\{' }).Count
     if ($count -ne 2) { throw "SessionStart 不得修改索引，行数变为 $count" }
 
@@ -115,6 +116,34 @@ try {
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput 'not-json-at-all' -Target $target
     if ($r.ExitCode -ne 0) { throw "非法 payload 应 exit 0" }
     Assert-IndexLineCount 4
+
+    # 4f) Digest 消化状态机：
+    #     此刻索引 4 行 = 2 条合成行（无 dedupKey，不可标记）+ 2 条真实行（同一 dedupKey，过期重录）
+    $r = Invoke-Runner -Mode 'Digest' -Target $target
+    if ($r.ExitCode -ne 0) { throw "Digest 应 exit 0，实际 $($r.ExitCode): $($r.Output)" }
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=0 unmarkable=2')) { throw "Digest 首跑计数不符: $($r.Output)" }
+
+    # 恶意 dedupKey（路径注入形态）必须被判定为不可标记，且不得在状态目录外产生任何文件
+    Add-Content -LiteralPath $feedbackIndex -Encoding UTF8 -Value '{"dedupKey":"../../evil","ts":"2026-09-11T00:00:02Z"}'
+
+    # 新增一条不同信号 → SessionStart 应只报「未消化」条数：3 不可标记 + 1 未标记真实 = 4（已标记的 1 条不计）
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-test-3","prompt":"还是错，日期格式应该是 ISO"}' -Target $target
+    if ($r.ExitCode -ne 0) { throw "新信号应 exit 0" }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target
+    if ($r.Output -notmatch 'PENDING=4') { throw "SessionStart 应报 PENDING=4（剔除已标记）: $($r.Output)" }
+
+    # 第二次 Digest：标记新条目 + 识别恶意行为不可标记
+    $r = Invoke-Runner -Mode 'Digest' -Target $target
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=1 unmarkable=3')) { throw "Digest 二跑计数不符: $($r.Output)" }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target
+    if ($r.Output -notmatch 'PENDING=3') { throw "SessionStart 应报 PENDING=3: $($r.Output)" }
+
+    # 幂等：第三次 Digest 全部 already，SessionStart 继续只报不可标记的 3 条
+    $r = Invoke-Runner -Mode 'Digest' -Target $target
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=0 already=2 unmarkable=3')) { throw "Digest 幂等计数不符: $($r.Output)" }
+    # 负面断言：状态目录之外不得出现任何 .digested 文件（恶意 dedupKey 不得逃逸）
+    $escaped = @(Get-ChildItem -LiteralPath $target -Recurse -Force -Filter '*.digested' | Where-Object { $_.FullName -notlike ((Join-Path $target '.feisheng/vibe-hook-state') + '*') })
+    if ($escaped.Count -gt 0) { throw ("digested 标记出现在状态目录之外: " + (@($escaped | ForEach-Object { $_.FullName }) -join '; ')) }
 
     # 5) 安装 / 卸载 / 回滚 + 契约篡改必须 fail-closed
     $installer = Join-Path $repoRoot 'scripts/install-vibe-hooks.ps1'
@@ -193,7 +222,7 @@ try {
     }
     if ($violations.Count -gt 0) { throw ("白名单外出现写入: " + ($violations -join '; ')) }
 
-    [Console]::WriteLine('PASS: Vibe Hook adapter v2 — enablement scoped to experience sedimentation, whitelist enforced, idempotent, governance events stay disabled.')
+    [Console]::WriteLine('PASS: Vibe Hook adapter v2 — capture-scoped enablement, whitelist enforced, idempotent, digestion markers pending-aware, governance events stay disabled.')
     exit 0
 } finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }

@@ -1,7 +1,7 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Validate', 'Invoke')]
+    [ValidateSet('Validate', 'Invoke', 'Digest')]
     [string]$Mode,
 
     [Parameter(Mandatory = $true)]
@@ -25,15 +25,18 @@ Set-StrictMode -Version Latest
 
 # Vibe Hook 适配器单一 runner（契约：adapters/vibe-hooks/contract.json v2）。
 #
-# 语义（v2 = enabled-experience-sedimentation-v1）：
-#   - SessionStart    启用：只读汇总目标项目经验索引，输出上下文；不写任何文件
+# 语义（v2 = enabled-experience-sedimentation-v1，采集面；沉淀三件套未接入，不声称完整闭环）：
+#   - SessionStart    启用：只读汇总索引中「待消化」条数（已打 Digest 标记的不计）；不写任何文件
 #   - UserPromptSubmit 启用：保守纠错信号检测，命中才向白名单索引追加一行 JSON；始终 exit 0
+#   - Digest          维护命令（非宿主事件）：把索引中 40 位十六进制 dedupKey 的条目在白名单状态目录
+#                      打 <dedupKey>.digested 标记；SessionStart 从此只提醒未消化条目
 #   - 其余事件        禁用：exit 3（治理门禁归控制面，不重复建第二套）
 #
 # 铁律：
 #   - 永不执行 sources/vibe-coding-skills 的源钩子（sourceRunnerExecution=false）
 #   - 所有写入限定在契约 writeWhitelist 内；越界 = 拒绝并记录到状态目录
 #   - 幂等：同一事件键在 retention 内只处理一次
+#   - dedupKey 用作标记文件名前必须严格校验为 40 位小写十六进制（索引行是不可信数据，防路径注入）
 
 $script:EnabledEvents = @('SessionStart', 'UserPromptSubmit')
 
@@ -179,12 +182,26 @@ function Test-EventDuplicate {
     return $false
 }
 
+function Get-DedupKeyFromLine {
+    param([Parameter(Mandatory = $true)][string]$Line)
+    # 索引行是不可信数据：dedupKey 必须严格是 40 位小写十六进制才可用作标记文件名（防路径注入）。
+    try {
+        $entry = $Line | ConvertFrom-Json
+        if ($null -ne $entry.PSObject.Properties['dedupKey']) {
+            $key = [string]$entry.dedupKey
+            if ($key -match '^[0-9a-f]{40}$') { return $key }
+        }
+    } catch { }
+    return ''
+}
+
 function Invoke-SessionStartHandler {
     param(
         [Parameter(Mandatory = $true)][string]$TargetRoot,
-        [Parameter(Mandatory = $true)][array]$Whitelist
+        [Parameter(Mandatory = $true)][array]$Whitelist,
+        [Parameter(Mandatory = $true)][string]$StateDir
     )
-    # 只读：汇总经验索引里待处理的条目数，作为上下文输出；不写任何文件。
+    # 只读：汇总经验索引里「待消化」条数（已打消化标记的不计），作为上下文输出；不写任何文件。
     $indexPath = Join-Path $TargetRoot '.claude/feedback/FEEDBACK-INDEX.md'
     if (-not (Test-Path -LiteralPath $indexPath -PathType Leaf)) { exit 0 }
     try {
@@ -193,8 +210,51 @@ function Invoke-SessionStartHandler {
         exit 0  # 索引被锁/不可读：静默降级，绝不阻塞宿主
     }
     if ($lines.Count -eq 0) { exit 0 }
+    $pending = 0
+    foreach ($line in $lines) {
+        $key = Get-DedupKeyFromLine -Line $line
+        if (-not [string]::IsNullOrWhiteSpace($key)) {
+            $marker = Join-Path $StateDir ($key + '.digested')
+            if (Test-Path -LiteralPath $marker -PathType Leaf) { continue }
+        }
+        $pending++   # 无有效 dedupKey 的条目按未消化计（保守，不会漏提醒）
+    }
+    if ($pending -eq 0) { exit 0 }
     [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
-    Write-Output ("经验沉淀提醒：目标项目的纠错经验索引有 " + $lines.Count + " 条待消化（.claude/feedback/FEEDBACK-INDEX.md）。处理相关问题时先查阅，避免重复踩坑。")
+    # PENDING=/TOTAL= 是 ASCII 机器可读前缀（测试与日志解析用），中文句子面向宿主模型
+    Write-Output ("PENDING=" + $pending + "; TOTAL=" + $lines.Count + "; 经验沉淀提醒：目标项目的纠错经验索引有 " + $pending + " 条待消化（.claude/feedback/FEEDBACK-INDEX.md）。处理相关问题时先查阅，避免重复踩坑；消化后运行 runner -Mode Digest 标记完成。")
+    exit 0
+}
+
+function Invoke-DigestHandler {
+    param(
+        [Parameter(Mandatory = $true)][string]$TargetRoot,
+        [Parameter(Mandatory = $true)][string]$StateDir
+    )
+    # 维护命令：给当前索引里的条目打消化标记。只写白名单状态目录；幂等（重复跑只报 already）。
+    $indexPath = Join-Path $TargetRoot '.claude/feedback/FEEDBACK-INDEX.md'
+    if (-not (Test-Path -LiteralPath $indexPath -PathType Leaf)) {
+        [Console]::WriteLine('DIGEST: index missing; 0 entries marked.')
+        exit 0
+    }
+    $lines = @(Get-Content -LiteralPath $indexPath -Encoding UTF8 | Where-Object { $_ -match '^\{' })
+    if (-not (Test-Path -LiteralPath $StateDir)) { New-Item -ItemType Directory -Force -Path $StateDir | Out-Null }
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    $unmarkable = 0
+    $uniqueKeys = @{}
+    foreach ($line in $lines) {
+        $key = Get-DedupKeyFromLine -Line $line
+        if ([string]::IsNullOrWhiteSpace($key)) { $unmarkable++; continue }
+        $uniqueKeys[$key] = $true
+    }
+    $marked = 0; $already = 0
+    foreach ($key in $uniqueKeys.Keys) {
+        $marker = Join-Path $StateDir ($key + '.digested')
+        if (Test-Path -LiteralPath $marker -PathType Leaf) { $already++; continue }
+        [System.IO.File]::WriteAllText($marker, (Get-Date).ToUniversalTime().ToString('o'), $utf8)
+        $marked++
+    }
+    [Console]::WriteLine('DIGEST: marked=' + $marked + ' already=' + $already + ' unmarkable=' + $unmarkable)
     exit 0
 }
 
@@ -261,8 +321,31 @@ $contract = Get-Content -Raw -Encoding UTF8 -LiteralPath $contractPath | Convert
 Assert-Contract -Contract $contract
 
 if ($Mode -eq 'Validate') {
-    [Console]::WriteLine('PASS: Vibe Hook adapter contract v2 is valid (experience sedimentation enabled; governance gates stay disabled).')
+    [Console]::WriteLine('PASS: Vibe Hook adapter contract v2 is valid (correction-signal capture scoped; Digest available; governance gates stay disabled).')
     exit 0
+}
+
+if ($Mode -eq 'Digest') {
+    $resolvedTarget = Get-TargetRoot -Start $TargetRoot
+    $contractStateStore = [string]$contract.idempotency.stateStore
+    $stateDirRelative = $contractStateStore.Replace('target-repository/', '').TrimStart('/')
+    if (-not [string]::IsNullOrWhiteSpace($StateDir)) {
+        $resolvedStateDir = [System.IO.Path]::GetFullPath($StateDir)
+    } else {
+        $resolvedStateDir = Get-ContainedPath -Root $resolvedTarget -RelativePath $stateDirRelative
+    }
+    # 状态目录若经 junction/symlink 重定向出目标项目，标记写入会越出白名单语义 → 拒绝（与采集同一防线）
+    if (Test-PathHasReparseAncestor -FullPath $resolvedStateDir -StopAtRoot $resolvedTarget) {
+        try {
+            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+            $diagDir = Join-Path $resolvedTarget '.feisheng/vibe-hook-state'
+            if (-not (Test-Path -LiteralPath $diagDir)) { New-Item -ItemType Directory -Force -Path $diagDir | Out-Null }
+            [System.IO.File]::AppendAllText((Join-Path $diagDir 'write-refusals.log'), ((Get-Date).ToUniversalTime().ToString('o') + ' digest state-dir reparse detected' + "`n"), $utf8NoBom)
+        } catch {}
+        [Console]::Error.WriteLine('REFUSED: 状态目录含 reparse 点，Digest 拒绝写入。')
+        exit 0
+    }
+    Invoke-DigestHandler -TargetRoot $resolvedTarget -StateDir $resolvedStateDir
 }
 
 if ([string]::IsNullOrWhiteSpace($Event)) { throw 'Invoke 模式必须给出 Event。' }
@@ -284,7 +367,7 @@ if (-not [string]::IsNullOrWhiteSpace($StateDir)) {
 
 switch ($Event) {
     'SessionStart' {
-        Invoke-SessionStartHandler -TargetRoot $resolvedTarget -Whitelist @($contract.writeWhitelist)
+        Invoke-SessionStartHandler -TargetRoot $resolvedTarget -Whitelist @($contract.writeWhitelist) -StateDir $resolvedStateDir
     }
     'UserPromptSubmit' {
         if ([string]::IsNullOrWhiteSpace($HookInput) -and -not [Console]::IsInputRedirected) {
