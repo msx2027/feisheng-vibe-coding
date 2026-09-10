@@ -27,6 +27,149 @@
       "reason": "third-party UI licenses and notices require per-skill review"
     }
   ],
+  "vibePerSkill": {
+    "schema": "feisheng-vibe-per-skill-license-ledger/v1",
+    "mergedAt": "2026-09-10",
+    "evidence": [
+      "evidence/20260910-vibe-product-audit-local.md",
+      "evidence/20260910-vibe-ui-audit-local.md",
+      "legal/fonts/NOTICE.md",
+      "legal/ui-system-guardian/SOURCE-DECLARATION.md"
+    ],
+    "note": "per-skill license mapping is informational for license completeness review only; runtimeEligible stays false for the whole vibe source until per-skill notices are independently reviewed",
+    "families": {
+      "ui-ux-pro-max-bundled": {
+        "license": "MIT",
+        "upstream": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill (skill.json v2.5.0)",
+        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-ui-ux-pro-max-bundled.txt",
+        "skills": [
+          "ui-ux-pro-max",
+          "design-system",
+          "ui-styling",
+          "brand"
+        ]
+      },
+      "impeccable-bundled": {
+        "license": "Apache-2.0",
+        "upstream": "https://github.com/pbakaus/impeccable (v2.1.7) + anthropics/skills frontend-design NOTICE",
+        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-impeccable-bundled.txt; sources/vibe-coding-skills/docs/legal/NOTICE-impeccable-bundled.txt",
+        "skills": [
+          "impeccable",
+          "adapt",
+          "animate",
+          "bolder",
+          "colorize",
+          "delight",
+          "distill",
+          "layout",
+          "overdrive",
+          "polish",
+          "quieter",
+          "typeset"
+        ]
+      },
+      "impeccable-bundled-product-checker-overlap": {
+        "license": "Apache-2.0 (same impeccable side bundled declaration)",
+        "upstream": "https://github.com/pbakaus/impeccable (v2.1.7)",
+        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-impeccable-bundled.txt",
+        "skills": [
+          "audit",
+          "critique",
+          "harden",
+          "optimize"
+        ]
+      },
+      "impeccable-bundled-unreviewed-overlap": {
+        "license": "Apache-2.0 (same impeccable side bundled declaration)",
+        "upstream": "https://github.com/pbakaus/impeccable (v2.1.7)",
+        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-impeccable-bundled.txt",
+        "skills": [
+          "clarify",
+          "shape"
+        ]
+      },
+      "vibe-original-product-checker": {
+        "license": "vibe distribution (private); see upstream package.json + README license section",
+        "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
+        "notice": "legal/ui-system-guardian/SOURCE-DECLARATION.md",
+        "skills": [
+          "architecture-foundation",
+          "bug-fixer",
+          "codebase-memory-scout",
+          "design-brief-builder",
+          "design-maker",
+          "dev-builder",
+          "dev-planner",
+          "doc-sync-guardian",
+          "hotspot-governor",
+          "product-spec-builder",
+          "release-builder",
+          "requirements-test-designer",
+          "rule-harvester",
+          "skill-builder",
+          "target-constitution-setup",
+          "target-runtime-setup",
+          "test-automation",
+          "ui-system-guardian"
+        ]
+      },
+      "vibe-original-checker": {
+        "license": "vibe distribution (private); see upstream package.json + README license section",
+        "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
+        "notice": "none; source-only checker",
+        "skills": [
+          "vibe-code-review"
+        ]
+      },
+      "vibe-original-unreviewed": {
+        "license": "vibe distribution (private); unreviewed",
+        "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
+        "notice": "none; source-only-unreviewed",
+        "skills": [
+          "beginner-flow-guide"
+        ]
+      },
+      "vibe-event-only": {
+        "license": "vibe distribution (private); event-only source-only",
+        "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
+        "notice": "none; event-only-source-only",
+        "skills": [
+          "evolution-engine",
+          "experience-elevator",
+          "feedback-writer"
+        ]
+      },
+      "vibe-compatibility-alias": {
+        "license": "vibe distribution (private); compatibility alias",
+        "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
+        "notice": "none; compatibility-alias",
+        "skills": [
+          "vibe-coding-skills"
+        ]
+      }
+    },
+    "fontGapResolved": {
+      "ui-styling": {
+        "note": "6 fonts (IBMPlexSerif x4, InstrumentSerif x2) previously lacked OFL texts; now mapped with upstream license text + source revision",
+        "license": "SIL OFL 1.1 (per family)",
+        "notice": "legal/fonts/NOTICE.md; legal/fonts/IBMPlexSerif-OFL.txt; legal/fonts/InstrumentSerif-OFL.txt",
+        "sources": {
+          "IBMPlexSerif": {
+            "upstream": "github.com/IBM/plex",
+            "file": "packages/plex-serif/LICENSE.txt (master)",
+            "revision": "c5f949677f6f163e8dfe98ca2c326bd48b42fa1b",
+            "date": "2024-06-12"
+          },
+          "InstrumentSerif": {
+            "upstream": "github.com/google/fonts",
+            "file": "ofl/instrumentserif/OFL.txt (main)",
+            "revision": "5e0122a40050ed2cc20e9d5c387d19dd13c6c69f",
+            "date": "2023-03-22"
+          }
+        }
+      }
+    }
+  },
   "forbidden": [
     "single-root-license-over-mixed-content",
     "runtime-inclusion-without-notice",
