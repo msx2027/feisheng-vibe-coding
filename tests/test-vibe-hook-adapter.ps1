@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-# Vibe Hook 适配器测试（契约 v2：经验沉淀启用、治理门禁保持禁用）。
+# Vibe Hook 适配器测试（契约 v2：纠错信号采集启用 + Digest 消化标记，治理门禁保持禁用）。
 #
 # 覆盖：
 #   1) Validate：契约 v2 不变量

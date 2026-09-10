@@ -59,6 +59,13 @@ if (-not ($classification.statusPolicy.PSObject.Properties.Name -contains $polic
 
 function ConvertTo-JsonStringScalar {
     param([Parameter(Mandatory = $true)][string]$Text)
+    # fail-closed：控制字符（换行/制表等）不转义会写出「pwsh 宽容解析、严格 JSON 解析器拒收」的文件，
+    # 且本仓库工具链察觉不到（GA 复核红队发现的 P2）——直接拒绝，让调用方清洗输入。
+    foreach ($ch in $Text.ToCharArray()) {
+        if ([int]$ch -lt 0x20) {
+            throw ('reason 含控制字符（0x{0:X2}）；请去除换行/制表等控制字符后重试。' -f [int]$ch)
+        }
+    }
     return $Text.Replace('\', '\\').Replace('"', '\"')
 }
 

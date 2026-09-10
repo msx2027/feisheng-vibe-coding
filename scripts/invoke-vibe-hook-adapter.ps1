@@ -189,7 +189,9 @@ function Get-DedupKeyFromLine {
         $entry = $Line | ConvertFrom-Json
         if ($null -ne $entry.PSObject.Properties['dedupKey']) {
             $key = [string]$entry.dedupKey
-            if ($key -match '^[0-9a-f]{40}$') { return $key }
+            # -cmatch：大小写敏感。契约声明 lowercase hex，PS 的 -match 默认忽略大小写，
+            # 大写 key 会在大小写敏感文件系统上产生第二份标记（GA 复核红队 P3）。
+            if ($key -cmatch '^[0-9a-f]{40}$') { return $key }
         }
     } catch { }
     return ''

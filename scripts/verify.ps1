@@ -122,7 +122,7 @@ try {
                 $runtimeFiles += [pscustomobject]@{ path = [string]$runtimeRecord.path; sha256 = [string]$runtimeRecord.sourceSha256 }
             }
 
-            foreach ($runtimeFile in $runtimeFiles) {
+        foreach ($runtimeFile in $runtimeFiles) {
                 $runtimeRelativePath = ([string]$runtimeFile.path).Replace('\', '/')
                 $runtimeFullPath = Join-Path $repoRoot ($runtimeRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
                 if (-not (Test-Path -LiteralPath $runtimeFullPath -PathType Leaf)) {
@@ -136,6 +136,24 @@ try {
                 $runtimeChecked++
             }
         }
+        # 1b-2) 全局唯一性守护：任何记录的 path 都不得是另一记录 path 的路径后缀。
+        #     否则宿主可见性按 path 后缀归属时，同一条目会同时命中多条记录（GA 复核红队指出的
+        #     构造性歧义：admitted 记录可借他记录文件拿到假 model-visible，非 admitted 会被误报影子入口）。
+        $allRecordPaths = @(@($catalogDoc.records) | ForEach-Object { ([string]$_.path).Replace('\', '/') })
+        $pathSuffixCollisions = @()
+        for ($pi = 0; $pi -lt $allRecordPaths.Count; $pi++) {
+            for ($pj = 0; $pj -lt $allRecordPaths.Count; $pj++) {
+                if ($pi -eq $pj) { continue }
+                $isSuffix = $allRecordPaths[$pj].ToLowerInvariant().EndsWith('/' + $allRecordPaths[$pi].ToLowerInvariant(), [System.StringComparison]::OrdinalIgnoreCase)
+                if ($isSuffix) {
+                    $pathSuffixCollisions += ($allRecordPaths[$pi] + ' 是 ' + $allRecordPaths[$pj] + ' 的路径后缀（归属歧义）')
+                }
+            }
+        }
+        if ($pathSuffixCollisions.Count -gt 0) {
+            $runtimeDrift += @(@('catalog path 后缀歧义（全局唯一性）') + @($pathSuffixCollisions | Select-Object -First 5))
+        }
+
         if ($runtimeDrift.Count -gt 0) {
             Add-Result -Step 'runtime include 内容完整性' -Passed $false -Detail ($runtimeDrift -join '; ')
         } else {
@@ -312,7 +330,7 @@ try {
         Add-Result -Step '发布 NOTICE 门禁' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 5) Vibe Hook 适配器安全契约（v2：仅经验沉淀两事件启用，治理门禁事件保持禁用）
+    # 5) Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记，治理门禁事件保持禁用）
     #    测试覆盖：契约不变量、未启用事件 exit 3、SessionStart 只读、UserPromptSubmit 白名单追加 + 幂等、写入边界。
     try {
         $null = Invoke-Child -Script (Join-Path $repoRoot 'tests/test-vibe-hook-adapter.ps1') -Arguments @{
@@ -358,6 +376,7 @@ try {
                     }
                 } else {
                     # 影子入口：非 admitted 技能不得从统一包内可见（遗留源链接暴露不算，那是阶段 5 口径）
+                    if ($null -eq $er) { continue }  # 非 admitted 缺证据记录不算违规（影子检查无从做起）
                     foreach ($v in @($er.visibleAs)) {
                         if ([string]$v.path -like 'feisheng-vibe-coding/*') {
                             $gateViolations += ([string]$record.id + ' (非 admitted 但从统一包内可见: ' + [string]$v.path + ')')

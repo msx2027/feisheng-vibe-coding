@@ -12,7 +12,7 @@
 
 ### skill-catalog
 
-拥有技能的 canonical id、来源、调用类型、触发边界、输出形态和依赖。`provenance/SKILL-INVENTORY.json` 只记录三份来源的原始事实；`provenance/SKILL-DECISIONS.md` 记录人工语义判断；`provenance/CANONICAL-CATALOG.json` 才是统一仓库的唯一技能决策真源。README、plugin manifest 和宿主清单只能由它生成或校验。
+拥有技能的 canonical id、来源、调用类型、触发边界、输出形态和依赖。技能分类决策的唯一写入点是 `provenance/SKILL-CLASSIFICATION.json`；`provenance/SKILL-INVENTORY.json` 只记录三份来源的原始事实；`provenance/SKILL-DECISIONS.md` 记录人工语义判断；`provenance/CANONICAL-CATALOG.json` 是由 `scripts/build-canonical-catalog.ps1` 从分类生成的统一决策投影，只能再生、不得手工编辑（2026-09-11 与 AGENTS.md 对齐）。README、plugin manifest 和宿主清单只能由它生成或校验。
 
 ### target-truth
 

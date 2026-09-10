@@ -262,7 +262,7 @@ model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留�
 已接入（`e224c03`，见 `evidence/20260911-d2-green-t4-and-retirement.md`）：从 `9fe7e7a3` 快照逐字节导入
 `skills/engineering/`、writeAuthority=none、绑定表 9/9、NOTICE 过、门禁 13/13 + fresh clone 四组合全过。
 「宿主行为 smoke」阻塞由统一入口链路实测解除。共享根 4 个重名链接已退役（源仓库未动，回滚命令在证据里）。
-注意：共享根其余 ~66 个源仓库链接**未动**（阶段 5 口径待 owner 定）。
+注意：共享根其余 ~~~66 个~~~ **64 个**源仓库链接**未动**（阶段 5 口径待 owner 定；精确清点见 9.7）。
 
 ### 9.5 T5 ~~阶段 4 批次~~【已被闭环批超越 2026-09-11】
 
@@ -285,11 +285,11 @@ owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `eviden
 
 ### 9.7 T7【部分完成 2026-09-11】**收尾清理**
 
-- ✅ `provenance/HOST-DISCOVERY-EVIDENCE.json` 已重采（60 模型可见 / 14 仅安装 / 8 应缺席零误差）
+- ✅ `provenance/HOST-DISCOVERY-EVIDENCE.json` 已重采（~~60 模型可见 / 14 仅安装 / 8 应缺席~~ 本批 T7 时点数字；治理对齐批已按 path 精确归属再次重采为 **39 / 25 / 8 / 10**，见 7.3，以新数字为准）
 - ✅ 本批文档一致性：交接文档数字、能力索引、 packaging 策略同步
 - ⏸️ `_smoke/` 清理：等 owner 真人测试通过后统一删（探测脚手架可能复用）
 - ⏸️ 新接入技能 frontmatter 描述里的旧入口名（`vibe-coding-skills`）：委派不受影响；改名需动导入保真机制，暂缓
-- ⏸️ 共享根其余 ~66 个源仓库链接退役：阶段 5，需 owner 口径
+- ⏸️ 共享根其余 ~~~66 个~~ **64 个**源仓库链接退役：阶段 5，需 owner 口径（精确清点见 `scripts/audit-host-legacy-links.ps1` 输出，快照 `_smoke/host-legacy-links-20260911.json`）
 - 若 T2 推翻了形态决策，回头更新第 6 节决策日志（标注被推翻的原因）
 
 ### 9.8 GA【已完成 2026-09-11】**治理对齐批**（6 子 Agent 交叉复核后的五项修复）
@@ -316,7 +316,11 @@ owner 批准的五个优先级修复，全部完成并通过 `verify.ps1 -Includ
 
 GA 批后遗留（按优先级）：① 沉淀消费三技能的迁移批次（需许可证族决策 + statusPolicy 决策 + 绑定变更）；
 ② 64 个源仓库链接的退役口径（owner）；③ 挂远端让 CI 真跑（owner 提供仓库地址）；
-④ OWNER-LEDGER 的结构性议题（"Sliver" 实体未登记、裁决 owner 无落点文件、OWNER-LEDGER 等 owner 文件不在完整性基线内）。
+④ OWNER-LEDGER 的结构性议题（"Sliver" 实体未登记、裁决 owner 无落点文件、OWNER-LEDGER 等 owner 文件不在完整性基线内、
+skill-catalog 条目的 path/writes 仍指向生成物 catalog 而非唯一写入点 classification——GA 复扫发现的口径错位、
+`SOURCE-INVENTORY.json` 状态停格在迁移前但被 AGENTS.md 指为权威迁移记录、`LOCAL-PATCHES.json` owner 字段 "provenance" 不在 ledger）。
+复扫批次还确认：collector 无单元测试（布尔恒真类回归只靠注释与踩坑清单防）、verify 5b 不比对证据与 catalog 的 readiness 字段
+（内容级漂移只受 7 天新鲜度约束）——两者都是下一批的候选门禁增强。
 
 ---
 

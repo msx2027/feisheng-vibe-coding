@@ -61,7 +61,7 @@
   },
   "idempotency": {
     "required": true,
-    "key": "sha256(eventNamespace,eventName,sessionId,prompt) (Claude Code UserPromptSubmit payload has no event_id/tool_use_id)",
+    "key": "sha256(eventNamespace,eventName,sessionId,prompt) truncated to the first 40 lowercase hex chars (Claude Code UserPromptSubmit payload has no event_id/tool_use_id)",
     "stateStore": "target-repository/.feisheng/vibe-hook-state/",
     "retentionSeconds": 600
   },
@@ -86,7 +86,8 @@
   "enablePrerequisites": {
     "per-skill-license-and-notice-map": "PASS 2026-09-11 (owner personal-use waiver recorded in LICENSE-MAP vibe-original-* families)",
     "verified-source-revision": "PASS (snapshot pinned by provenance integrity gates)",
-    "host-discovery-and-fresh-session-smoke": "PASS 2026-09-11 (HOST-DISCOVERY-EVIDENCE.json re-captured; D2/D3 fresh-session probes in evidence/20260911-*)",
+    "host-discovery-evidenced": "PASS 2026-09-11 (HOST-DISCOVERY-EVIDENCE.json re-captured with path-exact attribution; 39 admitted all unified-bundle visible)",
+    "hook-fresh-session-smoke": "UNVERIFIED (no in-repo artifacts; installer refuses this repo by design; entry-level D2/D3 probes in evidence/20260911-* are a different scope - do not cite them as hook smoke)",
     "event-order-and-concurrency-smoke": "PASS 2026-09-11 (tests/test-vibe-hook-adapter.ps1 in pwsh + PS 5.1: dedup marker, expiry re-record, read-only session-start, junction-escape negative case)",
     "approved-write-whitelist-and-rollback-plan": "PASS 2026-09-11 (writeWhitelist v2; rollback = -Uninstall or contract status flip to disabled, runner then fails closed with non-zero exit)",
     "independent-logical-review": "PASS 2026-09-11 (subagent review APPROVE-WITH-FINDINGS; P1-1 reparse escape + P1-2 installer/uninstall/tamper tests closed; residual P2s fixed: guard scoped to TargetRoot, leaf link check, state-dir reparse precheck, atomic uninstall write, stale wording)"
