@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T12:29:34.0943619Z",
+  "generatedAt": "2026-09-10T12:34:43.6319592Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1319,7 +1319,7 @@
       "vibe-coding-skills",
       "ask-matt"
     ],
-    "note": "bundle 字段只出现在 acceptedStatuses 记录上：它是该记录的 runtime 文件白名单（逐文件 sha256）。\n        规则与排除理由的真源是 SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy。"
+    "note": "runtime 单位策略（数据真源；由 build-canonical-catalog.ps1 写入 catalog.bundlePolicy，投影门禁与 verify 读生成物而不重定义）：定义一条记录进入投影时到底带哪些文件。catalog 里的 bundle 字段只出现在 acceptedStatuses 记录上，它是该记录的 runtime 文件白名单（逐文件 sha256）。"
   },
   "duplicateGroups": [
     {

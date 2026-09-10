@@ -21,3 +21,11 @@
 sources/** -text
 skills/** -text
 governance/sliver-core/** -text
+
+# 脚本源码固定为 LF。
+#
+# 生成物的字符串值不得依赖脚本源码的换行：实测过一个真实缺陷 —— 生成器里的一个
+# 多行字面字符串会让 catalog 在 core.autocrlf=true 的 clone 里重新生成出含 CRLF 的字符串值，
+# 于是 `catalog 与分类真源同步` 门禁在 fresh clone 上失败（本机却是绿的）。
+# 固定脚本换行后，这类「生成物随本地 git 配置变化」的问题不再可能出现。
+scripts/** text eol=lf

@@ -436,8 +436,7 @@ $output = [ordered]@{
         directoryExcludedSegments = @($bundleExcludedSegments)
         directoryExcludedReason = [string]$bundlePolicySource.directoryExcludedReason
         forbiddenSegments = @($projectionForbiddenSegments)
-        note = 'bundle 字段只出现在 acceptedStatuses 记录上：它是该记录的 runtime 文件白名单（逐文件 sha256）。
-        规则与排除理由的真源是 SKILL-CLASSIFICATION.json 的 runtimePromotionPolicy.bundlePolicy。'
+        note = [string]$bundlePolicySource.note
     }
     duplicateGroups = $duplicateGroups
     decisionPolicy = [ordered]@{

@@ -693,7 +693,7 @@
     "structuralPrerequisite": "accepted 记录的 path 必须位于 sources/ 之外（一等导入位置），否则无法进入投影：scripts/runtime-projection-guard.ps1 明确禁止把 sources 段带进运行时 bundle。Vibe 技能的导入约定：accepted 记录必须声明 sourceDir，由 scripts/import-vibe-skills.ps1 从快照导入到 skills/checker/<id>/（派生来源登记在 provenance/VIBE-IMPORTS.json），catalog 生成器据此改写 path。许可证侧同批完成策略化：vibePerSkill.families[].runtimeEligible 是逐族策略真源，scripts/validate-release-notices.ps1 读它而不是硬编码 source 级 flag；缺字段即 fail-closed。",
     "runtimeIneligibilityPolicy": "runtimeEligible=false 的许可证族不得进入 runtime：vibe-original-* 族的上游是 private 分发包，未逐技能授予许可证文本，属「来源/许可证未通过」而非「待办」。解除需要上游逐技能许可证声明或独立法律审查，并同步改本文件的分类真源。",
     "bundlePolicy": {
-      "note": "runtime 单位策略（数据真源；由 build-canonical-catalog.ps1 写入 catalog.bundlePolicy，投影门禁与 verify 读生成物而不重定义）：定义一条记录进入投影时到底带哪些文件。",
+      "note": "runtime 单位策略（数据真源；由 build-canonical-catalog.ps1 写入 catalog.bundlePolicy，投影门禁与 verify 读生成物而不重定义）：定义一条记录进入投影时到底带哪些文件。catalog 里的 bundle 字段只出现在 acceptedStatuses 记录上，它是该记录的 runtime 文件白名单（逐文件 sha256）。",
       "directoryScope": "path 形如 skills/<group>/<id>/SKILL.md 的记录是「已物理导入的技能目录」，以整个目录为 runtime 单位（目录名必须等于 canonical id，否则生成器 fail-closed）。其余记录（如控制面 governance/sliver-core/SKILL.md）保持单文件单位 —— 那棵树的其余部分不是技能内容（含 hooks / packaging / tests），绝不能整体投影。",
       "explicitAllowlist": "目录单位不是「目录里有什么就发什么」：文件清单在生成时枚举并逐文件记录 sha256，生成物里就是显式白名单，且生成期就要校验不得命中 forbiddenSegments。",
       "directoryExcludedSegments": [
