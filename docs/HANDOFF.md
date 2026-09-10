@@ -182,6 +182,32 @@ owner 选定方案 B：自持后允许对 vendored 内容打补丁，并把偏�
 
 证据：`evidence/20260910-local-patch-registry.md`。
 
+## 第九轮完成情况：Codex 投影宿主事实补齐 + 重复/覆盖审计
+
+| 事项 | 结果 |
+|---|---|
+| **Codex 投影缺口修复** | 发现非对称：Claude 投影挂了 2 个宿主事实资产，Codex **一个都没挂**。按 Sliver 自己的 `runtime-manifest.json` 的 `targets.codex.overlay_files` 补入 3 个（`adapters/codex/agents/openai.yaml`、`adapters/codex/references/{studio-codex,execution-liveness-host}.md`）→ 投影 6 → 9 文件，Build/Validate 均 PASS，发布包 19 → 22 |
+| **AGENTS.md 要不要挂** | **不挂**，理由有实测支撑：Codex 原生读目标项目的 `AGENTS.md`（smoke 中实测到它注入仓库根 AGENTS.md）；那份宪法属于目标项目，由 Sliver 模板 materialize。Claude 侧同样不挂（它的 `CLAUDE.md` 只有一行 `@AGENTS.md`） |
+| **重复检查** | 仓库内部零重复（id/path/同内容文件）；跳来源仅 1 处同名冲突（`code-review`）已由命名空间 + duplicateGroups 消解；**宿主层面发现真实重复** |
+| **覆盖分析** | 见下「三包功能覆盖」 |
+
+### 宿主层面的真实重复（待你授权清理）
+
+`~/.claude/skills`(187) 与 `~/.codex/skills`(158) **有 157 个重名**，而两者**不是**同一目录。
+由于 `~/.claude/skills` 同时是 Codex 的根 `r1`，于是 **Codex 会把同一个技能列出两遍**（实测：`r0/...` 与 `r1/...` 各一条）。
+Claude 不读 `~/.codex/skills`。→ 建议清掉 `~/.codex/skills` 里与 `r1` 重复的 157 个（保留 `.system` 等 Codex 专属）。
+**本次未执行**（会动你的环境）。
+
+### 三包功能覆盖（在交接时保留结论）
+
+- **内容覆盖 ~100%**：能力性文件无一缺失（Vibe `tools/` 145/145、`hooks/` 10/10、`codex-hooks/` 22/22）；
+  被排除的 792 个里 711 个是宿主镜像（正是「不把镜像当源码」规则的执行）、71 个是开发计划。
+- **正式投影 4/82（5%）**；宿主上已可用的 75 个来自你**既有**安装，不是我们包的投影。
+- **唯一结构性未实现的能力 = Hook 自动强制**（内容在，适配器故意禁用）。
+- 已知小缺口：Vibe 3 个 docs（含被引为权威的 `docs/runtime-loading-policy.md`）；Matt `.skills/translate-skill`（建议不补）。
+
+证据：`evidence/20260910-duplicate-and-coverage-audit.md`。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）

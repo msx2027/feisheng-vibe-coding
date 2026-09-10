@@ -11,13 +11,17 @@
         "governance/sliver-core/SKILL.md",
         "skills/engineering/diagnosing-bugs/SKILL.md",
         "skills/engineering/codebase-design/SKILL.md",
-        "skills/engineering/domain-modeling/SKILL.md"
+        "skills/engineering/domain-modeling/SKILL.md",
+        "adapters/codex/agents/openai.yaml",
+        "adapters/codex/references/studio-codex.md",
+        "adapters/codex/references/execution-liveness-host.md"
       ],
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
+      "hostFacts": "mirrors Sliver's runtime-manifest targets.codex.overlay_files; symmetric with the claude projection which ships CLAUDE.md plus adapters/claude/runtime-adapter.md",
+      "entryFileNote": "no AGENTS.md is shipped: those three files are the codex host facts. Codex reads the target project's own AGENTS.md natively (observed in the host smoke), and that constitution belongs to the target project and is materialised by Sliver's bootstrap/adoption templates - the claude projection does not ship AGENTS.md either, it ships a thin CLAUDE.md whose only content is @AGENTS.md",
       "freshSessionDiscovery": "VERIFIED for the Sliver control-plane bundle; A/B codex debug prompt-input: available skills 204 vs 203 and the skill gained its own root r0 (~/.codex/skills)",
       "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-codex-and-bundle-validation.md",
-      "freshSessionSmoke": "PARTIAL; control-plane bundle discovery verified, this projection bundle itself not yet probe-tested",
-      "knownGap": "codex injects the repository root AGENTS.md as instructions, but this projection's include list has no AGENTS.md"
+      "freshSessionSmoke": "PARTIAL; control-plane bundle discovery verified, this projection bundle itself not yet probe-tested"
     },
     "claude": {
       "status": "candidate-unverified; static-smoke-only; host-discovery-verified",

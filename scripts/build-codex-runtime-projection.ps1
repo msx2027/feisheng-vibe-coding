@@ -21,6 +21,66 @@ if (-not (Test-Path -LiteralPath $guardModule -PathType Leaf)) {
 }
 . $guardModule
 
+# Codex 宿主事实资产（Sliver codex 适配器 overlay）。
+# 权威来源：governance/sliver-core/packaging/runtime-manifest.json 的 targets.codex.overlay_files。
+# 与 Claude 侧对称：Claude 挂 CLAUDE.md + adapters/claude/runtime-adapter.md，Codex 挂这里 3 个。
+$codexHostFactFiles = @(
+    [pscustomobject]@{
+        id = 'codex-host-facts-openai-yaml'; kind = 'host-facts'; source = 'sliver-vibe-coding'
+        relativePath = 'adapters/codex/agents/openai.yaml'
+        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/agents/openai.yaml'
+    },
+    [pscustomobject]@{
+        id = 'codex-host-facts-studio-codex'; kind = 'host-facts'; source = 'sliver-vibe-coding'
+        relativePath = 'adapters/codex/references/studio-codex.md'
+        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/references/studio-codex.md'
+    },
+    [pscustomobject]@{
+        id = 'codex-host-facts-execution-liveness'; kind = 'host-facts'; source = 'sliver-vibe-coding'
+        relativePath = 'adapters/codex/references/execution-liveness-host.md'
+        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/references/execution-liveness-host.md'
+    }
+)
+
+function Get-CodexProjectionPlan {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Root
+    )
+
+    # 复用共享 catalog 门禁：control-plane + accepted-primitive include、blocked 排除、写权限校验
+    $basePlan = Get-ProjectionPlan -Root $Root
+
+    $files = @($basePlan.files)
+    foreach ($fact in $codexHostFactFiles) {
+        $sourcePath = Join-ContainedPath -Root $Root -RelativePath $fact.sourceRelativePath
+        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+            throw ("缺少 Codex 宿主事实文件: " + $fact.sourceRelativePath)
+        }
+        $files += [pscustomobject]@{
+            id = $fact.id
+            kind = $fact.kind
+            source = $fact.source
+            sourceRevision = $null
+            relativePath = $fact.relativePath
+            sourcePath = $sourcePath
+            sourceRelativePath = $fact.sourceRelativePath
+        }
+    }
+
+    return [pscustomobject]@{
+        catalogPath = $basePlan.catalogPath
+        catalogRelativePath = $basePlan.catalogRelativePath
+        catalogSha256 = $basePlan.catalogSha256
+        sourceRevision = $basePlan.sourceRevision
+        entryPath = $basePlan.entryPath
+        files = $files
+        acceptedPrimitiveIds = $basePlan.acceptedPrimitiveIds
+        blockedRecords = $basePlan.blockedRecords
+        entryAliases = $basePlan.entryAliases
+    }
+}
+
 
 function Test-CodexRuntimeProjection {
     param(
@@ -35,7 +95,7 @@ function Test-CodexRuntimeProjection {
         throw "projection 输出目录不存在: $ProjectionRoot"
     }
 
-    $plan = Get-ProjectionPlan -Root $Root
+    $plan = Get-CodexProjectionPlan -Root $Root
     $manifestRelativePath = 'codex-projection-manifest.json'
     $manifestPath = Join-ContainedPath -Root $ProjectionRoot -RelativePath $manifestRelativePath
     if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
@@ -176,7 +236,7 @@ try {
             throw "OutputRoot 不能位于源仓库内: $outputRootFull"
         }
 
-        $plan = Get-ProjectionPlan -Root $repositoryRootFull
+        $plan = Get-CodexProjectionPlan -Root $repositoryRootFull
         New-Item -ItemType Directory -Force -Path $outputRootFull | Out-Null
         $manifestFiles = @()
         foreach ($plannedFile in $plan.files) {
