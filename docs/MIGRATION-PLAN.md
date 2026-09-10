@@ -21,7 +21,7 @@
 
 优先接入 `tdd`、`diagnosing-bugs`、`codebase-design`、`domain-modeling` 和双轴 `code-review`。`to-spec`、`to-tickets`、`implement` 先作为适配器，不能创建第二份项目真源。
 
-当前已接入：`diagnosing-bugs`、`codebase-design`、`domain-modeling`。`tdd` 与 `code-review` 因源目录存在未提交命名改动，状态为 `blocked-unclassified-working-tree`。
+当前已接入：`diagnosing-bugs`、`codebase-design`、`domain-modeling`。`tdd` 与 `code-review` 的 `blocked-unclassified-working-tree` 已按 canonical 命名策略**解除**（该状态仍在策略里保留为 `checker|blocked` 的映射，但当前 0 条记录使用）：两者现为 `source-only-primitive` / `source-only-checker`，内容取自已提交 revision `9fe7e7a3` 的 blob（不采用上游工作树未提交改名），canonical id 由本仓库决定；解除阻塞后的剩余条件是**宿主行为 smoke**（可解除的完整依据见 `evidence/20260910-matt-canonical-naming.md`）。另有 7 条 `adapter-candidate`（`implement`、`to-spec`、`to-tickets`、`triage`、`wayfinder`、`setup-matt-pocock-skills`、`improve-codebase-architecture`）尚未接入。
 
 ## 阶段 3：宿主适配
 

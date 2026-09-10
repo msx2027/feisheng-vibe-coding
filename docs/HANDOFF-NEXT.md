@@ -183,7 +183,7 @@ vendored 修改已按规矩登记 `LOCAL-PATCHES.json`（`originalSha256` → `p
 
 | 来源 | 源侧 SKILL.md | 我们登记 | 说明 |
 |---|---|---|---|
-| sliver-vibe-coding | 1 | 1 | 22 条主路由 + 9 lens 是 `references/*.md`，非独立技能 |
+| sliver-vibe-coding | 1 | 1 | 22 条主路由 + 8 lens 是 `references/*.md`，非独立技能（实测 `lens-catalog` 输出 8） |
 | vibe-coding-skills | **138** | **46** | 138 = `skills/` 46 + `.claude/skills/` 46 + `.agents/skills/` 46；后两者是宿主适配变体 |
 | mattpocock-skills | 36 | 35 | 未登记 `.skills/translate-skill`（翻译维护 meta-技能，建议不补） |
 
@@ -325,6 +325,10 @@ pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\
 - 宿主侧**从未在扩大后的 bundle 上重验**：控制面 bundle 从 1 个文件增到 **50 个**（总投影 65 文件），
   宿主发现性/行为都没有重新采证。
 - 宿主证据只证明「被识别」，**不证明行为正确**；本轮也未重采。
+- **现存宿主证据已过期，不得当作当前运行时集合的证据**：`provenance/HOST-DISCOVERY-EVIDENCE.json`
+  的 `capturedAt` 为 `2026-09-10T11:39:40Z`（= 19:39 +0800），而 Vibe 检查器接入提交 `3e14dd3` 在 **20:14 +0800**，
+  即证据比接入**早约 34 分钟**。所以那份证据里 `audit`/`critique`/`harden`/`optimize` 仍写着 `source-only`、
+  并且它记录的是**控制面 1 文件时代的 bundle**。重采前不得引用它作为运行时集合的宿主证据。
 - 控制面的 `assets/` **有意未纳入 bundle**（references 里有 `assets/project-adoption/**` 等引用，目前是悬空引用）。
   加 `"assets"` 到 `bundlePaths` 即可翻转，但那是「bootstrap 进目标项目的模板」还是「运行时 owner」，需 owner 拍定。
 
