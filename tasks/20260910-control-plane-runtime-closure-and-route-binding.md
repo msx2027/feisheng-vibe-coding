@@ -90,25 +90,34 @@ grep -rln "code-review|critique|harden|diagnosing-bugs|codebase-design|domain-mo
 - 实测效果（已完成）：runtime include 文件 16 → **65**；控制面 1 → **50** 个文件。
   功能验证：在仓库外的投影 bundle 内运行契约脚本成功解析出 22 条路由（证明不是「文件齐全但跑不起来」）。
 
-### 第 2 步：路由绑定
+### 第 2 步：路由绑定（设计约束已实测，方案待 owner 确认）
 
-绑定**必须写在路由 owner 里**（不得在根 `SKILL.md` 或 README 里另建第二份路由表）。
-两条候选路径，实施时择一并记录理由：
+**实测约束（关键，先说结论）**：`runtime_decision_contract.py` 里 `"skill"` 出现 **0 次**；
+`LOADED_OWNER_IDS` 是 10 个**抽象 owner 类别**（`routes`、`task_depth`、`testing`、`effect_recovery`、
+`risk_control`、`studio_execution`、`project_flow`、`plan_artifact`、`truth_capture`、`audit_artifact`），
+**不是文件路径**；对未知 id 会 `raise ContractError`。
 
-- **方案 A（推荐，改动小）**：在 `routes-index.md` 相关 route 的 `Load` 列中，把已接入技能作为**附加 owner** 列出
-  （如 `开发执行` 的 `Load` 里加 `skills/engineering/diagnosing-bugs/SKILL.md`）。
-  必须先用 `runtime_decision_contract.py` 实测该列是否被校验、以及非 `references/` 路径是否被接受。
-- **方案 B**：在 route 的 reference owner 文件（如 `references/development-execution-core.md`）里新增
-  「技能调用点」小节，声明何时调用哪个技能。更贴合 Sliver 语义（Load 列是 reference owner），但需要改 reference 内容。
+⇒ **Load 列是「owner 概念」而不是「文件清单」，把 `skills/<group>/<id>/SKILL.md` 直接塞进 Load 列
+不符合 Sliver 的契约模型**（且 Sliver 完全没有「技能」这个一等概念）。所以方案 A 已排除。
 
-两条路径都会修改 vendored 内容 → 必须登记 `LOCAL-PATCHES.json` + 重算 `PROVENANCE-INTEGRITY.json`（见 2.4）。
+**这一步是 owner/语义决策**（哪些 route 在什么条件下调用哪个技能，等于扩展路由语义），
+按仓库规则「路由必须各有唯一 owner」，应由 owner 拍定形态后实施。三个候选：
 
-绑定内容来源：`SKILL-CLASSIFICATION.json` 的 `duplicateGroups[].rule`（11 组已给出唯一 owner 与分工）。
-至少覆盖当前已接入的 8 条记录：`audit`、`critique`、`harden`、`optimize`、`codebase-design`、`diagnosing-bugs`、
-`domain-modeling`、`sliver-vibe-coding`（后者是控制面自身，不需要绑定）。
+| 方案 | 做法 | 代价 | 评价 |
+|---|---|---|---|
+| **1（推荐）** | 在相关 route 的 **reference owner 文件**（Load 列已指向的 md）里新增「内部技能调用点」小节，声明「条件 → 技能路径 → 分工」 | 内容层改动，**不动 Python 契约**、不动表结构；需 `LOCAL-PATCHES.json` 登记 | 最贴合 Sliver 设计（Load 指向的 owner 负责说明能力）；改动面可控（预计 2–3 个 owner 文件） |
+| 2 | 新增我们自己的集中 owner 文件（如 `references/internal-skill-bindings.md`），加进相关 route 的 Load 列 | 需同时改 `LOADED_OWNER_IDS`（机器校验核心） | 绑定集中、易审查，但改动直击契约校验器，风险最高 |
+| 3 | 只在根 `SKILL.md`（我们的入口）声明技能清单，不动 Sliver | 最小 | Sliver 路由仍不引用技能 ⇒ 绑定效果最弱；且容易被判为「第二份路由表」 |
 
-新增门禁（`verify.ps1`）：每条 runtime 已接入的技能记录必须在路由 owner 里有**唯一命中**，
-且不得引入第二入口（与既有 `duplicateGroups` / `entryAliases` 检查一致）。
+推荐方案 1，理由：绑定内容**已经存在**（`duplicateGroups[].rule` 的 11 组裁决给出了唯一 owner 与分工），
+只需把它落到 route 的 owner 文档里；且不改机器校验层，风险最低。
+
+**绑定内容的来源（不需要新决策）**：`SKILL-CLASSIFICATION.json` 的 `duplicateGroups[].rule`。
+需绑定的已接入技能（8 条记录去掉控制面自身 = 7 个）：
+`audit`、`critique`、`harden`、`optimize`、`codebase-design`、`diagnosing-bugs`、`domain-modeling`。
+
+**新增门禁（`verify.ps1`）**：每条 runtime 已接入的技能记录必须在路由绑定 owner 里有**唯一命中**；
+反例（删掉一条绑定）必须使门禁失败。
 
 ## 四、不做事项
 
