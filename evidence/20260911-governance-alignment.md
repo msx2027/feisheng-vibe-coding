@@ -95,3 +95,30 @@ verify: 14/14 steps passed
 
 宿主 trust、逐技能行为质量（用一次验一次）、Hook 宿主 fresh-session 冒烟（无仓库内留痕物）、
 沉淀消费技能接入、发布 CI 实跑（无远端）——全部维持 `UNVERIFIED`，本批不改变这些边界。
+
+## 5. 复扫轮（4 子 Agent）与增量修复（提交 c93cb7d）
+
+修复后按 owner 要求执行多批交叉复核。第一批 4 个只读子 Agent 按原四维度复扫
+（Owner/写入权限、新增脚本红队深审、文档一致性、运行时闭环），结论：**五项修复全部成立**——
+AGENTS.md 新规与执行链四处互证一致；沉淀链「采集→提醒→消化标记→提醒递减」四跳闭合且消费跳
+在三份活文档与契约中一致地保持敞口；数字六处对账（82/39/399/176/401/64/12步/14步）；
+collector 两个伪影确认修复且不再复发。红队独立实证：retire 工具 fail-closed 属实（含 -DryRun 也拒）、
+幂等成立、正则锚定无前缀误配、Digest 注入防线成立、测试全绿。
+
+复扫发现的增量项及处置（提交 `c93cb7d`，门禁复跑 14/14 + fresh clone 14/14）：
+
+| 级别 | 发现 | 处置 |
+|---|---|---|
+| P2 | retire 工具不转义控制字符 → 可写出 pwsh 宽容但严格解析器拒收的 JSON，仓库工具链全盲 | `ConvertTo-JsonStringScalar` 对 <0x20 字符直接 throw（fail-closed）；在临时 clone（加 checker\|retired 策略行）实测 `[char]10` reason 被拒：`TOOL-REJECTED: reason 含控制字符（0x0A）` |
+| P2 | collector path 后缀归属缺全局唯一性守护（构造性歧义埋雷） | verify 步骤 1b 新增 O(n²) 检查：任何记录 path 是另一记录 path 的后缀即 FAIL |
+| 活矛盾 | `contract.json` enablePrerequisites 仍有一条 `host-discovery-and-fresh-session-smoke: PASS`，与全仓 UNVERIFIED 口径相抵 | 拆为 `host-discovery-evidenced: PASS` + `hook-fresh-session-smoke: UNVERIFIED`（并注明 D2/D3 入口探测不可引作 hook 冒烟）；幂等键补 40-hex 截断说明 |
+| 活矛盾 | `ARCHITECTURE.md:15` 仍称 catalog 是"唯一技能决策真源" | 改为与 AGENTS.md 一致（classification 唯一写入点、catalog 只能再生） |
+| 滞后 | HANDOFF-NEXT §9.7 旧数字 60/14/8、§9.4/§9.7 "~66"未随新口径回收 | 划线标注被 39/25/8/10 与 64 取代 |
+| P3 | runner `-match` 忽略大小写，契约却声明 lowercase hex | 改 `-cmatch`；测试复跑 PASS |
+| P3 | verify 5b 非 admitted 缺证据记录时空引用报错信息差 | 空值守卫 |
+| P3 | tests/verify 注释残留"经验沉淀启用"旧措辞 | 改采集面口径 |
+| 记账 | SOURCE-INVENTORY 停格迁移前、OWNER-LEDGER skill-catalog 条目 path/writes 指向生成物、collector 无单元测试、verify 5b 不比对 readiness 内容漂移 | 全部写入 HANDOFF-NEXT §9.8 遗留清单，留待下批 |
+
+复扫确认的「有意遗留」（非本批失败，均有留痕）：13 owner vs README 4 owner 表述、7 个裁决 owner 无落点、
+PROVENANCE-INTEGRITY 不锁 owner 文件、LOCAL-PATCHES owner 字段悬空、根 SKILL.md 委托链措辞、
+retiredAt 为 UTC 日期（2026-09-10）与本地批次日期差一天。
