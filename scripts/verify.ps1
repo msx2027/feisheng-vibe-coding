@@ -167,6 +167,58 @@ try {
         Add-Result -Step '导入副本与快照一致性' -Passed $false -Detail $_.Exception.Message
     }
 
+    # 1d) 保真树的换行可复现性（把刚修好的不变量锁住，防回归）
+    #     目标：不管 runner 的 core.autocrlf 是什么值，保真树在 clone 后都得到与登记 sha 一致的字节。
+    #     做法：对保真树逐文件检查 ①属性确实是 -text（规则覆盖到、且没被删）
+    #     ②索引 blob 与工作树字节一致（i/ 与 w/ 相同）—— 后者就是「clone 会原样还原」的等价表述。
+    #     反例：删掉 .gitattributes 规则、或在自动转换生效时重新 add 快照，都会被这条抓。
+    try {
+        Get-Command git -ErrorAction Stop | Out-Null
+        $fidelityTrees = @('sources', 'skills', 'governance/sliver-core')
+        $eolOutput = @(& git -C $repoRoot ls-files --eol -- @fidelityTrees 2>$null)
+        if ($LASTEXITCODE -ne 0) { throw 'git ls-files --eol 执行失败' }
+        if ($eolOutput.Count -eq 0) { throw '保真树没有任何已跟踪文件；预期至少 sources/** 与 skills/**。' }
+        $eolViolations = @()
+        $eolParsedCount = 0
+        foreach ($line in $eolOutput) {
+            # git ls-files --eol 的实际格式：前三个字段是空格对齐的 `i/<eol> w/<eol> attr/<attr>`，
+            # 然后一个 TAB，再是路径。只按 TAB 切只能得到 2 段，必须再切 meta 段，
+            # 否则每一行都会被跳过，门禁会“假通过”（本步已实测踩过这个坑）。
+            $tabFields = @([string]$line -split "`t")
+            if ($tabFields.Count -lt 2) { continue }
+            $relativePath = [string]$tabFields[1]
+            $metaFields = @($tabFields[0] -split '\s+' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+            if ($metaFields.Count -lt 3) {
+                $eolViolations += ($relativePath + ' (无法解析 --eol 输出行)')
+                continue
+            }
+            $eolParsedCount++
+            $indexToken = $metaFields[0]
+            $worktreeToken = $metaFields[1]
+            $attribute = $metaFields[2]
+            if ($attribute -notlike 'attr/*-text*') {
+                $eolViolations += ($relativePath + ' (属性不是 -text: ' + $attribute + ')')
+                continue
+            }
+            # 必须去掉 i/ 与 w/ 前缀再比：这两个前缀天生不同，直接比会把全部文件报成违规（本步已踩过）。
+            if (($indexToken -replace '^i/', '') -ne ($worktreeToken -replace '^w/', '')) {
+                $eolViolations += ($relativePath + ' (' + $indexToken + ' != ' + $worktreeToken + ')')
+            }
+        }
+        # 自检：解析不到行就直接失败，不让格式变化静默变成“通过”
+        if ($eolParsedCount -ne $eolOutput.Count) {
+            $eolViolations += ('解析行数 ' + $eolParsedCount + ' != git 输出行数 ' + $eolOutput.Count + '（--eol 输出格式可能已变）')
+        }
+        if ($eolViolations.Count -gt 0) {
+            $preview = @($eolViolations | Select-Object -First 5) -join '; '
+            Add-Result -Step '保真树换行可复现性' -Passed $false -Detail ('违规 ' + $eolViolations.Count + ' 个: ' + $preview)
+        } else {
+            Add-Result -Step '保真树换行可复现性' -Passed $true -Detail ('files = ' + $eolOutput.Count + ' (-text，索引==工作树)')
+        }
+    } catch {
+        Add-Result -Step '保真树换行可复现性' -Passed $false -Detail $_.Exception.Message
+    }
+
     # 2) 能力索引新鲜度
     try {
         $regenIndex = Join-Path $workRoot 'CAPABILITY-INDEX.md'
