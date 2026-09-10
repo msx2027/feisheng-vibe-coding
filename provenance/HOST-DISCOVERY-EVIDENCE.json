@@ -1,0 +1,1527 @@
+{
+  "schema": "feisheng-host-discovery-evidence/v1",
+  "owner": "provenance",
+  "capturedAt": "2026-09-10T11:39:40.8051406Z",
+  "method": "codex debug prompt-input (model-visible skill list) + host skill directory presence",
+  "caveat": "skills with disable-model-invocation are intentionally absent from the model-visible list; they are evidenced by installation instead",
+  "codexSkillRoots": {
+    "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills",
+    "r2": "C:/Users/MSX/.codex/plugins/cache/basic-memory/codex/0.23.2/skills",
+    "r7": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.903.11726/skills",
+    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
+    "r1": "C:/Users/MSX/.codex/skills/.system",
+    "r4": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/remotion/d416fd5a/skills",
+    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime",
+    "r0": "F:/skiils宸ュ叿/_adapters/shared/skills"
+  },
+  "counts": {
+    "catalogRecords": 82,
+    "modelVisible": 62,
+    "installedUserInvokedOnly": 14,
+    "notInstalled": 6,
+    "otherOrUnknown": 0,
+    "parsedModelVisibleEntries": 203
+  },
+  "records": [
+    {
+      "id": "adapt",
+      "source": "vibe-coding-skills",
+      "dirName": "adapt",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "adapt",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "adapt/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "animate",
+      "source": "vibe-coding-skills",
+      "dirName": "animate",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "animate",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "animate/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "architecture-foundation",
+      "source": "vibe-coding-skills",
+      "dirName": "architecture-foundation",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "architecture-foundation",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "architecture-foundation/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "ask-matt",
+      "source": "mattpocock-skills",
+      "dirName": "ask-matt",
+      "invocation": "user-invoked",
+      "readiness": "compatibility",
+      "status": "compatibility-selector",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "audit",
+      "source": "vibe-coding-skills",
+      "dirName": "audit",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "audit",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "audit/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "beginner-flow-guide",
+      "source": "vibe-coding-skills",
+      "dirName": "beginner-flow-guide",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-unreviewed",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "beginner-flow-guide",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "beginner-flow-guide/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "bolder",
+      "source": "vibe-coding-skills",
+      "dirName": "bolder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "bolder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "bolder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "brand",
+      "source": "vibe-coding-skills",
+      "dirName": "brand",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "brand",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "brand/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "bug-fixer",
+      "source": "vibe-coding-skills",
+      "dirName": "bug-fixer",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "bug-fixer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "bug-fixer/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "clarify",
+      "source": "vibe-coding-skills",
+      "dirName": "clarify",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-unreviewed",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "clarify",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "clarify/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "claude-handoff",
+      "source": "mattpocock-skills",
+      "dirName": "claude-handoff",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    },
+    {
+      "id": "code-review",
+      "source": "mattpocock-skills",
+      "dirName": "code-review",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "code-review",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "code-review/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "codebase-design",
+      "source": "mattpocock-skills",
+      "dirName": "codebase-design",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:codebase-design",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "codebase-design/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "codebase-memory-scout",
+      "source": "vibe-coding-skills",
+      "dirName": "codebase-memory-scout",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "codebase-memory-scout",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "codebase-memory-scout/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "colorize",
+      "source": "vibe-coding-skills",
+      "dirName": "colorize",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "colorize",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "colorize/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "critique",
+      "source": "vibe-coding-skills",
+      "dirName": "critique",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "critique",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "critique/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "delight",
+      "source": "vibe-coding-skills",
+      "dirName": "delight",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "delight",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "delight/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "design-brief-builder",
+      "source": "vibe-coding-skills",
+      "dirName": "design-brief-builder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "design-brief-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "design-brief-builder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "design-maker",
+      "source": "vibe-coding-skills",
+      "dirName": "design-maker",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "design-maker",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "design-maker/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "design-system",
+      "source": "vibe-coding-skills",
+      "dirName": "design-system",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "design-system",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "design-system/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "dev-builder",
+      "source": "vibe-coding-skills",
+      "dirName": "dev-builder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "dev-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "dev-builder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "dev-planner",
+      "source": "vibe-coding-skills",
+      "dirName": "dev-planner",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "dev-planner",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "dev-planner/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "diagnosing-bugs",
+      "source": "mattpocock-skills",
+      "dirName": "diagnosing-bugs",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:diagnosing-bugs",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "diagnosing-bugs/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "distill",
+      "source": "vibe-coding-skills",
+      "dirName": "distill",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "distill",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "distill/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "doc-sync-guardian",
+      "source": "vibe-coding-skills",
+      "dirName": "doc-sync-guardian",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "doc-sync-guardian",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "doc-sync-guardian/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "domain-modeling",
+      "source": "mattpocock-skills",
+      "dirName": "domain-modeling",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:domain-modeling",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "domain-modeling/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "evolution-engine",
+      "source": "vibe-coding-skills",
+      "dirName": "evolution-engine",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "event-only-source-only",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "evolution-engine",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "evolution-engine/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "experience-elevator",
+      "source": "vibe-coding-skills",
+      "dirName": "experience-elevator",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "event-only-source-only",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "experience-elevator",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "experience-elevator/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "feedback-writer",
+      "source": "vibe-coding-skills",
+      "dirName": "feedback-writer",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "event-only-source-only",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "feedback-writer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feedback-writer/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "git-guardrails-claude-code",
+      "source": "mattpocock-skills",
+      "dirName": "git-guardrails-claude-code",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:git-guardrails-claude-code",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "git-guardrails-claude-code/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "grill-me",
+      "source": "mattpocock-skills",
+      "dirName": "grill-me",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "grill-with-docs",
+      "source": "mattpocock-skills",
+      "dirName": "grill-with-docs",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "grilling",
+      "source": "mattpocock-skills",
+      "dirName": "grilling",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:grilling",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "grilling/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "handoff",
+      "source": "mattpocock-skills",
+      "dirName": "handoff",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "harden",
+      "source": "vibe-coding-skills",
+      "dirName": "harden",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "harden",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "harden/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "hotspot-governor",
+      "source": "vibe-coding-skills",
+      "dirName": "hotspot-governor",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "hotspot-governor",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "hotspot-governor/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "impeccable",
+      "source": "vibe-coding-skills",
+      "dirName": "impeccable",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "impeccable",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "impeccable/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "implement",
+      "source": "mattpocock-skills",
+      "dirName": "implement",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "improve-codebase-architecture",
+      "source": "mattpocock-skills",
+      "dirName": "improve-codebase-architecture",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "layout",
+      "source": "vibe-coding-skills",
+      "dirName": "layout",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "layout",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "layout/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "loop-me",
+      "source": "mattpocock-skills",
+      "dirName": "loop-me",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    },
+    {
+      "id": "migrate-to-shoehorn",
+      "source": "mattpocock-skills",
+      "dirName": "migrate-to-shoehorn",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:migrate-to-shoehorn",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "migrate-to-shoehorn/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "optimize",
+      "source": "vibe-coding-skills",
+      "dirName": "optimize",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "optimize",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "optimize/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "overdrive",
+      "source": "vibe-coding-skills",
+      "dirName": "overdrive",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "overdrive",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "overdrive/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "polish",
+      "source": "vibe-coding-skills",
+      "dirName": "polish",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "polish",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "polish/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "product-spec-builder",
+      "source": "vibe-coding-skills",
+      "dirName": "product-spec-builder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "product-spec-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "product-spec-builder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "prototype",
+      "source": "mattpocock-skills",
+      "dirName": "prototype",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:prototype",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "prototype/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "quieter",
+      "source": "vibe-coding-skills",
+      "dirName": "quieter",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "quieter",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "quieter/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "release-builder",
+      "source": "vibe-coding-skills",
+      "dirName": "release-builder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "release-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "release-builder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "requirements-test-designer",
+      "source": "vibe-coding-skills",
+      "dirName": "requirements-test-designer",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "requirements-test-designer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "requirements-test-designer/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "research",
+      "source": "mattpocock-skills",
+      "dirName": "research",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:research",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "research/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "resolving-merge-conflicts",
+      "source": "mattpocock-skills",
+      "dirName": "resolving-merge-conflicts",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:resolving-merge-conflicts",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "resolving-merge-conflicts/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "rule-harvester",
+      "source": "vibe-coding-skills",
+      "dirName": "rule-harvester",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "rule-harvester",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "rule-harvester/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "scaffold-exercises",
+      "source": "mattpocock-skills",
+      "dirName": "scaffold-exercises",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:scaffold-exercises",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "scaffold-exercises/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "setup-matt-pocock-skills",
+      "source": "mattpocock-skills",
+      "dirName": "setup-matt-pocock-skills",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "setup-pre-commit",
+      "source": "mattpocock-skills",
+      "dirName": "setup-pre-commit",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:setup-pre-commit",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "setup-pre-commit/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "setup-ts-deep-modules",
+      "source": "mattpocock-skills",
+      "dirName": "setup-ts-deep-modules",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    },
+    {
+      "id": "shape",
+      "source": "vibe-coding-skills",
+      "dirName": "shape",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-unreviewed",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "shape",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "shape/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "skill-builder",
+      "source": "vibe-coding-skills",
+      "dirName": "skill-builder",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "skill-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "skill-builder/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "sliver-vibe-coding",
+      "source": "sliver-vibe-coding",
+      "dirName": "sliver-vibe-coding",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "runtime",
+      "status": "control-plane",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "sliver-vibe-coding",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "sliver-vibe-coding/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "target-constitution-setup",
+      "source": "vibe-coding-skills",
+      "dirName": "target-constitution-setup",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "target-constitution-setup",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "target-constitution-setup/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "target-runtime-setup",
+      "source": "vibe-coding-skills",
+      "dirName": "target-runtime-setup",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "target-runtime-setup",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "target-runtime-setup/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "tdd",
+      "source": "mattpocock-skills",
+      "dirName": "tdd",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:tdd",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "tdd/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "teach",
+      "source": "mattpocock-skills",
+      "dirName": "teach",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "test-automation",
+      "source": "vibe-coding-skills",
+      "dirName": "test-automation",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "test-automation",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "test-automation/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "to-questionnaire",
+      "source": "mattpocock-skills",
+      "dirName": "to-questionnaire",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "to-spec",
+      "source": "mattpocock-skills",
+      "dirName": "to-spec",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "to-tickets",
+      "source": "mattpocock-skills",
+      "dirName": "to-tickets",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "triage",
+      "source": "mattpocock-skills",
+      "dirName": "triage",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "typeset",
+      "source": "vibe-coding-skills",
+      "dirName": "typeset",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "typeset",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "typeset/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "ui-styling",
+      "source": "vibe-coding-skills",
+      "dirName": "ui-styling",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "ui-styling",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "ui-styling/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "ui-system-guardian",
+      "source": "vibe-coding-skills",
+      "dirName": "ui-system-guardian",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-product-or-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "ui-system-guardian",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "ui-system-guardian/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "ui-ux-pro-max",
+      "source": "vibe-coding-skills",
+      "dirName": "ui-ux-pro-max",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-ui",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "ui-ux-pro-max",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "ui-ux-pro-max/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "vibe-code-review",
+      "source": "vibe-coding-skills",
+      "dirName": "code-review",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-checker",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "code-review",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "code-review/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "vibe-coding-skills",
+      "source": "vibe-coding-skills",
+      "dirName": "vibe-coding-skills",
+      "invocation": "user-invoked",
+      "readiness": "compatibility",
+      "status": "compatibility-alias",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "vibe-coding-skills",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "vibe-coding-skills/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "wait-what",
+      "source": "mattpocock-skills",
+      "dirName": "wait-what",
+      "invocation": "user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-user-tool",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "wayfinder",
+      "source": "mattpocock-skills",
+      "dirName": "wayfinder",
+      "invocation": "user-invoked",
+      "readiness": "candidate",
+      "status": "adapter-candidate",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "installed-user-invoked-only"
+    },
+    {
+      "id": "wizard",
+      "source": "mattpocock-skills",
+      "dirName": "wizard",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:wizard",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "wizard/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "writing-beats",
+      "source": "mattpocock-skills",
+      "dirName": "writing-beats",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    },
+    {
+      "id": "writing-for-agents",
+      "source": "mattpocock-skills",
+      "dirName": "writing-for-agents",
+      "invocation": "model-invoked-or-user-invoked",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "installedInSharedRoot": true,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": true,
+      "visibleAs": [
+        {
+          "entryName": "mattpocock-skills:writing-for-agents",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "writing-for-agents/SKILL.md"
+        }
+      ],
+      "evidence": "model-visible"
+    },
+    {
+      "id": "writing-fragments",
+      "source": "mattpocock-skills",
+      "dirName": "writing-fragments",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    },
+    {
+      "id": "writing-shape",
+      "source": "mattpocock-skills",
+      "dirName": "writing-shape",
+      "invocation": "user-invoked",
+      "readiness": "excluded",
+      "status": "excluded-in-progress",
+      "installedInSharedRoot": false,
+      "installedInCodexRoot": false,
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
+    }
+  ]
+}

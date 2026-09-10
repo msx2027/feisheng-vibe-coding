@@ -92,6 +92,23 @@
         "scripts/provenance-integrity.ps1"
       ],
       "rule": "only registered deviations are allowed; unregistered deviation is drift"
+    },
+    {
+      "id": "host-evidence",
+      "path": "provenance/HOST-DISCOVERY-EVIDENCE.json",
+      "writes": [
+        "host-discovery-evidence",
+        "model-visible-skill-list",
+        "installation-presence"
+      ],
+      "inputs": [
+        "provenance/CANONICAL-CATALOG.json",
+        "host skill roots"
+      ],
+      "projections": [
+        "scripts/collect-host-skill-evidence.ps1"
+      ],
+      "rule": "discovery evidence only; never claims behavioural correctness"
     }
   ],
   "forbidden": [

@@ -24,7 +24,7 @@
       "license": "mixed; per bundled skill",
       "notice": "sources/vibe-coding-skills/docs/legal",
       "runtimeEligible": false,
-      "reason": "third-party UI licenses and notices require per-skill review"
+      "reason": "per-skill license review is COMPLETE (46/46 mapped into 8 families, font gap closed), but runtime inclusion stays disabled until accepted vibe records are physically imported outside sources/ and the release-notice gate policy is relaxed in the same batch"
     }
   ],
   "vibePerSkill": {

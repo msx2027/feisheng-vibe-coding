@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T11:07:55.2368271Z",
+  "generatedAt": "2026-09-10T11:40:29.1763577Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -949,7 +949,7 @@
       "domain": "product-or-checker",
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
-      "reason": "来源声明见 legal/ui-system-guardian/SOURCE-DECLARATION.md；仍待宿主行为 smoke",
+      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
       "sourceSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
       "writeAuthority": []
     },

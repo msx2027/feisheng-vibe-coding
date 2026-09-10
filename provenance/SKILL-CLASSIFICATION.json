@@ -53,7 +53,6 @@
   },
   "reasonsById": {
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
-    "ui-system-guardian": "来源声明见 legal/ui-system-guardian/SOURCE-DECLARATION.md；仍待宿主行为 smoke",
     "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门",
     "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名；待宿主行为 smoke",
     "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
@@ -557,5 +556,19 @@
     },
     "requireDeclaredForRuntime": true
   },
-  "canonicalNamingPolicy": "canonical id 由本仓库决定。上游未提交的工作树改名只作为事实记录，不采用、也不等待上游确认；不采用工作树内容是因为其意图不可证，而不是因为命名冲突。"
+  "canonicalNamingPolicy": "canonical id 由本仓库决定。上游未提交的工作树改名只作为事实记录，不采用、也不等待上游确认；不采用工作树内容是因为其意图不可证，而不是因为命名冲突。",
+  "runtimePromotionPolicy": {
+    "note": "进入 runtime 投影（readiness=accepted）必须同时满足以下条件；缺一即保持 source-only（fail-closed）",
+    "requires": [
+      "license-mapped: 该技能所属许可证族已在 provenance/LICENSE-MAP.json 的 vibePerSkill 中登记",
+      "write-authority-declared: 已声明 writeAuthority（只读技能声明 none），由投影门禁规则 A 强制",
+      "host-discovery-evidenced: provenance/HOST-DISCOVERY-EVIDENCE.json 中该技能证据不是 not-installed",
+      "semantic-review: 该技能不是 unreviewed 状态（未做语义审查的不提升）"
+    ],
+    "evidence": [
+      "evidence/20260910-tool-batch-promotion.md",
+      "provenance/HOST-DISCOVERY-EVIDENCE.json"
+    ],
+    "structuralPrerequisite": "accepted 记录的 path 必须位于 sources/ 之外（一等导入位置），否则无法进入投影：scripts/runtime-projection-guard.ps1 明确禁止把 sources 段带进运行时 bundle。参考已验收 Matt 原语的做法：导入到 skills/engineering/<id>/SKILL.md。另：scripts/validate-release-notices.ps1 目前硬编码要求 Vibe 条目 runtimeEligible=false，放宽它必须与 PHYSICAL IMPORT 同批完成，不能先翻 flag。"
+  }
 }
