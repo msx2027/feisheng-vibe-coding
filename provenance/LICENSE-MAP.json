@@ -16,7 +16,7 @@
       "license": "MIT plus localized/source notices",
       "notice": "sources/mattpocock-skills/LICENSE; sources/mattpocock-skills/LICENSE.zh-CN.md",
       "runtimeEligible": true,
-      "scope": "accepted primitives only"
+      "scope": "accepted primitives and the code-review checker"
     },
     {
       "source": "vibe-coding-skills",

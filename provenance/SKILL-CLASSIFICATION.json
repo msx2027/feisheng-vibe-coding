@@ -55,8 +55,8 @@
   },
   "reasonsById": {
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
-    "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门",
-    "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名；待宿主行为 smoke",
+    "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
+    "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
     "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
     "domain-modeling": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
     "diagnosing-bugs": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
@@ -259,8 +259,11 @@
     },
     "code-review": {
       "domain": "checker",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "codebase-design": {
       "domain": "primitive",
@@ -549,8 +552,11 @@
     },
     "tdd": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "teach": {
       "domain": "user-tool",

@@ -266,6 +266,8 @@ through this delegation; the condition below, not a user keyword, is its trigger
 | `skills/engineering/diagnosing-bugs/SKILL.md` | a bug, failing test, flaky test, or performance regression has resisted a simple fix and the Debug Evidence Ladder needs a diagnosis loop |
 | `skills/engineering/codebase-design/SKILL.md` | module interfaces, deepening opportunities, seam placement, or the testability and AI-navigability of an owner layer is the design question |
 | `skills/engineering/domain-modeling/SKILL.md` | project terminology, the ubiquitous language, or an architecture decision record must be clarified or maintained, with writes staying under `target-truth` |
+| `skills/engineering/tdd/SKILL.md` | a change needs test-first discipline, a strict red-green-refactor loop, or test double / mocking guidance |
+| `skills/engineering/code-review/SKILL.md` | a bounded diff or completed change needs a specialist review of correctness, coupling, and maintainability before acceptance |
 
 A specialist finding enters this backbone's normal flow: it is evidence for the failing layer, it never
 authorizes remediation, and the active route with `代码审计` or `验收` still owns the verdict and gate.

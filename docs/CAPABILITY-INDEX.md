@@ -4,7 +4,7 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 8、待启用 7、来源专用 59、阻塞 0、兼容/排除 8。
+统计：共 **82** 项来源技能 —— 可用 10、待启用 7、来源专用 57、阻塞 0、兼容/排除 8。
 
 ## 现在可用（进入 runtime 静态投影）
 
@@ -13,6 +13,7 @@
 | id | 来源 | 域 | 状态 | 可写（writeAuthority） | runtime 单位 | 文件 |
 |---|---|---|---|---|---|---|
 | `audit` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `code-review` | mattpocock-skills | checker | accepted-checker | none | `directory` | 1 |
 | `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 | `critique` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 4 |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
@@ -20,6 +21,7 @@
 | `harden` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
 | `optimize` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
 | `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `explicit` | 75 |
+| `tdd` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 
 runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
 
@@ -46,11 +48,11 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 
 按域分组列出；`reason` 为未启用的统一原因。
 
-- **checker**（2）：`code-review`、`vibe-code-review`
-  - 原因：内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门
+- **checker**（1）：`vibe-code-review`
+  - 原因：专项 checker；Sliver 拥有验收门，未进入 runtime
 - **event**（3）：`evolution-engine`、`experience-elevator`、`feedback-writer`
   - 原因：仅限结构化事件调用；需宿主事件契约与独立审查
-- **primitive**（11）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`tdd`、`wizard`、`writing-for-agents`
+- **primitive**（10）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`wizard`、`writing-for-agents`
   - 原因：来源专用工程原语；未验收
 - **product-or-checker**（18）：`architecture-foundation`、`bug-fixer`、`codebase-memory-scout`、`design-brief-builder`、`design-maker`、`dev-builder`、`dev-planner`、`doc-sync-guardian`、`hotspot-governor`、`product-spec-builder`、`release-builder`、`requirements-test-designer`、`rule-harvester`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`test-automation`、`ui-system-guardian`
   - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke

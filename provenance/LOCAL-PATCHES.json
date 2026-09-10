@@ -56,13 +56,13 @@
       "change": "add an `Internal Capability Providers` section to references/engineering-execution.md that binds the admitted internal skills as delegated, condition-triggered capability providers",
       "reason": "已接入的运行时技能此前不在任何路由 owner 里被引用，控制面因此对它们一无所知（等于死代码）。路由表 Load 列是抽象 owner 白名单（LOADED_OWNER_IDS 十个类别），不是文件清单，塞不进 skills/ 路径；因此绑定落在 Load 列已经指向的执行主干 owner 的内容里：该文件已拥有 Owner-Layer Rules、Debug Evidence Ladder 与 Verification Matrix，正是这些 provider 的语义邻域，且被 9 处 Load 命中。绑定不引入第二份路由表（它写的是「条件 -> 能力提供者」，不是 route -> reference 映射）。",
       "evidence": "evidence/20260910-route-binding.md",
-      "verification": "skills each referenced exactly once; no unadmitted skill path present; runtime_decision_contract.py route-catalog still parses",
+      "verification": "skills each referenced exactly once (9 admitted providers); no unadmitted skill path present; runtime_decision_contract.py route-catalog still parses",
       "files": [
         {
           "path": "references/engineering-execution.md",
           "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
-          "patchedSha256": "31f4edbf8044f663e62f45c06893c5aa3d60a40f92094ad492c74efa6f93a02f",
-          "linesChanged": 24
+          "patchedSha256": "423b99216f6032f58f22c0e74e2a15f11ce188993a5dd4c82d7492f469989324",
+          "linesChanged": 26
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T18:11:56.5478454Z",
+  "generatedAt": "2026-09-10T18:33:11.5711597Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -176,16 +176,33 @@
     {
       "id": "code-review",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/code-review/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/code-review",
+        "files": [
+          {
+            "path": "skills/engineering/code-review/SKILL.md",
+            "sha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/code-review/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "checker",
-      "readiness": "source-only",
-      "status": "source-only-checker",
-      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
       "sourceSha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "codebase-design",
@@ -1118,7 +1135,7 @@
           },
           {
             "path": "governance/sliver-core/references/engineering-execution.md",
-            "sha256": "31f4edbf8044f663e62f45c06893c5aa3d60a40f92094ad492c74efa6f93a02f"
+            "sha256": "423b99216f6032f58f22c0e74e2a15f11ce188993a5dd4c82d7492f469989324"
           },
           {
             "path": "governance/sliver-core/references/execution-liveness.md",
@@ -1319,16 +1336,41 @@
     {
       "id": "tdd",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/tdd/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/tdd/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/tdd",
+        "files": [
+          {
+            "path": "skills/engineering/tdd/SKILL.md",
+            "sha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24"
+          },
+          {
+            "path": "skills/engineering/tdd/mocking.md",
+            "sha256": "eda3fa3e03ec783ca2e976848e46cbab9a064bb93e269809a1e603761ac995e4"
+          },
+          {
+            "path": "skills/engineering/tdd/tests.md",
+            "sha256": "e144f35989e4bddf705304d0a3587dccb6d70b0f60526f89b108d5be225e347d"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/tdd/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名；待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
       "sourceSha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "teach",
