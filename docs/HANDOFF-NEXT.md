@@ -26,15 +26,15 @@
 
 ## 2. 一分钟现状（数字快照）
 
-- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交 `527b1bc`
-- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **12/12**；fresh clone 两种 shell × 两种 `autocrlf` 均 12/12
+- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交 `cb05fb1`
+- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **13/13**；fresh clone 两种 shell × 两种 `autocrlf` 均 13/13（2026-09-11 起为 13 步：新增宿主中性投影步骤）
 - 分类：**82 条记录**，其中 **8 条 runtime 已接入**（控制面 1 + Matt 原语 3 + Vibe 检查器 4）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**7/7**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets），runtime bundle 共 **90** 文件
-- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**180 条**，其中我们的包 `feisheng-vibe-coding` **93 文件**
-- 宿主发现性实测：Claude **162** 个技能（含我们 1 个入口）；Codex **204**（含我们包内 9 个 `SKILL.md`）
-- 存量：`evidence/` 38、`tasks/` 37、`scripts/` 20
+- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**180 条**，其中我们的包 `feisheng-vibe-coding` **92 文件**（宿主中性投影，决策 #4 已实施）
+- 宿主发现性实测：Claude **162** 个技能（含我们 1 个入口）；Codex **204**（含我们包内 9 个 `SKILL.md`）。⚠️ 该计数在 Claude 形态安装时采得，切到中性形态后尚未重采（文件数只少 1 个顶层 CLAUDE.md 与 2 个 overlay，预期不变，以 T2 重采为准）
+- 存量：`evidence/` 39、`tasks/` 37、`scripts/` 21
 
 ---
 
@@ -103,19 +103,20 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口，12 步）
+门禁（scripts/verify.ps1，单入口，13 步）
   1 catalog 同步 · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
-  5 Vibe Hook 保持禁用 · 6 Codex 投影 · 7 Claude 投影 · 8 发布包（-IncludePackage）
+  5 Vibe Hook 保持禁用 · 6 Codex/Claude/宿主中性投影 · 7 发布包（-IncludePackage）
 
 投影（runtime-projection）
   scripts/build-codex-runtime-projection.ps1    → 95 文件
   scripts/build-claude-runtime-projection.ps1   → 93 文件
-  scripts/runtime-projection-guard.ps1          共享门禁/计划/overlay 实现（唯一）
+  scripts/build-shared-runtime-projection.ps1   → 92 文件（宿主中性，无 overlay）
+  scripts/runtime-projection-guard.ps1          共享门禁/计划/overlay/主体实现（唯一；三 writer 共用 Invoke-RuntimeProjection）
   packaging/runtime-projection.json             策略描述
 
 安装
-  scripts/install-runtime-projection.ps1        宿主投递入口（本批新增）
+  scripts/install-runtime-projection.ps1        宿主投递入口（默认 -TargetHost Shared 宿主中性）
 ```
 
 ### 4.1 三种 bundle 单位（`catalog.bundlePolicy`）
@@ -158,6 +159,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 5 | `955577e` | 记录「Load 列不能放技能路径」这一实测约束 | `tasks/20260910-control-plane-runtime-closure-and-route-binding.md` |
 | 6 | `091b6f2` | **路由绑定**：7/7 唯一命中 + 门禁 `3b)` + 7 个反例实测 | `evidence/20260910-route-binding.md` |
 | 7 | `ca998d8` `559d7fc` `2ea9fc1` `48f7ab1` `527b1bc` | 目标审计 → 文档纠错 → **安装入口 + 宿主实证** → **退役旧入口** → **overlay 落点修正** | `evidence/20260910-host-install-and-discovery.md` |
+| 8 | `4fe8f43` `cb05fb1` | **T1 选项 A 实施**：宿主中性投影（共享主体抽进 guard，三 writer 薄壳）+ 安装默认 Shared + 门禁 13 步 + DryRun 副作用修复 | `evidence/20260911-host-neutral-shared-projection.md` |
 
 ---
 
@@ -168,7 +170,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 1 | **单目录形态**：7 个技能不做成独立顶层技能 | 用户明确选择（「不要」），目标是「一个根目录、所有 Agent 共读」 |
 | 2 | **Codex 递归暴露嵌套 `SKILL.md` 不修改** | 用户明确指示。代价：Codex 会把包内 9 个 `SKILL.md` 都列出；改名会破坏与来源格式/catalog 路径的一致性 |
 | 3 | **旧入口已退役**（8 个：旧控制面 + 7 专项） | 用户批准。共享根 188 → 180 |
-| 4 | **选择 A**：共享根装**宿主中性**包（不带任何宿主专属 overlay） | 用户拍定。理由：一个槽位文件无法同时满足两个宿主；Codex 本就不覆盖该槽位，中性版对它才正确。**待实施，见 9.1** |
+| 4 | **选择 A**：共享根装**宿主中性**包（不带任何宿主专属 overlay） | 用户拍定。理由：一个槽位文件无法同时满足两个宿主；Codex 本就不覆盖该槽位，中性版对它才正确。**已实施（2026-09-11，`4fe8f43`+`cb05fb1`，见 `evidence/20260911-host-neutral-shared-projection.md`）** |
 | 5 | `assets/` 纳入控制面包（22 文件） | 按 Sliver 自己的 `core_trees`；之前手写清单漏了它们 |
 | 6 | 控制面清单**不手写**，从 Sliver 的 manifest 读 | 避免两份清单漂移 |
 | 7 | 只接入 4 个 Vibe checker（不是 13 个） | 其余 9 个属 `vibe-original-*` 族：私有分发包、无逐技能许可证文本 |
@@ -183,7 +185,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 ### 7.1 布局
 
 - `~/.claude/skills` 是**junction** → `F:\skiils工具\_adapters\shared\skills`（宿主技能根，180 条）
-- 我们的包：`.../shared/skills/feisheng-vibe-coding`，**93 文件**（Claude 投影）
+- 我们的包：`.../shared/skills/feisheng-vibe-coding`，**92 文件**（宿主中性投影，决策 #4；2026-09-11 起替换原 Claude 形态 93 文件）
 - `~/.codex/skills` 只有 `.system`（Codex 通过 junction 根读取同一目录）
 - 已退役的 8 个旧条目**不在**这个根里了；它们的源仓库仍在原处（可回滚，见 `evidence/20260910-host-install-and-discovery.md` 第 8 节表格）
 
@@ -214,22 +216,15 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 
 ## 9. 后续任务（按优先级，goal 推进顺序）
 
-### 9.1 T1【立即】**实施选项 A：宿主中性安装**（已决策，只差执行）
+### 9.1 T1【已完成 2026-09-11】**实施选项 A：宿主中性安装**
 
-**目标**：共享根里装**不含任何宿主专属 overlay** 的包 —— 即核心中性 `governance/sliver-core/references/runtime-adapter.md`，
-且**不含** `agents/openai.yaml`、`references/studio-codex.md`、`references/execution-liveness-host.md`、
-`assets/project-claude/CLAUDE.md`。
+已实施：中立 builder `build-shared-runtime-projection.ps1` + 安装默认 `Shared` + 门禁第 6 步扩为三投影。
+验收全过（无宿主专属文件、槽位 = 核心中性版哈希一致、共享根重装成功、verify 13/13、fresh clone 四组合 13/13）。
+证据：`evidence/20260911-host-neutral-shared-projection.md`。实现要点留档：
 
-**做法（提示，不强制）**：
-- 中立投影 = guard 模块里 `Get-ProjectionPlan` 的基础计划（控制面 + 已接入技能，**无宿主 overlay**）+ manifest。
-- ⚠️ **不要**再写第三个 builder 复制 ~200 行：实测两个 builder 的主体 230 行里只有 28 行不同（差异只在 codex/claude 命名与 manifest 名）。
-  正确做法是把共享主体抽成 guard 模块的一个函数（参数：plan、manifest 名、schema、输出根），两个宿主 builder 与中立模式都调它。
-- 安装脚本加「宿主中性」模式（新 manifest 名/schema，例如 `shared-projection-manifest.json` /
-  `feisheng-shared-runtime-projection/v1`），并让 `-Force` 的标记校验认它。
-- 建议同时把中立投影纳入 `verify.ps1`（或并入现有投影步骤），否则没有新鲜度门禁。
-
-**验收**：中立投影里**没有**任何宿主专属文件；槽位是核心中性版；共享根重装成功；
-`verify.ps1` 12/12（或 13/13）；fresh clone 12/12。
+- 共享主体抽成 guard 模块的 `Invoke-RuntimeProjection`（参数：plan 差异、manifest 名、schema、输出根、
+  overlay 目标、hostAdapter、结果附加字段），三个 writer 都是薄壳；没有第三个复制版 builder。
+- 实施中发现并修复：带 `-Force` 的 DryRun 会删掉旧安装（`cb05fb1`）——DryRun 现在只读。
 
 ### 9.2 T2【核心】**触发行为验证**（D2/D3 的唯一证据来源）
 
@@ -390,11 +385,11 @@ cd F:/skiils工具/feisheng-vibe-coding
 git log --oneline -3                      # 起点应为 527b1bc
 git status --porcelain                    # 应为空
 pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludePackage
-                                          # 应为 12/12
+                                          # 应为 13/13
 ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 180
 ```
 
-然后按顺序：**9.1（T1 实施选项 A）→ 9.2（T2 触发行为验证）→ 9.3（T3 按结果修）→ 9.4 起**。
+然后按顺序：**9.2（T2 触发行为验证）→ 9.3（T3 按结果修）→ 9.4 起**（9.1 已完成）。
 
 ---
 
