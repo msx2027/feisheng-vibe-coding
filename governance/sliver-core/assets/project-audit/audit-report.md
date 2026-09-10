@@ -1,10 +1,10 @@
 ---
 status: open
-audit_route: @@代码审计-或-安全审计-或-项目体检-或-AI债务体检-或-项目宪法@@
-scope: @@审计范围：模块、目录、子系统或整个项目@@
+audit_route: "@@代码审计-或-安全审计-或-项目体检-或-AI债务体检-或-项目宪法@@"
+scope: "@@审计范围：模块、目录、子系统或整个项目@@"
 audit_pass: triage
-date: @@YYYY-MM-DD@@
-reviewer: @@独立复核者：子 agent 或 Studio reviewer 房间标识@@
+date: "@@YYYY-MM-DD@@"
+reviewer: "@@独立复核者：子 agent 或 Studio reviewer 房间标识@@"
 promoted_to: none
 # 复核已完成但未获真源写回授权时：audit_pass: reviewed_pending_promotion，status 保持 open。
 ---

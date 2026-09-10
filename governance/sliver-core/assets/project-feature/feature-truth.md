@@ -1,9 +1,9 @@
 ---
 status: active
-feature_id: @@stable-ascii-feature-id@@
-owners: [@@受影响的代码或文档 owner 路径@@]
-created: @@YYYY-MM-DD@@
-source_confirmation: @@用户确认授权卡的会话或记录引用@@
+feature_id: "@@stable-ascii-feature-id@@"
+owners: ["@@受影响的代码或文档 owner 路径@@"]
+created: "@@YYYY-MM-DD@@"
+source_confirmation: "@@用户确认授权卡的会话或记录引用@@"
 ---
 
 # @@功能名称@@

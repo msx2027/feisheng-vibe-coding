@@ -1,11 +1,11 @@
 ---
 status: active
-decision_id: @@adr-编号@@
-decided: @@YYYY-MM-DD@@
+decision_id: "@@adr-编号@@"
+decided: "@@YYYY-MM-DD@@"
 supersedes: none
 superseded_by: none
-affected_owners: [@@受影响的文档或代码 owner 路径@@]
-source_confirmation: @@用户确认授权卡的会话或记录引用@@
+affected_owners: ["@@受影响的文档或代码 owner 路径@@"]
+source_confirmation: "@@用户确认授权卡的会话或记录引用@@"
 ---
 
 # @@决策标题：选了什么，不选什么@@

@@ -5,28 +5,93 @@
     {
       "id": "route-catalog",
       "path": "governance/sliver-core/references/routes-index.md",
-      "writes": ["primary-route", "operation", "conditional-lens", "reference-loading"],
-      "projections": ["runtime route JSON", "host route hints"]
+      "writes": [
+        "primary-route",
+        "operation",
+        "conditional-lens",
+        "reference-loading"
+      ],
+      "projections": [
+        "runtime route JSON",
+        "host route hints"
+      ]
     },
     {
       "id": "skill-catalog",
       "path": "provenance/CANONICAL-CATALOG.json",
-      "writes": ["canonical-skill-id", "invocation", "source", "domain", "readiness", "status", "dependencies", "outputs"],
-      "inputs": ["provenance/SKILL-CLASSIFICATION.json", "provenance/SKILL-INVENTORY.json", "provenance/SKILL-DECISIONS.md"],
-      "projections": ["README skill lists", "plugin manifests", "host discovery metadata", "docs/CAPABILITY-INDEX.md"]
+      "writes": [
+        "canonical-skill-id",
+        "invocation",
+        "source",
+        "domain",
+        "readiness",
+        "status",
+        "dependencies",
+        "outputs"
+      ],
+      "inputs": [
+        "provenance/SKILL-CLASSIFICATION.json",
+        "provenance/SKILL-INVENTORY.json",
+        "provenance/SKILL-DECISIONS.md"
+      ],
+      "projections": [
+        "README skill lists",
+        "plugin manifests",
+        "host discovery metadata",
+        "docs/CAPABILITY-INDEX.md"
+      ]
     },
     {
       "id": "target-truth",
       "path": "docs/target-truth-schema.json",
-      "writes": ["requirements", "plan", "terminology", "task-state", "acceptance-evidence"],
-      "adapters": ["vibe .vibe-docs.json", "Matt issue tracker", "project document index"]
+      "writes": [
+        "requirements",
+        "plan",
+        "terminology",
+        "task-state",
+        "acceptance-evidence"
+      ],
+      "adapters": [
+        "vibe .vibe-docs.json",
+        "Matt issue tracker",
+        "project document index"
+      ]
     },
     {
       "id": "runtime-projection",
       "path": "packaging/runtime-projection.json",
-      "writes": ["host-bundle-include", "host-overlay", "generated-mirror", "manifest"],
-      "inputs": ["provenance/LICENSE-MAP.json"],
-      "projections": ["Codex", "Claude"]
+      "writes": [
+        "host-bundle-include",
+        "host-overlay",
+        "generated-mirror",
+        "manifest"
+      ],
+      "inputs": [
+        "provenance/LICENSE-MAP.json"
+      ],
+      "projections": [
+        "Codex",
+        "Claude"
+      ]
+    },
+    {
+      "id": "local-patch-registry",
+      "path": "provenance/LOCAL-PATCHES.json",
+      "writes": [
+        "local-patch-registration",
+        "original-content-hash",
+        "patched-content-hash"
+      ],
+      "inputs": [
+        "provenance/PROVENANCE-INTEGRITY.json",
+        "sources/",
+        "governance/sliver-core/"
+      ],
+      "projections": [
+        "scripts/record-provenance-integrity.ps1",
+        "scripts/provenance-integrity.ps1"
+      ],
+      "rule": "only registered deviations are allowed; unregistered deviation is drift"
     }
   ],
   "forbidden": [

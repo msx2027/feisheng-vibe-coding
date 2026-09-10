@@ -2,10 +2,10 @@
   "schema": "feisheng-provenance-integrity/v1",
   "algorithm": "sha256-lines-v1",
   "algorithmDefinition": "record = file line as \"relativePath/with/slashes`nfileSha256\"; sort paths Ordinal; join with LF and append trailing LF; digest = SHA-256 of UTF-8 (no BOM) bytes",
-  "recordedAt": "2026-09-10T11:14:10.0683678Z",
-  "recordedAtRevision": "bbae1fcb56f9cda439839ae823b1ef52ab5429fb",
+  "recordedAt": "2026-09-10T11:24:43.0574155Z",
+  "recordedAtRevision": "88e9ad3b49fc6480914dfe6b086f576377fb248a",
   "corroboration": {
-    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 148 within supplement allowlist",
+    "sourceByteComparison": "required at recording time; 751 files byte-identical to source, 4 verified against recorded git revision, 3 registered local patch(es) verified, 148 within supplement allowlist",
     "sourceState": "git sources must match recorded HEAD and dirty set; non-git sources recorded as such"
   },
   "snapshots": [
@@ -19,6 +19,7 @@
       "sourceRevision": null,
       "supplementAllowlist": [],
       "revisionSourcedPaths": [],
+      "locallyPatchedPaths": [],
       "importRecord": "provenance/VIBE-IMPORT.json"
     },
     {
@@ -48,13 +49,14 @@
           "sha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24"
         }
       ],
+      "locallyPatchedPaths": [],
       "importRecord": "provenance/MATT-IMPORT.json"
     },
     {
       "name": "sliver-core",
       "path": "governance/sliver-core",
       "fileCount": 220,
-      "treeHash": "sha256:c8ab7c36fcdbff9403aff3e9d07085dec0465c7992645bbdc10ebd2bd7f31b45",
+      "treeHash": "sha256:25127370bc06b354ce2e74beb45a1173efc379477c15f39637d1f291e8cdca19",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
@@ -70,6 +72,26 @@
         "scripts"
       ],
       "revisionSourcedPaths": [],
+      "locallyPatchedPaths": [
+        {
+          "path": "assets/project-audit/audit-report.md",
+          "patchedSha256": "39c104e9ad4bc7a7f3caf0a9ab441a65a44a7cbe3be0920476d9ff6bf0e36c45",
+          "originalSha256": "dcc25ed5361754957ff8c7924f4f1789f8c04614cc9cf6560dfc598b57167855",
+          "patchId": "sliver-template-frontmatter-quoted"
+        },
+        {
+          "path": "assets/project-decision/adr.md",
+          "patchedSha256": "c8032387c078c161346d008b3e7ff3aefad58af41b370d0f128a21deaeaaa5d2",
+          "originalSha256": "10821d1cd470205ff137034d14fd38f3bb7c9d4e120d5ffdb242fd02179bd281",
+          "patchId": "sliver-template-frontmatter-quoted"
+        },
+        {
+          "path": "assets/project-feature/feature-truth.md",
+          "patchedSha256": "a877d81ff0d87a85398c19a02e7184660aa0906ad0f43f7839b30600b2d6575e",
+          "originalSha256": "7dac5bfae82b88cb07011a6560ea85740bb2c791fdc7654051860231d3de442d",
+          "patchId": "sliver-template-frontmatter-quoted"
+        }
+      ],
       "importRecord": "provenance/SLIVER-IMPORT.json"
     }
   ]

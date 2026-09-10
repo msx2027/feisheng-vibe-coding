@@ -103,6 +103,32 @@ function Get-SourceState {
     return [pscustomobject]@{ kind = 'git'; dirtyPaths = @($sorted); revision = $revision }
 }
 
+function Get-LocalPatches {
+    param([Parameter(Mandatory = $true)][string]$RepositoryRoot)
+
+    # 本地补丁登记（本仓库自持后允许对 vendored 内容做补丁）。
+    # 返回 snapshot -> path -> { originalSha256, patchedSha256, patchId } 的映射。
+    # 未登记的偏差仍视为漂移；登记项哈希不符也失败（登记不得过期）。
+    $path = Join-Path $RepositoryRoot 'provenance/LOCAL-PATCHES.json'
+    $map = @{}
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return $map }
+    $doc = Get-Content -Raw -Encoding UTF8 -LiteralPath $path | ConvertFrom-Json
+    if ($doc.schema -ne 'feisheng-local-patches/v1') { throw "不支持的 LOCAL-PATCHES schema: $($doc.schema)" }
+    foreach ($patch in @($doc.patches)) {
+        $snapshot = [string]$patch.snapshot
+        if (-not $map.ContainsKey($snapshot)) { $map[$snapshot] = @{} }
+        foreach ($file in @($patch.files)) {
+            $relative = ([string]$file.path).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+            $map[$snapshot][$relative] = [pscustomobject]@{
+                originalSha256 = [string]$file.originalSha256
+                patchedSha256 = [string]$file.patchedSha256
+                patchId = [string]$patch.id
+            }
+        }
+    }
+    return $map
+}
+
 function Test-ProvenanceIntegrity {
     param(
         [Parameter(Mandatory = $true)][string]$RepositoryRoot,
@@ -121,6 +147,8 @@ function Test-ProvenanceIntegrity {
     if ($record.algorithm -ne 'sha256-lines-v1') {
         throw "不支持的树摘要算法: $($record.algorithm)"
     }
+
+    $localPatches = Get-LocalPatches -RepositoryRoot $repoRoot
 
     $result = @()
     $errors = @()
@@ -145,7 +173,12 @@ function Test-ProvenanceIntegrity {
         $sourceChecked = 0
         $sourceSkipped = 0
         $revisionChecked = 0
+        $patchedChecked = 0
         $sourceDrift = @()
+
+        # 该快照下已登记的本地补丁
+        $snapshotPatches = @{}
+        if ($localPatches.ContainsKey([string]$snapshot.name)) { $snapshotPatches = $localPatches[[string]$snapshot.name] }
 
         # 来自某个 git revision 的文件（工作树已改动，故有意不采用工作树内容）：
         # 与记录的 sha256 比对，不比对工作树。
@@ -160,6 +193,24 @@ function Test-ProvenanceIntegrity {
             $allowlist = @($snapshot.supplementAllowlist)
             foreach ($record in $records) {
                 if (Test-PathWithinAllowlist -RelativePath $record.path -Allowlist $allowlist) { $sourceSkipped++; continue }
+                if ($snapshotPatches.ContainsKey($record.path)) {
+                    # 已登记的本地补丁：快照必须等于 patchedSha256；来源必须仍等于 originalSha256
+                    $patch = $snapshotPatches[$record.path]
+                    if ($patch.patchedSha256 -ne $record.sha256) {
+                        $sourceDrift += ($record.path + ' (content-vs-registered-patch)')
+                        continue
+                    }
+                    $sourcePath = Join-Path $sourceRoot ($record.path.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+                    if (Test-Path -LiteralPath $sourcePath -PathType Leaf) {
+                        $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourcePath).Hash.ToLowerInvariant()
+                        if ($sourceHash -ne $patch.originalSha256) {
+                            $sourceDrift += ($record.path + ' (upstream-moved-under-patch)')
+                            continue
+                        }
+                    }
+                    $patchedChecked++
+                    continue
+                }
                 if ($revisionSourced.ContainsKey($record.path)) {
                     if ($revisionSourced[$record.path] -ne $record.sha256) {
                         $sourceDrift += ($record.path + ' (content-vs-recorded-revision)')
@@ -197,6 +248,7 @@ function Test-ProvenanceIntegrity {
             sourceAvailable = $sourceAvailable
             sourceCheckedFiles = $sourceChecked
             revisionSourcedCheckedFiles = $revisionChecked
+            locallyPatchedCheckedFiles = $patchedChecked
             sourceAllowlistedFiles = $sourceSkipped
             driftedPaths = @($drifted + $sourceDrift)
         }

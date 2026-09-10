@@ -45,9 +45,11 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 10. **快照内容必须是可证明的来源。** 优先取来源工作树；当工作树存在未提交改动时，取**已提交 revision 的 blob**（按已实测的换行归一化模型写入），并在导入记录里逐条登记。不得直接丢弃——丢弃会造成记录指向不存在的文件。
 11. **本仓库自持，不再依靠任何上游。** owner 于 2026-09-10 明确：`feisheng-vibe-coding` 自此由 owner 自行维护，
    不再等待任何上游确认，也不产出上游问题报告。上游差异（如未提交的工作树改动）只作**事实记录 + 周期复核项**，不构成阻塞。
-   - **待定影响（需 owner 决定，本轮未改）**：自持后我们**有权**修改 vendored 内容（例如 Sliver 的 3 个模板资产
-     在 Claude Code 下会触发 YAML frontmatter 解析告警）。但那样会打破与来源的字节一致性，使 provenance 模型需要升级为
-     「vendor + 本地补丁偏差登记」。本轮**未**修改任何 vendored 内容；现有 provenance 门禁（字节一致 + 树摘要）保持不变。
+12. **允许本地补丁，但必须登记（provenance 模型已升级）。** owner 选定方案 B：对 vendored 内容的偏离
+   一律记入 `provenance/LOCAL-PATCHES.json`（快照、路径、sourceRevision、originalSha256、patchedSha256、原因、证据）。
+   - **未登记**的偏差 = 漂移，verification 失败；**已登记**但哈希不符（登记过期）= 失败；
+   - `originalSha256` 使补丁可逆，并能单独发现「上游在补丁底下动过」；
+   - 未登记的文件仍然必须与来源逐字节一致。第一个补丁见 `evidence/20260910-local-patch-registry.md`。
 
 ## 第二轮完成情况（G1–G4）
 
@@ -165,6 +167,21 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 - 所有测试脚手架放在 **`<repo>/_smoke/`**（已 gitignore），**总目标完成后统一清理**；不得污染其它 Claude/Codex 配置与既有技能。
 - 宿主安装只经 Sliver 自带 `build_runtime_bundle.py` + `runtime-manifest.json` 白名单；不得自造安装集。
 
+## 第八轮完成情况：本地补丁登记机制（provenance 模型升级）
+
+owner 选定方案 B：自持后允许对 vendored 内容打补丁，并把偏差登记制度化。
+
+| 事项 | 结果 |
+|---|---|
+| 新增真源 | `provenance/LOCAL-PATCHES.json`（`feisheng-local-patches/v1`，owner-ledger 已登记 `local-patch-registry`） |
+| 首个补丁 | 修掉 Sliver 三个模板资产在 Claude Code 的 YAML 解析错误：根因是 **YAML 中 `@` 不能作为 token 起始字符**（`@@占位符@@` 直接作为值）。修法：给占位符值加引号——**解析后的值仍是 `@@…@@`，语义与下游替换逻辑不变**（3 文件 × 4 行） |
+| 门禁 | 未登记偏差 = 漂移（fail-closed）；已登记偏差 = 合法且可验证；登记过期 = 失败；`originalSha256` 使补丁可逆并能发现「上游在补丁底下动过」 |
+| 深度校验兼容性 | 先读校验器源码确认它只比对 **bundle ↔ 我们自己的快照**、trusted baseline **只校验路径集合**，再实测：两宿主 bundle 均 `validate_runtime_bundle` PASS（claude 76 / codex 78） |
+| 宿主端到端效果 | 真实 Claude Code：我们技能的 YAML 解析失败 **3 → 0**，技能加载数仍 169（发现性不变） |
+| 反例 | 篡改已登记补丁文件 → verification 失败并点名 `content-vs-registered-patch`；还原后 SHA 与登记一致、恢复 PASS |
+
+证据：`evidence/20260910-local-patch-registry.md`。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
@@ -259,6 +276,10 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-capabi
 pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-provenance-integrity.ps1' `
   -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
 
+# 宿主 smoke（消耗真实额度，不接入 verify）：-Install / -Uninstall / -Probe，脚手架在 <repo>/_smoke/
+pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\smoke-host-skill-discovery.ps1' `
+  -TargetHost Both -FetchTrustedBaseline -Probe
+
 # 建议使用 PowerShell 7 (pwsh)；Windows PowerShell 5.1 亦可运行（manifest 字节不同）
 # Hook 默认禁用行为
 & 'F:\skiils工具\feisheng-vibe-coding\tests\test-vibe-hook-adapter.ps1' `
@@ -302,5 +323,7 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-prove
 - **本仓库自持，不再依靠任何上游**：不产出上游问题报告、不等待上游确认；上游改名/差异仅作事实记录与周期复核项。
 - 测试脚手架一律放 `<repo>/_smoke/`（gitignore），总目标完成后清理；不得污染其它 Claude/Codex 配置、不得覆盖既有技能。
 - 调 Sliver 自带 Python 工具必须带 `-B`（否则在快照里生成 `__pycache__`，会被 provenance 门禁拦下）。
+- 修改 vendored 内容必须先在 `provenance/LOCAL-PATCHES.json` 登记（未登记即漂移）；登记必须记 `originalSha256`，确保可逆。
+- 不得用「改登记」的方式掩盖意外漂移：登记过期（哈希不符）会被门禁拒绝。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。

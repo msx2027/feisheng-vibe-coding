@@ -40,6 +40,10 @@ $errors = @()
 $totalChecked = 0
 $totalAllowlisted = 0
 $totalRevisionVerified = 0
+$totalPatched = 0
+
+# 已登记的本地补丁（本仓库自持后允许；未登记者仍视为漂移）
+$localPatches = Get-LocalPatches -RepositoryRoot $repoRoot
 
 foreach ($spec in $importSpecs) {
     $recordPath = Join-Path $repoRoot $spec.record
@@ -78,10 +82,32 @@ foreach ($spec in $importSpecs) {
         }
     }
 
+    # 该快照下已登记的本地补丁
+    $snapshotPatches = @{}
+    if ($localPatches.ContainsKey($spec.name)) { $snapshotPatches = $localPatches[$spec.name] }
+
     # 逐字节交叉校验
     $drift = @()
     foreach ($record in $records) {
         if (Test-PathWithinAllowlist -RelativePath $record.path -Allowlist $allowlist) { $totalAllowlisted++; continue }
+        if ($snapshotPatches.ContainsKey($record.path)) {
+            # 已登记的本地补丁：快照 == patchedSha256；来源仍须 == originalSha256
+            $patch = $snapshotPatches[$record.path]
+            if ($patch.patchedSha256 -ne $record.sha256) {
+                $drift += ($record.path + ' (content-vs-registered-patch)')
+                continue
+            }
+            $sourcePath = Join-Path $sourceRoot ($record.path.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+            if (Test-Path -LiteralPath $sourcePath -PathType Leaf) {
+                $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourcePath).Hash.ToLowerInvariant()
+                if ($sourceHash -ne $patch.originalSha256) {
+                    $drift += ($record.path + ' (upstream-moved-under-patch)')
+                    continue
+                }
+            }
+            $totalPatched++
+            continue
+        }
         if ($revisionSourced.ContainsKey($record.path)) {
             if ($revisionSourced[$record.path] -ne $record.sha256) {
                 $drift += ($record.path + ' (content-vs-recorded-revision)')
@@ -158,6 +184,14 @@ foreach ($spec in $importSpecs) {
         revisionSourcedPaths = @(Sort-StringsOrdinal -Values ([string[]]@($revisionSourced.Keys)) | ForEach-Object {
             [ordered]@{ path = [string]$_; sha256 = [string]$revisionSourced[$_] }
         })
+        locallyPatchedPaths = @(Sort-StringsOrdinal -Values ([string[]]@($snapshotPatches.Keys)) | ForEach-Object {
+            [ordered]@{
+                path = [string]$_
+                patchedSha256 = [string]$snapshotPatches[$_].patchedSha256
+                originalSha256 = [string]$snapshotPatches[$_].originalSha256
+                patchId = [string]$snapshotPatches[$_].patchId
+            }
+        })
         importRecord = $spec.record
     }
 }
@@ -175,7 +209,7 @@ $document = [ordered]@{
     recordedAt = (Get-Date).ToUniversalTime().ToString('o')
     recordedAtRevision = $revision
     corroboration = [ordered]@{
-        sourceByteComparison = 'required at recording time; ' + $totalChecked + ' files byte-identical to source, ' + $totalRevisionVerified + ' verified against recorded git revision, ' + $totalAllowlisted + ' within supplement allowlist'
+        sourceByteComparison = 'required at recording time; ' + $totalChecked + ' files byte-identical to source, ' + $totalRevisionVerified + ' verified against recorded git revision, ' + $totalPatched + ' registered local patch(es) verified, ' + $totalAllowlisted + ' within supplement allowlist'
         sourceState = 'git sources must match recorded HEAD and dirty set; non-git sources recorded as such'
     }
     snapshots = @($snapshotEntries)
@@ -190,6 +224,7 @@ $result = [ordered]@{
     recordedAtRevision = $revision
     sourceByteCheckedFiles = $totalChecked
     revisionSourcedVerifiedFiles = $totalRevisionVerified
+    locallyPatchedVerifiedFiles = $totalPatched
     sourceAllowlistedFiles = $totalAllowlisted
     snapshots = @($snapshotEntries | ForEach-Object {
         [ordered]@{ name = $_.name; fileCount = $_.fileCount; treeHash = $_.treeHash; sourceKind = $_.sourceKind }

@@ -1,0 +1,52 @@
+{
+  "schema": "feisheng-local-patches/v1",
+  "owner": "provenance",
+  "status": "active",
+  "note": "本仓库自持（不再依靠上游）后，允许对 vendored 内容做本地补丁。每个补丁必须登记：快照、路径、来源 revision、原始内容 sha256、补丁后 sha256、原因、证据。未登记的偏差一律仍视为漂移（fail-closed）；登记但哈希不符也失败（登记不得过期）。",
+  "policy": {
+    "unregisteredDeviation": "drift; verification fails",
+    "staleRegistration": "registration hash mismatch; verification fails",
+    "registrationRequires": [
+      "snapshot",
+      "path",
+      "sourceRevision",
+      "originalSha256",
+      "patchedSha256",
+      "reason",
+      "evidence"
+    ],
+    "reversibility": "original content is recoverable from the source revision recorded here"
+  },
+  "patches": [
+    {
+      "id": "sliver-template-frontmatter-quoted",
+      "snapshot": "sliver-core",
+      "appliedAt": "2026-09-10",
+      "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
+      "change": "quote placeholder values so the frontmatter is valid YAML; parsed values stay exactly the @@...@@ placeholders",
+      "reason": "Sliver 模板资产的 YAML frontmatter 把 @@占位符@@ 直接作为值，而 YAML 规定 '@' 不能作为 token 起始字符，导致 Claude Code 加载技能时对每个 .md 报 YAML 解析错误（实测 3 个文件各 4 行）。修法：给占位符值加引号——解析出来的值仍是 @@...@@，语义与任何下游占位符替换逻辑完全不变。",
+      "evidence": "evidence/20260910-local-patch-registry.md",
+      "verification": "YAML frontmatter parses; parsed values == original placeholder strings",
+      "files": [
+        {
+          "path": "assets/project-audit/audit-report.md",
+          "originalSha256": "dcc25ed5361754957ff8c7924f4f1789f8c04614cc9cf6560dfc598b57167855",
+          "patchedSha256": "39c104e9ad4bc7a7f3caf0a9ab441a65a44a7cbe3be0920476d9ff6bf0e36c45",
+          "linesChanged": 4
+        },
+        {
+          "path": "assets/project-decision/adr.md",
+          "originalSha256": "10821d1cd470205ff137034d14fd38f3bb7c9d4e120d5ffdb242fd02179bd281",
+          "patchedSha256": "c8032387c078c161346d008b3e7ff3aefad58af41b370d0f128a21deaeaaa5d2",
+          "linesChanged": 4
+        },
+        {
+          "path": "assets/project-feature/feature-truth.md",
+          "originalSha256": "7dac5bfae82b88cb07011a6560ea85740bb2c791fdc7654051860231d3de442d",
+          "patchedSha256": "a877d81ff0d87a85398c19a02e7184660aa0906ad0f43f7839b30600b2d6575e",
+          "linesChanged": 4
+        }
+      ]
+    }
+  ]
+}
