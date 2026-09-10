@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T19:07:47.5390878Z",
+  "generatedAt": "2026-09-10T19:15:20.3645679Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -604,16 +604,284 @@
     {
       "id": "dev-builder",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/dev-builder/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/dev-builder",
+        "files": [
+          {
+            "path": "skills/product/dev-builder/SKILL.md",
+            "sha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef"
+          },
+          {
+            "path": "skills/product/dev-builder/references/anti-rationalization.md",
+            "sha256": "7abee3abb868ea32a25809131a1db3a35dd2b154c5aa46e1a82742b1f1448c8f"
+          },
+          {
+            "path": "skills/product/dev-builder/references/development-rules.md",
+            "sha256": "28288240f6ac111000d761e46d4110b65ce0918ec17cb63c019acf136e3c69ec"
+          },
+          {
+            "path": "skills/product/dev-builder/references/development-strategy.md",
+            "sha256": "004aa2fb35bfd6f0b37627bb62ffa09ae44b6c92f82663b925f3fdea286500c3"
+          },
+          {
+            "path": "skills/product/dev-builder/references/file-structure.md",
+            "sha256": "3dfed112983644de5a645709448938decaf49d583bcdbe0e00a6caa5e9879f3e"
+          },
+          {
+            "path": "skills/product/dev-builder/references/output-style.md",
+            "sha256": "6f4cf008bea73e138308ec30d04c494440348638f9952adf8cd161263138f46e"
+          },
+          {
+            "path": "skills/product/dev-builder/references/phase-completion.md",
+            "sha256": "721c21e27d2cd4e17c882e7d53034e990d120521db7a85ffb22a39c01fdd805c"
+          },
+          {
+            "path": "skills/product/dev-builder/references/ui-token-component-reuse.md",
+            "sha256": "239c9715340c59da6f2e3d00bc4248987ae84bee6111bb0dcc3bbff80a880f6f"
+          },
+          {
+            "path": "skills/product/dev-builder/references/workflow-continuous-development.md",
+            "sha256": "4396f92bd224bb60fd0fa14c2f633fcf6edf47fb82f100b582e299eec0fbcc55"
+          },
+          {
+            "path": "skills/product/dev-builder/references/workflow-initialization.md",
+            "sha256": "8b7a70a21b46d149bd743184096e32ab2b19642f766ffe687a57edcefe707314"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/button.tsx.template",
+            "sha256": "2e83f0589b58b5535a1c2902cb1759dded12b9b79dfc8a1d33c2906f914282ea"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/card.tsx.template",
+            "sha256": "38c499e1e9b940dd738acd690ffb1ac197cd8f4d6cf1ff92a79d6f4c7de6e4b9"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/index.ts.template",
+            "sha256": "cf92efb6f9ecd429bda8c570ba213ae9300e2363e04b026a1ccf5563045cc6d7"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/tokens.css.template",
+            "sha256": "9704e88a58a866cb84060825caccb15e8b100e4f6debc76190d55c81030cae87"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/_vibe-docs.json.template",
+            "sha256": "3fa61949e50b8c2c91ebaaf18da4b8d7b07b63eead5d1d996d8f7516723a3d66"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/plans/执行光标.md.template",
+            "sha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/接口契约.md.template",
+            "sha256": "cc9efd7ff8b1b6fb767b618e764196a1abc004f8615d568d8e689ed25848e2a5"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/设计简报.md.template",
+            "sha256": "7be643e181c8cc8e9cacbdcb3f6a69bb36dc0579d6dd8c9ae63a548382f8df06"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/需求变更.md.template",
+            "sha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/需求文档.md.template",
+            "sha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/宪法设计.md.template",
+            "sha256": "ae34fb6a6cf4ae2086fee9a6e683b6e8a29cb72221e8865694e550b9b7f2de10"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/开发计划.md.template",
+            "sha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/项目画像.md.template",
+            "sha256": "7cdefe3f8b6f4581d92f556be807aac7144f56d20af6d7990b0b4deea5e14b70"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/验收记录.md.template",
+            "sha256": "34ca6559816bb3b9628d7099188831f854bf46917c62299b83fd35684d479ddf"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
+            "sha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/cli-feature-first/_gitignore.template",
+            "sha256": "bead60c938bbb7159cb8fd2b301c7ffa6f7328d80d1cd98ce9910f6c20bca8af"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/cli-feature-first/package-lock.json.template",
+            "sha256": "7dc3fb34d4fda42f60a80e974867601ddf219fc724dc4fd8fcb4adb4653fd006"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/cli-feature-first/package.json.template",
+            "sha256": "6ead858f04b7776d7d05578882da34070aaab313b24c06fb89d08c4234513a8b"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/cli-feature-first/src/index.mjs.template",
+            "sha256": "9e67f5405cd5309ad468b08466a66d50626ba7f30a0ff5c7f3c5ef45f4c71e32"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/_gitignore.template",
+            "sha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/electron/main.ts.template",
+            "sha256": "c3aa1878fed43349f0522401b38d1643e44d3b6edd65bac9522935ce88c0c7b1"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/electron/preload.ts.template",
+            "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/package-lock.json.template",
+            "sha256": "b2aed95528ab13d05c552cc4c9b1b82e19d24ef6139a0cb32d5a8aeb972e0799"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/package.json.template",
+            "sha256": "da255e1bd9fbdfb867cd536875e788faf92579b8dd67e43fc12b8f3451d34ff5"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/scripts/dev-electron.mjs.template",
+            "sha256": "79c5fb60e531ba7a3343e7cb755efb0749ed69514c44bc2821e20ce3c57c9507"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/app/layout.tsx.template",
+            "sha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/app/page.tsx.template",
+            "sha256": "9f69489652a1ba3b9dfd536f6315b693c967d84376572227afa4d3c9f02db5cb"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/core/config/app-config.ts.template",
+            "sha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/features/desktop-home/components/desktop-home-screen.tsx.template",
+            "sha256": "fa55a43cfd66c903b03c5306b24557a633f743f9963636144128dd7b22a2668b"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/features/desktop-home/index.ts.template",
+            "sha256": "59bb727b56dc499a69fd4923f18d40a519bfa878c4f0b712a4804a86bfcc68de"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/shared/providers/app-providers.tsx.template",
+            "sha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/tsconfig.electron.json.template",
+            "sha256": "8f28fd95f9a925f47a095334a7b2685959cbc381336eec1d1b42742ac1bdf9c8"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/electron-next-feature-first/tsconfig.json.template",
+            "sha256": "ab6df004120ad40f4b80262515909abcbad3a0f49be6c8de79ec64a2263f6330"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/_gitignore.template",
+            "sha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/package-lock.json.template",
+            "sha256": "67fc7ee27534051db0bbcc199ee39e1abe74a7720896796693282669a78ab029"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/package.json.template",
+            "sha256": "64aeedbb43a5a3860e44a96a7f2629f17c920dfb69165c15f1212266a077c47d"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/app/layout.tsx.template",
+            "sha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/app/page.tsx.template",
+            "sha256": "91b9b93e518c9f15a72c0360f3ee80c8a308588ec5fb16fce76e402017c3124d"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/core/config/app-config.ts.template",
+            "sha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/features/home/components/home-screen.tsx.template",
+            "sha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/features/home/index.ts.template",
+            "sha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/src/shared/providers/app-providers.tsx.template",
+            "sha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/next-feature-first/tsconfig.json.template",
+            "sha256": "7712455dafe0055ed4e21b987cda3258e4dbbd8a2d0ad4dbb21723739298e79f"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/_gitignore.template",
+            "sha256": "e50b9195e8f67d8a5eb2221637b604487c861cbb83b6b6b1c06e104001bcdb11"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/index.html.template",
+            "sha256": "981805c2aa1980b5dbdc6209397e445ffe1ab2b66523f5b02a4f6a80eadbf228"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/package-lock.json.template",
+            "sha256": "3d4ae8b3e3a8f51af39d6d1d1ef5a86eec996a0d92c2fc000a197ceb0f37e5ba"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/package.json.template",
+            "sha256": "11a59b16fefbf11664662eb26c1012734e3c532e9355e1e94ac8e824c792248e"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/core/config/app-config.ts.template",
+            "sha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/features/home/components/home-screen.tsx.template",
+            "sha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/features/home/index.ts.template",
+            "sha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/main.tsx.template",
+            "sha256": "f2214ece1e999eda538953a968504c45bf8c42f92d751ad4d5e736fe43d6293d"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/pages/home-page.tsx.template",
+            "sha256": "51cb8fc32009fdc50e243ef8d2f6b319de5630c962a7e67f37a65aaa0567b864"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/src/shared/providers/app-providers.tsx.template",
+            "sha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/tsconfig.json.template",
+            "sha256": "c94da4eb583edf3db57b5bf4ecd185b5d5c57b3b897fec64a9e35e63e4bac90c"
+          },
+          {
+            "path": "skills/product/dev-builder/templates/project-scaffolds/vite-feature-first/vite.config.ts.template",
+            "sha256": "c3667a1f1b18309e75e17a81a9393fa486daa2fc03549c643c4d472960c8c7eb"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "dev-planner",
@@ -1723,7 +1991,7 @@
           },
           {
             "path": "governance/sliver-core/references/engineering-execution.md",
-            "sha256": "0fd2abfae3cfb5995bf3db00a6300f19bac5153a0b49d9aa2bfd28889f22d050"
+            "sha256": "f18b94792d26e9166654daf156b354a91216c8c6af5fe76cd05d2458a05daee9"
           },
           {
             "path": "governance/sliver-core/references/execution-liveness.md",
@@ -2491,16 +2759,36 @@
     {
       "id": "ui-system-guardian",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/ui-system-guardian/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/ui-system-guardian/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/ui-system-guardian",
+        "files": [
+          {
+            "path": "skills/product/ui-system-guardian/SKILL.md",
+            "sha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375"
+          },
+          {
+            "path": "skills/product/ui-system-guardian/references/audit-rules.md",
+            "sha256": "950ab11d96228913ced7873204bf1871f4a58099339e84baa207d4a4e20db3be"
+          },
+          {
+            "path": "skills/product/ui-system-guardian/references/workflow.md",
+            "sha256": "43b86640cfd4e65824f1aef4698b67947386c436e88afa297c8f9f49fb98e191"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "ui-ux-pro-max",

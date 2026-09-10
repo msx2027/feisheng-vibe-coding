@@ -279,6 +279,8 @@ through this delegation; the condition below, not a user keyword, is its trigger
 | `skills/product/rule-harvester/SKILL.md` | rules need gold-panning: misplaced rules corrected, generic rules folded into skill packages, stale rules or constitutions retired |
 | `skills/product/doc-sync-guardian/SKILL.md` | code, skill, hook, script, command, directory, or workflow changes require syncing the affected documents and blocking doc drift |
 | `skills/product/hotspot-governor/SKILL.md` | core hotspots, oversized files or components, or hard-to-maintain modules need diagnosis, a split route, and follow-up control |
+| `skills/product/dev-builder/SKILL.md` | the development plan is ready and the user says to start coding or continue the next phase; scaffold, dependencies, per-phase implementation, integration verification, and user confirmation follow this flow |
+| `skills/product/ui-system-guardian/SKILL.md` | the component library needs initialization, tokens or base components/variants are missing, or UI debt needs an audit and migration gate |
 | `skills/ui/impeccable/SKILL.md` | frontend interface work needs the production-grade craft workflow |
 | `skills/ui/adapt/SKILL.md` | a design must adapt across screen sizes, devices, or contexts |
 | `skills/ui/animate/SKILL.md` | animation, micro-interaction, transition, or motion work is requested |

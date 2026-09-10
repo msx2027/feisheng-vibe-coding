@@ -1,0 +1,18 @@
+import type { ReactNode } from "react";
+
+import "@/shared/ui/tokens.css";
+import { AppProviders } from "@/shared/providers/app-providers";
+
+type RootLayoutProps = {
+  children: ReactNode;
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html lang="en">
+      <body>
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
+  );
+}

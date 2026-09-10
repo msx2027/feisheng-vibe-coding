@@ -30,13 +30,13 @@
 
 - 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **13/13**；fresh clone 两种 shell × 两种 `autocrlf` 均 13/13（2026-09-11 起为 13 步：新增宿主中性投影步骤）
-- 分类：**82 条记录**，其中 **10 条 runtime 已接入**（控制面 1 + mattpocock 来源 5：原语 4（tdd/codebase-design/diagnosing-bugs/domain-modeling）+ checker 1（code-review）+ vibe 来源检查器 4）；runtime bundle 共 **94** 文件
+- 分类：**82 条记录**，其中 **37 条 runtime 已接入**（控制面 1 + mattpocock 来源 5 + vibe 来源 31：checker 4 + product 11 + ui 16）；runtime bundle 共 **331** 文件
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
-- 路由绑定：**9/9**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
+- 路由绑定：**36/36**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
 - 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**176 条**（2026-09-11 退役 4 个重名链接后），其中我们的包 `feisheng-vibe-coding` **96 文件**（宿主中性投影，含 tdd/code-review）
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口，全链路走到「项目体检」报告（Claude，`-p` 口径）；Codex 注入含我们根入口 + 控制面 + 9 个已接入技能嵌套条目（条目数 202）
-- 存量：`evidence/` 41、`tasks/` 37、`scripts/` 21
+- 存量：`evidence/` 42、`tasks/` 37、`scripts/` 21
 
 ---
 
@@ -400,14 +400,14 @@ ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 176
 | 来源 | 登记 | 已接入 | 说明 |
 |---|---|---|---|
 | sliver-vibe-coding | 1 | **1** | 控制面（22 主路由 + 8 lens 是 `references/*.md`，非独立技能） |
-| vibe-coding-skills | 46 | **4** | 4 个 checker 已接入；18 条许可证已放行但未接；24 条被许可证挡住 |
+| vibe-coding-skills | 46 | **35** | 2026-09-11 闭环批后：checker 4 + product 11 + ui 16 已接入；7 个留待后续（MCP 依赖 2、语义未审 3、Hook 驱动 3 中 2 个计入 event-only）；许可证族经 owner 豁免（自用） |
 | mattpocock-skills | 35 | **5** | 4 个原语 + code-review（checker）已接入（2026-09-11）；10 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（上游 in-progress）；6 个 user-tool；1 compat |
 
 ```text
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 功能裁决   11/11 簇  已完成（duplicateGroups）
-交付runtime 10/82     10 条记录 / 94 文件（控制面 75 + 9 技能 19）
-路由绑定   9/9        已接入技能全部唯一命中
+交付runtime 37/82     37 条记录 / 331 文件（控制面 75 + 36 技能 256）
+路由绑定   36/36      已接入技能全部唯一命中
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）
 行为验证   D2/D3 已实测转绿（2026-09-11，见 9.2 与 evidence/20260911-*）

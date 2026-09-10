@@ -4,7 +4,7 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 37、待启用 7、来源专用 30、阻塞 0、兼容/排除 8。
+统计：共 **82** 项来源技能 —— 可用 39、待启用 7、来源专用 28、阻塞 0、兼容/排除 8。
 
 ## 现在可用（进入 runtime 静态投影）
 
@@ -26,6 +26,7 @@
 | `delight` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `design-brief-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
 | `design-system` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 12 |
+| `dev-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 65 |
 | `dev-planner` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 9 |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
 | `distill` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
@@ -48,6 +49,7 @@
 | `test-automation` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 4 |
 | `typeset` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `ui-styling` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 93 |
+| `ui-system-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
 | `ui-ux-pro-max` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 38 |
 
 runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
@@ -81,7 +83,7 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
   - 原因：仅限结构化事件调用；需宿主事件契约与独立审查
 - **primitive**（10）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`wizard`、`writing-for-agents`
   - 原因：来源专用工程原语；未验收
-- **product-or-checker**（7）：`codebase-memory-scout`、`design-maker`、`dev-builder`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`ui-system-guardian`
+- **product-or-checker**（5）：`codebase-memory-scout`、`design-maker`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`
   - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke
 - **unreviewed**（3）：`beginner-flow-guide`、`clarify`、`shape`
   - 原因：尚未完成语义审查

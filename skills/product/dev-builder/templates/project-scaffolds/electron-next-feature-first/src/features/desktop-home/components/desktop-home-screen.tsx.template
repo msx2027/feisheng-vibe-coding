@@ -1,0 +1,14 @@
+import { appConfig } from "@/core/config/app-config";
+import { Button, Card } from "@/shared/ui";
+
+export function DesktopHomeScreen() {
+  return (
+    <main>
+      <Card>
+        <h1>{appConfig.title}</h1>
+        <p>Start building __PROJECT_TITLE__ from src/features/desktop-home.</p>
+        <Button>Start</Button>
+      </Card>
+    </main>
+  );
+}

@@ -1,0 +1,98 @@
+import http from "node:http";
+import { spawn } from "node:child_process";
+import process from "node:process";
+import { setTimeout as delay } from "node:timers/promises";
+
+const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+const children = new Set();
+let shuttingDown = false;
+
+function spawnNpmScript(scriptName, options = {}) {
+  const child = spawn(npmCommand, ["run", scriptName], {
+    stdio: "inherit",
+    ...options
+  });
+
+  children.add(child);
+  child.on("exit", () => {
+    children.delete(child);
+  });
+
+  return child;
+}
+
+async function isServerReady(url) {
+  return new Promise((resolve) => {
+    const request = http.get(url, (response) => {
+      response.resume();
+      resolve((response.statusCode ?? 500) < 500);
+    });
+
+    request.on("error", () => resolve(false));
+    request.setTimeout(2000, () => {
+      request.destroy();
+      resolve(false);
+    });
+  });
+}
+
+async function waitForServer(url, timeoutMs = 60000) {
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    if (await isServerReady(url)) {
+      return;
+    }
+
+    await delay(1000);
+  }
+
+  throw new Error(`Timed out waiting for renderer server: ${url}`);
+}
+
+function shutdown(exitCode = 0) {
+  if (shuttingDown) {
+    return;
+  }
+
+  shuttingDown = true;
+
+  for (const child of children) {
+    child.kill("SIGTERM");
+  }
+
+  setTimeout(() => {
+    process.exit(exitCode);
+  }, 0);
+}
+
+async function main() {
+  const webProcess = spawnNpmScript("dev:web");
+  webProcess.on("exit", (code) => {
+    shutdown(code ?? 0);
+  });
+
+  try {
+    await waitForServer("http://localhost:3000");
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    shutdown(1);
+    return;
+  }
+
+  const desktopProcess = spawnNpmScript("dev:desktop", {
+    env: {
+      ...process.env,
+      ELECTRON_RENDERER_URL: "http://localhost:3000"
+    }
+  });
+
+  desktopProcess.on("exit", (code) => {
+    shutdown(code ?? 0);
+  });
+}
+
+process.on("SIGINT", () => shutdown(0));
+process.on("SIGTERM", () => shutdown(0));
+
+void main();

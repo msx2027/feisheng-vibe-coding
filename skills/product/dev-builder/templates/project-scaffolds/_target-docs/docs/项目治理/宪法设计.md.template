@@ -1,0 +1,45 @@
+# 宪法设计包
+
+## 项目证据包
+
+| 项目 | 证据 | 状态 |
+| --- | --- | --- |
+| 项目根目录 | 脚手架输出目录 | 已确认 |
+| `.vibe-docs.json` | `.vibe-docs.json` | 已确认 |
+| package scripts | `package.json` | 已确认 |
+| API / schema / auth / deploy | 未验证 | 未验证 |
+
+## Owner Map
+
+| 概念 | Owner | 证据 | 缺口 |
+| --- | --- | --- | --- |
+| 产品边界和生命周期文档映射 | product | `需求文档.md` | 无 |
+| 配置文件和脚本 | config | `package.json` | 无 |
+| 自动化体检入口 | tests | `check:health` | 无 |
+| API、server route 或后端依赖 | backend | 未验证 | 未验证 |
+| 数据 schema 或 migration | schema | 未验证 | 未验证 |
+| 认证、权限或 RBAC 证据 | auth | 未验证 | 未验证 |
+| 部署配置、CI 或 deploy 脚本 | deploy | 未验证 | 未验证 |
+
+## 条款映射
+
+| 通用条款 | 决策 | 项目证据 | 生成规则 |
+| --- | --- | --- | --- |
+| 真源入口 | rewrite | `.vibe-docs.json` | 先读 `.vibe-docs.json`，再读其中映射的项目画像、需求、计划和契约文档。 |
+| 证据纪律 | keep | `需求文档.md` / `package.json` | 没有真实文件、配置、命令或用户确认，不把模板愿望写成项目事实。 |
+| 验收纪律 | rewrite | `npm run check:health` / `npm run build` | 只使用目标项目真实存在的验证命令；缺失命令写 `未验证`。 |
+| 最小实现 | keep | Agent 宪法 | 写代码前先查现有实现、标准库、平台能力和已安装依赖，最后才新增最小实现。 |
+| 高风险停止 | keep | owner map | 高风险能力改动前先确认 owner、真源和验证路径。 |
+
+## 停止条件
+
+- 没有读取 `.vibe-docs.json` 和当前任务相关真源时，不开始中高风险任务。
+- 没有实际验证证据时，不声明完成、通过或修好。
+- 涉及 API、schema、auth、permission、payment、deployment、migration、secret、数据删除或公开访问时，先确认 owner、真源和验证路径。
+
+## 缺失证据和用户问题
+
+- backend：需要真实 endpoint、server route、service 或用户确认后才能写成已落地能力。
+- schema：需要真实 schema、migration 或用户确认后才能写成已落地能力。
+- auth：需要真实认证 / 权限文件、依赖或用户确认后才能写成已落地能力。
+- deploy：需要真实部署配置、CI 或 deploy 脚本后才能写成已落地能力。

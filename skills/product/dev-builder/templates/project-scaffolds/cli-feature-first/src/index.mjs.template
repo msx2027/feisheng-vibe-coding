@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+const args = new Set(process.argv.slice(2));
+
+function printHelp() {
+  console.log(`__PROJECT_TITLE__
+
+Usage:
+  __NPM_PACKAGE_NAME__ --health
+  __NPM_PACKAGE_NAME__ --help`);
+}
+
+if (args.has("--health")) {
+  console.log(JSON.stringify({ ok: true, app: "__PROJECT_NAME__", mode: "smoke" }));
+} else {
+  printHelp();
+}

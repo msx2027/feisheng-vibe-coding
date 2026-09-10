@@ -1,0 +1,49 @@
+# __PROJECT_TITLE__
+
+## 范围
+
+这是由 `vibe-coding-skills` 脚手架生成的最小目标项目，用于承载后续需求、设计、开发和验收记录。
+
+当前范围是建立可运行、可验证、可继续接管的项目底座：生命周期文档、runtime 入口、health 门禁、接口契约台账和第一条可见闭环。
+
+## 不做什么
+
+- 不在初始化阶段承诺真实业务 API、数据库 schema、auth、部署能力已经完成。
+- 不把半路接管项目当成空项目重建。
+- 不把未确认的人工验收写成 `用户已确认`。
+
+## 成功标准
+
+- 项目可以运行 `npm run check:health`。
+- 项目可以运行 `npm run build`。
+- 生命周期文档通过 `.vibe-docs.json` 映射。
+- `AGENTS.md` 与 `CLAUDE.md` 保留用户原文，只维护 managed block。
+
+## Bootstrap 口径
+
+空项目初始化时，第一闭环是：项目能安装、能运行 health、能 build，并且文档映射、接口契约和人工验收记录都存在。
+
+## Adoption 口径
+
+半路接管项目先记录现状证据、真实启动状态、已有 owner、危险接管动作、重复/假数据/漂移风险和第一个安全任务；完成只读审计前，不直接重建目录或批量改代码。
+
+## 验收标准
+
+- 严格 TDD：除 visual-only T1 受控例外外，所有新功能、bug 修复、重构和行为变更强制 RED-GREEN-REFACTOR；没有先失败且原因正确的测试不得写生产代码。
+- visual-only T1 受控例外：仅限边界核对通过且没有既有测试 / visual regression seam 的同一组件 / 容器呈现微调；必须记录 seam 结论、改前基线、改后同路径定向视觉证据、副作用检查与越界条件，已有 seam 仍执行 RED-GREEN-REFACTOR。
+- 完成证据：严格 TDD 分支记录 RED / GREEN 与回归；受控 T1 记录边界、seam、基线、同路径证据与副作用；其他例外仅限用户明确批准的原型、生成代码或配置文件，无法自动化本身不构成例外资格。
+- 自动化验证：运行 `npm run check:health` 和 `npm run build`。
+- 人工验收：用户真实打开主界面或运行 CLI health 命令，确认生成结果符合项目目标。
+
+## 停止条件
+
+- health 或 build 失败。
+- `.vibe-docs.json` 映射缺失或文档命名不符合四字中文规则。
+- 发现 `.env`、secret、private key 或数据库 dump 等疑似隐私文件且未人工确认。
+
+## 未验证事项
+
+- 真实业务 API：未验证。
+- 数据库 schema：未验证。
+- auth / permission：未验证。
+- 部署链路：未验证。

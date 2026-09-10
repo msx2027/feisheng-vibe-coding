@@ -360,8 +360,12 @@
     },
     "dev-builder": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "dev-builder",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "dev-planner": {
       "domain": "product-or-checker",
@@ -710,8 +714,12 @@
     },
     "ui-system-guardian": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "ui-system-guardian",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "ui-ux-pro-max": {
       "domain": "ui",
