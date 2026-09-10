@@ -11,9 +11,9 @@
     {
       "id": "skill-catalog",
       "path": "provenance/CANONICAL-CATALOG.json",
-      "writes": ["canonical-skill-id", "invocation", "source", "dependencies", "outputs"],
-      "inputs": ["provenance/SKILL-INVENTORY.json", "provenance/SKILL-DECISIONS.md"],
-      "projections": ["README skill lists", "plugin manifests", "host discovery metadata"]
+      "writes": ["canonical-skill-id", "invocation", "source", "domain", "readiness", "status", "dependencies", "outputs"],
+      "inputs": ["provenance/SKILL-CLASSIFICATION.json", "provenance/SKILL-INVENTORY.json", "provenance/SKILL-DECISIONS.md"],
+      "projections": ["README skill lists", "plugin manifests", "host discovery metadata", "docs/CAPABILITY-INDEX.md"]
     },
     {
       "id": "target-truth",

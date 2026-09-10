@@ -112,8 +112,15 @@ foreach ($entry in @($licenseMap.entries)) {
     }
 }
 
-# 收集 runtime include（catalog 中 control-plane + accepted-primitive + project entry）
-$runtimeRecords = @($catalog.records | Where-Object { $_.status -in @('control-plane', 'accepted-primitive') })
+# 收集 runtime include（catalog decisionPolicy 声明的 acceptedStatuses；单一真源）
+if ($catalog.PSObject.Properties.Name -notcontains 'decisionPolicy') {
+    throw 'canonical catalog 缺少 decisionPolicy；无法确定 runtime include 集合。'
+}
+$runtimeIncludedStatuses = @($catalog.decisionPolicy.acceptedStatuses)
+if ($runtimeIncludedStatuses.Count -eq 0) {
+    throw 'decisionPolicy.acceptedStatuses 为空，拒绝发布门禁。'
+}
+$runtimeRecords = @($catalog.records | Where-Object { $runtimeIncludedStatuses -contains $_.status })
 $runtimeItems = @()
 $runtimeItems += [pscustomobject]@{
     id = 'project-entry'

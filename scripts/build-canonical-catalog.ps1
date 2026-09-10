@@ -1,59 +1,158 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true)]
-    [string]$RepoRoot
+    [string]$RepoRoot,
+
+    [Parameter(Mandatory = $false)]
+    [string]$OutputPath = ''
 )
 
 $ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
+# CANONICAL-CATALOG 生成器（数据驱动）
+#
+# 真源分工：
+#   - provenance/SKILL-INVENTORY.json      : 来源事实快照（source/path/invocation/sha256）
+#   - provenance/SKILL-CLASSIFICATION.json : 分类决策唯一真源（domain/readiness → statusPolicy → status）
+#   - 本脚本                                : 只做派生（id 命名、路径、来源 revision、字段拼装），不做分类判断
+#
+# 因此「改分类」= 改 SKILL-CLASSIFICATION.json，不再改本脚本的数组。
+# 本脚本对分类缺失/不一致 fail loudly（fail-closed）。
+
 $inventoryPath = Join-Path $RepoRoot 'provenance/SKILL-INVENTORY.json'
-$outputPath = Join-Path $RepoRoot 'provenance/CANONICAL-CATALOG.json'
+$classificationPath = Join-Path $RepoRoot 'provenance/SKILL-CLASSIFICATION.json'
+$outputPath = if ([string]::IsNullOrWhiteSpace($OutputPath)) {
+    Join-Path $RepoRoot 'provenance/CANONICAL-CATALOG.json'
+} else {
+    [System.IO.Path]::GetFullPath($OutputPath)
+}
+
+if (-not (Test-Path -LiteralPath $inventoryPath -PathType Leaf)) { throw "缺少 inventory: $inventoryPath" }
+if (-not (Test-Path -LiteralPath $classificationPath -PathType Leaf)) { throw "缺少 classification: $classificationPath" }
+
 $inventory = Get-Content -Raw -Encoding UTF8 -LiteralPath $inventoryPath | ConvertFrom-Json
+$classification = Get-Content -Raw -Encoding UTF8 -LiteralPath $classificationPath | ConvertFrom-Json
 
-$mattRevision = '9fe7e7a3bb352851b986725bab1c7cfb17610a97'
-$sliverRevision = '30c7cfb363c7ea58121e98edfd321c2cf396098e'
+if ($classification.schema -ne 'feisheng-skill-classification/v1') {
+    throw "不支持的 classification schema: $($classification.schema)"
+}
 
-$uiSkills = @('ui-ux-pro-max','impeccable','design-system','ui-styling','brand','layout','polish','adapt','animate','colorize','bolder','delight','distill','overdrive','quieter','typeset')
-$eventOnly = @('experience-elevator','feedback-writer','evolution-engine')
-$mattAdapters = @('implement','improve-codebase-architecture','to-spec','to-tickets','triage','wayfinder','setup-matt-pocock-skills')
-$mattUserTools = @('grill-me','grill-with-docs','handoff','teach','to-questionnaire','wait-what','ask-matt')
-$acceptedMatt = @('diagnosing-bugs','codebase-design','domain-modeling')
-$blockedMatt = @('code-review','tdd')
+# 来源 revision 属来源事实，保留在本脚本（非分类决策）。
+$sourceRevisions = [ordered]@{
+    'mattpocock-skills' = '9fe7e7a3bb352851b986725bab1c7cfb17610a97'
+    'sliver-vibe-coding' = '30c7cfb363c7ea58121e98edfd321c2cf396098e'
+    'vibe-coding-skills' = $null
+}
+
+# status 只能由 statusPolicy 派生
+$statusPolicy = @{}
+foreach ($property in $classification.statusPolicy.PSObject.Properties) {
+    $statusPolicy[$property.Name] = [string]$property.Value
+}
+
+function Get-DerivedStatus {
+    param(
+        [Parameter(Mandatory = $true)][string]$Id,
+        [Parameter(Mandatory = $true)][string]$Domain,
+        [Parameter(Mandatory = $true)][string]$Readiness
+    )
+    $key = "$Domain|$Readiness"
+    if (-not $statusPolicy.ContainsKey($key)) {
+        throw "分类策略缺失: skill '$Id' 的 (domain=$Domain, readiness=$Readiness) 不在 statusPolicy 中。"
+    }
+    return $statusPolicy[$key]
+}
+
+# id 派生（命名空间决策，与 readiness 无关）
+function Get-RecordId {
+    param(
+        [Parameter(Mandatory = $true)][string]$Source,
+        [Parameter(Mandatory = $true)][string]$Candidate,
+        [Parameter(Mandatory = $true)][string]$Relative
+    )
+    $id = $Candidate
+    if ($Source -eq 'sliver-vibe-coding') {
+        $id = 'sliver-vibe-coding'
+    } elseif ($Source -eq 'vibe-coding-skills') {
+        if ($Candidate -eq 'code-review') { $id = 'vibe-code-review' }
+    } elseif ($Source -eq 'mattpocock-skills') {
+        if ($Candidate -eq 'mattpocock-code-review' -or $Relative -match '/code-review/SKILL\.md$') { $id = 'code-review' }
+        if ($Candidate -eq 'tdd') { $id = 'tdd' }
+    }
+    return $id
+}
+
+# path 派生：已验收原语已导入目标仓库，路径指向导入副本
+# （由 readiness 语义决定，而不是硬编码名单）
+function Get-RecordPath {
+    param(
+        [Parameter(Mandatory = $true)][string]$Source,
+        [Parameter(Mandatory = $true)][string]$Candidate,
+        [Parameter(Mandatory = $true)][string]$Relative,
+        [Parameter(Mandatory = $true)][string]$Readiness
+    )
+    if ($Source -eq 'sliver-vibe-coding') {
+        return 'governance/sliver-core/SKILL.md'
+    }
+    if ($Source -eq 'vibe-coding-skills') {
+        return 'sources/vibe-coding-skills/' + $Relative
+    }
+    if ($Source -eq 'mattpocock-skills') {
+        if ($Readiness -eq 'accepted') {
+            return 'skills/engineering/' + $Candidate + '/SKILL.md'
+        }
+        return 'sources/mattpocock-skills/' + $Relative
+    }
+    return $Relative
+}
 
 $records = @()
+$seenIds = @{}
+$usedClassificationIds = @{}
 foreach ($row in @($inventory.skills)) {
     $source = [string]$row.source
     $candidate = [string]$row.canonicalCandidate
     $relative = ([string]$row.path).Replace('\', '/')
-    $id = $candidate
-    $status = 'source-only-unreviewed'
-    $revision = $null
-    $path = $relative
 
-    if ($source -eq 'sliver-vibe-coding') {
-        $id = 'sliver-vibe-coding'
-        $status = 'control-plane'
-        $revision = $sliverRevision
-        $path = 'governance/sliver-core/SKILL.md'
-    } elseif ($source -eq 'vibe-coding-skills') {
-        $revision = $null
-        $path = 'sources/vibe-coding-skills/' + $relative
-        if ($candidate -eq 'vibe-coding-skills') { $status = 'compatibility-alias' }
-        elseif ($eventOnly -contains $candidate) { $status = 'event-only-source-only' }
-        elseif ($uiSkills -contains $candidate) { $status = 'source-only-ui' }
-        elseif ($candidate -in @('product-spec-builder','design-brief-builder','design-maker','dev-planner','dev-builder','architecture-foundation','target-constitution-setup','target-runtime-setup','bug-fixer','test-automation','requirements-test-designer','release-builder','audit','critique','optimize','harden','ui-system-guardian','doc-sync-guardian','codebase-memory-scout','hotspot-governor','rule-harvester','skill-builder')) { $status = 'source-only-product-or-checker' }
-        if ($candidate -eq 'code-review') { $id = 'vibe-code-review'; $status = 'source-only-checker' }
-    } elseif ($source -eq 'mattpocock-skills') {
-        $revision = $mattRevision
-        $path = 'sources/mattpocock-skills/' + $relative
-        if ($candidate -eq 'mattpocock-code-review' -or $relative -match '/code-review/SKILL\.md$') { $id = 'code-review'; $status = 'blocked-unclassified-working-tree' }
-        elseif ($candidate -eq 'tdd') { $id = 'tdd'; $status = 'blocked-unclassified-working-tree' }
-        elseif ($acceptedMatt -contains $candidate) {
-            $status = 'accepted-primitive'
-            $path = 'skills/engineering/' + $candidate + '/SKILL.md'
-        }
-        elseif ($mattAdapters -contains $candidate) { $status = 'adapter-candidate' }
-        elseif ($mattUserTools -contains $candidate) { $status = if ($candidate -eq 'ask-matt') { 'compatibility-selector' } else { 'source-only-user-tool' } }
-        elseif ($relative -like 'skills/in-progress/*') { $status = 'excluded-in-progress' }
-        elseif ($candidate -in @('research','prototype','wizard','resolving-merge-conflicts','git-guardrails-claude-code','migrate-to-shoehorn','scaffold-exercises','setup-pre-commit','grilling','writing-for-agents')) { $status = 'source-only-primitive' }
+    $id = Get-RecordId -Source $source -Candidate $candidate -Relative $relative
+
+    if ($seenIds.ContainsKey($id)) {
+        throw "派生 id 重复: $id"
+    }
+    $seenIds[$id] = $true
+
+    $classified = $classification.skills.PSObject.Properties[$id]
+    if ($null -eq $classified) {
+        throw "分类缺失: 派生 id '$id'（source=$source）不在 SKILL-CLASSIFICATION.json 的 skills 中。"
+    }
+    $usedClassificationIds[$id] = $true
+
+    $entry = $classified.Value
+    $domain = [string]$entry.domain
+    $readiness = [string]$entry.readiness
+    $entrySource = [string]$entry.source
+    if ($entrySource -ne $source) {
+        throw "分类 source 不一致: skill '$id' 分类记录 source=$entrySource，实际=$source"
+    }
+
+    $path = Get-RecordPath -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness
+    $status = Get-DerivedStatus -Id $id -Domain $domain -Readiness $readiness
+
+    $writeAuthority = @()
+    if ($entry.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $entry.writeAuthority) {
+        $writeAuthority = @($entry.writeAuthority)
+    }
+
+    $reason = ''
+    if ($classification.reasonsById.PSObject.Properties.Name -contains $id) {
+        $reason = [string]$classification.reasonsById.$id
+    } elseif ($classification.reasonsByStatus.PSObject.Properties.Name -contains $status) {
+        $reason = [string]$classification.reasonsByStatus.$status
+    }
+
+    $revision = $null
+    if ($sourceRevisions.Contains($source)) {
+        $revision = $sourceRevisions[$source]
     }
 
     $records += [ordered]@{
@@ -62,13 +161,45 @@ foreach ($row in @($inventory.skills)) {
         path = $path
         sourceRevision = $revision
         invocation = [string]$row.invocation
+        domain = $domain
+        readiness = $readiness
         status = $status
+        reason = $reason
         sourceSha256 = [string]$row.sha256
-        writeAuthority = @()
+        writeAuthority = $writeAuthority
+    }
+}
+
+foreach ($property in $classification.skills.PSObject.Properties) {
+    if (-not $usedClassificationIds.ContainsKey($property.Name)) {
+        throw "分类存在过期条目: '$($property.Name)' 未出现在 SKILL-INVENTORY.json 的派生结果中。"
     }
 }
 
 $records = @($records | Sort-Object id, source)
+
+# decisionPolicy 由 runtimePolicy 派生；runtimeExcludedStatuses 自动补集（fail-closed）
+$controlPlaneStatus = [string]$classification.runtimePolicy.controlPlaneStatus
+$acceptedStatuses = @($classification.runtimePolicy.acceptedStatuses)
+if ($acceptedStatuses -notcontains $controlPlaneStatus) {
+    throw "runtimePolicy.acceptedStatuses 必须包含 controlPlaneStatus。"
+}
+$allStatuses = @()
+foreach ($row in @($classification.statusPolicy.PSObject.Properties | Sort-Object Name)) {
+    $value = [string]$row.Value
+    if ($allStatuses -notcontains $value) { $allStatuses += $value }
+}
+$runtimeExcludedStatuses = @($allStatuses | Where-Object { $acceptedStatuses -notcontains $_ })
+
+$duplicateGroups = @()
+foreach ($group in @($classification.duplicateGroups)) {
+    if ($group.PSObject.Properties.Name -contains 'aliases') {
+        $duplicateGroups += [ordered]@{ id = [string]$group.id; owner = [string]$group.owner; aliases = @($group.aliases); rule = [string]$group.rule }
+    } else {
+        $duplicateGroups += [ordered]@{ id = [string]$group.id; owner = [string]$group.owner; members = @($group.members); rule = [string]$group.rule }
+    }
+}
+
 $output = [ordered]@{
     schema = 'feisheng-canonical-skill-catalog/v1'
     generatedAt = (Get-Date).ToUniversalTime().ToString('o')
@@ -76,15 +207,13 @@ $output = [ordered]@{
     projectEntry = 'SKILL.md'
     routeOwner = 'governance/sliver-core/references/routes-index.md'
     sourceInventory = 'provenance/SKILL-INVENTORY.json'
+    sourceClassification = 'provenance/SKILL-CLASSIFICATION.json'
     records = $records
-    duplicateGroups = @(
-        [ordered]@{ id = 'project-entry'; owner = 'sliver-vibe-coding'; aliases = @('vibe-coding-skills','ask-matt'); rule = 'aliases may select or activate but cannot own project routing' },
-        [ordered]@{ id = 'review-and-test'; owner = 'sliver-validation-gate'; members = @('vibe-code-review','code-review','tdd'); rule = 'specialized methods return findings/results; Sliver owns the gate' },
-        [ordered]@{ id = 'truth-and-planning'; owner = 'target-truth'; members = @('product-spec-builder','dev-planner','to-spec','to-tickets','wayfinder'); rule = 'adapters project to target-truth and cannot create a parallel spec owner' }
-    )
+    duplicateGroups = $duplicateGroups
     decisionPolicy = [ordered]@{
-        acceptedStatuses = @('control-plane','accepted-primitive')
-        runtimeExcludedStatuses = @('blocked-unclassified-working-tree','source-only-unreviewed','source-only-ui','source-only-product-or-checker','source-only-checker','source-only-user-tool','source-only-primitive','event-only-source-only','adapter-candidate','compatibility-alias','compatibility-selector','excluded-in-progress')
+        controlPlaneStatus = $controlPlaneStatus
+        acceptedStatuses = $acceptedStatuses
+        runtimeExcludedStatuses = $runtimeExcludedStatuses
         generatedProjectionsAreReadOnly = $true
     }
 }

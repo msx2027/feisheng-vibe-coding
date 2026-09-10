@@ -154,6 +154,17 @@ function Get-ProjectionPlan {
     if ($catalog.owner -ne 'skill-catalog') {
         throw "canonical catalog owner 必须是 skill-catalog。"
     }
+    if ($catalog.PSObject.Properties.Name -notcontains 'decisionPolicy') {
+        throw 'canonical catalog 缺少 decisionPolicy；门禁必须从决策策略读取 runtime include 集合。'
+    }
+    $controlPlaneStatus = [string]$catalog.decisionPolicy.controlPlaneStatus
+    if ([string]::IsNullOrWhiteSpace($controlPlaneStatus)) {
+        throw 'decisionPolicy.controlPlaneStatus 缺失。'
+    }
+    $runtimeIncludedStatuses = @($catalog.decisionPolicy.acceptedStatuses)
+    if ($runtimeIncludedStatuses.Count -eq 0 -or $runtimeIncludedStatuses -notcontains $controlPlaneStatus) {
+        throw 'decisionPolicy.acceptedStatuses 必须非空且包含 controlPlaneStatus。'
+    }
 
     $entryPath = ConvertTo-SafeRelativePath -Path ([string]$catalog.projectEntry) -Label 'projectEntry'
     if ($entryPath -ne 'SKILL.md') {
@@ -165,12 +176,14 @@ function Get-ProjectionPlan {
         throw 'canonical catalog 没有记录。'
     }
 
-    $controlPlaneRecords = @($records | Where-Object { $_.status -eq 'control-plane' })
+    $controlPlaneRecords = @($records | Where-Object { $_.status -eq $controlPlaneStatus })
     if ($controlPlaneRecords.Count -ne 1) {
         throw "control-plane 记录必须唯一，实际数量: $($controlPlaneRecords.Count)"
     }
 
-    $acceptedPrimitiveRecords = @($records | Where-Object { $_.status -eq 'accepted-primitive' })
+    $acceptedPrimitiveRecords = @($records | Where-Object {
+        $runtimeIncludedStatuses -contains $_.status -and $_.status -ne $controlPlaneStatus
+    })
     if ($acceptedPrimitiveRecords.Count -eq 0) {
         throw 'canonical catalog 没有 accepted-primitive 记录。'
     }

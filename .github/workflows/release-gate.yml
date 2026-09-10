@@ -1,9 +1,8 @@
 # 静态发布门禁（CI）
 #
 # 本工作流只跑静态门禁与静态候选包装配：
-#   - 发布 NOTICE 门禁（provenance/LICENSE-MAP.json 映射）
-#   - Vibe Hook 适配器保持禁用（拒绝执行来源 Hook）
-#   - Codex / Claude 静态投影 Build + Validate（catalog/SHA/blocked 门禁）
+#   - 单入口 scripts/verify.ps1：生成物新鲜度（catalog / 能力索引）+ 发布 NOTICE 门禁
+#     + Vibe Hook 禁用测试 + Codex/Claude 静态投影 Build & Validate
 #   - 发布候选包装配（zip + NOTICE + release manifest）
 #
 # 本工作流不是发布授权，也不证明真实宿主 discovery / trust / fresh-session 行为；
@@ -34,37 +33,11 @@ jobs:
         shell: pwsh
         run: $PSVersionTable | Out-String | Write-Host
 
-      - name: Release NOTICE gate
+      - name: Static gates (single entrypoint)
         shell: pwsh
         run: |
-          $result = ./scripts/validate-release-notices.ps1 -RepositoryRoot $env:GITHUB_WORKSPACE
-          if ($LASTEXITCODE -ne 0) { throw "NOTICE gate failed with exit code $LASTEXITCODE" }
-          $result | Out-String | Write-Host
-
-      - name: Vibe Hook adapter remains disabled
-        shell: pwsh
-        run: |
-          ./tests/test-vibe-hook-adapter.ps1 -RepositoryRoot $env:GITHUB_WORKSPACE
-
-      - name: Codex static projection (build + validate)
-        shell: pwsh
-        run: |
-          $out = Join-Path $env:RUNNER_TEMP ('codex-' + [guid]::NewGuid().ToString('N'))
-          $build = ./scripts/build-codex-runtime-projection.ps1 -Mode Build -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
-          if ($LASTEXITCODE -ne 0) { throw "Codex build failed with exit code $LASTEXITCODE" }
-          $validate = ./scripts/build-codex-runtime-projection.ps1 -Mode Validate -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
-          if ($LASTEXITCODE -ne 0) { throw "Codex validate failed with exit code $LASTEXITCODE" }
-          $validate | Out-String | Write-Host
-
-      - name: Claude static projection (build + validate)
-        shell: pwsh
-        run: |
-          $out = Join-Path $env:RUNNER_TEMP ('claude-' + [guid]::NewGuid().ToString('N'))
-          $build = ./scripts/build-claude-runtime-projection.ps1 -Mode Build -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
-          if ($LASTEXITCODE -ne 0) { throw "Claude build failed with exit code $LASTEXITCODE" }
-          $validate = ./scripts/build-claude-runtime-projection.ps1 -Mode Validate -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
-          if ($LASTEXITCODE -ne 0) { throw "Claude validate failed with exit code $LASTEXITCODE" }
-          $validate | Out-String | Write-Host
+          ./scripts/verify.ps1 -RepositoryRoot $env:GITHUB_WORKSPACE
+          if ($LASTEXITCODE -ne 0) { throw "verify.ps1 failed with exit code $LASTEXITCODE" }
 
       - name: Release package assembly (static candidate)
         shell: pwsh

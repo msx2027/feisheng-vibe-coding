@@ -1,0 +1,505 @@
+{
+  "schema": "feisheng-skill-classification/v1",
+  "owner": "skill-catalog",
+  "status": "active",
+  "note": "分类唯一真源。build-canonical-catalog.ps1 只从本文件 + SKILL-INVENTORY.json 派生 CANONICAL-CATALOG.json；改分类 = 改本文件，不再改 PowerShell 数组。domain 与 readiness 是正交两轴，status 由 statusPolicy 派生。 status 是给消费者的兼容别名（generated alias）；未来收敛阶段消费者应直接读 readiness，status 可移除。accepted 只对 primitive 域开放策略行：把非 primitive 域提升为运行时是一笔需要显式决策的动作，故意保持 fail-closed。",
+  "runtimePolicy": {
+    "controlPlaneStatus": "control-plane",
+    "acceptedStatuses": [
+      "control-plane",
+      "accepted-primitive"
+    ],
+    "note": "只有 acceptedStatuses 可进入 runtime 投影；其余一律 runtime-excluded（fail-closed）"
+  },
+  "statusPolicy": {
+    "adapter|candidate": "adapter-candidate",
+    "alias|compatibility": "compatibility-alias",
+    "checker|blocked": "blocked-unclassified-working-tree",
+    "checker|candidate": "adapter-candidate",
+    "checker|source-only": "source-only-checker",
+    "control-plane|runtime": "control-plane",
+    "event|candidate": "adapter-candidate",
+    "event|source-only": "event-only-source-only",
+    "in-progress|excluded": "excluded-in-progress",
+    "primitive|accepted": "accepted-primitive",
+    "primitive|blocked": "blocked-unclassified-working-tree",
+    "primitive|candidate": "adapter-candidate",
+    "primitive|source-only": "source-only-primitive",
+    "product-or-checker|candidate": "adapter-candidate",
+    "product-or-checker|source-only": "source-only-product-or-checker",
+    "selector|compatibility": "compatibility-selector",
+    "ui|candidate": "adapter-candidate",
+    "ui|source-only": "source-only-ui",
+    "unreviewed|candidate": "adapter-candidate",
+    "unreviewed|source-only": "source-only-unreviewed",
+    "user-tool|candidate": "adapter-candidate",
+    "user-tool|source-only": "source-only-user-tool"
+  },
+  "reasonsByStatus": {
+    "accepted-primitive": "已验收工程原语；进入 runtime 静态投影",
+    "adapter-candidate": "已审查、待适配器与行为 smoke；未进入 runtime",
+    "blocked-unclassified-working-tree": "来源工作树半改名且未提交，未获上游/维护者确认",
+    "compatibility-alias": "兼容入口别名；不得拥有项目级路由",
+    "compatibility-selector": "兼容选择器；不得拥有项目级路由",
+    "control-plane": "唯一项目级控制面（Sliver）",
+    "event-only-source-only": "仅限结构化事件调用；需宿主事件契约与独立审查",
+    "excluded-in-progress": "上游 in-progress；不进入正式运行包",
+    "source-only-checker": "专项 checker；Sliver 拥有验收门，未进入 runtime",
+    "source-only-primitive": "来源专用工程原语；未验收",
+    "source-only-product-or-checker": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+    "source-only-ui": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+    "source-only-unreviewed": "尚未完成语义审查",
+    "source-only-user-tool": "用户显式工具；未做宿主行为 smoke"
+  },
+  "reasonsById": {
+    "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
+    "ui-system-guardian": "来源声明见 legal/ui-system-guardian/SOURCE-DECLARATION.md；仍待宿主行为 smoke",
+    "code-review": "Matt 工作树把 frontmatter 改为 mattpocock-code-review，但 plugin.json/marketplace.json 未同步；未解锁",
+    "tdd": "Matt 工作树把 code-review 引用改为 mattpocock-code-review，但 manifest 未同步；未解锁"
+  },
+  "duplicateGroups": [
+    {
+      "id": "project-entry",
+      "owner": "sliver-vibe-coding",
+      "aliases": [
+        "vibe-coding-skills",
+        "ask-matt"
+      ],
+      "rule": "aliases may select or activate but cannot own project routing"
+    },
+    {
+      "id": "review-and-test",
+      "owner": "sliver-validation-gate",
+      "members": [
+        "vibe-code-review",
+        "code-review",
+        "tdd"
+      ],
+      "rule": "specialized methods return findings/results; Sliver owns the gate"
+    },
+    {
+      "id": "truth-and-planning",
+      "owner": "target-truth",
+      "members": [
+        "product-spec-builder",
+        "dev-planner",
+        "to-spec",
+        "to-tickets",
+        "wayfinder"
+      ],
+      "rule": "adapters project to target-truth and cannot create a parallel spec owner"
+    }
+  ],
+  "skills": {
+    "adapt": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "animate": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "architecture-foundation": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "ask-matt": {
+      "domain": "selector",
+      "readiness": "compatibility",
+      "source": "mattpocock-skills"
+    },
+    "audit": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "beginner-flow-guide": {
+      "domain": "unreviewed",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "bolder": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "brand": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "bug-fixer": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "clarify": {
+      "domain": "unreviewed",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "claude-handoff": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    },
+    "code-review": {
+      "domain": "primitive",
+      "readiness": "blocked",
+      "source": "mattpocock-skills"
+    },
+    "codebase-design": {
+      "domain": "primitive",
+      "readiness": "accepted",
+      "source": "mattpocock-skills"
+    },
+    "codebase-memory-scout": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "colorize": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "critique": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "delight": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "design-brief-builder": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "design-maker": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "design-system": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "dev-builder": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "dev-planner": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "diagnosing-bugs": {
+      "domain": "primitive",
+      "readiness": "accepted",
+      "source": "mattpocock-skills"
+    },
+    "distill": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "doc-sync-guardian": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "domain-modeling": {
+      "domain": "primitive",
+      "readiness": "accepted",
+      "source": "mattpocock-skills"
+    },
+    "evolution-engine": {
+      "domain": "event",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "experience-elevator": {
+      "domain": "event",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "feedback-writer": {
+      "domain": "event",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "git-guardrails-claude-code": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "grill-me": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "grill-with-docs": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "grilling": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "handoff": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "harden": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "hotspot-governor": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "impeccable": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "implement": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "improve-codebase-architecture": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "layout": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "loop-me": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    },
+    "migrate-to-shoehorn": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "optimize": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "overdrive": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "polish": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "product-spec-builder": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "prototype": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "quieter": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "release-builder": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "requirements-test-designer": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "research": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "resolving-merge-conflicts": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "rule-harvester": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "scaffold-exercises": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "setup-matt-pocock-skills": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "setup-pre-commit": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "setup-ts-deep-modules": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    },
+    "shape": {
+      "domain": "unreviewed",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "skill-builder": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "sliver-vibe-coding": {
+      "domain": "control-plane",
+      "readiness": "runtime",
+      "source": "sliver-vibe-coding"
+    },
+    "target-constitution-setup": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "target-runtime-setup": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "tdd": {
+      "domain": "primitive",
+      "readiness": "blocked",
+      "source": "mattpocock-skills"
+    },
+    "teach": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "test-automation": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "to-questionnaire": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "to-spec": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "to-tickets": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "triage": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "typeset": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "ui-styling": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "ui-system-guardian": {
+      "domain": "product-or-checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "ui-ux-pro-max": {
+      "domain": "ui",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "vibe-code-review": {
+      "domain": "checker",
+      "readiness": "source-only",
+      "source": "vibe-coding-skills"
+    },
+    "vibe-coding-skills": {
+      "domain": "alias",
+      "readiness": "compatibility",
+      "source": "vibe-coding-skills"
+    },
+    "wait-what": {
+      "domain": "user-tool",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "wayfinder": {
+      "domain": "adapter",
+      "readiness": "candidate",
+      "source": "mattpocock-skills"
+    },
+    "wizard": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "writing-beats": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    },
+    "writing-for-agents": {
+      "domain": "primitive",
+      "readiness": "source-only",
+      "source": "mattpocock-skills"
+    },
+    "writing-fragments": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    },
+    "writing-shape": {
+      "domain": "in-progress",
+      "readiness": "excluded",
+      "source": "mattpocock-skills"
+    }
+  }
+}
