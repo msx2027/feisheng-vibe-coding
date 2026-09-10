@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>feisheng-vibe-coding · 流程图与生命图</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1f2430; --muted:#6b7280;
+    --line:#e5e8f0; --accent:#3b5bdb; --gold:#b08900;
+    --blue:#2f6fed; --purple:#7c5cd6; --green:#1f9d61; --orange:#e8850c;
+    --red:#d6455d; --cyan:#0e9aa7; --slate:#475569; --pink:#d64f8e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    line-height:1.65; padding:32px 16px 64px;}
+  .wrap{max-width:1080px; margin:0 auto;}
+  h1{font-size:28px; letter-spacing:.5px;}
+  h1 small{font-size:14px; color:var(--muted); font-weight:normal; display:block; margin-top:6px;}
+  h2{font-size:21px; margin:44px 0 6px; display:flex; align-items:center; gap:10px;}
+  h2 .tag{font-size:12px; background:var(--accent); color:#fff; border-radius:99px; padding:2px 12px; font-weight:normal;}
+  .sub{color:var(--muted); font-size:14px; margin-bottom:18px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; margin-top:14px;
+    box-shadow:0 1px 3px rgba(30,40,80,.05);}
+  .badges{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+  .badge{background:#eef1fb; border:1px solid #dbe2f8; color:#33418f; border-radius:10px;
+    padding:8px 14px; font-size:13px;}
+  .badge b{font-size:17px; display:block;}
+  .badge.ok{background:#e9f8f0; border-color:#bfe8d2; color:#14663f;}
+  /* ---------- 流程图：竖向主链 ---------- */
+  .flow{display:flex; flex-direction:column; align-items:stretch; gap:0;}
+  .stage{display:flex; gap:16px; align-items:stretch;}
+  .stage .num{flex:0 0 46px; height:46px; border-radius:12px; color:#fff; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:18px; margin-top:6px;}
+  .stage .body{flex:1; background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:12px; padding:14px 18px;}
+  .stage .body h3{font-size:16px; margin-bottom:4px;}
+  .stage .body p{font-size:13.5px; color:#3c4356;}
+  .stage .body .where{display:inline-block; font-size:12px; color:var(--muted); background:#f2f4f9;
+    border-radius:6px; padding:1px 8px; margin-top:6px; margin-right:6px;}
+  .arrow{height:26px; margin-left:39px; width:0; position:relative;
+    border-left:3px dashed #b9c4e8;}
+  .arrow::after{content:""; position:absolute; bottom:-2px; left:-7.5px;
+    border:6px solid transparent; border-top:9px solid #b9c4e8;}
+  .chips{margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;}
+  .chip{font-size:12px; border-radius:99px; padding:2px 10px; color:#fff;}
+  /* ---------- 生命图：闭环两行 ---------- */
+  .loop{display:grid; grid-template-columns:repeat(6,1fr); gap:14px;}
+  .life{border-radius:12px; padding:14px 12px; color:#fff; position:relative; min-height:118px;
+    display:flex; flex-direction:column;}
+  .life h4{font-size:15px; margin-bottom:4px;}
+  .life .sk{font-size:11.5px; opacity:.92; line-height:1.5;}
+  .life .arrow-h{position:absolute; right:-13px; top:44px; width:12px; height:12px;
+    border-top:3px solid rgba(255,255,255,.75); border-right:3px solid rgba(255,255,255,.75);
+    transform:rotate(45deg); z-index:2;}
+  .life.down .arrow-h{display:none;}
+  .turn{grid-column:1 / -1; display:flex; align-items:center; gap:10px; color:var(--muted);
+    font-size:12.5px; padding:2px 6px;}
+  .turn .line{flex:1; height:0; border-top:3px dashed #c3cce6; position:relative;}
+  .turn .line.right::after{content:""; position:absolute; right:-2px; top:-7px;
+    border:6px solid transparent; border-top:9px solid #c3cce6; transform:rotate(90deg);}
+  .turn .line.left::before{content:""; position:absolute; left:-2px; top:-7px;
+    border:6px solid transparent; border-bottom:9px solid #c3cce6;}
+  .looprow2{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:2px;}
+  /* ---------- 阶段时间线 ---------- */
+  .phases{display:grid; grid-template-columns:repeat(6,1fr); gap:12px;}
+  .phase{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; position:relative;}
+  .phase .no{font-size:12px; color:var(--muted);}
+  .phase .name{font-weight:700; margin:2px 0 6px;}
+  .phase ul{list-style:none; font-size:12.5px; color:#3c4356;}
+  .phase li{padding-left:18px; position:relative;}
+  .phase li::before{content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700;}
+  .phase li.dot::before{content:"•"; color:var(--orange);}
+  .phase .bar{height:6px; border-radius:99px; background:#edf0f7; margin-top:10px; overflow:hidden;}
+  .phase .bar i{display:block; height:100%; background:var(--green);}
+  .phase .bar i.part{background:linear-gradient(90deg,var(--green) 0%,var(--green) 78%,var(--orange) 78%);}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; font-size:12.5px; color:var(--muted);}
+  .legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-1px;}
+  .note{font-size:12.5px; color:var(--muted); margin-top:10px;}
+  .rail{background:#fff8ec; border:1px solid #f3ddba; border-radius:12px; padding:16px 18px; margin-top:16px;}
+  .rail h3{font-size:15px; color:#8a6100; margin-bottom:6px;}
+  .rail p{font-size:13px; color:#6b5a33;}
+  footer{margin-top:48px; color:var(--muted); font-size:12.5px; text-align:center;}
+  footer code{background:#eef1fb; padding:1px 6px; border-radius:5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>feisheng-vibe-coding · 流程图与生命图
+    <small>一个统一入口 + 控制面 + 38 个技能 —— 让不懂代码的人也能把一个想法做到商用级上线</small>
+  </h1>
+  <div class="badges">
+    <div class="badge ok"><b>38</b>个技能已接入</div>
+    <div class="badge ok"><b>22</b>条主路由 + 8 个透镜</div>
+    <div class="badge ok"><b>4</b>大能力组（工程/检查/产品/UI）</div>
+    <div class="badge ok"><b>13/13</b>门禁全绿（fresh clone ×4）</div>
+    <div class="badge ok"><b>Hook</b>经验沉淀已启用</div>
+    <div class="badge"><b>2026-09-11</b>数据截至</div>
+  </div>
+
+  <!-- ================= 流程图 ================= -->
+  <h2>流程图 <span class="tag">一句话进来之后，系统内部发生什么</span></h2>
+  <div class="sub">左边数字是顺序；每个蓝框是系统里一个真实存在的环节。虚线箭头表示"把结果交给下一步"。</div>
+
+  <div class="flow">
+    <div class="stage">
+      <div class="num" style="background:var(--slate)">你</div>
+      <div class="body" style="border-left-color:var(--slate)">
+        <h3>说一句中文</h3>
+        <p>例如：「我想做一个帮宠物主人记录疫苗、提醒下次时间的小工具，帮我做到上线。」——不需要懂任何术语。</p>
+        <span class="where">宿主：Claude Code / Codex</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--blue)">1</div>
+      <div class="body" style="border-left-color:var(--blue)">
+        <h3>唯一入口被触发：feisheng-vibe-coding</h3>
+        <p>整个系统只有一个项目级入口。宿主加载它，得到第一条指令：「读控制面协议，按启动协议执行，不许跳过控制面直接回答」。</p>
+        <span class="where">SKILL.md（入口 + 启动动作）</span><span class="where">已实测：纯中文首动作即触发</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--blue)">2</div>
+      <div class="body" style="border-left-color:var(--blue)">
+        <h3>控制面接管（项目的大脑）</h3>
+        <p>读取控制面协议 → 先确认「项目当前的真实状态」和「这次授权的边界」→ 再决定怎么做。它是唯一拥有路由、任务深度、风险、真源、验收定义的组件。</p>
+        <span class="where">governance/sliver-core/SKILL.md</span><span class="where">references/runtime-adapter.md</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--purple)">3</div>
+      <div class="body" style="border-left-color:var(--purple)">
+        <h3>选主路由（22 选 1）</h3>
+        <p>运行控制面自带的确定性路由工具，从 22 条主路由里<strong>精确选一条</strong>（如 立项 / 需求澄清 / 功能开发 / 代码审计 / 测试验收 / 部署发布），再查这条路由的投影拿到执行细节。</p>
+        <span class="where">runtime_decision_contract.py route-catalog</span><span class="where">route-projection</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--purple)">4</div>
+      <div class="body" style="border-left-color:var(--purple)">
+        <h3>需要时叠加"透镜"（8 选 0~n）</h3>
+        <p>只有当前端、数据、安全、部署等受影响时，才加载对应的条件透镜（如安全透镜、数据透镜），决定额外的检查动作。普通小任务一个透镜都不加载，避免小题大做。</p>
+        <span class="where">lens-catalog / lens-projection</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--green)">5</div>
+      <div class="body" style="border-left-color:var(--green)">
+        <h3>按路由委派内部技能（38 个，四组）</h3>
+        <p>控制面按「什么条件加载哪个能力」的委托表，把具体活儿分给对应技能；技能只交回结果和发现，<strong>永远不能自己改路由或项目真源</strong>。</p>
+        <div class="chips">
+          <span class="chip" style="background:var(--green)">工程 5：tdd · code-review · diagnosing-bugs · codebase-design · domain-modeling</span>
+          <span class="chip" style="background:var(--orange)">检查 4：audit · critique · harden · optimize</span>
+          <span class="chip" style="background:var(--cyan)">产品/治理 13：product-spec-builder · dev-planner · dev-builder · architecture-foundation · bug-fixer · test-automation · release-builder · rule-harvester · doc-sync-guardian · hotspot-governor · requirements-test-designer · design-brief-builder · ui-system-guardian</span>
+          <span class="chip" style="background:var(--pink)">UI 16：impeccable 族 12 + design-system · ui-styling · brand · ui-ux-pro-max</span>
+        </div>
+        <span class="where">委托表：engineering-execution.md · Internal Capability Providers（38/38 唯一命中）</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--orange)">6</div>
+      <div class="body" style="border-left-color:var(--orange)">
+        <h3>执行 + 新鲜验证</h3>
+        <p>按路由干活（写代码 / 出规格 / 跑测试 / 发版…），完成前必须拿出<strong>新鲜的验证证据</strong>——没有当次验证，不许宣布"完成/安全/可发布"。</p>
+        <span class="where">控制面验收门</span><span class="where">测试策略 T0–T4</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--red)">7</div>
+      <div class="body" style="border-left-color:var(--red)">
+        <h3>向用户交付，写回 durable 真相</h3>
+        <p>用大白话汇报结果和证据；确认过的关键决定写回项目真源（需求文档 / 开发计划 / 验收记录），供下一轮使用。</p>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="stage">
+      <div class="num" style="background:var(--cyan)">8</div>
+      <div class="body" style="border-left-color:var(--cyan)">
+        <h3>经验沉淀（自动 + 手动）</h3>
+        <p>你在对话里纠正 AI（"不对，你搞错了"）会被<strong>自动记录</strong>到目标项目的经验索引；会话启动时提醒待消化的经验；也可以手动"规则淘金"，把重复踩的坑固化成规则。</p>
+        <span class="where">Hook：SessionStart / UserPromptSubmit（白名单内写入）</span><span class="where">rule-harvester</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rail">
+    <h3>🛡 全程的安全护栏（每一步都在生效）</h3>
+    <p><strong>fail-closed</strong>：任何组件拿不准就拒绝，不猜；<strong>写入白名单</strong>：Hook 只能写经验索引和状态目录，越界即拒绝；
+    <strong>真源唯一</strong>：需求/计划/术语/验收各只有一个写入者，杜绝两套账；<strong>权限边界</strong>：安全审计只读，动代码要你授权；
+    <strong>新鲜验证</strong>：没有当次证据，禁止宣称完成。</p>
+  </div>
+
+  <!-- ================= 生命图 ================= -->
+  <h2>生命图 <span class="tag">一个商用级产品的生命周期，和每个阶段背后的技能</span></h2>
+  <div class="sub">从「我有个想法」到「上线运营」再回到「下一个迭代」——每个阶段由控制面委派对应技能承接，形成闭环。</div>
+
+  <div class="card">
+    <div class="loop">
+      <div class="life" style="background:linear-gradient(160deg,#3b6fe0,#2f5bd0)">
+        <h4>① 想法 / 立项</h4>
+        <div class="sk">控制面「立项」路由：问题库访谈、项目模板、任务深度与授权边界</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#4a5fd6,#3b4cc0)">
+        <h4>② 需求 / 规格</h4>
+        <div class="sk">product-spec-builder（深挖对话→开发级规格）<br>requirements-test-designer（需求→验收/测试设计）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#7c5cd6,#6a4ac2)">
+        <h4>③ 设计方向</h4>
+        <div class="sk">design-brief-builder（采访式收设计需求→设计简报）<br>brand · design-system（品牌与体系）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#9a4fd0,#8340bc)">
+        <h4>④ 架构落地</h4>
+        <div class="sk">architecture-foundation（范围/边界/数据/权限落真源，PASS 才动工）<br>codebase-design（模块与接口词汇）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#c05ec0,#a848a8)">
+        <h4>⑤ 开发计划</h4>
+        <div class="sk">dev-planner（读需求和设计简报 → 分阶段开发计划）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#1f9d61,#178a52)">
+        <h4>⑥ 编码实现</h4>
+        <div class="sk">dev-builder（搭骨架/按 Phase 编码/集成验证）<br>tdd（测试先行）· impeccable 族 12 个（UI 视觉与交互）</div>
+        <div class="arrow-h"></div>
+      </div>
+    </div>
+
+    <div class="turn"><div class="line"></div><span>进入验收与发布</span><div class="line right"></div></div>
+
+    <div class="looprow2">
+      <div class="life" style="background:linear-gradient(160deg,#e8850c,#cf7408)">
+        <h4>⑦ 测试 / 审查</h4>
+        <div class="sk">test-automation（E2E/回归）<br>code-review · audit · critique · harden · optimize</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#d6455d,#c23a51)">
+        <h4>⑧ 发布上线</h4>
+        <div class="sk">release-builder（构建-打包-测试-发布，隐私与漏洞检查）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#0e9aa7,#0c8894)">
+        <h4>⑨ 运行 / 修 bug</h4>
+        <div class="sk">bug-fixer（大白话报障→分级修复）<br>diagnosing-bugs（疑难缺陷证据阶梯）<br>hotspot-governor（大文件治理）</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#0f7f8f,#3f6f8f)">
+        <h4>⑩ 迭代维护</h4>
+        <div class="sk">doc-sync-guardian（文档防漂移）<br>ui-system-guardian（UI 债务治理）<br>回到 ②：下一个功能迭代</div>
+        <div class="arrow-h"></div>
+      </div>
+      <div class="life" style="background:linear-gradient(160deg,#b08900,#9a7600)">
+        <h4>⑪ 经验沉淀（贯穿全程）</h4>
+        <div class="sk">Hook 自动采集纠错信号 → 经验索引<br>rule-harvester（规则淘金/固化）<br>演化信号 → 提议新规则或新技能</div>
+        <div class="arrow-h"></div>
+      </div>
+    </div>
+
+    <div class="turn"><div class="line left"></div><span>经验反哺下一轮（越用越懂你的项目）</span><div class="line"></div></div>
+
+    <div class="note">贯穿全程的两条底线：控制面是唯一的"大脑"（技能只交结果，不抢方向盘）；每个阶段完成都要有当次验证证据。</div>
+  </div>
+
+  <!-- ================= 建设历程 ================= -->
+  <h2>项目建设历程 <span class="tag">迁移阶段 0–5，当前状态</span></h2>
+  <div class="sub">这个统一包本身是分六个阶段建成的。前五个阶段已完成，最后一个阶段等你真人测试通过后收尾。</div>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="no">阶段 0</div>
+      <div class="name">冻结取证</div>
+      <ul>
+        <li>三个来源仓库快照（字节级一致）</li>
+        <li>82 条技能全量分类</li>
+      </ul>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="phase">
+      <div class="no">阶段 1</div>
+      <div class="name">控制面</div>
+      <ul>
+        <li>唯一入口 + 路由/真源/验收</li>
+        <li>canonical 目录 + 投影机制</li>
+      </ul>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="phase">
+      <div class="no">阶段 2</div>
+      <div class="name">工程原语</div>
+      <ul>
+        <li>tdd · code-review · diagnosing-bugs · codebase-design · domain-modeling</li>
+      </ul>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="phase">
+      <div class="no">阶段 3</div>
+      <div class="name">宿主适配</div>
+      <ul>
+        <li>宿主中性安装（一个包两个宿主）</li>
+        <li>纯中文触发 + 路由委派实测</li>
+        <li>Hook 经验沉淀启用</li>
+      </ul>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="phase">
+      <div class="no">阶段 4</div>
+      <div class="name">产品 / UI</div>
+      <ul>
+        <li>检查器 4 + 产品/治理 13 + UI 16</li>
+        <li>闭环补全（想法→上线全链路）</li>
+      </ul>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="phase">
+      <div class="no">阶段 5</div>
+      <div class="name">灰度退役</div>
+      <ul>
+        <li>旧入口 8 条 + 重名 4 条已退役</li>
+        <li class="dot">其余 ~66 条源链接待你定口径</li>
+        <li class="dot">_smoke 清理等真人测试后</li>
+      </ul>
+      <div class="bar"><i class="part" style="width:100%"></i></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i style="background:var(--green)"></i>已完成并验证</span>
+    <span><i style="background:var(--orange)"></i>部分完成 / 待口径</span>
+    <span>数据与证据：evidence/20260911-*.md · 门禁 verify.ps1 = 13/13</span>
+  </div>
+
+  <footer>
+    feisheng-vibe-coding · 本页为静态说明文档（<code>docs/flow-and-lifecycle.html</code>），双击即可离线打开 · 生成于 2026-09-11
+  </footer>
+</div>
+</body>
+</html>
