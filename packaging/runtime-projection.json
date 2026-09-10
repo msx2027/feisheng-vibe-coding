@@ -62,7 +62,7 @@
   },
   "hostDiscovery": {
     "verifiedAt": "2026-09-10",
-    "note": "verified scope is discovery only; host trust, skill behavior, and Hook enforcement remain UNVERIFIED",
+    "note": "HISTORICAL SNAPSHOT (2026-09-10 control-plane-bundle era): installState and the 169/168 baseline below describe the retired sliver-vibe-coding top-level entry, not the current feisheng-vibe-coding neutral bundle. Current per-skill discovery evidence lives in provenance/HOST-DISCOVERY-EVIDENCE.json (path-exact attribution, re-captured 2026-09-11); host trust, skill behavior, and Hook enforcement remain UNVERIFIED",
     "claudeCode": {
       "mechanism": "user skills root (managed/project roots empty on this machine)",
       "root": "~/.claude/skills",

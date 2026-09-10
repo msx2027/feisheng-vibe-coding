@@ -321,6 +321,8 @@ skill-catalog 条目的 path/writes 仍指向生成物 catalog 而非唯一写�
 `SOURCE-INVENTORY.json` 状态停格在迁移前但被 AGENTS.md 指为权威迁移记录、`LOCAL-PATCHES.json` owner 字段 "provenance" 不在 ledger）。
 复扫批次还确认：collector 无单元测试（布尔恒真类回归只靠注释与踩坑清单防）、verify 5b 不比对证据与 catalog 的 readiness 字段
 （内容级漂移只受 7 天新鲜度约束）——两者都是下一批的候选门禁增强。
+终审新增 P3：`packaging/runtime-projection.json` 的 `hostDiscovery` 段已加"历史时点快照"标注（描述的是退役前的
+sliver 顶层条目时代）；`contract.json` status id 字面含 "sedimentation"（有意保留，改 id 需同步历史证据引用面）。
 
 ---
 
