@@ -6,8 +6,8 @@
 ## 0. 仓库状态
 
 - 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`（Vibe 检查器接入）、
-  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁），以及目录忠实 runtime 单位与文档刷新，
-  **工作树干净**。
+  `8e30d2f`（换行可复现性修复）、`00451d6`（防回归门禁）、`4fe6951`（目录忠实 runtime 单位）、
+  `33ebb79`（生成物不再继承脚本源码换行），以及文档刷新，**工作树干净**。
 - 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **11/11 PASS**（发布包 48 文件、0 违规）；
   `pwsh`（7）与 Windows PowerShell 5.1 均为 11/11。
 - **fresh clone 验收已通过**：`core.autocrlf` = `true` / `false` / `input` 三种配置下各 clone 一次，均全绿。
@@ -212,6 +212,11 @@
     新增文件**不会**被静默忽略（生成器会纳入并导致不同步）——这是有意的 fail-closed。
     另外：`agents/` 与 `.git` 永不进产物（`bundlePolicy.directoryExcludedSegments`），
     目录内出现 `hooks`/`.claude`/`sources` 等禁止段时**生成器直接报错**。
+21. **本机绿不是证据，fresh clone 才是**：实测过一个真实缺陷 —— 生成器里一个**多行字面字符串**
+    使生成物的字符串值继承**脚本源码换行**，而 `scripts/**` 当时无属性规则 → 本机（LF）绿，
+    fresh clone（`autocrlf=true`，脚本 CRLF）`catalog 同步` 门禁失败。
+    已修：①生成物字符串不从源码字面字符串来（从真源数据读）；②`.gitattributes` 加了 `scripts/** text eol=lf`。
+    **凡是改动生成器（尤其新增字符串/字段），必须跑一次新目录 clone 验收。**
 
 ## 8. 入口速查
 

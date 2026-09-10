@@ -95,7 +95,34 @@
 更新后的 `runtime include 内容完整性` 门禁不再只看 `SKILL.md`，而是遍历 `bundle.files` 逐文件比对 sha ——
 这是反例 A 能被抓住的原因（旧版本只校验 SKILL.md，reference 文件漂移不会被发现）。
 
-## 六、边界与未做
+## 六、本批次引入并当场修复的缺陷（fresh clone 抓到）
+
+目录忠实改完后本机全绿（11/11），但 **fresh clone 上 `autocrlf=true` 时为 10/11**：
+`catalog 与 SKILL-CLASSIFICATION.json 同步` 失败。
+
+根因是我在本批次写进生成器的一个**多行字面字符串**：
+
+- `build-canonical-catalog.ps1` 里的 `bundlePolicy.note` 写成跨行字符串，于是该字符串里的换行
+  **继承脚本源码的换行**；
+- `scripts/**` 当时没有 `.gitattributes` 规则，所以 `autocrlf=true` 的 clone 里脚本是 CRLF →
+  重新生成出的字符串值含 CRLF，而本机（LF）不含 → 两边 `ConvertTo-Json` 后不等。
+
+这与我上一轮修的换行缺陷**同一根源**（生成物字节依赖于本地 git 配置），只是换了一层。
+修法两半（缺一不可）：
+
+1. **数据里不留源码换行**：catalog 的 `note` 改为从 `SKILL-CLASSIFICATION.json` 的
+   `bundlePolicy.note` 读（并顺带消除重复句子），生成物里不再有任何来自脚本源码空白的字符串值。
+2. **给脚本固定 LF**：`.gitattributes` 新增 `scripts/** text eol=lf`，此后任何 clone
+   的脚本换行都一致，这类问题不可能再出现。
+
+验收：修后 fresh clone 在 `autocrlf` = `true`/`false`/`input` 三种配置下均 **11/11**，
+且 clone 中 `scripts/*.ps1` 为 LF。
+
+**教训（比改动本身更值钱）**：这类缺陷在本机完全不可见 ——
+本机 `verify.ps1 -IncludePackage` 绿**不是**证据，**新目录 clone 才算验收**。
+凡是改动生成器（尤其是新增字符串/字段）都必须跑一次 fresh clone 验收。
+
+## 七、边界与未做
 
 - 控制面保持单文件是**有意**的：`governance/sliver-core/` 下含 hooks / packaging / tests / plugins，
   目录忠实会立刻撞上禁止段约束。若将来要投影控制面的更多文件，应显式列出而不是整体目录。

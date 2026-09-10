@@ -54,4 +54,9 @@
   且生成器确实把新文件纳入 bundle（不会静默漏掉）。
 - 复验 6（反例）：`skills/checker/audit/hooks/probe.json` → 生成器 throw「落在禁止路径段 'hooks'」。
 - 复验 7：`verify.ps1 -IncludePackage` **11/11 PASS**（`pwsh` 与 Windows PowerShell 5.1）。
+- 验收时间：2026-09-10。
+- 复验 8（本批次引入并修复的缺陷）：目录忠实改完本机 11/11，但 fresh clone（`autocrlf=true`）**10/11** ——
+  生成器里一个多行字面字符串使 catalog 的字符串值继承脚本源码换行，而 `scripts/**` 无属性规则 →
+  修法：catalog 的 note 改从 classification 读 + `.gitattributes` 新增 `scripts/** text eol=lf`；
+  修后 fresh clone 三种配置均 11/11。
 - 决定：本任务 accepted。遗留：宿主 trust/行为/Hook `UNVERIFIED`；路由绑定仍 0 条。
