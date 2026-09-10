@@ -122,7 +122,7 @@
           "ui-system-guardian"
         ],
         "runtimeEligible": true,
-        "reason": "owner 2026-09-11 明确豁免：仅本机自用、不对再分发，vibe 私有分发包的许可证文本缺失不构成自用阻碍；再分发前仍需上游逐技能许可证声明或独立法律审查"
+        "reason": "owner 2026-09-11 明确豁免：仅本机自用、不对再分发，vibe 私有分发包的许可证文本缺失不构成自用阻碍；再分发前仍需上游逐技能许可证声明或独立法律审查。owner 2026-09-11 另确认：vibe-coding-skills 为本人开发/维护的集合"
       },
       "vibe-original-checker": {
         "license": "vibe distribution (private); see upstream package.json + README license section",

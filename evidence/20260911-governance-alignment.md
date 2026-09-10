@@ -122,3 +122,37 @@ collector 两个伪影确认修复且不再复发。红队独立实证：retire 
 复扫确认的「有意遗留」（非本批失败，均有留痕）：13 owner vs README 4 owner 表述、7 个裁决 owner 无落点、
 PROVENANCE-INTEGRITY 不锁 owner 文件、LOCAL-PATCHES owner 字段悬空、根 SKILL.md 委托链措辞、
 retiredAt 为 UTC 日期（2026-09-10）与本地批次日期差一天。
+
+## 6. D1：退役 29 个双重曝光链接（owner 同日拍板）+ 35 技能原因分组
+
+owner 对终态审计拍板：终态 = 只保留 feisheng-vibe-coding 一个文件夹；29 个「已接入但旧链接还在」的
+双重曝光链接全部退役；vibe-coding-skills 为 owner 本人开发（已记入 LICENSE-MAP reason）；matt 的
+4 个脏文件为 owner 本人胡乱改的，不保留；AGENTS.md 规则文本可在源项目实际删除时改写。
+
+**执行记录**：
+- 29 个链接经 python `os.rmdir` 退役（安全断言：必须为指向三源的 reparse 链接且名字在批准清单内）；共享根 176 → **147**
+- 回滚记录：`_smoke/retire-29-rollback.json`（29 条 name → linkType → target，逐条可 `mklink /j` 重建）
+- 重采 `HOST-DISCOVERY-EVIDENCE.json`：**39 条 admitted 仍全部 model-visible 且经统一包**（零能力丢失）；
+  门禁 `verify.ps1 -IncludeHostEvidence -IncludePackage` = **14/14**
+- 退役后共享根构成：unified-bundle 1 + source-repo-link 35 + other-link 83 + directory 28 = 147
+
+**吸收完整性（防删源丢技能的审计结论）**：
+1. 内容层：三源完整快照在仓库内（vibe 553 + matt 136 + sliver-core 220 文件，逐文件 sha 闭包，
+   verify 步骤 3 含来源逐字节交叉校验，本日 PASS = 源目录与快照无漂移）——删源项目本体**不丢任何字节**；
+2. 未来接入层：`import-vibe-skills.ps1:144` 与 `import-matt-source.ps1:26` 的复制源都是**仓库内快照**，
+   不读源项目本体——删源不堵后续任何接入；
+3. 运行时层：39 admitted 全部经统一包可达（宿主证据门强制）。
+
+**35 个未接入技能的原因分组**（阶段 2「接入或退役」的决策清单）：
+
+| 数量 | 原因（catalog reason 原文） | 技能 |
+|---|---|---|
+| 10 | 来源专用工程原语；未验收 | git-guardrails-claude-code, grilling, migrate-to-shoehorn, prototype, research, resolving-merge-conflicts, scaffold-exercises, setup-pre-commit, wizard, writing-for-agents |
+| 7 | 已审查、待适配器与行为 smoke | implement, improve-codebase-architecture, setup-matt-pocock-skills, to-spec, to-tickets, triage, wayfinder |
+| 6 | 用户显式工具；未做宿主行为 smoke | grill-me, grill-with-docs, handoff, teach, to-questionnaire, wait-what |
+| 5 | 产品/checker 来源专用；审计与许可证映射已完成，待宿主行为 smoke | codebase-memory-scout, design-maker, skill-builder, target-constitution-setup, target-runtime-setup |
+| 3 | 尚未完成语义审查 | beginner-flow-guide, clarify, shape |
+| 3 | 仅限结构化事件调用；需宿主事件契约与独立审查 | evolution-engine, experience-elevator, feedback-writer |
+| 1 | 专项 checker；Sliver 拥有验收门，未进入 runtime | vibe-code-review |
+
+另：6 个 excluded（上游 in-progress）+ 1 个 retired-alias（vibe-coding-skills）本就不在迁移面内。

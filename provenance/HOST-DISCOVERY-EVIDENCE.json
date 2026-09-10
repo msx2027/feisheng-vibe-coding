@@ -1,18 +1,18 @@
 {
   "schema": "feisheng-host-discovery-evidence/v1",
   "owner": "provenance",
-  "capturedAt": "2026-09-10T22:12:36.4284761Z",
+  "capturedAt": "2026-09-10T23:55:09.6947075Z",
   "method": "codex debug prompt-input (model-visible skill list) + host skill directory presence",
   "caveat": "skills with disable-model-invocation are intentionally absent from the model-visible list; they are evidenced by installation instead",
   "codexSkillRoots": {
-    "r2": "C:/Users/MSX/.codex/plugins/cache/basic-memory/codex/0.23.2/skills",
-    "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills",
-    "r1": "C:/Users/MSX/.codex/skills/.system",
-    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
-    "r7": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.903.11726/skills",
     "r4": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/remotion/d416fd5a/skills",
     "r0": "F:/skiils宸ュ叿/_adapters/shared/skills",
-    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime"
+    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
+    "r1": "C:/Users/MSX/.codex/skills/.system",
+    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime",
+    "r2": "C:/Users/MSX/.codex/plugins/cache/basic-memory/codex/0.23.2/skills",
+    "r7": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.903.11726/skills",
+    "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills"
   },
   "counts": {
     "catalogRecords": 82,
@@ -21,7 +21,7 @@
     "notInstalled": 8,
     "otherOrUnknown": 10,
     "legacyVisible": 0,
-    "parsedModelVisibleEntries": 231
+    "parsedModelVisibleEntries": 202
   },
   "records": [
     {
@@ -31,15 +31,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\adapt",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "adapt",
@@ -58,15 +58,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\animate",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "animate",
@@ -85,15 +85,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\architecture-foundation",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "architecture-foundation",
@@ -173,15 +173,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\bolder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "bolder",
@@ -200,15 +200,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\brand",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "brand",
@@ -227,15 +227,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\bug-fixer",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "bug-fixer",
@@ -359,15 +359,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\colorize",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "colorize",
@@ -413,15 +413,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\delight",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "delight",
@@ -440,15 +440,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-brief-builder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "design-brief-builder",
@@ -484,15 +484,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-system",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "design-system",
@@ -511,15 +511,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\dev-builder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "dev-builder",
@@ -538,15 +538,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\dev-planner",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "dev-planner",
@@ -592,15 +592,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\distill",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "distill",
@@ -619,15 +619,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\doc-sync-guardian",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "doc-sync-guardian",
@@ -836,15 +836,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\hotspot-governor",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "hotspot-governor",
@@ -863,15 +863,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\impeccable",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "impeccable",
@@ -924,15 +924,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\layout",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "layout",
@@ -1012,15 +1012,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\overdrive",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "overdrive",
@@ -1039,15 +1039,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\polish",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "polish",
@@ -1066,15 +1066,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\product-spec-builder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "product-spec-builder",
@@ -1110,15 +1110,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\quieter",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "quieter",
@@ -1137,15 +1137,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\release-builder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "release-builder",
@@ -1164,15 +1164,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\requirements-test-designer",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "requirements-test-designer",
@@ -1225,15 +1225,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\rule-harvester",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "rule-harvester",
@@ -1459,15 +1459,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\test-automation",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "test-automation",
@@ -1554,15 +1554,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\typeset",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "typeset",
@@ -1581,15 +1581,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-styling",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "ui-styling",
@@ -1608,15 +1608,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-product",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-system-guardian",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "ui-system-guardian",
@@ -1635,15 +1635,15 @@
       "invocation": "user-invoked",
       "readiness": "accepted",
       "status": "accepted-ui",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleVia": [
         "unified-bundle"
       ],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-ux-pro-max",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [
         {
           "entryName": "ui-ux-pro-max",
@@ -1677,8 +1677,8 @@
       "source": "vibe-coding-skills",
       "dirName": "vibe-coding-skills",
       "invocation": "user-invoked",
-      "readiness": "compatibility",
-      "status": "compatibility-alias",
+      "readiness": "retired",
+      "status": "retired-alias",
       "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
