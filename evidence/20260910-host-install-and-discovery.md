@@ -140,3 +140,53 @@ Codex 上仍是我们的包贡献 9 个条目（第三节那个「Codex 递归�
 - 用户其它 Agent/项目若按名字直接调用 `audit`、`critique`、`codebase-design` 等，**现在会失败**
   （它们只存在于我们的包内，由控制面按路由委派）。回滚方式：按第 8 节表格，从对应源仓库重建链接/拷贝。
 - 退役只影响宿主技能目录，**未触碰任何源仓库内容**。
+
+## 十、宿主 overlay 落点修正（用户批准执行）
+
+### 10.1 问题
+
+第四节记录的 5 条落点差异，根因比「我们改写成了 adapters/*」更深：
+
+- Sliver 的 overlay 目标路径是相对**运行时 bundle 根**（Sliver 自己 SKILL.md 所在目录）的。证据（Sliver 原文）：
+  `SKILL.md:145`「Every published bundle contains exactly one fixed startup host slot at
+  `references/runtime-adapter.md` … A platform adapter may replace only that slot with host facts」；
+  核心 `runtime-adapter.md:46`「If `references/execution-liveness-host.md` exists in **the selected runtime bundle**, load it」。
+- 在 Sliver 自己的包里 bundle 根 == 技能根，两者重合；**本仓库把控制面嵌在 `governance/sliver-core/` 下**，
+  两者不再重合。所以把 overlay 放在投影根时：
+  - `references/runtime-adapter.md` **没有覆盖协议真正加载的槽位**（宿主读到的仍是不声明适配的核心版）；
+  - `references/studio-codex.md`、`references/execution-liveness-host.md` 不在「selected runtime bundle」里，控制面按相对路径找不到。
+
+### 10.2 修法
+
+`Get-HostOverlayFacts`（共享实现，两个 builder 共用）改为：**落点从 Sliver 的 `runtime-manifest.json`
+读取，并重定位进控制面根**；控制面根由 manifest 自身位置推导（`<cpRoot>/packaging/runtime-manifest.json`）。
+唯一例外：`agents/` 开头的目标是 Codex 插件元数据（`interface/display_name/default_prompt`），
+控制面文档从不引用它、宿主按技能根读，因此留在投影根。
+
+`Merge-OverlayFacts` 保证同路径时 overlay 覆盖核心包文件（这才是「替换槽位」的实际动作）。
+
+### 10.3 验证（可复算）
+
+| 检查 | 结果 |
+|---|---|
+| Claude 投影的控制面槽位 `governance/sliver-core/references/runtime-adapter.md` | = **Claude 专用版** sha `4ec051aed83a` ✓（不再是不声明适配的核心版） |
+| Codex 投影的同一槽位 | = **核心中性版** sha `4c7b5db64a83` ✓（Codex 本就不替换该槽位） |
+| Codex 投影 `governance/sliver-core/references/studio-codex.md` / `execution-liveness-host.md` | 均存在 ✓ |
+| Codex 投影 `agents/openai.yaml` | 在投影根 ✓ |
+| 两个投影的顶层文件 | 只有 `SKILL.md` + manifest ✓（根目录不再有游离的 `CLAUDE.md`） |
+| `assets/project-claude/CLAUDE.md` | 落在控制面根（它内容是 `@AGENTS.md`，是**目标项目模板**，不属于技能根） |
+| 门禁 | 12/12 ✓ |
+
+### 10.4 由此暴露的**不可兼得**冲突（需 owner 决策，本轮未改）
+
+两个宿主的适配槽位内容不同，而且**Codex 不覆盖该槽位**（中性版就是它的正确值）、
+Claude 要用 Claude 专用版（与核心版有 **58 行**实质差异，明确写「Claude Code 的 loaded Skill path」
+「Claude Code 暴露的 task store」）。一个共享目录里的这一个槽位文件**无法同时满足两个宿主**。
+
+| 方案 | 做法 | 结果 |
+|---|---|---|
+| **A（推荐）** | 共享根装**宿主中性**包：核心 `runtime-adapter.md`，不带任何宿主专属 overlay | 一份内容被所有宿主共用；Codex 拿到它设计上该有的中性值；Claude 损失专属措辞（安全但不够精确） |
+| B | 每个宿主各装一份（共享根放 Claude 版、`~/.codex/skills` 放 Codex 版） | 宿主各自正确，但违背用户「不各拷一份」的要求；且 Codex 会自动读共享根，仍会看到 Claude 版 |
+| C（现状） | 共享根放 Claude 版 | Claude 正确；Codex 读到 Claude 专属适配（语义不符，但其中的解析规则仍指向「SKILL.md 的父目录」，影响温和） |
+
+本轮按用户上一轮决定（单目录、共享根）装的是 **C**。第 10.4 的取舍尚未由 owner 拍定。

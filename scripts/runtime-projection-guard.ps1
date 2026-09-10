@@ -377,3 +377,98 @@ function Get-ExpectedDirectories {
 
     return @($directories | Select-Object -Unique)
 }
+
+# 宿主 overlay 契约（唯一实现，两个投影 builder 共用）。
+#
+# Sliver 用 packaging/runtime-manifest.json 的 targets.<host>.overlay_files 声明「哪个适配文件装到哪个路径」。
+# 本仓库**不复制也不改写**这张映射：复制会在上游改契约时静默漂移。
+#
+# **落点基准**：Sliver 的 overlay 目标路径是相对「运行时 bundle 根」的（即 Sliver 自己 SKILL.md 所在目录）。
+# 证据：SKILL.md:145「Every published bundle contains exactly one fixed startup host slot at
+# references/runtime-adapter.md … A platform adapter may replace only that slot」；核心 runtime-adapter.md:46
+# 「If references/execution-liveness-host.md exists in the selected runtime bundle」。
+# 在 Sliver 自己的包里 bundle 根 == 技能根，两者重合；而**本仓库把控制面嵌在 governance/sliver-core/ 下**，
+# 两者不再重合。因此必须把 overlay 目标**重定位进控制面根**，否则：
+#   - references/runtime-adapter.md 不会覆盖协议真正加载的那个槽位（宿主读到的仍是不声明适配的核心版）；
+#   - references/studio-codex.md、references/execution-liveness-host.md、assets/project-claude/CLAUDE.md
+#     都不在「selected runtime bundle」里，控制面按自己的相对路径找不到它们。
+#
+# 例外：`agents/` 开头的目标是 **Codex 插件元数据**（interface/display_name/default_prompt），
+# 控制面文档从不引用它，宿主按「技能根」读。因此它留在投影根，不进控制面根。
+function Get-HostOverlayFacts {
+    param(
+        [Parameter(Mandatory = $true)][string]$Root,
+        [Parameter(Mandatory = $true)][string]$TargetName
+    )
+
+    $manifestRelative = 'governance/sliver-core/packaging/runtime-manifest.json'
+    $manifestPath = Join-Path $Root ($manifestRelative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        throw "缺少 Sliver runtime manifest: $manifestRelative"
+    }
+    $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestPath | ConvertFrom-Json
+    if (-not ($manifest.PSObject.Properties.Name -contains 'targets')) {
+        throw "runtime manifest 缺少 targets: $manifestRelative"
+    }
+    if (-not ($manifest.targets.PSObject.Properties.Name -contains $TargetName)) {
+        throw "runtime manifest 缺少 target '$TargetName'（fail-closed）"
+    }
+    $target = $manifest.targets.$TargetName
+    if (-not ($target.PSObject.Properties.Name -contains 'overlay_files')) {
+        throw "target '$TargetName' 缺少 overlay_files（fail-closed）"
+    }
+
+    # 控制面根从 manifest 自身位置推导：<cpRoot>/packaging/runtime-manifest.json → <cpRoot>
+    $controlPlaneRoot = ($manifestRelative -replace '/packaging/runtime-manifest\.json$', '')
+    if ([string]::IsNullOrWhiteSpace($controlPlaneRoot) -or $controlPlaneRoot -eq $manifestRelative) {
+        throw "无法从 manifest 路径推导控制面根: $manifestRelative"
+    }
+
+    $facts = @()
+    foreach ($property in $target.overlay_files.PSObject.Properties) {
+        $destination = ([string]$property.Value).Replace('\', '/').TrimStart('/')
+        if ([string]::IsNullOrWhiteSpace($destination)) {
+            throw ("overlay 目标为空: " + [string]$property.Name)
+        }
+        # 重定位基准：除 agents/（宿主插件元数据）外，其余都是运行时 bundle 内部路径
+        $relativePath = if ($destination -like 'agents/*') { $destination } else { ($controlPlaneRoot + '/' + $destination) }
+        $sourceRelativePath = ('governance/sliver-core/' + ([string]$property.Name).Replace('\', '/').TrimStart('/'))
+        $sourcePath = Join-ContainedPath -Root $Root -RelativePath $sourceRelativePath
+        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+            throw ("缺少宿主 overlay 源文件: " + $sourceRelativePath)
+        }
+        $facts += [pscustomobject]@{
+            id = 'host-overlay-' + ($relativePath -replace '[^A-Za-z0-9]+', '-')
+            kind = 'host-facts'
+            source = 'sliver-vibe-coding'
+            sourceRevision = $null
+            relativePath = $relativePath
+            sourcePath = $sourcePath
+            sourceRelativePath = $sourceRelativePath
+        }
+    }
+    if ($facts.Count -eq 0) {
+        throw "target '$TargetName' 的 overlay_files 为空（fail-closed）"
+    }
+    return $facts
+}
+
+# 把 overlay 事实合进核心包文件清单：目标路径相同者由 overlay 覆盖（Sliver 的 overlay 语义）。
+function Merge-OverlayFacts {
+    param(
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][object[]]$BaseFiles,
+        [Parameter(Mandatory = $true)][object[]]$OverlayFacts
+    )
+
+    $overlayPaths = @{}
+    foreach ($fact in $OverlayFacts) { $overlayPaths[[string]$fact.relativePath] = $true }
+
+    $result = @($BaseFiles | Where-Object { -not $overlayPaths.ContainsKey([string]$_.relativePath) })
+    $result += $OverlayFacts
+
+    $duplicates = @($result | Group-Object relativePath | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+    if ($duplicates.Count -gt 0) {
+        throw ('overlay 合并后仍有重复路径: ' + ($duplicates -join ', '))
+    }
+    return $result
+}

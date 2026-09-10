@@ -23,12 +23,13 @@ if (-not (Test-Path -LiteralPath $guardModule -PathType Leaf)) {
 }
 . $guardModule
 
-# Claude 特有的宿主事实资产（Sliver control-plane 内的 adapter 资产）
-# 投影输出路径：顶层 CLAUDE.md（宿主读取）与 adapters/claude/runtime-adapter.md（宿主事实）
-$claudeEntryRelative = 'CLAUDE.md'
-$claudeEntrySourceRelative = 'governance/sliver-core/packaging/adapters/claude/assets/project-claude/CLAUDE.md'
-$claudeRuntimeAdapterRelative = 'adapters/claude/runtime-adapter.md'
-$claudeRuntimeAdapterSourceRelative = 'governance/sliver-core/packaging/adapters/claude/references/runtime-adapter.md'
+# Claude 宿主 overlay 事实不再在本脚本里硬编码：
+# 落点由 Sliver 自己的 packaging/runtime-manifest.json（targets.claude-code.overlay_files）定义，
+# 共享实现 Get-HostOverlayFacts / Merge-OverlayFacts 在 runtime-projection-guard.ps1。
+# 注意 references/runtime-adapter.md 是「覆盖核心包同名槽位」的语义：Claude 专用版本替换掉核心那份
+# （核心那份写着「本包不声明启动时宿主适配」，之前被我们错放成 adapters/claude/runtime-adapter.md，
+#  导致宿主实际读到的是不声明适配的核心版本）。
+# 另：assets/project-claude/CLAUDE.md 是**目标项目模板**（内容为 @AGENTS.md），不属于技能根目录。
 
 function Get-ClaudeProjectionPlan {
     param(
@@ -39,34 +40,9 @@ function Get-ClaudeProjectionPlan {
     # 复用共享 catalog 门禁：control-plane + accepted-primitive include、blocked 排除
     $codexPlan = Get-ProjectionPlan -Root $Root
 
-    $claudeEntrySource = Join-ContainedPath -Root $Root -RelativePath $claudeEntrySourceRelative
-    $claudeAdapterSource = Join-ContainedPath -Root $Root -RelativePath $claudeRuntimeAdapterSourceRelative
-    if (-not (Test-Path -LiteralPath $claudeEntrySource -PathType Leaf)) {
-        throw "缺少 Claude 薄入口: $claudeEntrySource"
-    }
-    if (-not (Test-Path -LiteralPath $claudeAdapterSource -PathType Leaf)) {
-        throw "缺少 Claude runtime adapter 宿主事实: $claudeAdapterSource"
-    }
-
-    $files = @($codexPlan.files)
-    $files += [pscustomobject]@{
-        id = 'claude-entry'
-        kind = 'host-entry'
-        source = 'sliver-vibe-coding'
-        sourceRevision = $null
-        relativePath = $claudeEntryRelative
-        sourcePath = $claudeEntrySource
-        sourceRelativePath = $claudeEntrySourceRelative
-    }
-    $files += [pscustomobject]@{
-        id = 'claude-runtime-adapter'
-        kind = 'host-facts'
-        source = 'sliver-vibe-coding'
-        sourceRevision = $null
-        relativePath = $claudeRuntimeAdapterRelative
-        sourcePath = $claudeAdapterSource
-        sourceRelativePath = $claudeRuntimeAdapterSourceRelative
-    }
+    # overlay 落点由上游契约决定；其中 references/runtime-adapter.md 会覆盖核心包同名文件
+    $overlayFacts = @(Get-HostOverlayFacts -Root $Root -TargetName 'claude-code')
+    $files = @(Merge-OverlayFacts -BaseFiles @($codexPlan.files) -OverlayFacts $overlayFacts)
 
     return [pscustomobject]@{
         catalogPath = $codexPlan.catalogPath
@@ -136,9 +112,9 @@ function Test-ClaudeRuntimeProjection {
     }
 
     $rootFiles = @(Get-ChildItem -LiteralPath $ProjectionRoot -Force -File | ForEach-Object { $_.Name })
-    $expectedRootFiles = @('SKILL.md', 'CLAUDE.md', $manifestRelativePath)
+    $expectedRootFiles = @('SKILL.md', $manifestRelativePath)
     if ($rootFiles.Count -ne $expectedRootFiles.Count -or @($rootFiles | Where-Object { $expectedRootFiles -notcontains $_ }).Count -gt 0) {
-        throw "projection 顶层只能包含唯一项目入口、Claude 薄入口和 manifest，实际为: $($rootFiles -join ', ')"
+        throw "projection 顶层只能包含唯一项目入口和 manifest，实际为: $($rootFiles -join ', ')"
     }
 
     $forbiddenSegments = @($plan.forbiddenSegments)
@@ -292,8 +268,9 @@ try {
                 }
             })
             hostAdapter = [ordered]@{
-                entry = $claudeEntryRelative
-                runtimeFacts = $claudeRuntimeAdapterRelative
+                runtimeAdapter = 'references/runtime-adapter.md'
+                hostEntryTemplate = 'assets/project-claude/CLAUDE.md'
+                overlayContract = 'governance/sliver-core/packaging/runtime-manifest.json targets.claude-code.overlay_files'
                 freshSessionSmoke = 'UNVERIFIED'
             }
             excluded = [ordered]@{

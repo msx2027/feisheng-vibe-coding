@@ -21,27 +21,9 @@ if (-not (Test-Path -LiteralPath $guardModule -PathType Leaf)) {
 }
 . $guardModule
 
-# Codex 宿主事实资产（Sliver codex 适配器 overlay）。
-# 权威来源：governance/sliver-core/packaging/runtime-manifest.json 的 targets.codex.overlay_files。
-# 与 Claude 侧对称：Claude 挂 CLAUDE.md + adapters/claude/runtime-adapter.md，Codex 挂这里 3 个。
-$codexHostFactFiles = @(
-    [pscustomobject]@{
-        id = 'codex-host-facts-openai-yaml'; kind = 'host-facts'; source = 'sliver-vibe-coding'
-        relativePath = 'adapters/codex/agents/openai.yaml'
-        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/agents/openai.yaml'
-    },
-    [pscustomobject]@{
-        id = 'codex-host-facts-studio-codex'; kind = 'host-facts'; source = 'sliver-vibe-coding'
-        relativePath = 'adapters/codex/references/studio-codex.md'
-        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/references/studio-codex.md'
-    },
-    [pscustomobject]@{
-        id = 'codex-host-facts-execution-liveness'; kind = 'host-facts'; source = 'sliver-vibe-coding'
-        relativePath = 'adapters/codex/references/execution-liveness-host.md'
-        sourceRelativePath = 'governance/sliver-core/packaging/adapters/codex/references/execution-liveness-host.md'
-    }
-)
-
+# Codex 宿主 overlay 事实不再在本脚本里硬编码：
+# 落点由 Sliver 自己的 packaging/runtime-manifest.json（targets.codex.overlay_files）定义，
+# 共享实现 Get-HostOverlayFacts / Merge-OverlayFacts 在 runtime-projection-guard.ps1。
 function Get-CodexProjectionPlan {
     param(
         [Parameter(Mandatory = $true)]
@@ -51,22 +33,9 @@ function Get-CodexProjectionPlan {
     # 复用共享 catalog 门禁：control-plane + accepted-primitive include、blocked 排除、写权限校验
     $basePlan = Get-ProjectionPlan -Root $Root
 
-    $files = @($basePlan.files)
-    foreach ($fact in $codexHostFactFiles) {
-        $sourcePath = Join-ContainedPath -Root $Root -RelativePath $fact.sourceRelativePath
-        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
-            throw ("缺少 Codex 宿主事实文件: " + $fact.sourceRelativePath)
-        }
-        $files += [pscustomobject]@{
-            id = $fact.id
-            kind = $fact.kind
-            source = $fact.source
-            sourceRevision = $null
-            relativePath = $fact.relativePath
-            sourcePath = $sourcePath
-            sourceRelativePath = $fact.sourceRelativePath
-        }
-    }
+    # overlay 事实可能覆盖核心包里的同名文件（Sliver 的 overlay 语义），因此用共享合并函数而不是直接拼接
+    $overlayFacts = @(Get-HostOverlayFacts -Root $Root -TargetName 'codex')
+    $files = @(Merge-OverlayFacts -BaseFiles @($basePlan.files) -OverlayFacts $overlayFacts)
 
     return [pscustomobject]@{
         catalogPath = $basePlan.catalogPath
