@@ -20,21 +20,23 @@
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
-**注意**：D2/D3 曾是最大未知。2026-09-11 T2 实测：**D3 机制链路全通**（路由工具可执行、「项目体检」路由被选中、owner 被加载、包内文件可读可执行——单目录形态成立）；**D2 自动触发未达成**，主因是宿主侧全局内存 `~/.claude/CLAUDE.md` 的旧路由块（仓库外，需 owner 决定），证据见 `evidence/20260911-trigger-behavior-and-entry-fix.md`。
+**注意**：D2/D3 曾是最大未知。2026-09-11 两轮实测后 **D2/D3 均已转绿**：owner 批准更新宿主全局路由块后，
+纯中文需求首个动作即调用统一入口，并走通「控制面 → 项目体检路由 → provider → owner」全链路。
+证据：`evidence/20260911-trigger-behavior-and-entry-fix.md`、`evidence/20260911-d2-green-t4-and-retirement.md`。
 
 ---
 
 ## 2. 一分钟现状（数字快照）
 
-- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交 `507a07f`
+- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **13/13**；fresh clone 两种 shell × 两种 `autocrlf` 均 13/13（2026-09-11 起为 13 步：新增宿主中性投影步骤）
-- 分类：**82 条记录**，其中 **8 条 runtime 已接入**（控制面 1 + Matt 原语 3 + Vibe 检查器 4）
+- 分类：**82 条记录**，其中 **10 条 runtime 已接入**（控制面 1 + mattpocock 来源 5：原语 4（tdd/codebase-design/diagnosing-bugs/domain-modeling）+ checker 1（code-review）+ vibe 来源检查器 4）；runtime bundle 共 **94** 文件
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
-- 路由绑定：**7/7**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
-- 控制面包：**75 文件**（9 core_files + 44 references + 22 assets），runtime bundle 共 **90** 文件
-- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**180 条**，其中我们的包 `feisheng-vibe-coding` **92 文件**（宿主中性投影，决策 #4 已实施）
-- 宿主发现性实测：Claude **162** 个技能（含我们 1 个入口）；Codex **204**（含我们包内 9 个 `SKILL.md`）。⚠️ 该计数在 Claude 形态安装时采得，切到中性形态后尚未重采（文件数只少 1 个顶层 CLAUDE.md 与 2 个 overlay，预期不变，以 T2 重采为准）
-- 存量：`evidence/` 40、`tasks/` 37、`scripts/` 21
+- 路由绑定：**9/9**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
+- 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
+- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**176 条**（2026-09-11 退役 4 个重名链接后），其中我们的包 `feisheng-vibe-coding` **96 文件**（宿主中性投影，含 tdd/code-review）
+- 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口，全链路走到「项目体检」报告（Claude，`-p` 口径）；Codex 注入含我们根入口 + 控制面 + 9 个已接入技能嵌套条目（条目数 202）
+- 存量：`evidence/` 41、`tasks/` 37、`scripts/` 21
 
 ---
 
@@ -80,8 +82,8 @@
 |---|---|
 | 0 冻结取证 | ✅ 完成（三源快照逐字节一致，82 技能已分类） |
 | 1 控制面 | ✅ 基本完成（唯一入口、catalog、schema、投影、allowlist、revision、回滚点齐备） |
-| 2 工程原语 | 🟡 3/5（`diagnosing-bugs`/`codebase-design`/`domain-modeling` 已接入；`tdd`/`code-review` 待宿主行为 smoke；7 个 adapter-candidate 未接） |
-| 3 宿主适配 | 🟡 **投递已打通、行为未验证**（本批新建安装入口并装上，拿到「被识别」级证据） |
+| 2 工程原语 | ✅ 完成（tdd/code-review/codebase-design/diagnosing-bugs/domain-modeling 已接入；7 个 adapter-candidate 未接） |
+| 3 宿主适配 | ✅ 投递 + 行为验证完成（中性安装、D2/D3 实测转绿；trust/Hook 仍禁用未验证） |
 | 4 产品/UI/第三方 | 🟡 早期（Vibe 46 条里只接 4 条） |
 | 5 灰度退役 | 🟡 旧入口已退役（本批），但新入口行为尚未验证 |
 
@@ -161,6 +163,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 7 | `ca998d8` `559d7fc` `2ea9fc1` `48f7ab1` `527b1bc` | 目标审计 → 文档纠错 → **安装入口 + 宿主实证** → **退役旧入口** → **overlay 落点修正** | `evidence/20260910-host-install-and-discovery.md` |
 | 8 | `4fe8f43` `cb05fb1` `1155d8a` | **T1 选项 A 实施**：宿主中性投影（共享主体抽进 guard，三 writer 薄壳）+ 安装默认 Shared + 门禁 13 步 + DryRun 副作用修复 | `evidence/20260911-host-neutral-shared-projection.md` |
 | 9 | `507a07f` | **T2 触发行为实测 + T3 入口修复**：D3 链路全通、紧急检查点通过（包内文件可读可执行）；D2 卡在宿主全局路由块（owner 决定）；入口加「启动动作」第一跳 | `evidence/20260911-trigger-behavior-and-entry-fix.md` |
+| 10 | `e224c03` | **owner 确认批**：全局路由块更新（两文件）→ D2 复测转绿（纯中文首动作即调入口，全链路到体检报告）→ T4 接入 tdd/code-review（绑定 9/9）→ 4 个重名链接退役（共享根 180→176，包 96 文件） | `evidence/20260911-d2-green-t4-and-retirement.md` |
 
 ---
 
@@ -185,8 +188,8 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 
 ### 7.1 布局
 
-- `~/.claude/skills` 是**junction** → `F:\skiils工具\_adapters\shared\skills`（宿主技能根，180 条）
-- 我们的包：`.../shared/skills/feisheng-vibe-coding`，**92 文件**（宿主中性投影，决策 #4；2026-09-11 起替换原 Claude 形态 93 文件）
+- `~/.claude/skills` 是**junction** → `F:\skiils工具\_adapters\shared\skills`（宿主技能根，176 条；2026-09-11 退役 4 个重名链接，见 `evidence/20260911-d2-green-t4-and-retirement.md`）
+- 我们的包：`.../shared/skills/feisheng-vibe-coding`，**96 文件**（宿主中性投影，含 tdd/code-review）
 - `~/.codex/skills` 只有 `.system`（Codex 通过 junction 根读取同一目录）
 - 已退役的 8 个旧条目**不在**这个根里了；它们的源仓库仍在原处（可回滚，见 `evidence/20260910-host-install-and-discovery.md` 第 8 节表格）
 
@@ -248,12 +251,12 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 - ⏸️ owner 决定项：更新 `~/.claude/CLAUDE.md`（及镜像 `C:\Users\MSX\AGENTS.md`）的「Skills 路由规则」块，
   把统一入口 `feisheng-vibe-coding` 立为项目级请求的第一路由——这是 D2 转绿的关键一步（建议文案已给 owner）。
 
-### 9.4 T4 **阶段 2 收尾**：`tdd` / `code-review`（⚠️ 与全局路由块更新配套，顺序不可反）
+### 9.4 T4【已完成 2026-09-11】**阶段 2 收尾**：`tdd` / `code-review`
 
-两者现为 `source-only-*`，理由明确写着「待宿主行为 smoke」。**必须先接入它们、再退役共享根里的
-独立 `tdd`/`code-review`/`vibe-coding-skills` 顶层条目**——先退役会造成用户能力回退。
-注意它们的内容取自已提交 revision `9fe7e7a3` 的 blob（**不采用**上游工作树未提交的改名）。
-配套建议：T4 接入完成 + owner 更新全局路由块后，一次性做「共享根旧条目退役 + D2 复测」。
+已接入（`e224c03`，见 `evidence/20260911-d2-green-t4-and-retirement.md`）：从 `9fe7e7a3` 快照逐字节导入
+`skills/engineering/`、writeAuthority=none、绑定表 9/9、NOTICE 过、门禁 13/13 + fresh clone 四组合全过。
+「宿主行为 smoke」阻塞由统一入口链路实测解除。共享根 4 个重名链接已退役（源仓库未动，回滚命令在证据里）。
+注意：共享根其余 ~66 个源仓库链接**未动**（阶段 5 口径待 owner 定）。
 
 ### 9.5 T5 **阶段 4 批次**（需 owner 定批次口径）
 
@@ -385,10 +388,10 @@ git log --oneline -3                      # 起点应为 527b1bc
 git status --porcelain                    # 应为空
 pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludePackage
                                           # 应为 13/13
-ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 180
+ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 176
 ```
 
-然后按顺序：**9.2（T2 触发行为验证）→ 9.3（T3 按结果修）→ 9.4 起**（9.1 已完成）。
+然后按顺序：**9.5（T5 批次口径待 owner）→ 9.6（Hook，最后）→ 9.7 收尾**（9.1–9.4 均已完成）。
 
 ---
 
@@ -398,14 +401,14 @@ ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 180
 |---|---|---|---|
 | sliver-vibe-coding | 1 | **1** | 控制面（22 主路由 + 8 lens 是 `references/*.md`，非独立技能） |
 | vibe-coding-skills | 46 | **4** | 4 个 checker 已接入；18 条许可证已放行但未接；24 条被许可证挡住 |
-| mattpocock-skills | 35 | **3** | 3 个原语已接；11 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（上游 in-progress）；6 个 user-tool；1 compat；1 checker |
+| mattpocock-skills | 35 | **5** | 4 个原语 + code-review（checker）已接入（2026-09-11）；10 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（上游 in-progress）；6 个 user-tool；1 compat |
 
 ```text
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 功能裁决   11/11 簇  已完成（duplicateGroups）
-交付runtime 8/82      8 条记录 / 90 文件（控制面 75 + 7 技能 15）
-路由绑定   7/7        已接入技能全部唯一命中
+交付runtime 10/82     10 条记录 / 94 文件（控制面 75 + 9 技能 19）
+路由绑定   9/9        已接入技能全部唯一命中
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）
-行为验证   0          ← 唯一还没做的大项（见 9.2）
+行为验证   D2/D3 已实测转绿（2026-09-11，见 9.2 与 evidence/20260911-*）
 ```
