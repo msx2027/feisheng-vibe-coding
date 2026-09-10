@@ -209,6 +209,40 @@ foreach ($row in @($classification.statusPolicy.PSObject.Properties | Sort-Objec
 }
 $runtimeExcludedStatuses = @($allStatuses | Where-Object { $acceptedStatuses -notcontains $_ })
 
+# duplicateGroups 校验（fail-closed）：
+#   - group.owner 必须是 OWNER-LEDGER.json 中登记的 owner id（防悬空 owner / 重复写入者）
+#   - 每个 group 的成员（members 或 aliases）必须是本文件 skills 中的 canonical id
+#   - group.id 唯一，且每个 group 至少有一个成员
+$ownerLedgerPath = Join-Path $RepoRoot 'provenance/OWNER-LEDGER.json'
+if (-not (Test-Path -LiteralPath $ownerLedgerPath -PathType Leaf)) { throw "缺少 owner ledger: $ownerLedgerPath" }
+$ownerLedger = Get-Content -Raw -Encoding UTF8 -LiteralPath $ownerLedgerPath | ConvertFrom-Json
+$ownerIds = @{}
+foreach ($owner in @($ownerLedger.owners)) { $ownerIds[[string]$owner.id] = $true }
+
+$duplicateGroupIds = @{}
+foreach ($group in @($classification.duplicateGroups)) {
+    $groupId = [string]$group.id
+    if ([string]::IsNullOrWhiteSpace($groupId)) { throw 'duplicateGroups 存在空 id。' }
+    if ($duplicateGroupIds.ContainsKey($groupId)) { throw "duplicateGroups id 重复: $groupId" }
+    $duplicateGroupIds[$groupId] = $true
+
+    $ownerId = [string]$group.owner
+    if (-not $ownerIds.ContainsKey($ownerId)) {
+        throw "duplicateGroups[$groupId] 的 owner '$ownerId' 未在 OWNER-LEDGER.json 中登记。"
+    }
+
+    $referenced = @()
+    if ($group.PSObject.Properties.Name -contains 'members') { $referenced += @($group.members) }
+    if ($group.PSObject.Properties.Name -contains 'aliases') { $referenced += @($group.aliases) }
+    if ($referenced.Count -eq 0) { throw "duplicateGroups[$groupId] 没有任何 members/aliases。" }
+    foreach ($memberId in $referenced) {
+        if ([string]::IsNullOrWhiteSpace([string]$memberId)) { throw "duplicateGroups[$groupId] 存在空成员。" }
+        if ($null -eq $classification.skills.PSObject.Properties[[string]$memberId]) {
+            throw "duplicateGroups[$groupId] 的成员 '$memberId' 不在 SKILL-CLASSIFICATION.skills 中。"
+        }
+    }
+}
+
 $duplicateGroups = @()
 foreach ($group in @($classification.duplicateGroups)) {
     if ($group.PSObject.Properties.Name -contains 'aliases') {

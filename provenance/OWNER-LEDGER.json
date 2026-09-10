@@ -109,6 +109,57 @@
         "scripts/collect-host-skill-evidence.ps1"
       ],
       "rule": "discovery evidence only; never claims behavioural correctness"
+    },
+    {
+      "id": "validation-gate",
+      "writes": [
+        "review-finding-acceptance",
+        "test-verdict",
+        "validation-gate-decision"
+      ],
+      "rule": "duplicateGroups[review-and-test] 的裁决 owner；专项 review/test 方法只回 findings/results，最终验收门归 Sliver。"
+    },
+    {
+      "id": "bug-rescue",
+      "writes": [
+        "bug-rescue-arbitration"
+      ],
+      "rule": "duplicateGroups[bug-rescue] 的裁决 owner；bug-fixer 与 diagnosing-bugs 均不得改写 route/depth/truth。"
+    },
+    {
+      "id": "ui-quality",
+      "writes": [
+        "ui-quality-arbitration"
+      ],
+      "rule": "duplicateGroups[ui-quality] 的裁决 owner；UI 原技能独立，profile 只组合调用，不复制正文、不产生第二套设计真源。"
+    },
+    {
+      "id": "context-handoff",
+      "writes": [
+        "context-handoff-arbitration"
+      ],
+      "rule": "duplicateGroups[context-and-handoff] 的裁决 owner；交接产物不拥有 target-truth。"
+    },
+    {
+      "id": "doc-authoring",
+      "writes": [
+        "doc-authoring-arbitration"
+      ],
+      "rule": "duplicateGroups[doc-authoring] 的裁决 owner；文档同步不得覆盖 target-truth。"
+    },
+    {
+      "id": "architecture",
+      "writes": [
+        "architecture-arbitration"
+      ],
+      "rule": "duplicateGroups[architecture] 的裁决 owner；架构产物不拥有 route 或第二份真源。"
+    },
+    {
+      "id": "git-release",
+      "writes": [
+        "git-release-arbitration"
+      ],
+      "rule": "duplicateGroups[git-and-release] 的裁决 owner；发布授权与验收门仍归 Sliver。"
     }
   ],
   "forbidden": [

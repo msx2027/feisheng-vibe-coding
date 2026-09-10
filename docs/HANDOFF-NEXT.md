@@ -4,14 +4,23 @@
 
 ## 0. 仓库状态
 
-- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`，最新提交 `37c0f6f`，**工作树干净**。
+- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`，最新提交见 `git log -1 --oneline`（本轮为功能重叠裁决补全），**工作树干净**。
 - 门禁：`pwsh scripts/verify.ps1` = **7/7 PASS**；加 `-IncludePackage` = **8/8 PASS**（发布包 22 文件、0 违规）。
 - 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要全部一致
   （matt 有 4 个按已提交 revision 校验；sliver 有 3 个已登记本地补丁）。
 - 脚手架 `_smoke/`（2.4M，已 gitignore）：**总目标完成后统一清理**，勿提前删（内含宿主 junction 回滚映射等证据）。
 - 存量：`evidence/` 31 份、`tasks/` 32 份、`scripts/` 16 个。
 
-## 1. 【下一步第一优先】功能重叠裁决补全（owner 已指名先做）
+## 1. 【已完成】功能重叠裁决补全（2026-09-10 本轮完成）
+
+> 已完成：`duplicateGroups` 3 → **11 组**，覆盖交接点名的 11 簇 / 50 个技能；新增 7 个域 owner 并登记入
+> `OWNER-LEDGER.json`；生成器增加 owner/成员 fail-closed 校验；`readiness`/`status` 零改动；
+> `verify.ps1 -IncludePackage` 8/8。证据：`evidence/20260910-overlap-arbitration.md`、
+> 任务：`tasks/20260910-overlap-arbitration.md`。
+> **下一优先事项见第 2 节。**
+> 注：owner 已归一化为 ledger 登记 id —— `project-entry`：`sliver-vibe-coding`→`route-catalog`；
+> `review-and-test`：`sliver-validation-gate`→`validation-gate`。
+> 下面保留原任务说明作为历史记录。
 
 ### 背景
 
@@ -72,7 +81,7 @@ git/冲突        3个 [未登记3]  resolving-merge-conflicts, git-guardrails-c
 
 - 全部簇有机读裁决；`verify.ps1` 8/8；**不改动任何 readiness/status**（本轮只加裁决）；owner 均在 ledger 中。
 
-## 2. 之后两件事
+## 2. 下一步两件事（本交接剩余优先）
 
 ### 2.1 物理导入 + 门禁策略化（提升 runtime 覆盖，定义已完备）
 
@@ -114,7 +123,7 @@ git/冲突        3个 [未登记3]  resolving-merge-conflicts, git-guardrails-c
 ```
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 文件内容   全量       能力性文件无缺失（Vibe tools 145/145、hooks 10/10、codex-hooks 22/22）
-功能裁决   3/11 簇    ← 本轮第一步
+功能裁决   11/11 簇   已完成（evidence/20260910-overlap-arbitration.md）
 交付runtime 4/82     只启用经证据+导入的技能
 路由绑定   0 条       ← Sliver 的 22 路由不引用这 82 个技能（更深层缺口，未开工）
 ```

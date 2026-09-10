@@ -149,6 +149,21 @@ foreach ($record in $excluded) {
     $lines += ('- `' + $record.id + '`（' + $record.source + '，' + $record.readiness + '）：' + $record.reason)
 }
 $lines += ''
+$lines += '## 功能重叠裁决（duplicateGroups）'
+$lines += ''
+$lines += '重叠能力已归属到唯一 owner；同一能力有多个技能时按下列规则分工。owner 均登记在 `provenance/OWNER-LEDGER.json`。'
+$lines += ''
+$lines += '| 组 | owner | 成员/别名 | 分工规则 |'
+$lines += '|---|---|---|---|'
+$arbitrationGroups = @($catalog.duplicateGroups)
+foreach ($group in (Sort-ByKeyOrdinal -Items @($arbitrationGroups) -Key id)) {
+    $memberList = @()
+    if ($group.PSObject.Properties.Name -contains 'members') { $memberList += @($group.members) }
+    if ($group.PSObject.Properties.Name -contains 'aliases') { $memberList += @($group.aliases) }
+    $memberText = (@($memberList | ForEach-Object { '`' + $_ + '`' }) -join '、')
+    $lines += ('| `' + $group.id + '` | `' + $group.owner + '` | ' + $memberText + ' | ' + $group.rule + ' |')
+}
+$lines += ''
 $lines += '## 如何改变可用集合'
 $lines += ''
 $lines += '1. 改 `provenance/SKILL-CLASSIFICATION.json`（`skills.<id>.readiness`，需要时同时调 `domain`）——这是**唯一**分类入口。'
