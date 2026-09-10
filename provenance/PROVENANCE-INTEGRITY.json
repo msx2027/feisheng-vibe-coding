@@ -2,18 +2,18 @@
   "schema": "feisheng-provenance-integrity/v1",
   "algorithm": "sha256-lines-v1",
   "algorithmDefinition": "record = file line as \"relativePath/with/slashes`nfileSha256\"; sort paths Ordinal; join with LF and append trailing LF; digest = SHA-256 of UTF-8 (no BOM) bytes",
-  "recordedAt": "2026-09-10T11:24:43.0574155Z",
-  "recordedAtRevision": "88e9ad3b49fc6480914dfe6b086f576377fb248a",
+  "recordedAt": "2026-09-10T11:37:51.7584740Z",
+  "recordedAtRevision": "fd18fbe8e3f3662e61be177a9ba07ac26e71bd43",
   "corroboration": {
-    "sourceByteComparison": "required at recording time; 751 files byte-identical to source, 4 verified against recorded git revision, 3 registered local patch(es) verified, 148 within supplement allowlist",
+    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 3 registered local patch(es) verified, 148 within supplement allowlist",
     "sourceState": "git sources must match recorded HEAD and dirty set; non-git sources recorded as such"
   },
   "snapshots": [
     {
       "name": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills",
-      "fileCount": 550,
-      "treeHash": "sha256:7ed5f024007233341dfbdbaac2f49f27ca8193c57d7587ee053c16f504e753e0",
+      "fileCount": 553,
+      "treeHash": "sha256:d22a304ce9b69e9d2467aea6abb8237dba7f78dfbbe711a0eed97994c9010393",
       "sourceRoot": "F:\\skiils工具\\vibe-coding-skills",
       "sourceKind": "not-a-git-checkout",
       "sourceRevision": null,

@@ -2,6 +2,18 @@
 
 更新时间：2026-09-10（第三轮：分类数据化 + 能力索引 + 单入口验证 + 写权限门禁）
 
+## 当前接手快照（2026-09-10，主 Agent 第九/十轮后刷新）
+
+> 本块原由另一写入者添加，主 Agent 保留其意图并刷新为与当前提交一致的准确状态。
+
+- **仓库状态**：分支 `main`；最新提交见 `git -C 'F:\skiils工具eisheng-vibe-coding' log -1 --oneline`；工作树干净。
+- **刚执行验证**：`scripts/verify.ps1 -IncludePackage` **8/8 通过**；来源快照完整性 **vibe 553 / matt 136 / sliver 220**；发布包 22 文件 0 违规。
+- **已完成（累计）**：三来源盘点与 provenance；Sliver 唯一控制面；3 个 Matt accepted 原语；Matt 四项断链修复（命名自定 + 采纳已提交 revision）；Vibe 许可证/字体/来源声明 + v5 交叉审计；**分类数据化**与能力索引；**单一共享投影门禁**（Codex 平行实现已收敛）；**来源完整性门禁**（实测拦下过真实漂移）；**本地补丁登记机制**（owner 选 B）；**两宿主 discovery 已实测**（Claude 169 vs 168；Codex 204 vs 203 且新获 r0）；**深度 bundle 校验**（Claude 76 / Codex 78 文件，按 SHA 直连 fetch 取得受信任基线）；**Codex 投影补齐 3 个宿主事实资产**；**宿主 157 个冗余 junction 已清理**（目标 5587 文件完好）；**Vibe 3 个被引为权威的 docs 已补入**。
+- **未完成/未验证**：两宿主 trust、技能真实行为、Hook 强制；发布 CI 未在真实 GitHub runner 运行（已接入工作流）；Vibe adapter-candidate 仍暂不登记（需行为证据，而非内容）。
+- **Codex `AGENTS.md` 问题已结论**：**不打包**。Codex 原生读目标项目的 `AGENTS.md`（smoke 实测），该宪法属目标项目并由 Sliver 模板 materialize；Claude 侧同样不打包（其 `CLAUDE.md` 仅一行 `@AGENTS.md`）。真正缺的是 codex 宿主事实资产——已按 Sliver manifest 补齐 3 个。
+- **子 Agent 状态**：当前无后台子 Agent；此前中断/无回执轮次不计入完成证据。
+- **下一步**：① 逐技能自动化 discovery 证据并据此成批提升；② Hook 解锁（唯一结构性缺口）。
+
 ## 总目标
 
 把三个来源重构为一个可维护、可审计的统一仓库 `F:\skiils工具\feisheng-vibe-coding`：
@@ -207,6 +219,16 @@ Claude 不读 `~/.codex/skills`。→ 建议清掉 `~/.codex/skills` 里与 `r1`
 - 已知小缺口：Vibe 3 个 docs（含被引为权威的 `docs/runtime-loading-policy.md`）；Matt `.skills/translate-skill`（建议不补）。
 
 证据：`evidence/20260910-duplicate-and-coverage-audit.md`。
+
+## 第十轮完成情况：宿主重复清理（任务 4）+ Vibe 权威文档补齐（任务 2）
+
+| 任务 | 结果 |
+|---|---|
+| **4 宿主重复注册清理**（owner 授权） | 查清 `~/.codex/skills` 的 157 个同名条目**全是 junction**（指向共享根真实路径，磁盘无重复存储），但仍导致 Codex 双份注册。经安全闸门（目标必须在共享根内且存在）用 `os.rmdir` 只删链接：**目标 5587 文件前后一致**，Codex 仍见 **203** 个技能，`sliver-vibe-coding` 出现次数 **2 → 1** |
+| **2 Vibe docs 补齐** | 补入 3 个 md（含被 `AGENTS.md`/README **引为权威**的 `docs/runtime-loading-policy.md`）；快照 550 → **553**，导入记录与基线同步，verify 8/8 |
+
+证据：`evidence/20260910-host-duplicate-cleanup.md`、`evidence/20260910-vibe-docs-import.md`。
+回滚：宿主 junction 映射见 `_smoke/r0-junction-removal.json`。
 
 ## 当前技能状态（CANONICAL-CATALOG.json）
 

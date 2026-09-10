@@ -7,15 +7,15 @@
   "sourceRevision": null,
   "sourceWorkingTree": "not-a-git-checkout",
   "snapshotRoot": "sources/vibe-coding-skills",
-  "snapshotFiles": 550,
+  "snapshotFiles": 553,
   "sourceFiles": 1342,
-  "approvedAllowlistFiles": 550,
+  "approvedAllowlistFiles": 553,
   "sourceMissingApprovedFiles": [],
   "snapshotMissingApprovedFiles": [],
   "snapshotUnexpectedFiles": [],
-  "sourceFilesOutsideAllowlist": 792,
+  "sourceFilesOutsideAllowlist": 789,
   "sha256Algorithm": "SHA-256",
-  "sha256CheckedFiles": 550,
+  "sha256CheckedFiles": 553,
   "sha256Mismatches": 0,
   "sha256MismatchPaths": [],
   "sourceAllowlistTreeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca",
@@ -65,7 +65,7 @@
   },
   "validationStatus": "accepted",
   "generatedAt": "2026-09-10T02:57:50.0553914Z",
-  "note": "Approved source paths were copied and checked byte-for-byte. Generated mirrors and stale manifests are excluded from the formal snapshot; runtime projection and fresh-session smoke remain unverified.",
+  "note": "Approved source paths were copied and checked byte-for-byte. Generated mirrors and stale manifests are excluded from the formal snapshot; runtime projection and fresh-session smoke remain unverified. 2026-09-10: added 3 referenced docs (runtime-loading-policy, reference-main-chain, language-platform-profiles) - runtime-loading-policy.md is cited by AGENTS.md/README as an authority for tier/routing/hook/lifecycle/rollback rules, so a referenced-but-absent doc was a real gap.",
   "fileSha256": [
     {
       "path": ".claude/CLAUDE.md",
@@ -74,15 +74,15 @@
       "sha256Match": true
     },
     {
-      "path": ".claude/feedback/confirm-screenshot-project-before-diagnosis.md",
-      "sourceSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
-      "snapshotSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
-      "sha256Match": true
-    },
-    {
       "path": ".claude/feedback/FEEDBACK-INDEX.md",
       "sourceSha256": "73a57d922b5caca3c88a6519632fae79db2d5f5729a85037813fb14dcbfb35fe",
       "snapshotSha256": "73a57d922b5caca3c88a6519632fae79db2d5f5729a85037813fb14dcbfb35fe",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/confirm-screenshot-project-before-diagnosis.md",
+      "sourceSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
+      "snapshotSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
       "sha256Match": true
     },
     {
@@ -101,6 +101,12 @@
       "path": ".claude/feedback/templates/feedback-topic-template.md",
       "sourceSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
       "snapshotSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/INDEX.md",
+      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
       "sha256Match": true
     },
     {
@@ -125,12 +131,6 @@
       "path": ".claude/hooks/detect-feedback-signal.sh",
       "sourceSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
       "snapshotSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
-      "sha256Match": true
-    },
-    {
-      "path": ".claude/hooks/INDEX.md",
-      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
-      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
       "sha256Match": true
     },
     {
@@ -176,6 +176,24 @@
       "sha256Match": true
     },
     {
+      "path": "CLAUDE.md",
+      "sourceSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
+      "snapshotSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
+      "sha256Match": true
+    },
+    {
+      "path": "README.md",
+      "sourceSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
+      "snapshotSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/INDEX.md",
+      "sourceSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
+      "snapshotSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
+      "sha256Match": true
+    },
+    {
       "path": "agents/code-reviewer.md",
       "sourceSha256": "bb191c99107f285ce7ada47206d15e3d4d687bfbe09432aa5f63fc30dbc572fa",
       "snapshotSha256": "bb191c99107f285ce7ada47206d15e3d4d687bfbe09432aa5f63fc30dbc572fa",
@@ -200,21 +218,15 @@
       "sha256Match": true
     },
     {
-      "path": "agents/INDEX.md",
-      "sourceSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
-      "snapshotSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
-      "sha256Match": true
-    },
-    {
-      "path": "CLAUDE.md",
-      "sourceSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
-      "snapshotSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
-      "sha256Match": true
-    },
-    {
       "path": "codex-hooks.json",
       "sourceSha256": "84eefc5dee02cfa0d3b92b3137cbe97d20249bbd0011d856a7117f41ad200178",
       "snapshotSha256": "84eefc5dee02cfa0d3b92b3137cbe97d20249bbd0011d856a7117f41ad200178",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/INDEX.md",
+      "sourceSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
+      "snapshotSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
       "sha256Match": true
     },
     {
@@ -251,12 +263,6 @@
       "path": "codex-hooks/detect-feedback-signal.sh",
       "sourceSha256": "f087c78a917b5a9a679502661185a052073a162859dcd4dac7565f7c322b0f39",
       "snapshotSha256": "f087c78a917b5a9a679502661185a052073a162859dcd4dac7565f7c322b0f39",
-      "sha256Match": true
-    },
-    {
-      "path": "codex-hooks/INDEX.md",
-      "sourceSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
-      "snapshotSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
       "sha256Match": true
     },
     {
@@ -374,6 +380,24 @@
       "sha256Match": true
     },
     {
+      "path": "docs\\language-platform-profiles.md",
+      "sourceSha256": "f0378283b61be5306d27ba589d77c24f99477ef9f5f86c31fc8e283042fc161c",
+      "snapshotSha256": "f0378283b61be5306d27ba589d77c24f99477ef9f5f86c31fc8e283042fc161c",
+      "sha256Match": true
+    },
+    {
+      "path": "docs\\reference-main-chain.md",
+      "sourceSha256": "802b5049b95c7c6261c11f51ce14675e6e4b4d21d11488eb6f0f43e9f14a4370",
+      "snapshotSha256": "802b5049b95c7c6261c11f51ce14675e6e4b4d21d11488eb6f0f43e9f14a4370",
+      "sha256Match": true
+    },
+    {
+      "path": "docs\\runtime-loading-policy.md",
+      "sourceSha256": "cf0d3144305fa04276cdd50dd2cab4753b7c0f3baa6ec509e8945467dcabb6de",
+      "snapshotSha256": "cf0d3144305fa04276cdd50dd2cab4753b7c0f3baa6ec509e8945467dcabb6de",
+      "sha256Match": true
+    },
+    {
       "path": "feedback/templates/feedback-index-template.md",
       "sourceSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
       "snapshotSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
@@ -383,6 +407,12 @@
       "path": "feedback/templates/feedback-topic-template.md",
       "sourceSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
       "snapshotSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/INDEX.md",
+      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
       "sha256Match": true
     },
     {
@@ -407,12 +437,6 @@
       "path": "hooks/detect-feedback-signal.sh",
       "sourceSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
       "snapshotSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
-      "sha256Match": true
-    },
-    {
-      "path": "hooks/INDEX.md",
-      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
-      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
       "sha256Match": true
     },
     {
@@ -452,15 +476,15 @@
       "sha256Match": true
     },
     {
-      "path": "README.md",
-      "sourceSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
-      "snapshotSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
-      "sha256Match": true
-    },
-    {
       "path": "settings.json",
       "sourceSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
       "snapshotSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/INDEX.md",
+      "sourceSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
+      "snapshotSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
       "sha256Match": true
     },
     {
@@ -476,15 +500,15 @@
       "sha256Match": true
     },
     {
-      "path": "skills/architecture-foundation/references/foundation-dimensions.md",
-      "sourceSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
-      "snapshotSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
-      "sha256Match": true
-    },
-    {
       "path": "skills/architecture-foundation/SKILL.md",
       "sourceSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
       "snapshotSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/architecture-foundation/references/foundation-dimensions.md",
+      "sourceSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
+      "snapshotSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
       "sha256Match": true
     },
     {
@@ -494,21 +518,27 @@
       "sha256Match": true
     },
     {
-      "path": "skills/beginner-flow-guide/references/route-matrix.md",
-      "sourceSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
-      "snapshotSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
-      "sha256Match": true
-    },
-    {
       "path": "skills/beginner-flow-guide/SKILL.md",
       "sourceSha256": "935a5962df0346b4946645a0d2ab40e0853c108bc8eeab99fd25e4d1698987af",
       "snapshotSha256": "935a5962df0346b4946645a0d2ab40e0853c108bc8eeab99fd25e4d1698987af",
       "sha256Match": true
     },
     {
+      "path": "skills/beginner-flow-guide/references/route-matrix.md",
+      "sourceSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
+      "snapshotSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
+      "sha256Match": true
+    },
+    {
       "path": "skills/bolder/SKILL.md",
       "sourceSha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e",
       "snapshotSha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/SKILL.md",
+      "sourceSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
+      "snapshotSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
       "sha256Match": true
     },
     {
@@ -602,12 +632,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/brand/SKILL.md",
-      "sourceSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
-      "snapshotSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
-      "sha256Match": true
-    },
-    {
       "path": "skills/brand/templates/brand-guidelines-starter.md",
       "sourceSha256": "d157a57b15f0b458c79636d11de42f3c89f03d8c0bbea1bdd3cf1c3542b2140d",
       "snapshotSha256": "d157a57b15f0b458c79636d11de42f3c89f03d8c0bbea1bdd3cf1c3542b2140d",
@@ -623,6 +647,12 @@
       "path": "skills/clarify/SKILL.md",
       "sourceSha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb",
       "snapshotSha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/SKILL.md",
+      "sourceSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
+      "snapshotSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
       "sha256Match": true
     },
     {
@@ -662,9 +692,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/code-review/SKILL.md",
-      "sourceSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
-      "snapshotSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
+      "path": "skills/codebase-memory-scout/SKILL.md",
+      "sourceSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
+      "snapshotSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
       "sha256Match": true
     },
     {
@@ -674,15 +704,15 @@
       "sha256Match": true
     },
     {
-      "path": "skills/codebase-memory-scout/SKILL.md",
-      "sourceSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
-      "snapshotSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
-      "sha256Match": true
-    },
-    {
       "path": "skills/colorize/SKILL.md",
       "sourceSha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812",
       "snapshotSha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/critique/SKILL.md",
+      "sourceSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
+      "snapshotSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
       "sha256Match": true
     },
     {
@@ -701,12 +731,6 @@
       "path": "skills/critique/reference/personas.md",
       "sourceSha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca",
       "snapshotSha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca",
-      "sha256Match": true
-    },
-    {
-      "path": "skills/critique/SKILL.md",
-      "sourceSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
-      "snapshotSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
       "sha256Match": true
     },
     {
@@ -731,6 +755,12 @@
       "path": "skills/design-maker/SKILL.md",
       "sourceSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
       "snapshotSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/SKILL.md",
+      "sourceSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
+      "snapshotSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
       "sha256Match": true
     },
     {
@@ -794,15 +824,15 @@
       "sha256Match": true
     },
     {
-      "path": "skills/design-system/SKILL.md",
-      "sourceSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
-      "snapshotSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
-      "sha256Match": true
-    },
-    {
       "path": "skills/design-system/templates/design-tokens-starter.json",
       "sourceSha256": "5444f477b06bab9c72e2cc289d4a9104efef653391c9639972bcb712d5f2d81e",
       "snapshotSha256": "5444f477b06bab9c72e2cc289d4a9104efef653391c9639972bcb712d5f2d81e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/SKILL.md",
+      "sourceSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
+      "snapshotSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
       "sha256Match": true
     },
     {
@@ -860,12 +890,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/dev-builder/SKILL.md",
-      "sourceSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
-      "snapshotSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
-      "sha256Match": true
-    },
-    {
       "path": "skills/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/button.tsx.template",
       "sourceSha256": "2e83f0589b58b5535a1c2902cb1759dded12b9b79dfc8a1d33c2906f914282ea",
       "snapshotSha256": "2e83f0589b58b5535a1c2902cb1759dded12b9b79dfc8a1d33c2906f914282ea",
@@ -896,9 +920,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
-      "sourceSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
-      "snapshotSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/plans/执行光标.md.template",
+      "sourceSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
+      "snapshotSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
       "sha256Match": true
     },
     {
@@ -914,15 +938,27 @@
       "sha256Match": true
     },
     {
-      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/开发计划.md.template",
-      "sourceSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
-      "snapshotSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求变更.md.template",
+      "sourceSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
+      "snapshotSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求文档.md.template",
+      "sourceSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
+      "snapshotSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
       "sha256Match": true
     },
     {
       "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/宪法设计.md.template",
       "sourceSha256": "ae34fb6a6cf4ae2086fee9a6e683b6e8a29cb72221e8865694e550b9b7f2de10",
       "snapshotSha256": "ae34fb6a6cf4ae2086fee9a6e683b6e8a29cb72221e8865694e550b9b7f2de10",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/开发计划.md.template",
+      "sourceSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
+      "snapshotSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
       "sha256Match": true
     },
     {
@@ -938,21 +974,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求变更.md.template",
-      "sourceSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
-      "snapshotSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
-      "sha256Match": true
-    },
-    {
-      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求文档.md.template",
-      "sourceSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
-      "snapshotSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
-      "sha256Match": true
-    },
-    {
-      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/plans/执行光标.md.template",
-      "sourceSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
-      "snapshotSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
+      "sourceSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
+      "snapshotSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
       "sha256Match": true
     },
     {
@@ -1196,6 +1220,12 @@
       "sha256Match": true
     },
     {
+      "path": "skills/dev-planner/SKILL.md",
+      "sourceSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
+      "snapshotSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
+      "sha256Match": true
+    },
+    {
       "path": "skills/dev-planner/references/analysis-dimensions.md",
       "sourceSha256": "e2507ca2a46b37459d9ed551ecf9cc66f67e0faf91e87ebe9a42cda203d33d73",
       "snapshotSha256": "e2507ca2a46b37459d9ed551ecf9cc66f67e0faf91e87ebe9a42cda203d33d73",
@@ -1226,12 +1256,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/dev-planner/SKILL.md",
-      "sourceSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
-      "snapshotSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
-      "sha256Match": true
-    },
-    {
       "path": "skills/dev-planner/templates/current-execution-template.md",
       "sourceSha256": "305454fe74efe896586463af550f1e4e8dca19aed580f70396e1864056a6e8e1",
       "snapshotSha256": "305454fe74efe896586463af550f1e4e8dca19aed580f70396e1864056a6e8e1",
@@ -1256,6 +1280,12 @@
       "sha256Match": true
     },
     {
+      "path": "skills/doc-sync-guardian/SKILL.md",
+      "sourceSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
+      "snapshotSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
+      "sha256Match": true
+    },
+    {
       "path": "skills/doc-sync-guardian/references/document-surfaces.md",
       "sourceSha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e",
       "snapshotSha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e",
@@ -1268,27 +1298,21 @@
       "sha256Match": true
     },
     {
-      "path": "skills/doc-sync-guardian/SKILL.md",
-      "sourceSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
-      "snapshotSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
-      "sha256Match": true
-    },
-    {
       "path": "skills/evolution-engine/SKILL.md",
       "sourceSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
       "snapshotSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
       "sha256Match": true
     },
     {
-      "path": "skills/experience-elevator/references/ledger-and-elevation.md",
-      "sourceSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
-      "snapshotSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
-      "sha256Match": true
-    },
-    {
       "path": "skills/experience-elevator/SKILL.md",
       "sourceSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
       "snapshotSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/experience-elevator/references/ledger-and-elevation.md",
+      "sourceSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
+      "snapshotSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
       "sha256Match": true
     },
     {
@@ -1319,6 +1343,12 @@
       "path": "skills/impeccable/NOTICE.md",
       "sourceSha256": "62567465cc0c0ff7cee09091263d413f67be4707910191f92fea3c86008d3623",
       "snapshotSha256": "62567465cc0c0ff7cee09091263d413f67be4707910191f92fea3c86008d3623",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/SKILL.md",
+      "sourceSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
+      "snapshotSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
       "sha256Match": true
     },
     {
@@ -1382,18 +1412,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/impeccable/SKILL.md",
-      "sourceSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
-      "snapshotSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
-      "sha256Match": true
-    },
-    {
-      "path": "skills/INDEX.md",
-      "sourceSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
-      "snapshotSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
-      "sha256Match": true
-    },
-    {
       "path": "skills/layout/SKILL.md",
       "sourceSha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d",
       "snapshotSha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d",
@@ -1415,6 +1433,12 @@
       "path": "skills/polish/SKILL.md",
       "sourceSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
       "snapshotSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/SKILL.md",
+      "sourceSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
+      "snapshotSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
       "sha256Match": true
     },
     {
@@ -1466,12 +1490,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/product-spec-builder/SKILL.md",
-      "sourceSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
-      "snapshotSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
-      "sha256Match": true
-    },
-    {
       "path": "skills/product-spec-builder/templates/changelog-template.md",
       "sourceSha256": "d1ce7b849977dec7658f0310973ee4fe42ff2f13900a0984153d91060f5ca8ff",
       "snapshotSha256": "d1ce7b849977dec7658f0310973ee4fe42ff2f13900a0984153d91060f5ca8ff",
@@ -1499,6 +1517,12 @@
       "path": "skills/release-builder/SKILL.md",
       "sourceSha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374",
       "snapshotSha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/SKILL.md",
+      "sourceSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
+      "snapshotSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
       "sha256Match": true
     },
     {
@@ -1580,12 +1604,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/requirements-test-designer/SKILL.md",
-      "sourceSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
-      "snapshotSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
-      "sha256Match": true
-    },
-    {
       "path": "skills/requirements-test-designer/templates/test-case-export-template.csv",
       "sourceSha256": "1df6952986cb15a716f8f3d2a8ac0fbe2a2039d07016fd32f05ac490f44bdd96",
       "snapshotSha256": "1df6952986cb15a716f8f3d2a8ac0fbe2a2039d07016fd32f05ac490f44bdd96",
@@ -1628,15 +1646,21 @@
       "sha256Match": true
     },
     {
+      "path": "skills/target-constitution-setup/SKILL.md",
+      "sourceSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
+      "snapshotSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
+      "sha256Match": true
+    },
+    {
       "path": "skills/target-constitution-setup/references/workflow.md",
       "sourceSha256": "c55f96b5984d9933cb7dd17e71eab849aa40a6da992f83706cdf345d9adf18a8",
       "snapshotSha256": "c55f96b5984d9933cb7dd17e71eab849aa40a6da992f83706cdf345d9adf18a8",
       "sha256Match": true
     },
     {
-      "path": "skills/target-constitution-setup/SKILL.md",
-      "sourceSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
-      "snapshotSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
+      "path": "skills/target-runtime-setup/SKILL.md",
+      "sourceSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
+      "snapshotSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
       "sha256Match": true
     },
     {
@@ -1646,9 +1670,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/target-runtime-setup/SKILL.md",
-      "sourceSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
-      "snapshotSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
+      "path": "skills/test-automation/SKILL.md",
+      "sourceSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
+      "snapshotSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
       "sha256Match": true
     },
     {
@@ -1670,15 +1694,21 @@
       "sha256Match": true
     },
     {
-      "path": "skills/test-automation/SKILL.md",
-      "sourceSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
-      "snapshotSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
-      "sha256Match": true
-    },
-    {
       "path": "skills/typeset/SKILL.md",
       "sourceSha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a",
       "snapshotSha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/LICENSE.txt",
+      "sourceSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "snapshotSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/SKILL.md",
+      "sourceSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
+      "snapshotSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
       "sha256Match": true
     },
     {
@@ -2168,12 +2198,6 @@
       "sha256Match": true
     },
     {
-      "path": "skills/ui-styling/LICENSE.txt",
-      "sourceSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
-      "snapshotSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
-      "sha256Match": true
-    },
-    {
       "path": "skills/ui-styling/references/canvas-design-system.md",
       "sourceSha256": "2d436f68537a045de77edac427143cd13f706d3466f34f4fd57f78011bb9644e",
       "snapshotSha256": "2d436f68537a045de77edac427143cd13f706d3466f34f4fd57f78011bb9644e",
@@ -2234,9 +2258,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/ui-styling/SKILL.md",
-      "sourceSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
-      "snapshotSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
+      "path": "skills/ui-system-guardian/SKILL.md",
+      "sourceSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
+      "snapshotSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
       "sha256Match": true
     },
     {
@@ -2252,9 +2276,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/ui-system-guardian/SKILL.md",
-      "sourceSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
-      "snapshotSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
+      "path": "skills/ui-ux-pro-max/SKILL.md",
+      "sourceSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
+      "snapshotSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
       "sha256Match": true
     },
     {
@@ -2480,9 +2504,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/ui-ux-pro-max/SKILL.md",
-      "sourceSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
-      "snapshotSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
+      "path": "skills/vibe-coding-skills/SKILL.md",
+      "sourceSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
+      "snapshotSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
       "sha256Match": true
     },
     {
@@ -2492,9 +2516,9 @@
       "sha256Match": true
     },
     {
-      "path": "skills/vibe-coding-skills/SKILL.md",
-      "sourceSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
-      "snapshotSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
+      "path": "tools/INDEX.md",
+      "sourceSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
+      "snapshotSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
       "sha256Match": true
     },
     {
@@ -2759,12 +2783,6 @@
       "path": "tools/hotspot-policy.mjs",
       "sourceSha256": "192a570154a484a78092d76bc600eaf63dca4d19b4874ad8cb528cb6a0e1151b",
       "snapshotSha256": "192a570154a484a78092d76bc600eaf63dca4d19b4874ad8cb528cb6a0e1151b",
-      "sha256Match": true
-    },
-    {
-      "path": "tools/INDEX.md",
-      "sourceSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
-      "snapshotSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
       "sha256Match": true
     },
     {
