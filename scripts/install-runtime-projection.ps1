@@ -131,7 +131,10 @@ if (Test-Path -LiteralPath $targetPath) {
         throw "拒绝覆盖：$targetPath 不带本仓库任何投影形态的标记（不是我们的安装）。"
     }
     $existingSchema = [string]$existing.schema
-    Remove-Item -LiteralPath $targetPath -Recurse -Force
+    # DryRun 只读：记录将被替换的形态即可，绝不动目标目录
+    if (-not $DryRun) {
+        Remove-Item -LiteralPath $targetPath -Recurse -Force
+    }
 } else {
     $existingSchema = $null
 }
