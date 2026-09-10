@@ -165,12 +165,36 @@ owner 里出现未接入技能即 FAIL／缺策略或缺 owner 文件直接 thro
 vendored 修改已按规矩登记 `LOCAL-PATCHES.json`（`originalSha256` → `patchedSha256`，+24 行、0 删除、CRLF 保留），
 并用 `record-provenance-integrity.ps1` 重算 `PROVENANCE-INTEGRITY.json`（该脚本接受已登记补丁）。
 
-### 4.3 下一步第一优先：宿主 fresh-session smoke（本地门禁已到顶）
+### 4.3 下一步第一优先：先补「宿主投递路径」，然后才谈 smoke
 
-本地静态门禁已经做透（12/12、反例、fresh clone、两种 shell）。**当前最大的未知已经不在本地，而在宿主**：
-没有任何证据表明宿主会真的按这个绑定去委派技能，而且 bundle 从 16 增到 65 个文件后**宿主侧从未重验**。
-建议：用 `scripts/smoke-host-skill-discovery.ps1` + `scripts/collect-host-skill-evidence.ps1` 在新会话中采一次，
-并明确区分「被识别」与「行为正确」（后者仍需单独证据）。
+本地静态门禁已经做透（12/12、反例、fresh clone、两种 shell），但宿主侧**不是「缺证据」，而是「缺路径」**（本轮查实）：
+
+- 我们自己的投影 builder（`build-*-runtime-projection.ps1`）**没有安装入口**：它强制 `OutputRoot`
+  在仓库外且必须不存在，产物就是纯临时目录。
+- `scripts/smoke-host-skill-discovery.ps1` 里 `$skillId = 'sliver-vibe-coding'` 是**硬编码**的，只冒烟控制面；
+  它调的是 Sliver 自己的 `build_runtime_bundle.py`，而 `packaging/runtime-manifest.json` 的 overlay 只有
+  3 个（codex）/ 2 个（claude）适配文件，**完全不认识我们接入的 7 个技能**。
+- 宿主当前可见的技能**全部来自旧入口**：`~/.claude/skills` 是指向 `F:\skiils工具\_adapters\shared\skills` 的
+  **junction**（187 条），其中 Matt 那几个是**直接指向只读源仓库的符号链接**
+  （`mattpocock-skills\skills\engineering\*`），Vibe/Sliver 的是实体拷贝；`~/.codex/skills` 里只有 `.system`。
+- ⇒ 「宿主可见 62/82」这个数字**不能用来支持我们的运行包**；阶段 3 的实际投递进度是 **0**，
+  阶段 5（退役旧入口）更无从谈起 —— 今天**旧入口是唯一还能工作的路径**。
+
+**因此下一步不是「跑一次 smoke」，而是先定宿主安装形态**（真实取舍，需 owner 拍）：
+
+| 形态 | 做法 | 风险 |
+|---|---|---|
+| 单目录 | 把 65 文件投影装成 1 个技能目录（控制面 + 嵌套 `skills/**`） | 嵌套 `skills/*/SKILL.md` **能否被宿主发现未知**；控制面里的 `skills/…` 相对引用能成立 |
+| 多目录 | 控制面 1 个 + 每个技能各 1 个目录（共 8 个） | 宿主一定能发现 8 个技能，但控制面文档里的 `skills/…` 路径**会失效**，需要一层路径映射 |
+
+定了形态才能写安装入口，然后才可能拿到 fresh-session 证据（安装会写宿主 + 消耗真实额度，**需 owner 明确授权**）。
+另注意：源仓库目前**不能动**（宿主那边有符号链接直指它），迁移完成前它是运行时依赖，不是可归档的历史。
+
+### 4.4 其余待 owner 拍的口径
+
+- **阶段 4 批次**：46 条 Vibe 记录里，18 条许可证已放行（16 个 `source-only-ui` + 2 个 unrevied，MIT/Apache-2.0）但未接入；
+  24 条被 private 分发许可证挡着。按什么粒度接入、要不要接，需 owner 定。
+- **控制面 `assets/`**：见第 9 节的悬空引用条目 —— 加一个词就能纳入。
 
 ## 5. 【最后做】Hook 解锁（风险最大）
 
