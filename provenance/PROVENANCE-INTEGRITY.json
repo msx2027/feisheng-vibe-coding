@@ -2,10 +2,10 @@
   "schema": "feisheng-provenance-integrity/v1",
   "algorithm": "sha256-lines-v1",
   "algorithmDefinition": "record = file line as \"relativePath/with/slashes`nfileSha256\"; sort paths Ordinal; join with LF and append trailing LF; digest = SHA-256 of UTF-8 (no BOM) bytes",
-  "recordedAt": "2026-09-10T11:07:02.5488444Z",
-  "recordedAtRevision": "5ed4f3c3b273b078e43659201fcac0ba52410c23",
+  "recordedAt": "2026-09-10T11:14:10.0683678Z",
+  "recordedAtRevision": "bbae1fcb56f9cda439839ae823b1ef52ab5429fb",
   "corroboration": {
-    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 151 within supplement allowlist",
+    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 148 within supplement allowlist",
     "sourceState": "git sources must match recorded HEAD and dirty set; non-git sources recorded as such"
   },
   "snapshots": [
@@ -53,8 +53,8 @@
     {
       "name": "sliver-core",
       "path": "governance/sliver-core",
-      "fileCount": 223,
-      "treeHash": "sha256:1f0e7c44a7d93801e2f061e31d17960cdc66696bc4b6ad24ec6422669e99d696",
+      "fileCount": 220,
+      "treeHash": "sha256:c8ab7c36fcdbff9403aff3e9d07085dec0465c7992645bbdc10ebd2bd7f31b45",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",

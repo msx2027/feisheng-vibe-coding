@@ -112,6 +112,27 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 上游那个未提交改名仍记录在 `reasonsById` 里（作为事实，不再是 blocking 理由）。若上游日后**提交**该改名，
 那是一次**有意的重新导入**事件，不是阻塞。
 
+## 第六轮完成情况：Claude Code 真实宿主 smoke（发现性已验证）
+
+用户授权一次真实宿主安装 + smoke。结论精确如下：
+
+| 事项 | 结果 |
+|---|---|
+| **fresh-session discovery**（Claude Code 是否发现并注册该技能） | ✅ **VERIFIED**：A/B 全新会话 **169（装）vs 168（移出）**，delta=1；Claude Code 2.1.266；加载根 `user=~/.claude/skills` |
+| 安装方式 | 仅用 Sliver 自带 `build_runtime_bundle.py` 按 `runtime-manifest.json` 白名单产出（76 文件），装到文档指定 install root，**只新增不覆盖**，可一键回滚 |
+| `validate_runtime_bundle` 深度校验 | ❌ **UNAVAILABLE**：需受信任基线 git 对象 `29695fe0…`，本地源仓库（非浅克隆）不含该对象 |
+| 宿主 trust / 技能行为 / Hook 强制 | ⏳ 仍 `UNVERIFIED`（未越界声明） |
+
+证据：`evidence/20260910-host-smoke-claude-discovery.md`；复现脚本：`scripts/smoke-claude-skill-discovery.ps1`（`-Install` / `-Probe` / `-Uninstall`，**不**接入 `verify.ps1`，因为会消耗真实额度）。
+
+### 本轮两个新发现
+
+1. **深度校验缺受信任基线对象**（阻塞 `validate_runtime_bundle`）：需通过授权方式让 `29695fe0…` 对象可用
+   （对来源仓库 `git fetch` 会写入来源 `.git`，属修改来源项目，本轮未做）。
+2. **bundle 内 3 个上游模板资产在 Claude Code 触发 YAML frontmatter 解析失败**
+   （`assets/project-audit/audit-report.md`、`assets/project-decision/adr.md`、`assets/project-feature/feature-truth.md`）。
+   它们是 Sliver 上游内容且与来源逐字节一致 —— **不得为消错而修改**，应作为上游发现上报。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
@@ -151,16 +172,16 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 
 ### P1：宿主投影与发布能力
 
-1. **真实宿主 smoke 未验证**：Codex/Claude 投影均为静态候选；真实宿主 discovery、trust、fresh-session smoke 全部 `UNVERIFIED`；不得写入真实宿主目录，除非另有明确授权和回滚方案。
+1. **真实宿主 smoke**：Claude 侧 **discovery 已验证**（见第六轮）；Codex 侧 discovery、两侧的 trust 与技能行为仍未验证。不得写入更多真实宿主目录，除非另有授权与回滚方案。
 2. **发布包已可装配，CI 未真实运行**：`scripts/build-release-package.ps1` 本地两套 PowerShell 均验证通过（19 文件、0 违规、包内投影 Validate 通过）；`.github/workflows/release-gate.yml` 仅本地 YAML 校验，未在真实 runner 执行。
 3. **Hook 未解锁**：需要 per-skill license、host discovery、事件顺序/并发、写白名单/回滚和独立逻辑审查全部通过。
 
 ## 当前阻塞项
 
-- **真实宿主证据缺失**：Vibe/Hook 解锁的共同阻塞项（唯一真正的运行时限塞）。
+- **深度运行时校验**：`validate_runtime_bundle` 需受信任基线 git 对象 `29695fe0…`；本地不可得（不自行 fetch 来源仓库）。
+- **宿主 trust / 技能行为 / Hook 强制**：仍 `UNVERIFIED`（Claude discovery 已闭环）。
 - **宿主稳定性**：v5 派发时 `luna_vibe_product_audit_v5` 首次被中断、`v5b` 遇 `Upstream request failed`，
   第三次 `v5c` 成功；重派时需接受可能的中断，只采纳有回执的轮次。
-- ~~外部依赖：Matt 四项~~ → 已按第五轮策略解除（上游改名仅作复核项，不再是阻塞）。
 
 ## 本轮子 Agent 状态
 
@@ -243,5 +264,7 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-prove
 - 不新增第二份 provenance 校验实现；记录器与验证器必须点源 `scripts/provenance-integrity.ps1`。
 - 不采用上游未提交的工作树内容（意图不可证）；命名由本仓库决定，不等上游确认。
 - 不直接丢弃来源文件：工作树已改动时取已提交 revision 的 blob 并登记，保留可寻址性。
+- 宿主安装只经 Sliver 自带 `build_runtime_bundle.py` + `runtime-manifest.json` 白名单；不得自造安装集，不得覆盖既有技能目录，必须留回滚命令。
+- 不为消除宿主告警而修改上游资产文件（会破坏与来源的字节一致性）。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。

@@ -17,7 +17,7 @@
       "freshSessionSmoke": "UNVERIFIED"
     },
     "claude": {
-      "status": "candidate-unverified; static-smoke-only",
+      "status": "candidate-unverified; static-smoke-only; host-discovery-verified",
       "include": [
         "SKILL.md",
         "governance/sliver-core/SKILL.md",
@@ -28,7 +28,11 @@
         "adapters/claude/runtime-adapter.md"
       ],
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
-      "freshSessionSmoke": "UNVERIFIED"
+      "freshSessionDiscovery": "VERIFIED",
+      "freshSessionDiscoveryMethod": "A/B fresh session on Claude Code 2.1.266: 169 skills loaded with the installed skill vs 168 without (delta 1); load root user=~/.claude/skills",
+      "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-claude-discovery.md",
+      "freshSessionSmoke": "PARTIAL; discovery verified, host trust and skill behavior still UNVERIFIED",
+      "runtimeBundleValidation": "UNAVAILABLE; Sliver validate_runtime_bundle requires trusted baseline git object 29695fe099c6b38c9b5c470abbb2e065fc1ff936 which is absent from the local source checkout"
     }
   },
   "buildContract": {
