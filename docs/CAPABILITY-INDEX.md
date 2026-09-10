@@ -4,7 +4,7 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 39、待启用 7、来源专用 28、阻塞 0、兼容/排除 8。
+统计：共 **82** 项来源技能 —— 可用 39、待启用 7、来源专用 28、阻塞 0、兼容/排除 7、已退役 1。
 
 ## 现在可用（进入 runtime 静态投影）
 
@@ -55,7 +55,7 @@
 runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
 
 
-再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。
+再次提醒：投影是**静态候选**。宿主 discovery 已于 2026-09-11 重采证据（`provenance/HOST-DISCOVERY-EVIDENCE.json`）；宿主 trust、逐技能行为质量与 Hook 的宿主 fresh-session 冒烟仍为 `UNVERIFIED`——静态投影不是行为验收。
 
 写权限约束：runtime include 必须声明 `writeAuthority`；控制面 token（`route-catalog`、`target-truth`、`validation-gate`、`skill-catalog`、`runtime-projection`、`hook-writer`）具有排他 owner，违反即门禁失败（防重复写入者）。
 
@@ -100,10 +100,17 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 - `claude-handoff`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
 - `loop-me`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
 - `setup-ts-deep-modules`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `vibe-coding-skills`（vibe-coding-skills，compatibility）：兼容入口别名；不得拥有项目级路由
 - `writing-beats`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
 - `writing-fragments`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
 - `writing-shape`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
+
+## 已退役
+
+退役 = 系统能「出」的一侧：记录保留供审计，但永不进入 runtime，也不得再激活为入口（重新接入 = 走完整准入五门，不是翻状态）。
+
+| id | 来源 | 状态 | 原因 |
+|---|---|---|---|
+| `vibe-coding-skills` | vibe-coding-skills | retired-alias | 旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10 |
 
 ## 功能重叠裁决（duplicateGroups）
 

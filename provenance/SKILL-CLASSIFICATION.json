@@ -17,6 +17,7 @@
   "statusPolicy": {
     "adapter|candidate": "adapter-candidate",
     "alias|compatibility": "compatibility-alias",
+    "alias|retired": "retired-alias",
     "checker|accepted": "accepted-checker",
     "checker|blocked": "blocked-unclassified-working-tree",
     "checker|candidate": "adapter-candidate",
@@ -46,6 +47,7 @@
     "adapter-candidate": "已审查、待适配器与行为 smoke；未进入 runtime",
     "blocked-unclassified-working-tree": "来源工作树半改名且未提交，未获上游/维护者确认",
     "compatibility-alias": "兼容入口别名；不得拥有项目级路由",
+    "retired-alias": "别名已退役：宿主侧旧入口已删除，数据层状态补齐到与事实一致；保留记录供审计，不得再激活",
     "compatibility-selector": "兼容选择器；不得拥有项目级路由",
     "control-plane": "唯一项目级控制面（Sliver）",
     "event-only-source-only": "仅限结构化事件调用；需宿主事件契约与独立审查",
@@ -60,6 +62,7 @@
     "accepted-ui": "已验收 UI 设计实现能力；进入 runtime 静态投影"
   },
   "reasonsById": {
+        "vibe-coding-skills": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
     "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
     "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
@@ -737,7 +740,7 @@
     },
     "vibe-coding-skills": {
       "domain": "alias",
-      "readiness": "compatibility",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "wait-what": {

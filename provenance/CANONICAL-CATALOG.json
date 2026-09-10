@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T19:15:20.3645679Z",
+  "generatedAt": "2026-09-10T22:18:53.5477660Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -2986,9 +2986,9 @@
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "alias",
-      "readiness": "compatibility",
-      "status": "compatibility-alias",
-      "reason": "兼容入口别名；不得拥有项目级路由",
+      "readiness": "retired",
+      "status": "retired-alias",
+      "reason": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
       "sourceSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
       "writeAuthority": []
     },
@@ -3254,6 +3254,7 @@
     "runtimeExcludedStatuses": [
       "adapter-candidate",
       "compatibility-alias",
+      "retired-alias",
       "blocked-unclassified-working-tree",
       "source-only-checker",
       "event-only-source-only",

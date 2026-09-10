@@ -79,6 +79,7 @@ $pending = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.status -eq '
 $blocked = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.status -like 'blocked-*' }))
 $excluded = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.readiness -eq 'excluded' -or $_.readiness -eq 'compatibility' }))
 $sourceOnly = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.readiness -eq 'source-only' }))
+$retired = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.status -like 'retired-*' }))
 
 $lines = @()
 $lines += '# 能力索引（生成物）'
@@ -87,7 +88,7 @@ $lines += '> 本文件由 `scripts/build-capability-index.ps1` 从 `provenance/C
 $lines += '> 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。'
 $lines += '> 新鲜度校验：`pwsh scripts/verify.ps1`。'
 $lines += ''
-$lines += ('统计：共 **' + $records.Count + '** 项来源技能 —— 可用 ' + $runtime.Count + '、待启用 ' + $pending.Count + '、来源专用 ' + $sourceOnly.Count + '、阻塞 ' + $blocked.Count + '、兼容/排除 ' + $excluded.Count + '。')
+$lines += ('统计：共 **' + $records.Count + '** 项来源技能 —— 可用 ' + $runtime.Count + '、待启用 ' + $pending.Count + '、来源专用 ' + $sourceOnly.Count + '、阻塞 ' + $blocked.Count + '、兼容/排除 ' + $excluded.Count + '、已退役 ' + $retired.Count + '。')
 $lines += ''
 $lines += '## 现在可用（进入 runtime 静态投影）'
 $lines += ''
@@ -115,7 +116,7 @@ if ($catalog.PSObject.Properties.Name -contains 'bundlePolicy' -and $null -ne $c
     $lines += ''
 }
 $lines += ''
-$lines += '再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。'
+$lines += '再次提醒：投影是**静态候选**。宿主 discovery 已于 2026-09-11 重采证据（`provenance/HOST-DISCOVERY-EVIDENCE.json`）；宿主 trust、逐技能行为质量与 Hook 的宿主 fresh-session 冒烟仍为 `UNVERIFIED`——静态投影不是行为验收。'
 $lines += ''
 $lines += '写权限约束：runtime include 必须声明 `writeAuthority`；控制面 token（`route-catalog`、`target-truth`、`validation-gate`、`skill-catalog`、`runtime-projection`、`hook-writer`）具有排他 owner，违反即门禁失败（防重复写入者）。'
 $lines += ''
@@ -158,6 +159,20 @@ $lines += '## 兼容与排除'
 $lines += ''
 foreach ($record in $excluded) {
     $lines += ('- `' + $record.id + '`（' + $record.source + '，' + $record.readiness + '）：' + $record.reason)
+}
+$lines += ''
+$lines += '## 已退役'
+$lines += ''
+$lines += '退役 = 系统能「出」的一侧：记录保留供审计，但永不进入 runtime，也不得再激活为入口（重新接入 = 走完整准入五门，不是翻状态）。'
+$lines += ''
+if ($retired.Count -eq 0) {
+    $lines += '（当前无退役记录。）'
+} else {
+    $lines += '| id | 来源 | 状态 | 原因 |'
+    $lines += '|---|---|---|---|'
+    foreach ($record in $retired) {
+        $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.status + ' | ' + $record.reason + ' |')
+    }
 }
 $lines += ''
 $lines += '## 功能重叠裁决（duplicateGroups）'
