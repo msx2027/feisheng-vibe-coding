@@ -9,6 +9,8 @@
 
 当前证据：Vibe `MANIFEST.json` 有 1,341 条记录，其中 50 条 SHA-256 不匹配；quick strict health 有 97 项失败，其中 95 项为镜像漂移，routing manifest 过期；Matt 有 4 个未提交 Skill 修改。阶段 0 的结构取证已完成，内容迁移门禁仍为阻塞。
 
+阶段 0 收口结果：Vibe 已形成 550 文件、逐文件 SHA-256 一致的正式快照；Matt 已形成绑定 HEAD `9fe7e7a3bb352851b986725bab1c7cfb17610a97` 的 132 文件快照，4 个未提交文件明确排除；82 个技能已在 `provenance/CANONICAL-CATALOG.json` 分类。当前只有 Sliver control-plane 和 3 个 Matt 原语进入候选运行包。
+
 ## 阶段 1：控制面
 
 - 固化 canonical route catalog、skill catalog、target truth schema 和 runtime projection schema。
@@ -18,6 +20,8 @@
 ## 阶段 2：工程原语
 
 优先接入 `tdd`、`diagnosing-bugs`、`codebase-design`、`domain-modeling` 和双轴 `code-review`。`to-spec`、`to-tickets`、`implement` 先作为适配器，不能创建第二份项目真源。
+
+当前已接入：`diagnosing-bugs`、`codebase-design`、`domain-modeling`。`tdd` 与 `code-review` 因源目录存在未提交命名改动，状态为 `blocked-unclassified-working-tree`。
 
 ## 阶段 3：宿主适配
 

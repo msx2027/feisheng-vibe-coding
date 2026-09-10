@@ -25,6 +25,7 @@
       "id": "runtime-projection",
       "path": "packaging/runtime-projection.json",
       "writes": ["host-bundle-include", "host-overlay", "generated-mirror", "manifest"],
+      "inputs": ["provenance/LICENSE-MAP.json"],
       "projections": ["Codex", "Claude"]
     }
   ],

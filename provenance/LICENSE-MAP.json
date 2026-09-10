@@ -1,0 +1,35 @@
+{
+  "schema": "feisheng-license-map/v1",
+  "status": "partial; runtime-third-party-disabled",
+  "owner": "runtime-projection",
+  "entries": [
+    {
+      "source": "sliver-vibe-coding",
+      "path": "governance/sliver-core",
+      "license": "Apache-2.0",
+      "notice": "governance/sliver-core/LICENSE",
+      "runtimeEligible": true
+    },
+    {
+      "source": "mattpocock-skills",
+      "path": "sources/mattpocock-skills",
+      "license": "MIT plus localized/source notices",
+      "notice": "sources/mattpocock-skills/LICENSE; sources/mattpocock-skills/LICENSE.zh-CN.md",
+      "runtimeEligible": true,
+      "scope": "accepted primitives only"
+    },
+    {
+      "source": "vibe-coding-skills",
+      "path": "sources/vibe-coding-skills",
+      "license": "mixed; per bundled skill",
+      "notice": "sources/vibe-coding-skills/docs/legal",
+      "runtimeEligible": false,
+      "reason": "third-party UI licenses and notices require per-skill review"
+    }
+  ],
+  "forbidden": [
+    "single-root-license-over-mixed-content",
+    "runtime-inclusion-without-notice",
+    "manual-license-file-copy-without-provenance"
+  ]
+}
