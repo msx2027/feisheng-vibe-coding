@@ -66,19 +66,23 @@ foreach ($match in [regex]::Matches($text, '- `(r\d+)` = `([^`]+)`')) {
 }
 
 $modelVisible = @{}
+$visibleEntries = @()
 $seen = 0
 foreach ($match in [regex]::Matches($text, '(?m)^- ([^\r\n]+?): .*?\(file: (r\d+)/([^)]+)\)')) {
     $seen++
-    $path = $match.Groups[3].Value
-    $dir = Get-SkillDirName -Path $path
-    $key = $dir.ToLowerInvariant()
-    if (-not $modelVisible.ContainsKey($key)) { $modelVisible[$key] = @() }
-    $modelVisible[$key] += [pscustomobject]@{
+    $entry = [pscustomobject]@{
         entryName = $match.Groups[1].Value
         root = $match.Groups[2].Value
         rootPath = $roots[$match.Groups[2].Value]
-        pathInRoot = $path
+        path = ($match.Groups[3].Value -replace '\\', '/')
     }
+    $visibleEntries += $entry
+    # 目录名索引只作参考留存；记录级判定改用 catalog path 精确后缀匹配（防重名伪影，
+    # 例如未接入的 vibe `code-review` 曾因目录名相同被记成 Matt 版已安装）
+    $dir = Get-SkillDirName -Path $entry.path
+    $key = $dir.ToLowerInvariant()
+    if (-not $modelVisible.ContainsKey($key)) { $modelVisible[$key] = @() }
+    $modelVisible[$key] += $entry
 }
 
 # 2) 宿主安装情况
@@ -90,36 +94,74 @@ $bundleRoot = Join-Path $ClaudeSkillsRoot 'feisheng-vibe-coding'
 $bundleIsInstalled = Test-Path -LiteralPath $bundleRoot -PathType Container
 
 function Test-InstalledInSharedBundle {
+    # 精确判定：统一包按仓库相对路径安装，catalog 记录的 path 就应在 <bundleRoot>/<path> 落位。
+    # 不再按目录名到 skills/<group>/ 下扫（那会把重名源技能误判成已装，也看不见控制面嵌套位置）。
     param(
         [Parameter(Mandatory = $true)][string]$BundleRoot,
         [Parameter(Mandatory = $true)][bool]$BundleInstalled,
-        [Parameter(Mandatory = $true)][string]$DirName
+        [Parameter(Mandatory = $true)][string]$RecordPath
     )
     if (-not $BundleInstalled) { return $false }
-    foreach ($group in @('checker', 'product', 'ui', 'engineering')) {
-        $candidate = Join-Path $BundleRoot ('skills/' + $group + '/' + $DirName)
-        if (Test-Path -LiteralPath $candidate -PathType Container) { return $true }
+    $relative = ([string]$RecordPath).Replace('\', '/')
+    $candidate = Join-Path $BundleRoot ($relative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    return (Test-Path -LiteralPath $candidate -PathType Leaf)
+}
+
+function Get-RecordPathSuffixes {
+    # 记录 path 的宿主匹配后缀：快照路径（sources/<repo>/...）在宿主可能经「源仓库名/」遗留链接暴露，
+    # 额外提供剥掉 sources/<repo>/ 前缀的变体。
+    param([Parameter(Mandatory = $true)][string]$RecordPath)
+    $normalized = ([string]$RecordPath).Replace('\', '/')
+    $suffixes = @($normalized)
+    if ($normalized -like 'sources/*') {
+        $segments = @($normalized.Split('/') | Where-Object { $_ -ne '' })
+        if ($segments.Count -gt 3) {
+            $suffixes += (($segments[2..($segments.Count - 1)]) -join '/')
+        }
     }
-    return $false
+    return $suffixes
+}
+
+function Find-VisibleMatches {
+    # 用 catalog path 后缀把模型可见条目归属到唯一记录；并标注暴露途径（unified-bundle / legacy）。
+    param(
+        [Parameter(Mandatory = $true)]$Record,
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][object[]]$VisibleEntries
+    )
+    $suffixes = @(Get-RecordPathSuffixes -RecordPath ([string]$Record.path))
+    $attributed = @()
+    foreach ($entry in $VisibleEntries) {
+        foreach ($suffix in $suffixes) {
+            # 注意：不要写 [string](...EndsWith(...)) —— 那会把布尔结果转成 "False" 字符串，
+            # 而非空字符串在 PowerShell 里是真值，条件会恒真（本仓库真实踩过：82 条记录全部误匹配）。
+            $isSuffixMatch = $entry.path.ToLowerInvariant().EndsWith('/' + $suffix.ToLowerInvariant(), [System.StringComparison]::OrdinalIgnoreCase)
+            if ($isSuffixMatch) {
+                $startsBundle = $entry.path.ToLowerInvariant().StartsWith('feisheng-vibe-coding/', [System.StringComparison]::OrdinalIgnoreCase)
+                $via = if ($startsBundle) { 'unified-bundle' } else { 'legacy' }
+                $attributed += [pscustomobject]@{ entry = $entry; via = $via }
+                break
+            }
+        }
+    }
+    return $attributed
 }
 
 # 3) 逐记录判定
 $records = @()
-$summary = @{ modelVisible = 0; installedUserInvokedOnly = 0; notInstalled = 0; unknown = 0 }
+$summary = @{ modelVisible = 0; installedUserInvokedOnly = 0; notInstalled = 0; unknown = 0; legacyVisible = 0 }
 foreach ($record in @($catalog.records | Sort-Object id)) {
     $dir = Get-SkillDirName -Path ([string]$record.path) -Id ([string]$record.id)
-    $key = $dir.ToLowerInvariant()
-    $visible = @()
-    if ($modelVisible.ContainsKey($key)) { $visible = @($modelVisible[$key]) }
+    $matchedVisible = @(Find-VisibleMatches -Record $record -VisibleEntries $visibleEntries)
     $inClaude = $claudeDirs.ContainsKey($dir)
     $inCodex = $codexDirs.ContainsKey($dir)
     $modelInvocable = ([string]$record.invocation -ne 'user-invoked')
 
     $evidence = 'unknown'
-    $inBundle = Test-InstalledInSharedBundle -BundleRoot $bundleRoot -BundleInstalled $bundleIsInstalled -DirName $dir
-    if ($visible.Count -gt 0) {
+    $inBundle = Test-InstalledInSharedBundle -BundleRoot $bundleRoot -BundleInstalled $bundleIsInstalled -RecordPath ([string]$record.path)
+    if ($matchedVisible.Count -gt 0) {
         $evidence = 'model-visible'
         $summary.modelVisible++
+        if (@($matchedVisible | Where-Object { $_.via -eq 'legacy' }).Count -gt 0) { $summary.legacyVisible++ }
     } elseif ($inBundle) {
         $evidence = 'installed-in-shared-bundle'
         $summary.installedUserInvokedOnly++
@@ -129,6 +171,23 @@ foreach ($record in @($catalog.records | Sort-Object id)) {
     } else {
         $evidence = 'not-installed'
         $summary.notInstalled++
+    }
+
+    # 共享根顶层条目形态：我们的包 / 指向源仓库等的 reparse 链接 / 普通目录（遗留暴露的退役口径输入）
+    $sharedRootEntryKind = $null
+    $sharedRootEntryTarget = $null
+    if ($inClaude) {
+        if ($dir -eq 'feisheng-vibe-coding') {
+            $sharedRootEntryKind = 'unified-bundle'
+        } else {
+            $item = Get-Item -LiteralPath (Join-Path $ClaudeSkillsRoot $dir) -Force -ErrorAction SilentlyContinue
+            if ($null -ne $item -and $item.LinkType) {
+                $sharedRootEntryKind = 'reparse-link'
+                $sharedRootEntryTarget = @($item.Target)[0]
+            } else {
+                $sharedRootEntryKind = 'directory'
+            }
+        }
     }
 
     $records += [ordered]@{
@@ -141,8 +200,11 @@ foreach ($record in @($catalog.records | Sort-Object id)) {
         installedInSharedRoot = $inClaude
         installedInSharedBundle = $inBundle
         installedInCodexRoot = $inCodex
-        modelVisibleInCodex = ($visible.Count -gt 0)
-        visibleAs = @($visible | ForEach-Object { [ordered]@{ entryName = $_.entryName; root = $_.root; rootPath = $_.rootPath; path = $_.pathInRoot } })
+        modelVisibleInCodex = ($matchedVisible.Count -gt 0)
+        visibleVia = @(@($matchedVisible | ForEach-Object { $_.via }) | Select-Object -Unique)
+        sharedRootEntryKind = $sharedRootEntryKind
+        sharedRootEntryTarget = $sharedRootEntryTarget
+        visibleAs = @($matchedVisible | ForEach-Object { [ordered]@{ entryName = $_.entry.entryName; root = $_.entry.root; rootPath = $_.entry.rootPath; path = $_.entry.path; via = $_.via } })
         evidence = $evidence
     }
 }
@@ -160,6 +222,7 @@ $document = [ordered]@{
         installedUserInvokedOnly = $summary.installedUserInvokedOnly
         notInstalled = $summary.notInstalled
         otherOrUnknown = $summary.unknown
+        legacyVisible = $summary.legacyVisible
         parsedModelVisibleEntries = $seen
     }
     records = $records

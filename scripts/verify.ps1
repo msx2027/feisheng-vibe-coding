@@ -4,7 +4,15 @@ param(
     [string]$RepositoryRoot = (Split-Path -Parent $PSScriptRoot),
 
     [Parameter(Mandatory = $false)]
-    [switch]$IncludePackage
+    [switch]$IncludePackage,
+
+    # 可选：宿主证据门。校验 HOST-DISCOVERY-EVIDENCE.json 的新鲜度、admitted 记录的宿主证据，
+    # 以及「非 admitted 技能从统一包内可见」的影子入口。默认不跑（CI 无宿主环境）；本机验收时加。
+    [Parameter(Mandatory = $false)]
+    [switch]$IncludeHostEvidence,
+
+    [Parameter(Mandatory = $false)]
+    [int]$HostEvidenceMaxAgeDays = 7
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,9 +24,10 @@ Set-StrictMode -Version Latest
 #   1. catalog 与分类真源同步（重生成后语义比对）
 #   2. 能力索引新鲜度（重生成后逐字节比对）
 #   3. 发布 NOTICE 门禁
-#   4. Vibe Hook 适配器保持禁用
+#   4. Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记）
 #   5. Codex / Claude / 宿主中性静态投影 Build + Validate
-#   6. 可选：发布候选包装配（-IncludePackage）
+#   6. 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
+#   7. 可选：发布候选包装配（-IncludePackage）
 #
 # 本脚本只读仓库、只在临时目录写入；不安装依赖、不写入宿主目录。
 # 退出码：0 = 全部通过；1 = 有失败。
@@ -312,6 +321,59 @@ try {
         Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $true
     } catch {
         Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）
+    if ($IncludeHostEvidence) {
+        try {
+            $evidencePath = Join-Path $repoRoot 'provenance/HOST-DISCOVERY-EVIDENCE.json'
+            if (-not (Test-Path -LiteralPath $evidencePath -PathType Leaf)) {
+                throw '缺少 provenance/HOST-DISCOVERY-EVIDENCE.json（先运行 scripts/collect-host-skill-evidence.ps1）'
+            }
+            $hostEvidence = Get-Content -Raw -Encoding UTF8 -LiteralPath $evidencePath | ConvertFrom-Json
+            $capturedAt = [datetimeoffset]::Parse([string]$hostEvidence.capturedAt, [System.Globalization.CultureInfo]::InvariantCulture).UtcDateTime
+            $ageDays = ((Get-Date).ToUniversalTime() - $capturedAt).TotalDays
+            if ($ageDays -gt $HostEvidenceMaxAgeDays) {
+                throw ('宿主证据已过期: capturedAt=' + [string]$hostEvidence.capturedAt + '，超过 ' + $HostEvidenceMaxAgeDays + ' 天上限')
+            }
+            $gateCatalog = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/CANONICAL-CATALOG.json') | ConvertFrom-Json
+            $gateAccepted = @($gateCatalog.decisionPolicy.acceptedStatuses)
+            $evidenceById = @{}
+            foreach ($er in @($hostEvidence.records)) { $evidenceById[[string]$er.id] = $er }
+            $gateViolations = @()
+            $gateAdmitted = 0
+            foreach ($record in @($gateCatalog.records)) {
+                $isAdmitted = $gateAccepted -contains [string]$record.status
+                $er = $evidenceById[[string]$record.id]
+                if ($isAdmitted) {
+                    $gateAdmitted++
+                    if ($null -eq $er) {
+                        $gateViolations += ([string]$record.id + ' (admitted 但宿主证据缺记录)')
+                        continue
+                    }
+                    $allowedEvidence = @('model-visible', 'installed-in-shared-bundle')
+                    if ([string]$record.invocation -eq 'user-invoked') { $allowedEvidence += 'installed-user-invoked-only' }
+                    if ($allowedEvidence -notcontains [string]$er.evidence) {
+                        $gateViolations += ([string]$record.id + ' (admitted 但宿主证据为 ' + [string]$er.evidence + '，违反 runtimePromotionPolicy.host-discovery-evidenced)')
+                    }
+                } else {
+                    # 影子入口：非 admitted 技能不得从统一包内可见（遗留源链接暴露不算，那是阶段 5 口径）
+                    foreach ($v in @($er.visibleAs)) {
+                        if ([string]$v.path -like 'feisheng-vibe-coding/*') {
+                            $gateViolations += ([string]$record.id + ' (非 admitted 但从统一包内可见: ' + [string]$v.path + ')')
+                            break
+                        }
+                    }
+                }
+            }
+            if ($gateViolations.Count -gt 0) {
+                Add-Result -Step '宿主证据门' -Passed $false -Detail (@($gateViolations | Select-Object -First 8) -join '; ')
+            } else {
+                Add-Result -Step '宿主证据门' -Passed $true -Detail ('admitted=' + $gateAdmitted + ' ageDays=' + [math]::Round($ageDays, 2))
+            }
+        } catch {
+            Add-Result -Step '宿主证据门' -Passed $false -Detail $_.Exception.Message
+        }
     }
 
     # 6) 静态投影 Build + Validate（两个宿主投影 + 宿主中性投影：共享根安装形态，决策 #4）
