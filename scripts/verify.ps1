@@ -28,6 +28,13 @@ if (-not (Test-Path -LiteralPath $repoRoot -PathType Container)) {
     throw "RepositoryRoot 不存在: $repoRoot"
 }
 
+# 共享模块（单一实现，不在本脚本里复制一份）
+$provenanceModule = Join-Path $PSScriptRoot 'provenance-integrity.ps1'
+if (-not (Test-Path -LiteralPath $provenanceModule -PathType Leaf)) {
+    throw "缺少 provenance integrity 模块: $provenanceModule"
+}
+. $provenanceModule
+
 $results = @()
 $workRoot = Join-Path $env:TEMP ('feisheng-verify-' + [guid]::NewGuid().ToString('N'))
 
@@ -100,7 +107,20 @@ try {
         Add-Result -Step '能力索引新鲜度' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 3) 发布 NOTICE 门禁
+    # 3) 来源快照完整性（自证树摘要 + 来源逐字节交叉校验；来源不可用时只做自证）
+    try {
+        $integrity = Test-ProvenanceIntegrity -RepositoryRoot $repoRoot
+        if ($integrity.ok) {
+            $detail = (@($integrity.snapshots) | ForEach-Object { $_.name + '=' + $_.fileCount }) -join ', '
+            Add-Result -Step '来源快照完整性' -Passed $true -Detail $detail
+        } else {
+            Add-Result -Step '来源快照完整性' -Passed $false -Detail (@($integrity.errors) -join '; ')
+        }
+    } catch {
+        Add-Result -Step '来源快照完整性' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 4) 发布 NOTICE 门禁
     try {
         $gate = Invoke-Child -Script (Join-Path $repoRoot 'scripts/validate-release-notices.ps1') -Arguments @{
             RepositoryRoot = $repoRoot
@@ -115,7 +135,7 @@ try {
         Add-Result -Step '发布 NOTICE 门禁' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 4) Vibe Hook 适配器保持禁用
+    # 5) Vibe Hook 适配器保持禁用
     #    该测试脚本在 Validate != 0 或 Invoke != 3 时会 throw，因此“不抛异常”即通过。
     #    （不能用输出哨兵：测试内部用 [Console]::WriteLine，不进入 PowerShell 输出流。）
     try {
@@ -127,7 +147,7 @@ try {
         Add-Result -Step 'Vibe Hook 适配器保持禁用' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 5) 静态投影 Build + Validate
+    # 6) 静态投影 Build + Validate
     foreach ($hostName in @('Codex', 'Claude')) {
         $builder = if ($hostName -eq 'Codex') { 'build-codex-runtime-projection.ps1' } else { 'build-claude-runtime-projection.ps1' }
         $outputRoot = Join-Path $workRoot ('proj-' + $hostName.ToLowerInvariant())
@@ -148,7 +168,7 @@ try {
         }
     }
 
-    # 6) 可选：发布候选包装配
+    # 7) 可选：发布候选包装配
     if ($IncludePackage) {
         try {
             $packageRoot = Join-Path $workRoot 'release'

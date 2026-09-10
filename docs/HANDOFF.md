@@ -87,6 +87,17 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 「提升为 runtime（accepted）」仍只对 `primitive` 域开放策略行，且还需同时打开其来源的
 `LICENSE-MAP.runtimeEligible`（第二道独立闸门）——**故意保持 fail-closed**。
 
+## 第四轮完成情况：来源快照完整性门禁
+
+| 目标 | 结论 | 证据/入口 |
+|---|---|---|
+| 把「快照未篡改 / 与来源一致」从一次性结论变成**每次运行强制** | 新增共享模块 `scripts/provenance-integrity.ps1`（自证树摘要 + 来源逐字节交叉校验）与基线记录器 `scripts/record-provenance-integrity.ps1`（fail-closed，必须被来源背书才写基线）；`verify.ps1` 新增「来源快照完整性」步骤 | `evidence/20260910-provenance-integrity-gate.md` |
+
+- 基线（写入 `provenance/PROVENANCE-INTEGRITY.json`）：Vibe 550 / Matt 132 / Sliver 223 个文件的树摘要；记录时 **754 个文件逐字节经来源校验**。
+- 反例已验证：篡改任一快照文件 → `verify.ps1` 失败并**指名漂移路径**；同一状态下记录器拒绝写基线。
+- 跨版本：树摘要在 pwsh 7 记录、Windows PowerShell 5.1 重算一致（两侧 `verify.ps1` 均 7/7）。
+- **含义：「禁止手工修改快照」从自律变成了强制。** 修改 `sources/` 或 `governance/sliver-core/` 下任何字节都会使 `verify.ps1` 失败。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
@@ -180,6 +191,10 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-canoni
 pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-capability-index.ps1' `
   -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
 
+# 仅在「故意重新导入来源快照」后重记 provenance 基线（fail-closed；源不可用时拒绝）
+pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-provenance-integrity.ps1' `
+  -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
+
 # 建议使用 PowerShell 7 (pwsh)；Windows PowerShell 5.1 亦可运行（manifest 字节不同）
 # Hook 默认禁用行为
 & 'F:\skiils工具\feisheng-vibe-coding\tests\test-vibe-hook-adapter.ps1' `
@@ -212,7 +227,9 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-capabi
 - 不把 Vibe `.claude/`、`.agents/`、`.codex/` 镜像当成正式来源或运行时内容。
 - 不把混合第三方许可证合并成一个根许可证。
 - 不手工编辑 `CANONICAL-CATALOG.json`（生成产物）或生成镜像。
+- 不手工改动 `sources/` 与 `governance/sliver-core/` 任何字节；完整性由 provenance gate 强制，篡改即验证失败。
 - 不把技能分类写进生成器代码或第二个文件；分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`。
 - 不为 Codex/Claude 各写一套投影门禁；两侧必须点源 `scripts/runtime-projection-guard.ps1`。
+- 不新增第二份 provenance 校验实现；记录器与验证器必须点源 `scripts/provenance-integrity.ps1`。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。
