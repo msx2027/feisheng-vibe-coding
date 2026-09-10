@@ -8,7 +8,11 @@
     "vibeCheckerBatch": "audit/critique/harden/optimize are physically imported to skills/checker/<id>/ and registered in provenance/VIBE-IMPORTS.json; their license policy is per-family (provenance/LICENSE-MAP.json vibePerSkill.families[].runtimeEligible).",
     "excludedByBundlePolicy": "导入目录内的 agents/（宿主编排与插件资产）不进产物：它不被技能正文引用，且与单文件时代的投影行为一致；被排除的路径记录在 catalog 的 bundle.excluded 里。"
   },
-  "sourceOwners": ["route-catalog", "skill-catalog", "target-truth"],
+  "sourceOwners": [
+    "route-catalog",
+    "skill-catalog",
+    "target-truth"
+  ],
   "hosts": {
     "codex": {
       "status": "candidate-unverified",
@@ -21,7 +25,12 @@
           "adapters/codex/references/execution-liveness-host.md"
         ]
       },
-      "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party", "vibe-families-with-runtimeEligible-false"],
+      "exclude": [
+        "generated-mirrors",
+        "unowned-hooks",
+        "unlicensed-third-party",
+        "vibe-families-with-runtimeEligible-false"
+      ],
       "hostFacts": "mirrors Sliver's runtime-manifest targets.codex.overlay_files; symmetric with the claude projection which ships CLAUDE.md plus adapters/claude/runtime-adapter.md",
       "entryFileNote": "no AGENTS.md is shipped: those three files are the codex host facts. Codex reads the target project's own AGENTS.md natively (observed in the host smoke), and that constitution belongs to the target project and is materialised by Sliver's bootstrap/adoption templates - the claude projection does not ship AGENTS.md either, it ships a thin CLAUDE.md whose only content is @AGENTS.md",
       "freshSessionDiscovery": "VERIFIED for the Sliver control-plane bundle; A/B codex debug prompt-input: available skills 204 vs 203 and the skill gained its own root r0 (~/.codex/skills)",
@@ -38,7 +47,12 @@
           "adapters/claude/runtime-adapter.md"
         ]
       },
-      "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party", "vibe-families-with-runtimeEligible-false"],
+      "exclude": [
+        "generated-mirrors",
+        "unowned-hooks",
+        "unlicensed-third-party",
+        "vibe-families-with-runtimeEligible-false"
+      ],
       "freshSessionDiscovery": "VERIFIED",
       "freshSessionDiscoveryMethod": "A/B fresh session on Claude Code 2.1.266: 169 skills loaded with the installed skill vs 168 without (delta 1); load root user=~/.claude/skills",
       "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-claude-discovery.md",
@@ -74,7 +88,11 @@
     }
   },
   "buildContract": {
-    "inputs": ["provenance/CANONICAL-CATALOG.json", "governance/sliver-core/references/routes-index.md", "docs/target-truth-schema.json"],
+    "inputs": [
+      "provenance/CANONICAL-CATALOG.json",
+      "governance/sliver-core/references/routes-index.md",
+      "docs/target-truth-schema.json"
+    ],
     "generatedOutputsOnly": true,
     "manualMirrorEdits": false,
     "requiresSourceRevision": true,
@@ -107,9 +125,12 @@
   "hookAdapters": {
     "vibe": {
       "contract": "adapters/vibe-hooks/contract.json",
-      "status": "defined-disabled-pending-gates",
+      "status": "enabled-experience-sedimentation-v1 (SessionStart read-only reminder + UserPromptSubmit correction capture; governance gate events intentionally disabled, control-plane-owned)",
       "include": [],
-      "exclude": ["sources/vibe-coding-skills/codex-hooks", "sources/vibe-coding-skills/codex-hooks.json"],
+      "exclude": [
+        "sources/vibe-coding-skills/codex-hooks",
+        "sources/vibe-coding-skills/codex-hooks.json"
+      ],
       "freshSessionSmoke": "UNVERIFIED"
     }
   },

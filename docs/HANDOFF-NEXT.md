@@ -35,7 +35,8 @@
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
 - 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**176 条**（2026-09-11 退役 4 个重名链接后），其中我们的包 `feisheng-vibe-coding` **96 文件**（宿主中性投影，含 tdd/code-review）
-- 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口，全链路走到「项目体检」报告（Claude，`-p` 口径）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目（条目数 229+）
+- 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
+- Hook 状态（2026-09-11 T6 解锁）：经验沉淀两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集）已启用并通过全部安全门；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面
 - 存量：`evidence/` 43、`tasks/` 37、`scripts/` 21
 
 ---
@@ -83,7 +84,7 @@
 | 0 冻结取证 | ✅ 完成（三源快照逐字节一致，82 技能已分类） |
 | 1 控制面 | ✅ 基本完成（唯一入口、catalog、schema、投影、allowlist、revision、回滚点齐备） |
 | 2 工程原语 | ✅ 完成（tdd/code-review/codebase-design/diagnosing-bugs/domain-modeling 已接入；7 个 adapter-candidate 未接） |
-| 3 宿主适配 | ✅ 投递 + 行为验证完成（中性安装、D2/D3 实测转绿；trust/Hook 仍禁用未验证） |
+| 3 宿主适配 | ✅ 完成（中性安装、D2/D3 实测转绿、Hook 经验沉淀已启用通过安全门；trust 仍 UNVERIFIED） |
 | 4 产品/UI/第三方 | 🟡 早期（Vibe 46 条里只接 4 条） |
 | 5 灰度退役 | 🟡 旧入口已退役（本批），但新入口行为尚未验证 |
 
@@ -210,7 +211,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 
 ## 8. 未验证清单（不要越界声明）
 
-- 宿主 **trust**、Hook 强制 —— 均 `UNVERIFIED`
+- 宿主 **trust** —— `UNVERIFIED`；Hook：经验沉淀两事件已启用并通过安全门（见 T6），治理门禁事件有意禁用
 - **纯自然语言自动触发（D2）**：未达成，阻塞在宿主侧全局路由块（owner 决定，见 9.2/9.3）；
   入口被显式引用后的完整链路已实测走通（D3）
 - `-p` 会话中技能**描述**是否进入模型决策上下文 —— UNVERIFIED（模型自述没有；无宿主日志可证）
@@ -263,15 +264,22 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 Vibe 46 条中：4 条已接入；**18 条许可证已放行但未接入**（16 个 `source-only-ui` + 2 个 `source-only-unreviewed`，MIT/Apache-2.0）；
 **24 条被许可证挡住**（`vibe-original-*` / event-only / alias：私有分发包无逐技能许可证文本）。
 
-### 9.6 T6 **Hook 解锁**（最后做，风险最大）
+### 9.6 T6【已完成 2026-09-11】**Hook 解锁**（经验沉淀启用；治理门禁保持禁用）
 
-门槛：per-skill license + host discovery + 事件顺序/并发验证 + 写白名单/回滚 + **独立逻辑审查** + **owner 明确授权**。
-注意：`vibe-original-*` 族 `runtimeEligible=false`，**不得**因 Hook 解锁而绕过许可证门禁。
+owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `evidence/20260911-t6-hook-unlock.md`）：
+- 启用面：SessionStart（只读经验提醒）+ UserPromptSubmit（纠错信号采集，白名单内追加）；治理门禁事件禁用（exit 3）
+- 六项门槛全 PASS：许可证（owner 自用豁免）、快照 revision、宿主发现性（重采）、事件顺序/并发
+  （含幂等过期、junction 逃逸负面用例）、写白名单（规范化先行 + reparse 祖先守卫封顶 TargetRoot）+ 回滚、
+  独立子代理审查两轮（APPROVE-WITH-FINDINGS，P1 已闭合）
+- 遗留：自动沉淀三技能的技能级接入（信号采集已通，技能化处理待后续批次）
 
-### 9.7 T7 **收尾清理**
+### 9.7 T7【部分完成 2026-09-11】**收尾清理**
 
-- `_smoke/`（169 文件，已 gitignore）：**总目标完成后统一清理**，勿提前删
-- 文档一致性：`docs/HANDOFF.md`（历史）与本文的表述；`provenance/HOST-DISCOVERY-EVIDENCE.json` 重采
+- ✅ `provenance/HOST-DISCOVERY-EVIDENCE.json` 已重采（60 模型可见 / 14 仅安装 / 8 应缺席零误差）
+- ✅ 本批文档一致性：交接文档数字、能力索引、 packaging 策略同步
+- ⏸️ `_smoke/` 清理：等 owner 真人测试通过后统一删（探测脚手架可能复用）
+- ⏸️ 新接入技能 frontmatter 描述里的旧入口名（`vibe-coding-skills`）：委派不受影响；改名需动导入保真机制，暂缓
+- ⏸️ 共享根其余 ~66 个源仓库链接退役：阶段 5，需 owner 口径
 - 若 T2 推翻了形态决策，回头更新第 6 节决策日志（标注被推翻的原因）
 
 ---
