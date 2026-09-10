@@ -192,8 +192,32 @@ function Get-ExplicitBundlePlan {
         throw "bundleRoot 不存在: $bundleRoot（skill '$Id'）"
     }
 
-    $explicitPaths = @($Entry.bundlePaths | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
-    if ($explicitPaths.Count -eq 0) { throw "显式单位缺少 bundlePaths: skill '$Id'" }
+    # 路径来源有两种：bundlePaths 直接列举，或 bundlePathsFrom 从某个 manifest 的指定 key 读。
+    # 后者用于「上游自己定义了自己的 runtime 包」的情况（控制面）：清单只存一份，避免两边漂移。
+    $explicitPaths = @()
+    if ($Entry.PSObject.Properties.Name -contains 'bundlePathsFrom') {
+        $spec = $Entry.bundlePathsFrom
+        $manifestRelative = ([string]$spec.manifest).Replace('\', '/').TrimStart('/')
+        if ([string]::IsNullOrWhiteSpace($manifestRelative)) { throw "bundlePathsFrom 缺少 manifest: skill '$Id'" }
+        $manifestFull = Join-Path $bundleRootFull ($manifestRelative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        if (-not (Test-Path -LiteralPath $manifestFull -PathType Leaf)) {
+            throw "bundlePathsFrom 的 manifest 不存在: $bundleRoot/$manifestRelative（skill '$Id'）"
+        }
+        $manifestDoc = Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestFull | ConvertFrom-Json
+        $keys = @($spec.keys | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+        if ($keys.Count -eq 0) { throw "bundlePathsFrom 缺少 keys: skill '$Id'" }
+        foreach ($key in $keys) {
+            if (-not ($manifestDoc.PSObject.Properties.Name -contains [string]$key)) {
+                throw ("bundlePathsFrom 的 manifest 缺少 key '" + $key + "': " + $bundleRoot + '/' + $manifestRelative)
+            }
+            foreach ($item in @($manifestDoc.([string]$key))) {
+                if (-not [string]::IsNullOrWhiteSpace([string]$item)) { $explicitPaths += ([string]$item).Replace('\', '/') }
+            }
+        }
+    } else {
+        $explicitPaths = @($Entry.bundlePaths | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+    }
+    if ($explicitPaths.Count -eq 0) { throw "显式单位没有可用路径: skill '$Id'" }
 
     $files = @()
     $rootTrimmed = $bundleRootFull.TrimEnd([char[]]@(
@@ -269,7 +293,8 @@ function Get-BundlePlan {
     }
 
     $hasExplicitPaths = ($null -ne $ClassificationEntry) -and
-        ($ClassificationEntry.PSObject.Properties.Name -contains 'bundlePaths') -and
+        (($ClassificationEntry.PSObject.Properties.Name -contains 'bundlePaths') -or
+         ($ClassificationEntry.PSObject.Properties.Name -contains 'bundlePathsFrom')) -and
         ($ClassificationEntry.PSObject.Properties.Name -contains 'bundleRoot')
     if ($hasExplicitPaths) {
         return Get-ExplicitBundlePlan -Id $Id -RepoRoot $RepoRoot -RecordPath $RecordPath -SourceSha256 $SourceSha256 -Entry $ClassificationEntry

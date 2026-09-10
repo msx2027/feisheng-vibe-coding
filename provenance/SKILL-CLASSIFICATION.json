@@ -523,15 +523,14 @@
       "readiness": "runtime",
       "source": "sliver-vibe-coding",
       "bundleRoot": "governance/sliver-core",
-      "bundlePaths": [
-        "SKILL.md",
-        "LICENSE",
-        "references",
-        "scripts/runtime_decision_contract.py",
-        "scripts/validation_support.py",
-        "scripts/runtime_governance_contract.py",
-        "scripts/check_project_guardrails.py"
-      ],
+      "bundlePathsFrom": {
+        "manifest": "packaging/runtime-manifest.json",
+        "keys": [
+          "core_files",
+          "core_trees"
+        ],
+        "note": "控制面 runtime 包的内容由 Sliver 自己的 runtime-manifest.json 定义（core_files + core_trees），本仓库不复制这份清单——复制会在两边漂移。上一版手写的 bundlePaths 漏掉了 VERSION、scripts/stage_contract.py、scripts/migrate_stage_contract.py 和 7 个 assets/project-* 树（其中 stage_contract 是 check_project_guardrails.py 的 import 依赖，漏了会让该脚本在包里直接报错）。"
+      },
       "writeAuthority": [
         "route-catalog",
         "target-truth",

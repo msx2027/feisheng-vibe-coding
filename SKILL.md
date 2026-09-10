@@ -1,6 +1,6 @@
 ---
 name: feisheng-vibe-coding
-description: "统一的软件项目 AI 协作入口：先确认当前真相和授权，再选择一个项目路由，按需调用工程、产品、UI 和宿主适配能力，并以新鲜证据完成验证。"
+description: "统一的软件项目 AI 协作入口，覆盖任何规模的项目推进：立项与需求澄清、接管或救援既有项目、环境启动与报错排查、功能开发与重构、代码审计与安全审计、测试与验收、技术选型与架构、前端/UI 与设计系统、数据库与后端、部署发布与 Git 隐私保护、上下文交接，以及项目真源/AGENTS 等开发文档的建立与维护。当用户说「帮我看看」「下一步怎么走」「这个项目怎么接手」「有个报错」「帮我审计一下」「怎么写测试」「帮我选技术栈」「帮我把这个功能做出来」等时使用；先确认当前真相与授权，再选择一个项目路由，按需调用工程、产品、UI 与宿主适配能力，并以新鲜证据完成验证。Use when technical and non-technical users ask AI to plan, explain, audit, or advance a software project at any scope: idea/intake, startup, takeover, rescue, project guidance, local UI or behavior changes, bugs, tests, config, feature/change/refactor/review, architecture, frontend/backend/database/security, validation, Git/privacy, release/deploy, handoff, or AGENTS/dev-docs project truth."
 ---
 
 # Feisheng Vibe Coding

@@ -165,30 +165,27 @@ owner 里出现未接入技能即 FAIL／缺策略或缺 owner 文件直接 thro
 vendored 修改已按规矩登记 `LOCAL-PATCHES.json`（`originalSha256` → `patchedSha256`，+24 行、0 删除、CRLF 保留），
 并用 `record-provenance-integrity.ps1` 重算 `PROVENANCE-INTEGRITY.json`（该脚本接受已登记补丁）。
 
-### 4.3 下一步第一优先：先补「宿主投递路径」，然后才谈 smoke
+### 4.3 【本轮已完成】宿主投递 + 发现性实证（证据：evidence/20260910-host-install-and-discovery.md）
 
-本地静态门禁已经做透（12/12、反例、fresh clone、两种 shell），但宿主侧**不是「缺证据」，而是「缺路径」**（本轮查实）：
+用户拍定**单目录**形态。新增 `scripts/install-runtime-projection.ps1`（此前**没有任何安装入口**），
+把统一投影装成一个技能目录到宿主技能根：
 
-- 我们自己的投影 builder（`build-*-runtime-projection.ps1`）**没有安装入口**：它强制 `OutputRoot`
-  在仓库外且必须不存在，产物就是纯临时目录。
-- `scripts/smoke-host-skill-discovery.ps1` 里 `$skillId = 'sliver-vibe-coding'` 是**硬编码**的，只冒烟控制面；
-  它调的是 Sliver 自己的 `build_runtime_bundle.py`，而 `packaging/runtime-manifest.json` 的 overlay 只有
-  3 个（codex）/ 2 个（claude）适配文件，**完全不认识我们接入的 7 个技能**。
-- 宿主当前可见的技能**全部来自旧入口**：`~/.claude/skills` 是指向 `F:\skiils工具\_adapters\shared\skills` 的
-  **junction**（187 条），其中 Matt 那几个是**直接指向只读源仓库的符号链接**
-  （`mattpocock-skills\skills\engineering\*`），Vibe/Sliver 的是实体拷贝；`~/.codex/skills` 里只有 `.system`。
-- ⇒ 「宿主可见 62/82」这个数字**不能用来支持我们的运行包**；阶段 3 的实际投递进度是 **0**，
-  阶段 5（退役旧入口）更无从谈起 —— 今天**旧入口是唯一还能工作的路径**。
+- 安装根 `~/.claude/skills` 实为 junction → `F:\skiils工具\_adapters\shared\skills`，
+  所以**装一次两个宿主都读**（实测确认，不是声明）。
+- 装成 `.../shared/skills/feisheng-vibe-coding`，94 文件，装后用 builder 的 `Validate` 复核已安装目录 = PASS。
 
-**因此下一步不是「跑一次 smoke」，而是先定宿主安装形态**（真实取舍，需 owner 拍）：
+A/B 发现性（沿用 Sliver 自己的口径）：**Claude 169 → 170（+1）**；**Codex 203 → 212（+9）**，两者均 DISCOVERED。
 
-| 形态 | 做法 | 风险 |
-|---|---|---|
-| 单目录 | 把 65 文件投影装成 1 个技能目录（控制面 + 嵌套 `skills/**`） | 嵌套 `skills/*/SKILL.md` **能否被宿主发现未知**；控制面里的 `skills/…` 相对引用能成立 |
-| 多目录 | 控制面 1 个 + 每个技能各 1 个目录（共 8 个） | 宿主一定能发现 8 个技能，但控制面文档里的 `skills/…` 路径**会失效**，需要一层路径映射 |
+**重要更正（我上一轮说错了）**：我说「单目录时嵌套技能不会被发现」——只对 Claude 成立。
+**Codex 会递归枚举嵌套 `SKILL.md`**，把包里 9 个 `SKILL.md` 全部列出（含 4 个 Vibe checker，
+而它们 frontmatter 明写「不得自然语言独立触发」）。这是宿主行为，从我们这侧只能靠改名规避。
 
-定了形态才能写安装入口，然后才可能拿到 fresh-session 证据（安装会写宿主 + 消耗真实额度，**需 owner 明确授权**）。
-另注意：源仓库目前**不能动**（宿主那边有符号链接直指它），迁移完成前它是运行时依赖，不是可归档的历史。
+仍未解决：**宿主事实文件落点与 Sliver overlay 契约不一致**（我们把 `agents/openai.yaml`、`references/*`、
+`references/runtime-adapter.md`、`assets/project-claude/CLAUDE.md` 改写成了 `adapters/*` 与根 `CLAUDE.md`），
+其中最实质的是 Claude 会读到写着「本包不声明宿主适配」的核心 `runtime-adapter`。判断需宿主行为证据，本轮未改。
+
+**「单一入口」尚未达成**：共享根里现在**新旧两个控制面同时存在**（`sliver-vibe-coding` 旧 + `feisheng-vibe-coding` 新），
+7 个专项技能也仍有各自顶层目录。本次只是新增，没有退役旧条目。
 
 ### 4.4 其余待 owner 拍的口径
 
