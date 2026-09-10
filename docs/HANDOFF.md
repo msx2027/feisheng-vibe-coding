@@ -1,6 +1,6 @@
 # Feisheng Vibe Coding 交接文档
 
-更新时间：2026-09-10（第二轮：接手推进 G1–G4 后重写）
+更新时间：2026-09-10（第三轮：分类数据化 + 能力索引 + 单入口验证 + 写权限门禁）
 
 ## 总目标
 
@@ -17,15 +17,16 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 ## 当前基线
 
 - 仓库：`F:\skiils工具\feisheng-vibe-coding`，分支 `main`
-- 基线：第二轮提交序列（递增）：
+- 基线：第二轮 / 第三轮提交序列（递增）：
   - `5f7d60d` feat: add claude runtime projection, shared guard, and release notice gate
   - `399adc8` feat: merge vibe per-skill license ledger and close font/source gaps
   - `c257ac0` audit: cross-verify vibe groups (v5) and record adapter-candidate decision
   - `50aca5b` feat: add release package builder, release-gate CI, and normalize script encoding
   - `b58946f` docs: refresh continuation handoff after G1-G4
   - `907e4c7` docs: record committed baseline and post-commit gate verification
-  - （当前 HEAD 以 `git -C 'F:\skiils工具\feisheng-vibe-coding' log -1 --oneline` 为准）
-- 工作树：干净（第二轮完成后已提交）。
+  - `fd15146` refactor: make skill classification data-driven, add capability index and verify entrypoint
+  - （第三轮后续提交见 `git log`；当前 HEAD 以 `git -C 'F:\skiils工具\feisheng-vibe-coding' log -1 --oneline` 为准）
+- 工作树：干净（每轮完成后已提交）。
 - 完整性核对（提交后）：catalog 82 条记录中 78 条可寻址且 SHA-256 全部一致；4 条 Matt 记录
   （`ask-matt`、`code-review`、`implement`、`tdd`）的 SKILL.md 按 `tasks/20260910-matt-clean-snapshot.md`
   的既有策略未进入快照（4 个未提交文件不导入），非漂移。
@@ -38,6 +39,8 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 4. **运行时只读取 canonical catalog。** `provenance/CANONICAL-CATALOG.json` 是唯一技能决策真源（由 `scripts/build-canonical-catalog.ps1` 生成）；`provenance/SKILL-INVENTORY.json` 只是来源事实快照。
 5. **Hook 必须只有一个 runner。** Vibe Hook 适配器默认禁用，不得执行来源 Hook，不得安装到真实 Codex/Claude 目录。
 6. **不能伪称真实新 Codex 对话/归档。** 只证明了逻辑隔离的子 Agent、任务包和证据回写。
+7. **分类是数据，不是代码。** 技能分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`（`domain` × `readiness` → `statusPolicy` → `status`）；`CANONICAL-CATALOG.json` 是生成物。改分类 = 改数据后重生成，不得改生成器数组或手工编辑 catalog。
+8. **门禁只有一个实现。** Codex/Claude 投影共用 `scripts/runtime-projection-guard.ps1`；禁止平行门禁实现（本轮曾发现并修掉 Codex 侧的重复实现）。门禁从 `decisionPolicy` 读策略，不硬编码状态字面量。
 
 ## 第二轮完成情况（G1–G4）
 
@@ -61,7 +64,30 @@ UI 组本地证据把范围写成「17 个 UI 技能」，但 catalog 中 `statu
 导致 `manifestSha256` 不同。**以 PowerShell 7 (pwsh) 为唯一规范化 release 构建运行时**；
 5.1 可运行同一套门禁与投影，交叉版本不可字节复现。
 
-## 当前技能状态（CANONICAL-CATALOG.json，未改变）
+## 第三轮完成情况（分类数据化 ①②③④）
+
+| 目标 | 结论 | 证据/入口 |
+|---|---|---|
+| **③ 分类数据化** | 新增 `provenance/SKILL-CLASSIFICATION.json`（真源）；`build-canonical-catalog.ps1` 改为纯派生 + fail-closed 校验；**等价性证明：82/82 条既有字段逐字段一致**（该比对抓到并修掉 accepted 原语 path 重映射回归） | `evidence/20260910-classification-data-driven-and-index.md` |
+| **门禁读策略** | `runtime-projection-guard.ps1` / `validate-release-notices.ps1` 改读 `decisionPolicy`，不再硬编码 `'control-plane'` / `'accepted-primitive'` | 同上 |
+| **① 能力索引** | 新增 `scripts/build-capability-index.ps1` + 生成物 `docs/CAPABILITY-INDEX.md`（可用 4 / 待启用 7 / 来源专用 61 / 阻塞 2 / 兼容排除 8，逐项带原因；含 `writeAuthority` 列） | `docs/CAPABILITY-INDEX.md` |
+| **② 单入口验证** | 新增 `scripts/verify.ps1`：6 项门禁 + 生成物新鲜度（catalog 同步、索引新鲜度），退出码 0/1；反例实测返回 1 | `scripts/verify.ps1` |
+| **④ 写权限门禁** | `writeAuthority` 从空占位变为**强制执行**：runtime include 必须声明（规则 A）；控制面 token 必须由排他 owner 声明（规则 B，防重复写入者）；词表 9 个 token | `evidence/20260910-write-authority-gate.md` |
+| **④ 附带：门禁实现收敛** | 发现 `build-codex-runtime-projection.ps1` **自带平行门禁实现**（使新门禁对 Codex 静默失效）；已收敛到共享门禁，并证明 Codex 产物**逐文件 SHA 一致** | 同上 |
+
+### 第三轮关键更正
+
+`evidence/20260910-claude-projection-smoke.md` 的「Codex/Claude 共用门禁」在抽取当时**只对 Claude 成立**；
+Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完成收敛（含等价性证明）。
+
+### 第三轮关键含义（对“提升”的影响）
+
+「提升一个技能」现在是**一次数据编辑**：改 `SKILL-CLASSIFICATION.json` 里该技能的 `readiness`
+（`candidate` 策略行已覆盖常见域）→ 重生成 catalog + 索引 → 跑 `scripts/verify.ps1`。
+「提升为 runtime（accepted）」仍只对 `primitive` 域开放策略行，且还需同时打开其来源的
+`LICENSE-MAP.runtimeEligible`（第二道独立闸门）——**故意保持 fail-closed**。
+
+## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
 - `accepted-primitive`：3（diagnosing-bugs、codebase-design、domain-modeling）
@@ -70,21 +96,26 @@ UI 组本地证据把范围写成「17 个 UI 技能」，但 catalog 中 `statu
 - Vibe：`source-only-ui` 16、`source-only-product-or-checker` 22、`source-only-unreviewed` 3、
   `event-only-source-only` 3、`source-only-checker` 1、`compatibility-alias` 1
 
+第三轮新增派生字段：每条记录带 `domain` / `readiness` / `reason`；`decisionPolicy` 新增
+`controlPlaneStatus` 与 `writeAuthorityPolicy`。分类状态值**未改变**（等价性已证明）。
+
 关键含义：**只有 3 个 Matt 原语进入候选 Codex/Claude 静态投影。所有 Vibe 技能、Vibe Hook、
-Matt `tdd`/`code-review` 都没有进入运行时。** 本轮未改动 catalog 与生成器分类。
+Matt `tdd`/`code-review` 都没有进入运行时。**
+
+人类可读视图：`docs/CAPABILITY-INDEX.md`（生成物）。
 
 ## 未完成的工作
 
 ### P0-A（剩余）：adapter-candidate 登记
 
 前置条件已完成（逐技能许可证映射、字体缺口、ui-system-guardian 来源声明、独立交叉审查、无第二入口）。
-未完成的是**状态迁移本身**，被以下条件阻断：
+第三轮后**提升本身已降为一次数据编辑**（见上「第三轮关键含义」），但仍被以下条件阻断：
 
 1. 真实宿主（Codex/Claude）discovery / trust / fresh-session smoke 缺失；
 2. 或需要 owner 在 `provenance/OWNER-LEDGER.json` 显式授权「仅分类登记、不进入运行时」的有界迁移。
 
-解除后按「一个有界能力组」分批改 `scripts/build-canonical-catalog.ps1` 的分类列表、重生成 catalog，
-每批跑投影/NOTICE/Hook 全套 smoke。**不得直接手工编辑 `CANONICAL-CATALOG.json`（它是生成产物）。**
+解除后：改 `provenance/SKILL-CLASSIFICATION.json` 的 `readiness` → 重生成 catalog 与索引 → 跑 `scripts/verify.ps1`。
+**不得手工编辑 `CANONICAL-CATALOG.json` 或 `docs/CAPABILITY-INDEX.md`（都是生成物）。**
 
 ### P0-B：Matt 四项阻塞技能
 
@@ -121,14 +152,16 @@ Matt `tdd`/`code-review` 都没有进入运行时。** 本轮未改动 catalog �
 
 ## 建议的接手顺序
 
-1. 读取本文件、`AGENTS.md`、`docs/AGENT-ORCHESTRATION.md`、`provenance/CANONICAL-CATALOG.json`、
-   `provenance/LICENSE-MAP.json`、`evidence/20260910-vibe-independent-audit-v5-and-decision.md`。
+1. 读取本文件、`AGENTS.md`、`docs/AGENT-ORCHESTRATION.md`、`provenance/SKILL-CLASSIFICATION.json`、
+   `provenance/CANONICAL-CATALOG.json`、`docs/CAPABILITY-INDEX.md`、`provenance/LICENSE-MAP.json`、
+   `evidence/20260910-vibe-independent-audit-v5-and-decision.md`。
 2. `git status --short` 与 `git log -1 --oneline` 确认基线；不要重置或回退任何已有提交。
-3. 若先做分类推进：取得 owner 显式授权后，按一个有界能力组改生成器分类并重生成 catalog + 全套 smoke；
-   否则优先推进真实宿主授权安装与 fresh-session smoke。
-4. 在真实 GitHub runner 上验证 `.github/workflows/release-gate.yml`；如需可加发布流水线（仍不得声明发布授权）。
-5. 跟踪 Matt 上游提交/PR/维护者确认，满足条件后再复评四项状态。
-6. Hook 解锁按 P1 第 3 条逐门禁推进。
+3. 先跑 `pwsh scripts/verify.ps1` 确认基线可复现。
+4. 若先做分类推进：取得 owner 显式授权后，改 `provenance/SKILL-CLASSIFICATION.json` 的 `readiness`，
+   重生成 catalog 与索引，再跑 `verify.ps1`（提升已降为数据编辑）；否则优先推进真实宿主授权安装与 fresh-session smoke。
+5. 在真实 GitHub runner 上验证 `.github/workflows/release-gate.yml`；如需可加发布流水线（仍不得声明发布授权）。
+6. 跟踪 Matt 上游提交/PR/维护者确认，满足条件后再复评四项状态。
+7. Hook 解锁按 P1 第 3 条逐门禁推进。
 
 ## 常用验证命令
 
@@ -136,6 +169,16 @@ Matt `tdd`/`code-review` 都没有进入运行时。** 本轮未改动 catalog �
 # 目标仓库状态
 git -C 'F:\skiils工具\feisheng-vibe-coding' status --short
 git -C 'F:\skiils工具\feisheng-vibe-coding' log -1 --oneline
+
+# 一键全套门禁 + 生成物新鲜度（推荐入口；加 -IncludePackage 则一并装配发布包）
+pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\verify.ps1' `
+  -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
+
+# 改分类后重生成（顺序不能反）
+pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-canonical-catalog.ps1' `
+  -RepoRoot 'F:\skiils工具\feisheng-vibe-coding'
+pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\build-capability-index.ps1' `
+  -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
 
 # 建议使用 PowerShell 7 (pwsh)；Windows PowerShell 5.1 亦可运行（manifest 字节不同）
 # Hook 默认禁用行为
@@ -169,5 +212,7 @@ git -C 'F:\skiils工具\feisheng-vibe-coding' log -1 --oneline
 - 不把 Vibe `.claude/`、`.agents/`、`.codex/` 镜像当成正式来源或运行时内容。
 - 不把混合第三方许可证合并成一个根许可证。
 - 不手工编辑 `CANONICAL-CATALOG.json`（生成产物）或生成镜像。
+- 不把技能分类写进生成器代码或第二个文件；分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`。
+- 不为 Codex/Claude 各写一套投影门禁；两侧必须点源 `scripts/runtime-projection-guard.ps1`。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。

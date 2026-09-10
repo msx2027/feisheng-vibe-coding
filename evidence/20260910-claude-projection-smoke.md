@@ -53,3 +53,20 @@
 - 没有证明 Claude 宿主发现、`@AGENTS.md` 薄入口加载、runtime-adapter 生效、fresh-session 行为。
 - Vibe 产品/UI 技能、Matt `tdd`/`code-review` 和第三方许可证包仍未启用。
 - 共享门禁模块抽取后，Codex 脚本本体未改为点源该模块（避免破坏已验证基线）；若后续重构，需要把 Codex 脚本也切到共享模块并重跑两侧 smoke。
+
+---
+
+## 后续更正与收敛（2026-09-10，主 Agent 追加）
+
+本文件第 11 行「从 Codex 脚本原样抽取，非平行实现」的表述 **在抽取当时只对 Claude 侧成立**：Codex 脚本仍保留自己的一套重复
+helper 与 `Get-ProjectionPlan`，即 Codex 侧事实上仍是**平行门禁实现**（第 55 行的未完成项已如实记录该情况，但本文件开头的
+"共享/非平行" 结论对其过度概括）。
+
+该未完成项已在任务 `20260910-write-authority-gate` 中完成收敛：
+
+- `scripts/build-codex-runtime-projection.ps1` 删除全部重复 helper 与本地 `Get-ProjectionPlan`，改为点源共享门禁模块；
+- `Get-ExpectedDirectories` 移入共享门禁模块（两侧本地副本删除）；
+- 收敛等价性：Codex 产物**逐文件 SHA 一致**（5 文件，file set 与 outputSha256 全同）；
+- 收敛后新增的写权限门禁与 `decisionPolicy` 驱动在 **Codex 路径上也真实生效**（反例 A/B 均被拒绝）。
+
+证据：`evidence/20260910-write-authority-gate.md`。

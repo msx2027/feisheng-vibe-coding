@@ -10,14 +10,16 @@
 
 仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive` 可进入 runtime；其余一律排除。
 
-| id | 来源 | 域 | 状态 | 路径 |
-|---|---|---|---|---|
-| `codebase-design` | mattpocock-skills | primitive | accepted-primitive | `skills/engineering/codebase-design/SKILL.md` |
-| `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | `skills/engineering/diagnosing-bugs/SKILL.md` |
-| `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | `skills/engineering/domain-modeling/SKILL.md` |
-| `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | `governance/sliver-core/SKILL.md` |
+| id | 来源 | 域 | 状态 | 可写（writeAuthority） | 路径 |
+|---|---|---|---|---|---|
+| `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/codebase-design/SKILL.md` |
+| `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/diagnosing-bugs/SKILL.md` |
+| `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `skills/engineering/domain-modeling/SKILL.md` |
+| `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `governance/sliver-core/SKILL.md` |
 
 再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。
+
+写权限约束：runtime include 必须声明 `writeAuthority`；控制面 token（`route-catalog`、`target-truth`、`validation-gate`、`skill-catalog`、`runtime-projection`、`hook-writer`）具有排他 owner，违反即门禁失败（防重复写入者）。
 
 ## 已审查、待启用
 

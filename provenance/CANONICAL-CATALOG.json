@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T10:48:37.2032081Z",
+  "generatedAt": "2026-09-10T10:50:59.6946310Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -16,9 +16,13 @@
       "domain": "control-plane",
       "readiness": "runtime",
       "status": "control-plane",
-      "reason": "唯一项目级控制面（Sliver）",
+      "reason": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
       "sourceSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
-      "writeAuthority": []
+      "writeAuthority": [
+        "route-catalog",
+        "target-truth",
+        "validation-gate"
+      ]
     },
     {
       "id": "setup-matt-pocock-skills",
@@ -133,9 +137,11 @@
       "domain": "primitive",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "reason": "已验收工程原语；进入 runtime 静态投影",
+      "reason": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
       "sourceSha256": "1c65adfbf5ec15ed90375e3227225df49b8f79355a4141b13c745ebb5bbb0975",
-      "writeAuthority": []
+      "writeAuthority": [
+        "target-project-docs"
+      ]
     },
     {
       "id": "code-review",
@@ -159,9 +165,11 @@
       "domain": "primitive",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "reason": "已验收工程原语；进入 runtime 静态投影",
+      "reason": "仅提供 deep module / interface / seam 共享词汇，不声明写入权（同上）",
       "sourceSha256": "034a2108095725d36964b49c6160d7bc6c4189db8fdaacecb235bf50975db19d",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "ask-matt",
@@ -237,9 +245,11 @@
       "domain": "primitive",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "reason": "已验收工程原语；进入 runtime 静态投影",
+      "reason": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
       "sourceSha256": "279dc45fa48f3f53f1e156f2401f2c0799a5adcb0af419ce1bdeafc901644fb4",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "to-spec",
@@ -1127,6 +1137,31 @@
       "source-only-unreviewed",
       "source-only-user-tool"
     ],
+    "writeAuthorityPolicy": {
+      "controlPlaneTokens": [
+        "route-catalog",
+        "target-truth",
+        "validation-gate",
+        "skill-catalog",
+        "runtime-projection",
+        "hook-writer"
+      ],
+      "exclusiveOwners": {
+        "route-catalog": [
+          "sliver-vibe-coding"
+        ],
+        "target-truth": [
+          "sliver-vibe-coding"
+        ],
+        "validation-gate": [
+          "sliver-vibe-coding"
+        ],
+        "skill-catalog": [],
+        "runtime-projection": [],
+        "hook-writer": []
+      },
+      "requireDeclaredForRuntime": true
+    },
     "generatedProjectionsAreReadOnly": true
   }
 }

@@ -218,6 +218,38 @@ function Get-ProjectionPlan {
         }
     }
 
+    # 写权限门禁（防重复写入者）：
+    #   A) runtime include 必须声明 writeAuthority（不能空声明）
+    #   B) 任何记录声明了控制面 token 时，必须是该 token 的排他 owner
+    $hasWritePolicy = $catalog.decisionPolicy.PSObject.Properties.Name -contains 'writeAuthorityPolicy'
+    $runtimeRecords = @($records | Where-Object { $runtimeIncludedStatuses -contains $_.status })
+    if ($runtimeRecords.Count -gt 0 -and -not $hasWritePolicy) {
+        throw '缺少 decisionPolicy.writeAuthorityPolicy：无法校验写权限排他性（fail-closed）。'
+    }
+    if ($hasWritePolicy) {
+        $writePolicy = $catalog.decisionPolicy.writeAuthorityPolicy
+        $controlPlaneTokens = @($writePolicy.controlPlaneTokens)
+        foreach ($record in $records) {
+            $authority = @()
+            if ($record.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $record.writeAuthority) {
+                $authority = @($record.writeAuthority)
+            }
+            if (($runtimeIncludedStatuses -contains $record.status) -and $authority.Count -eq 0) {
+                throw "runtime include 必须声明 writeAuthority: $($record.id)"
+            }
+            foreach ($token in $authority) {
+                if ($controlPlaneTokens -notcontains [string]$token) { continue }
+                $allowed = @()
+                if ($writePolicy.exclusiveOwners.PSObject.Properties.Name -contains [string]$token) {
+                    $allowed = @($writePolicy.exclusiveOwners.$token)
+                }
+                if ($allowed -notcontains $record.id) {
+                    throw "重复写入者: '$($record.id)' 声明了控制面 token '$token'，但排他 owner 为 [$($allowed -join ', ')]"
+                }
+            }
+        }
+    }
+
     $entryAliases = @()
     $projectEntryGroups = @($catalog.duplicateGroups | Where-Object { $_.id -eq 'project-entry' })
     foreach ($group in $projectEntryGroups) {
@@ -277,4 +309,18 @@ function Get-ProjectionPlan {
         })
         entryAliases = $entryAliases
     }
+}
+
+function Get-ExpectedDirectories {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object[]]$Files
+    )
+
+    $directories = @()
+    foreach ($file in $Files) {
+        $directories += Get-ParentDirectories -RelativePath $file.relativePath
+    }
+
+    return @($directories | Select-Object -Unique)
 }

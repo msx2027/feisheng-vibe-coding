@@ -50,6 +50,12 @@ foreach ($property in $classification.statusPolicy.PSObject.Properties) {
     $statusPolicy[$property.Name] = [string]$property.Value
 }
 
+# writeAuthority 受控词表（生成时校验，fail-closed）
+$writeAuthorityVocabulary = @()
+foreach ($token in @($classification.writeAuthorityVocabulary)) {
+    $writeAuthorityVocabulary += [string]$token
+}
+
 function Get-DerivedStatus {
     param(
         [Parameter(Mandatory = $true)][string]$Id,
@@ -141,6 +147,11 @@ foreach ($row in @($inventory.skills)) {
     $writeAuthority = @()
     if ($entry.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $entry.writeAuthority) {
         $writeAuthority = @($entry.writeAuthority)
+        foreach ($token in $writeAuthority) {
+            if ($writeAuthorityVocabulary -notcontains [string]$token) {
+                throw "未知 writeAuthority token: skill '$id' 声明了 '$token'，不在 writeAuthorityVocabulary 中。"
+            }
+        }
     }
 
     $reason = ''
@@ -214,6 +225,11 @@ $output = [ordered]@{
         controlPlaneStatus = $controlPlaneStatus
         acceptedStatuses = $acceptedStatuses
         runtimeExcludedStatuses = $runtimeExcludedStatuses
+        writeAuthorityPolicy = [ordered]@{
+            controlPlaneTokens = @($classification.writeAuthorityPolicy.controlPlaneTokens)
+            exclusiveOwners = $classification.writeAuthorityPolicy.exclusiveOwners
+            requireDeclaredForRuntime = [bool]$classification.writeAuthorityPolicy.requireDeclaredForRuntime
+        }
         generatedProjectionsAreReadOnly = $true
     }
 }

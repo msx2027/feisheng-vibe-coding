@@ -55,7 +55,11 @@
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
     "ui-system-guardian": "来源声明见 legal/ui-system-guardian/SOURCE-DECLARATION.md；仍待宿主行为 smoke",
     "code-review": "Matt 工作树把 frontmatter 改为 mattpocock-code-review，但 plugin.json/marketplace.json 未同步；未解锁",
-    "tdd": "Matt 工作树把 code-review 引用改为 mattpocock-code-review，但 manifest 未同步；未解锁"
+    "tdd": "Matt 工作树把 code-review 引用改为 mattpocock-code-review，但 manifest 未同步；未解锁",
+    "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
+    "domain-modeling": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
+    "diagnosing-bugs": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
+    "codebase-design": "仅提供 deep module / interface / seam 共享词汇，不声明写入权（同上）"
   },
   "duplicateGroups": [
     {
@@ -154,7 +158,10 @@
     "codebase-design": {
       "domain": "primitive",
       "readiness": "accepted",
-      "source": "mattpocock-skills"
+      "source": "mattpocock-skills",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "codebase-memory-scout": {
       "domain": "product-or-checker",
@@ -204,7 +211,10 @@
     "diagnosing-bugs": {
       "domain": "primitive",
       "readiness": "accepted",
-      "source": "mattpocock-skills"
+      "source": "mattpocock-skills",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "distill": {
       "domain": "ui",
@@ -219,7 +229,10 @@
     "domain-modeling": {
       "domain": "primitive",
       "readiness": "accepted",
-      "source": "mattpocock-skills"
+      "source": "mattpocock-skills",
+      "writeAuthority": [
+        "target-project-docs"
+      ]
     },
     "evolution-engine": {
       "domain": "event",
@@ -389,7 +402,12 @@
     "sliver-vibe-coding": {
       "domain": "control-plane",
       "readiness": "runtime",
-      "source": "sliver-vibe-coding"
+      "source": "sliver-vibe-coding",
+      "writeAuthority": [
+        "route-catalog",
+        "target-truth",
+        "validation-gate"
+      ]
     },
     "target-constitution-setup": {
       "domain": "product-or-checker",
@@ -501,5 +519,42 @@
       "readiness": "excluded",
       "source": "mattpocock-skills"
     }
+  },
+  "writeAuthorityVocabulary": [
+    "none",
+    "target-project-code",
+    "target-project-docs",
+    "route-catalog",
+    "target-truth",
+    "validation-gate",
+    "skill-catalog",
+    "runtime-projection",
+    "hook-writer"
+  ],
+  "writeAuthorityPolicy": {
+    "note": "控制面 token 具有排他 owner：任何记录声明了该 token，其 id 必须在 exclusiveOwners 中；否则门禁失败（防重复写入者）。",
+    "controlPlaneTokens": [
+      "route-catalog",
+      "target-truth",
+      "validation-gate",
+      "skill-catalog",
+      "runtime-projection",
+      "hook-writer"
+    ],
+    "exclusiveOwners": {
+      "route-catalog": [
+        "sliver-vibe-coding"
+      ],
+      "target-truth": [
+        "sliver-vibe-coding"
+      ],
+      "validation-gate": [
+        "sliver-vibe-coding"
+      ],
+      "skill-catalog": [],
+      "runtime-projection": [],
+      "hook-writer": []
+    },
+    "requireDeclaredForRuntime": true
   }
 }

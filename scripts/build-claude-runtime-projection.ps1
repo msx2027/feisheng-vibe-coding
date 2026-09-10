@@ -81,20 +81,6 @@ function Get-ClaudeProjectionPlan {
     }
 }
 
-function Get-ExpectedDirectories {
-    param(
-        [Parameter(Mandatory = $true)]
-        [object[]]$Files
-    )
-
-    $directories = @()
-    foreach ($file in $Files) {
-        $directories += Get-ParentDirectories -RelativePath $file.relativePath
-    }
-
-    return @($directories | Select-Object -Unique)
-}
-
 function Test-ClaudeRuntimeProjection {
     param(
         [Parameter(Mandatory = $true)]

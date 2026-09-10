@@ -9,4 +9,5 @@ adapters/*/generated/
 .env.*
 *.sqlite
 *.sqlite3
+.rivet/
 

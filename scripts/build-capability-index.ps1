@@ -72,13 +72,20 @@ $lines += '## 现在可用（进入 runtime 静态投影）'
 $lines += ''
 $lines += ('仅 `decisionPolicy.acceptedStatuses` = `' + ($acceptedStatuses -join '`, `') + '` 可进入 runtime；其余一律排除。')
 $lines += ''
-$lines += '| id | 来源 | 域 | 状态 | 路径 |'
-$lines += '|---|---|---|---|---|'
+$lines += '| id | 来源 | 域 | 状态 | 可写（writeAuthority） | 路径 |'
+$lines += '|---|---|---|---|---|---|'
 foreach ($record in $runtime) {
-    $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.status + ' | `' + $record.path + '` |')
+    $authority = @()
+    if ($record.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $record.writeAuthority) {
+        $authority = @($record.writeAuthority)
+    }
+    $authorityText = if ($authority.Count -eq 0) { '未声明' } else { (@($authority) -join '、') }
+    $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.status + ' | ' + $authorityText + ' | `' + $record.path + '` |')
 }
 $lines += ''
 $lines += '再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。'
+$lines += ''
+$lines += '写权限约束：runtime include 必须声明 `writeAuthority`；控制面 token（`route-catalog`、`target-truth`、`validation-gate`、`skill-catalog`、`runtime-projection`、`hook-writer`）具有排他 owner，违反即门禁失败（防重复写入者）。'
 $lines += ''
 $lines += '## 已审查、待启用'
 $lines += ''
