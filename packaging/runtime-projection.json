@@ -83,8 +83,27 @@
   },
   "builder": [
     "scripts/build-codex-runtime-projection.ps1",
-    "scripts/build-claude-runtime-projection.ps1"
+    "scripts/build-claude-runtime-projection.ps1",
+    "scripts/build-shared-runtime-projection.ps1"
   ],
+  "sharedNeutral": {
+    "status": "candidate-unverified; static-smoke-only",
+    "purpose": "安装进宿主共享技能根（决策 #4）：共享根不能承载宿主专属适配，一个槽位文件放不了两个宿主的内容",
+    "include": {
+      "projectEntry": "SKILL.md",
+      "runtimeRecords": "与 codex/claude 投影同一份 catalog 策略；控制面槽位 references/runtime-adapter.md 保留核心中性版",
+      "hostFacts": []
+    },
+    "excludeHostOverlays": [
+      "agents/openai.yaml",
+      "governance/sliver-core/references/studio-codex.md",
+      "governance/sliver-core/references/execution-liveness-host.md",
+      "governance/sliver-core/assets/project-claude/CLAUDE.md"
+    ],
+    "manifest": "shared-projection-manifest.json",
+    "schema": "feisheng-shared-runtime-projection/v1",
+    "freshSessionDiscovery": "UNVERIFIED for the shared-neutral bundle; re-probe after switching the shared root install to this flavor"
+  },
   "hookAdapters": {
     "vibe": {
       "contract": "adapters/vibe-hooks/contract.json",

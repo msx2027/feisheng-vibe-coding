@@ -1,5 +1,7 @@
-﻿# 运行时投影共享门禁：Codex 与 Claude 投影脚本共用同一套路径/SHA/catalog 解析逻辑。
-# 本模块不是第二个 runtime owner，只是被两个投影 writer 点源的只读门禁函数集。
+﻿# 运行时投影共享门禁：Codex / Claude / 宿主中性（shared）三个投影 writer 共用同一套
+# 路径/SHA/catalog 解析与 Build+Validate 主体。
+# 本模块不是第二个 runtime owner，只是被三个投影 writer 点源的共享实现；
+# writer 之间的全部差异由参数声明（见 Invoke-RuntimeProjection），禁止在 writer 里复制主体。
 
 function Get-FullPath {
     param(
@@ -470,5 +472,280 @@ function Merge-OverlayFacts {
     if ($duplicates.Count -gt 0) {
         throw ('overlay 合并后仍有重复路径: ' + ($duplicates -join ', '))
     }
+    return $result
+}
+
+# 三个投影 writer（codex / claude / shared-neutral）共用的 Build + Validate 主体（唯一实现）。
+# writer 只声明差异参数：
+#   -ManifestName / -ManifestSchema / -ResultSchema  投影标记与结果 schema
+#   -HostLabel                                        manifest 的 host 字段
+#   -OverlayTargetName                                Sliver runtime-manifest 的 target 名；空 = 宿主中性（不合入任何 overlay）
+#   -HostAdapter                                      可选，写进 manifest 的 hostAdapter 说明段（codex 中性为 $null）
+#   -ResultExtras                                     可选，附加到验证结果顶层的字段（如 freshSessionSmoke）
+# 宿主中性（-OverlayTargetName 为空）时 fail-closed 断言计划里不含任何 host-facts 文件。
+function Invoke-RuntimeProjection {
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('Build', 'Validate')]
+        [string]$Mode,
+
+        [Parameter(Mandatory = $true)]
+        [string]$RepositoryRoot,
+
+        [Parameter(Mandatory = $true)]
+        [string]$OutputRoot,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ManifestName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ManifestSchema,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ResultSchema,
+
+        [Parameter(Mandatory = $true)]
+        [string]$HostLabel,
+
+        [string]$OverlayTargetName = '',
+
+        $HostAdapter = $null,
+
+        $ResultExtras = $null
+    )
+
+    # manifest 必须是输出根下的单段文件名（防路径拼接被滥用）
+    if ($ManifestName -notmatch '^[A-Za-z0-9][A-Za-z0-9.-]*\.json$' -or $ManifestName -match '(^|/)\.\.?(?:/|$)') {
+        throw "manifest 名必须是输出根下的单段文件名: $ManifestName"
+    }
+
+    $repositoryRootFull = Get-FullPath -Path $RepositoryRoot
+    if (-not (Test-Path -LiteralPath $repositoryRootFull -PathType Container)) {
+        throw "RepositoryRoot 不存在: $repositoryRootFull"
+    }
+    $outputRootFull = Get-FullPath -Path $OutputRoot
+
+    $plan = Get-ProjectionPlan -Root $repositoryRootFull
+    if ([string]::IsNullOrWhiteSpace($OverlayTargetName)) {
+        $hostFactFiles = @(@($plan.files) | Where-Object { [string]$_.kind -eq 'host-facts' })
+        if ($hostFactFiles.Count -gt 0) {
+            throw ('宿主中性投影不得包含宿主 overlay 文件: ' + (@($hostFactFiles | ForEach-Object { [string]$_.relativePath }) -join ', '))
+        }
+    }
+    else {
+        $overlayFacts = @(Get-HostOverlayFacts -Root $repositoryRootFull -TargetName $OverlayTargetName)
+        $plan.files = @(Merge-OverlayFacts -BaseFiles @($plan.files) -OverlayFacts $overlayFacts)
+    }
+
+    if ($Mode -eq 'Build') {
+        if (Test-Path -LiteralPath $outputRootFull) {
+            throw "为保证 fresh temporary output，OutputRoot 必须不存在: $outputRootFull"
+        }
+        $repositoryPrefix = $repositoryRootFull.TrimEnd([char[]]@(
+            [System.IO.Path]::DirectorySeparatorChar,
+            [System.IO.Path]::AltDirectorySeparatorChar
+        )) + [System.IO.Path]::DirectorySeparatorChar
+        if ($outputRootFull.StartsWith($repositoryPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+            throw "OutputRoot 不能位于源仓库内: $outputRootFull"
+        }
+
+        New-Item -ItemType Directory -Force -Path $outputRootFull | Out-Null
+        $manifestFiles = @()
+        foreach ($plannedFile in $plan.files) {
+            $destinationPath = Join-ContainedPath -Root $outputRootFull -RelativePath $plannedFile.relativePath
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destinationPath) | Out-Null
+            Copy-Item -LiteralPath $plannedFile.sourcePath -Destination $destinationPath
+            $sourceHash = Get-Sha256 -Path $plannedFile.sourcePath
+            $outputHash = Get-Sha256 -Path $destinationPath
+            if ($sourceHash -ne $outputHash) {
+                throw "复制后的 SHA-256 不一致: $($plannedFile.relativePath)"
+            }
+
+            $manifestFiles += [ordered]@{
+                id = $plannedFile.id
+                kind = $plannedFile.kind
+                source = $plannedFile.source
+                sourceRevision = $plannedFile.sourceRevision
+                path = $plannedFile.relativePath
+                sourceRelativePath = if ($plannedFile.PSObject.Properties.Name -contains 'sourceRelativePath') { $plannedFile.sourceRelativePath } else { $plannedFile.relativePath }
+                sourceSha256 = $sourceHash
+                outputSha256 = $outputHash
+            }
+        }
+
+        $manifest = [ordered]@{
+            schema = $ManifestSchema
+            status = 'candidate-unverified; static-smoke-only'
+            host = $HostLabel
+            source = [ordered]@{
+                repositoryRevision = $plan.sourceRevision
+                catalogPath = $plan.catalogRelativePath
+                catalogSha256 = $plan.catalogSha256
+            }
+            projectEntry = [ordered]@{
+                path = $plan.entryPath
+                unique = $true
+            }
+            controlPlane = @($plan.files | Where-Object { $_.kind -eq 'control-plane' } | Group-Object id | ForEach-Object {
+                $groupItems = @($_.Group)
+                [ordered]@{
+                    id = [string]$_.Name
+                    status = [string]$groupItems[0].kind
+                    files = @($groupItems | ForEach-Object { $_.relativePath })
+                }
+            })
+            accepted = @($plan.files | Where-Object { $_.kind -ne 'control-plane' -and $_.kind -notlike 'host-*' } | Group-Object id | ForEach-Object {
+                $groupItems = @($_.Group)
+                [ordered]@{
+                    id = [string]$_.Name
+                    status = [string]$groupItems[0].kind
+                    files = @($groupItems | ForEach-Object { $_.relativePath })
+                }
+            })
+        }
+        if ($null -ne $HostAdapter) { $manifest['hostAdapter'] = $HostAdapter }
+        $manifest['excluded'] = [ordered]@{
+            blocked = @($plan.blockedRecords)
+            forbiddenSegments = @($plan.forbiddenSegments)
+            projectEntryAliases = @($plan.entryAliases)
+        }
+        $manifest['files'] = $manifestFiles
+        $manifest['fileCounts'] = [ordered]@{
+            copied = @($plan.files).Count
+            generated = 1
+            total = @($plan.files).Count + 1
+        }
+        $manifestPath = Join-ContainedPath -Root $outputRootFull -RelativePath $ManifestName
+        $manifest | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath $manifestPath
+    }
+
+    if (-not (Test-Path -LiteralPath $outputRootFull -PathType Container)) {
+        throw "projection 输出目录不存在: $outputRootFull"
+    }
+
+    $manifestPath = Join-ContainedPath -Root $outputRootFull -RelativePath $ManifestName
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        throw "缺少 projection manifest: $manifestPath"
+    }
+
+    $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestPath | ConvertFrom-Json
+    if ($manifest.schema -ne $ManifestSchema) {
+        throw "不支持的 projection manifest schema: $($manifest.schema)"
+    }
+    if ($manifest.source.repositoryRevision -ne $plan.sourceRevision) {
+        throw "source revision 已变化: manifest=$($manifest.source.repositoryRevision), current=$($plan.sourceRevision)"
+    }
+    if ($manifest.source.catalogSha256 -ne $plan.catalogSha256) {
+        throw 'canonical catalog SHA-256 已变化，当前 projection 不能作为新鲜输出。'
+    }
+    if ($manifest.projectEntry.path -ne $plan.entryPath) {
+        throw "manifest project entry 不一致: $($manifest.projectEntry.path)"
+    }
+
+    $expectedFiles = @($plan.files | ForEach-Object { $_.relativePath }) + $ManifestName
+    $actualFiles = @(Get-ChildItem -LiteralPath $outputRootFull -Recurse -Force -File | ForEach-Object {
+        Get-NormalizedRelativePath -Root $outputRootFull -FullPath $_.FullName
+    })
+    $missingFiles = @($expectedFiles | Where-Object { $actualFiles -notcontains $_ })
+    $unexpectedFiles = @($actualFiles | Where-Object { $expectedFiles -notcontains $_ })
+    if ($missingFiles.Count -gt 0 -or $unexpectedFiles.Count -gt 0) {
+        throw "projection 文件集合不匹配: missing=[$($missingFiles -join ', ')]; unexpected=[$($unexpectedFiles -join ', ')]"
+    }
+
+    $expectedDirectories = Get-ExpectedDirectories -Files $plan.files
+    $actualDirectories = @(Get-ChildItem -LiteralPath $outputRootFull -Recurse -Force -Directory | ForEach-Object {
+        Get-NormalizedRelativePath -Root $outputRootFull -FullPath $_.FullName
+    })
+    $unexpectedDirectories = @($actualDirectories | Where-Object { $expectedDirectories -notcontains $_ })
+    if ($unexpectedDirectories.Count -gt 0) {
+        throw "projection 包含未授权目录: $($unexpectedDirectories -join ', ')"
+    }
+
+    $rootFiles = @(Get-ChildItem -LiteralPath $outputRootFull -Force -File | ForEach-Object { $_.Name })
+    $expectedRootFiles = @('SKILL.md', $ManifestName)
+    if ($rootFiles.Count -ne $expectedRootFiles.Count -or @($rootFiles | Where-Object { $expectedRootFiles -notcontains $_ }).Count -gt 0) {
+        throw "projection 顶层只能包含唯一项目入口和 manifest，实际为: $($rootFiles -join ', ')"
+    }
+
+    $forbiddenSegments = @($plan.forbiddenSegments)
+    $allRuntimePaths = @($actualFiles + $actualDirectories)
+    foreach ($segment in $forbiddenSegments | Select-Object -Unique) {
+        $matches = @($allRuntimePaths | Where-Object { Test-PathContainsSegment -RelativePath $_ -Segment $segment })
+        if ($matches.Count -gt 0) {
+            throw "projection 包含被拒绝的 generated mirror、Hook 或第二入口路径 ($segment): $($matches -join ', ')"
+        }
+    }
+
+    foreach ($blockedRecord in $plan.blockedRecords) {
+        $matches = @($allRuntimePaths | Where-Object {
+            (Test-PathContainsSegment -RelativePath $_ -Segment $blockedRecord.id) -or $_ -eq $blockedRecord.path
+        })
+        if ($matches.Count -gt 0) {
+            throw "blocked skill 出现在 projection 中: $($blockedRecord.id) => $($matches -join ', ')"
+        }
+    }
+
+    $manifestFilesRecords = @($manifest.files)
+    if ($manifestFilesRecords.Count -ne @($plan.files).Count) {
+        throw "manifest 文件数不一致: manifest=$($manifestFilesRecords.Count), expected=$(@($plan.files).Count)"
+    }
+
+    $fileHashes = @()
+    foreach ($plannedFile in $plan.files) {
+        $outputPath = Join-ContainedPath -Root $outputRootFull -RelativePath $plannedFile.relativePath
+        if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf)) {
+            throw "缺少已批准的 projection 文件: $outputPath"
+        }
+
+        $sourceHash = Get-Sha256 -Path $plannedFile.sourcePath
+        $outputHash = Get-Sha256 -Path $outputPath
+        $manifestFile = @($manifestFilesRecords | Where-Object { $_.path -eq $plannedFile.relativePath })
+        if ($manifestFile.Count -ne 1) {
+            throw "manifest 缺少或重复文件记录: $($plannedFile.relativePath)"
+        }
+        if ($manifestFile[0].sourceSha256 -ne $sourceHash -or $manifestFile[0].outputSha256 -ne $outputHash -or $sourceHash -ne $outputHash) {
+            throw "SHA-256 不一致: $($plannedFile.relativePath)"
+        }
+
+        $fileHashes += [ordered]@{
+            path = $plannedFile.relativePath
+            sha256 = $outputHash
+        }
+    }
+
+    $result = [ordered]@{
+        schema = $ResultSchema
+        mode = 'Validate'
+        status = 'PASS'
+        sourceRevision = $plan.sourceRevision
+        catalogSha256 = $plan.catalogSha256
+        outputRoot = $outputRootFull
+        include = @($plan.files | ForEach-Object {
+            [ordered]@{
+                id = $_.id
+                kind = $_.kind
+                path = $_.relativePath
+            }
+        })
+        exclude = [ordered]@{
+            blocked = @($plan.blockedRecords)
+            forbiddenSegments = @($plan.forbiddenSegments)
+            projectEntryAliases = @($plan.entryAliases)
+        }
+        fileCounts = [ordered]@{
+            copied = @($plan.files).Count
+            generated = 1
+            total = $actualFiles.Count
+        }
+        fileHashes = $fileHashes
+        manifestSha256 = Get-Sha256 -Path $manifestPath
+    }
+    if ($null -ne $ResultExtras) {
+        foreach ($extraProperty in $ResultExtras.GetEnumerator()) {
+            $result[$extraProperty.Key] = $extraProperty.Value
+        }
+    }
+    $result['exitCode'] = 0
+    if ($Mode -eq 'Build') { $result['mode'] = 'Build' }
     return $result
 }

@@ -17,7 +17,7 @@ Set-StrictMode -Version Latest
 #   2. 能力索引新鲜度（重生成后逐字节比对）
 #   3. 发布 NOTICE 门禁
 #   4. Vibe Hook 适配器保持禁用
-#   5. Codex / Claude 静态投影 Build + Validate
+#   5. Codex / Claude / 宿主中性静态投影 Build + Validate
 #   6. 可选：发布候选包装配（-IncludePackage）
 #
 # 本脚本只读仓库、只在临时目录写入；不安装依赖、不写入宿主目录。
@@ -315,24 +315,28 @@ try {
         Add-Result -Step 'Vibe Hook 适配器保持禁用' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 6) 静态投影 Build + Validate
-    foreach ($hostName in @('Codex', 'Claude')) {
-        $builder = if ($hostName -eq 'Codex') { 'build-codex-runtime-projection.ps1' } else { 'build-claude-runtime-projection.ps1' }
-        $outputRoot = Join-Path $workRoot ('proj-' + $hostName.ToLowerInvariant())
+    # 6) 静态投影 Build + Validate（两个宿主投影 + 宿主中性投影：共享根安装形态，决策 #4）
+    $projectionTargets = @(
+        [pscustomobject]@{ StepName = 'Codex 静态投影 Build + Validate'; Builder = 'build-codex-runtime-projection.ps1' },
+        [pscustomobject]@{ StepName = 'Claude 静态投影 Build + Validate'; Builder = 'build-claude-runtime-projection.ps1' },
+        [pscustomobject]@{ StepName = '宿主中性静态投影 Build + Validate'; Builder = 'build-shared-runtime-projection.ps1' }
+    )
+    foreach ($projectionTarget in $projectionTargets) {
+        $outputRoot = Join-Path $workRoot ('proj-' + [System.IO.Path]::GetFileNameWithoutExtension($projectionTarget.Builder).Replace('build-', '').Replace('-runtime-projection', ''))
         try {
-            $build = Invoke-Child -Script (Join-Path $repoRoot ('scripts/' + $builder)) -Arguments @{
+            $build = Invoke-Child -Script (Join-Path $repoRoot ('scripts/' + $projectionTarget.Builder)) -Arguments @{
                 Mode = 'Build'; RepositoryRoot = $repoRoot; OutputRoot = $outputRoot
             }
             $buildParsed = ($build.Output -join "`n") | ConvertFrom-Json
             if ($buildParsed.status -ne 'PASS') { throw ('build status = ' + $buildParsed.status) }
-            $validate = Invoke-Child -Script (Join-Path $repoRoot ('scripts/' + $builder)) -Arguments @{
+            $validate = Invoke-Child -Script (Join-Path $repoRoot ('scripts/' + $projectionTarget.Builder)) -Arguments @{
                 Mode = 'Validate'; RepositoryRoot = $repoRoot; OutputRoot = $outputRoot
             }
             $validateParsed = ($validate.Output -join "`n") | ConvertFrom-Json
             if ($validateParsed.status -ne 'PASS') { throw ('validate status = ' + $validateParsed.status) }
-            Add-Result -Step ($hostName + ' 静态投影 Build + Validate') -Passed $true
+            Add-Result -Step $projectionTarget.StepName -Passed $true
         } catch {
-            Add-Result -Step ($hostName + ' 静态投影 Build + Validate') -Passed $false -Detail $_.Exception.Message
+            Add-Result -Step $projectionTarget.StepName -Passed $false -Detail $_.Exception.Message
         }
     }
 

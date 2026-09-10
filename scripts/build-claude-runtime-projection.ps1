@@ -1,4 +1,8 @@
-﻿[CmdletBinding()]
+﻿# Claude 投影 writer：与 Codex / 宿主中性（shared）writer 共用 guard 模块的
+# Invoke-RuntimeProjection（唯一主体实现），本脚本只声明 Claude 的差异参数。
+# fresh-session smoke 保持 UNVERIFIED。
+
+[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [ValidateSet('Build', 'Validate')]
@@ -14,285 +18,36 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-# Claude 投影复用共享门禁模块（与 Codex 投影同一套路径/SHA/catalog/blocked 逻辑）。
-# 本脚本是 Claude 投影的唯一 writer；fresh-session smoke 保持 UNVERIFIED。
-
 $guardModule = Join-Path $PSScriptRoot 'runtime-projection-guard.ps1'
 if (-not (Test-Path -LiteralPath $guardModule -PathType Leaf)) {
     throw "缺少共享投影门禁模块: $guardModule"
 }
 . $guardModule
 
-# Claude 宿主 overlay 事实不再在本脚本里硬编码：
-# 落点由 Sliver 自己的 packaging/runtime-manifest.json（targets.claude-code.overlay_files）定义，
-# 共享实现 Get-HostOverlayFacts / Merge-OverlayFacts 在 runtime-projection-guard.ps1。
+# Claude 宿主 overlay 落点由 Sliver 自己的 packaging/runtime-manifest.json（targets.claude-code.overlay_files）定义，
+# 共享实现 Get-HostOverlayFacts / Merge-OverlayFacts 在 guard 模块里。
 # 注意 references/runtime-adapter.md 是「覆盖核心包同名槽位」的语义：Claude 专用版本替换掉核心那份
 # （核心那份写着「本包不声明启动时宿主适配」，之前被我们错放成 adapters/claude/runtime-adapter.md，
-#  导致宿主实际读到的是不声明适配的核心版本）。
+# 导致宿主实际读到的是不声明适配的核心版本）。
 # 另：assets/project-claude/CLAUDE.md 是**目标项目模板**（内容为 @AGENTS.md），不属于技能根目录。
 
-function Get-ClaudeProjectionPlan {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Root
-    )
-
-    # 复用共享 catalog 门禁：control-plane + accepted-primitive include、blocked 排除
-    $codexPlan = Get-ProjectionPlan -Root $Root
-
-    # overlay 落点由上游契约决定；其中 references/runtime-adapter.md 会覆盖核心包同名文件
-    $overlayFacts = @(Get-HostOverlayFacts -Root $Root -TargetName 'claude-code')
-    $files = @(Merge-OverlayFacts -BaseFiles @($codexPlan.files) -OverlayFacts $overlayFacts)
-
-    return [pscustomobject]@{
-        catalogPath = $codexPlan.catalogPath
-        catalogRelativePath = $codexPlan.catalogRelativePath
-        catalogSha256 = $codexPlan.catalogSha256
-        sourceRevision = $codexPlan.sourceRevision
-        entryPath = $codexPlan.entryPath
-        files = $files
-        acceptedPrimitiveIds = $codexPlan.acceptedPrimitiveIds
-        blockedRecords = $codexPlan.blockedRecords
-        entryAliases = $codexPlan.entryAliases
-        forbiddenSegments = $codexPlan.forbiddenSegments
-    }
-}
-
-function Test-ClaudeRuntimeProjection {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Root,
-
-        [Parameter(Mandatory = $true)]
-        [string]$ProjectionRoot
-    )
-
-    if (-not (Test-Path -LiteralPath $ProjectionRoot -PathType Container)) {
-        throw "projection 输出目录不存在: $ProjectionRoot"
-    }
-
-    $plan = Get-ClaudeProjectionPlan -Root $Root
-    $manifestRelativePath = 'claude-projection-manifest.json'
-    $manifestPath = Join-ContainedPath -Root $ProjectionRoot -RelativePath $manifestRelativePath
-    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
-        throw "缺少 projection manifest: $manifestPath"
-    }
-
-    $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestPath | ConvertFrom-Json
-    if ($manifest.schema -ne 'feisheng-claude-runtime-projection/v1') {
-        throw "不支持的 projection manifest schema: $($manifest.schema)"
-    }
-    if ($manifest.source.repositoryRevision -ne $plan.sourceRevision) {
-        throw "source revision 已变化: manifest=$($manifest.source.repositoryRevision), current=$($plan.sourceRevision)"
-    }
-    if ($manifest.source.catalogSha256 -ne $plan.catalogSha256) {
-        throw 'canonical catalog SHA-256 已变化，当前 projection 不能作为新鲜输出。'
-    }
-    if ($manifest.projectEntry.path -ne $plan.entryPath) {
-        throw "manifest project entry 不一致: $($manifest.projectEntry.path)"
-    }
-
-    $expectedFiles = @($plan.files | ForEach-Object { $_.relativePath }) + $manifestRelativePath
-    $actualFiles = @(Get-ChildItem -LiteralPath $ProjectionRoot -Recurse -Force -File | ForEach-Object {
-        Get-NormalizedRelativePath -Root $ProjectionRoot -FullPath $_.FullName
-    })
-    $missingFiles = @($expectedFiles | Where-Object { $actualFiles -notcontains $_ })
-    $unexpectedFiles = @($actualFiles | Where-Object { $expectedFiles -notcontains $_ })
-    if ($missingFiles.Count -gt 0 -or $unexpectedFiles.Count -gt 0) {
-        throw "projection 文件集合不匹配: missing=[$($missingFiles -join ', ')]; unexpected=[$($unexpectedFiles -join ', ')]"
-    }
-
-    $expectedDirectories = Get-ExpectedDirectories -Files $plan.files
-    $actualDirectories = @(Get-ChildItem -LiteralPath $ProjectionRoot -Recurse -Force -Directory | ForEach-Object {
-        Get-NormalizedRelativePath -Root $ProjectionRoot -FullPath $_.FullName
-    })
-    $unexpectedDirectories = @($actualDirectories | Where-Object { $expectedDirectories -notcontains $_ })
-    if ($unexpectedDirectories.Count -gt 0) {
-        throw "projection 包含未授权目录: $($unexpectedDirectories -join ', ')"
-    }
-
-    $rootFiles = @(Get-ChildItem -LiteralPath $ProjectionRoot -Force -File | ForEach-Object { $_.Name })
-    $expectedRootFiles = @('SKILL.md', $manifestRelativePath)
-    if ($rootFiles.Count -ne $expectedRootFiles.Count -or @($rootFiles | Where-Object { $expectedRootFiles -notcontains $_ }).Count -gt 0) {
-        throw "projection 顶层只能包含唯一项目入口和 manifest，实际为: $($rootFiles -join ', ')"
-    }
-
-    $forbiddenSegments = @($plan.forbiddenSegments)
-    $allRuntimePaths = @($actualFiles + $actualDirectories)
-    foreach ($segment in $forbiddenSegments | Select-Object -Unique) {
-        $matches = @($allRuntimePaths | Where-Object { Test-PathContainsSegment -RelativePath $_ -Segment $segment })
-        if ($matches.Count -gt 0) {
-            throw "projection 包含被拒绝的 generated mirror、Hook 或第二入口路径 ($segment): $($matches -join ', ')"
-        }
-    }
-
-    foreach ($blockedRecord in $plan.blockedRecords) {
-        $matches = @($allRuntimePaths | Where-Object {
-            (Test-PathContainsSegment -RelativePath $_ -Segment $blockedRecord.id) -or $_ -eq $blockedRecord.path
-        })
-        if ($matches.Count -gt 0) {
-            throw "blocked skill 出现在 projection 中: $($blockedRecord.id) => $($matches -join ', ')"
-        }
-    }
-
-    $manifestFiles = @($manifest.files)
-    if ($manifestFiles.Count -ne $plan.files.Count) {
-        throw "manifest 文件数不一致: manifest=$($manifestFiles.Count), expected=$($plan.files.Count)"
-    }
-
-    $fileHashes = @()
-    foreach ($plannedFile in $plan.files) {
-        $outputPath = Join-ContainedPath -Root $ProjectionRoot -RelativePath $plannedFile.relativePath
-        if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf)) {
-            throw "缺少已批准的 projection 文件: $outputPath"
-        }
-
-        $sourceHash = Get-Sha256 -Path $plannedFile.sourcePath
-        $outputHash = Get-Sha256 -Path $outputPath
-        $manifestFile = @($manifestFiles | Where-Object { $_.path -eq $plannedFile.relativePath })
-        if ($manifestFile.Count -ne 1) {
-            throw "manifest 缺少或重复文件记录: $($plannedFile.relativePath)"
-        }
-        if ($manifestFile[0].sourceSha256 -ne $sourceHash -or $manifestFile[0].outputSha256 -ne $outputHash -or $sourceHash -ne $outputHash) {
-            throw "SHA-256 不一致: $($plannedFile.relativePath)"
-        }
-
-        $fileHashes += [ordered]@{
-            path = $plannedFile.relativePath
-            sha256 = $outputHash
-        }
-    }
-
-    return [ordered]@{
-        schema = 'feisheng-claude-runtime-projection-result/v1'
-        mode = 'Validate'
-        status = 'PASS'
-        sourceRevision = $plan.sourceRevision
-        catalogSha256 = $plan.catalogSha256
-        outputRoot = $ProjectionRoot
-        include = @($plan.files | ForEach-Object {
-            [ordered]@{
-                id = $_.id
-                kind = $_.kind
-                path = $_.relativePath
-            }
-        })
-        exclude = [ordered]@{
-            blocked = @($plan.blockedRecords)
-            forbiddenSegments = @($plan.forbiddenSegments)
-            projectEntryAliases = @($plan.entryAliases)
-        }
-        fileCounts = [ordered]@{
-            copied = $plan.files.Count
-            generated = 1
-            total = $actualFiles.Count
-        }
-        fileHashes = $fileHashes
-        manifestSha256 = Get-Sha256 -Path $manifestPath
-        freshSessionSmoke = 'UNVERIFIED'
-        exitCode = 0
-    }
-}
-
 try {
-    $repositoryRootFull = Get-FullPath -Path $RepositoryRoot
-    if (-not (Test-Path -LiteralPath $repositoryRootFull -PathType Container)) {
-        throw "RepositoryRoot 不存在: $repositoryRootFull"
-    }
-    $outputRootFull = Get-FullPath -Path $OutputRoot
-
-    if ($Mode -eq 'Build') {
-        if (Test-Path -LiteralPath $outputRootFull) {
-            throw "为保证 fresh temporary output，OutputRoot 必须不存在: $outputRootFull"
-        }
-        $repositoryPrefix = $repositoryRootFull.TrimEnd([char[]]@(
-            [System.IO.Path]::DirectorySeparatorChar,
-            [System.IO.Path]::AltDirectorySeparatorChar
-        )) + [System.IO.Path]::DirectorySeparatorChar
-        if ($outputRootFull.StartsWith($repositoryPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-            throw "OutputRoot 不能位于源仓库内: $outputRootFull"
-        }
-
-        $plan = Get-ClaudeProjectionPlan -Root $repositoryRootFull
-        New-Item -ItemType Directory -Force -Path $outputRootFull | Out-Null
-        $manifestFiles = @()
-        foreach ($plannedFile in $plan.files) {
-            $destinationPath = Join-ContainedPath -Root $outputRootFull -RelativePath $plannedFile.relativePath
-            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destinationPath) | Out-Null
-            Copy-Item -LiteralPath $plannedFile.sourcePath -Destination $destinationPath
-            $sourceHash = Get-Sha256 -Path $plannedFile.sourcePath
-            $outputHash = Get-Sha256 -Path $destinationPath
-            if ($sourceHash -ne $outputHash) {
-                throw "复制后的 SHA-256 不一致: $($plannedFile.relativePath)"
-            }
-
-            $manifestFiles += [ordered]@{
-                id = $plannedFile.id
-                kind = $plannedFile.kind
-                source = $plannedFile.source
-                sourceRevision = $plannedFile.sourceRevision
-                path = $plannedFile.relativePath
-                sourceRelativePath = if ($plannedFile.PSObject.Properties.Name -contains 'sourceRelativePath') { $plannedFile.sourceRelativePath } else { $plannedFile.relativePath }
-                sourceSha256 = $sourceHash
-                outputSha256 = $outputHash
-            }
-        }
-
-        $manifest = [ordered]@{
-            schema = 'feisheng-claude-runtime-projection/v1'
-            status = 'candidate-unverified; static-smoke-only'
-            host = 'claude'
-            source = [ordered]@{
-                repositoryRevision = $plan.sourceRevision
-                catalogPath = $plan.catalogRelativePath
-                catalogSha256 = $plan.catalogSha256
-            }
-            projectEntry = [ordered]@{
-                path = $plan.entryPath
-                unique = $true
-            }
-            controlPlane = @($plan.files | Where-Object { $_.kind -eq 'control-plane' } | Group-Object id | ForEach-Object {
-                $groupItems = @($_.Group)
-                [ordered]@{
-                    id = [string]$_.Name
-                    status = [string]$groupItems[0].kind
-                    files = @($groupItems | ForEach-Object { $_.relativePath })
-                }
-            })
-            accepted = @($plan.files | Where-Object { $_.kind -ne 'control-plane' -and $_.kind -notlike 'host-*' } | Group-Object id | ForEach-Object {
-                $groupItems = @($_.Group)
-                [ordered]@{
-                    id = [string]$_.Name
-                    status = [string]$groupItems[0].kind
-                    files = @($groupItems | ForEach-Object { $_.relativePath })
-                }
-            })
-            hostAdapter = [ordered]@{
-                runtimeAdapter = 'references/runtime-adapter.md'
-                hostEntryTemplate = 'assets/project-claude/CLAUDE.md'
-                overlayContract = 'governance/sliver-core/packaging/runtime-manifest.json targets.claude-code.overlay_files'
-                freshSessionSmoke = 'UNVERIFIED'
-            }
-            excluded = [ordered]@{
-                blocked = @($plan.blockedRecords)
-                forbiddenSegments = @($plan.forbiddenSegments)
-                projectEntryAliases = @($plan.entryAliases)
-            }
-            files = $manifestFiles
-            fileCounts = [ordered]@{
-                copied = $plan.files.Count
-                generated = 1
-                total = $plan.files.Count + 1
-            }
-        }
-        $manifestPath = Join-ContainedPath -Root $outputRootFull -RelativePath 'claude-projection-manifest.json'
-        $manifest | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath $manifestPath
-    }
-
-    $result = Test-ClaudeRuntimeProjection -Root $repositoryRootFull -ProjectionRoot $outputRootFull
-    if ($Mode -eq 'Build') {
-        $result.mode = 'Build'
-    }
+    $result = Invoke-RuntimeProjection `
+        -Mode $Mode `
+        -RepositoryRoot $RepositoryRoot `
+        -OutputRoot $OutputRoot `
+        -ManifestName 'claude-projection-manifest.json' `
+        -ManifestSchema 'feisheng-claude-runtime-projection/v1' `
+        -ResultSchema 'feisheng-claude-runtime-projection-result/v1' `
+        -HostLabel 'claude' `
+        -OverlayTargetName 'claude-code' `
+        -HostAdapter ([ordered]@{
+            runtimeAdapter = 'references/runtime-adapter.md'
+            hostEntryTemplate = 'assets/project-claude/CLAUDE.md'
+            overlayContract = 'governance/sliver-core/packaging/runtime-manifest.json targets.claude-code.overlay_files'
+            freshSessionSmoke = 'UNVERIFIED'
+        }) `
+        -ResultExtras ([ordered]@{ freshSessionSmoke = 'UNVERIFIED' })
     $result | ConvertTo-Json -Depth 12
 }
 catch {
