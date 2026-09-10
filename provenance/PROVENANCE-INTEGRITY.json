@@ -2,10 +2,10 @@
   "schema": "feisheng-provenance-integrity/v1",
   "algorithm": "sha256-lines-v1",
   "algorithmDefinition": "record = file line as \"relativePath/with/slashes`nfileSha256\"; sort paths Ordinal; join with LF and append trailing LF; digest = SHA-256 of UTF-8 (no BOM) bytes",
-  "recordedAt": "2026-09-10T11:00:12.6603642Z",
-  "recordedAtRevision": "ad68186449222390c7496f1438fd339717151f64",
+  "recordedAt": "2026-09-10T11:07:02.5488444Z",
+  "recordedAtRevision": "5ed4f3c3b273b078e43659201fcac0ba52410c23",
   "corroboration": {
-    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 151 within supplement allowlist",
+    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 151 within supplement allowlist",
     "sourceState": "git sources must match recorded HEAD and dirty set; non-git sources recorded as such"
   },
   "snapshots": [
@@ -18,17 +18,36 @@
       "sourceKind": "not-a-git-checkout",
       "sourceRevision": null,
       "supplementAllowlist": [],
+      "revisionSourcedPaths": [],
       "importRecord": "provenance/VIBE-IMPORT.json"
     },
     {
       "name": "mattpocock-skills",
       "path": "sources/mattpocock-skills",
-      "fileCount": 132,
-      "treeHash": "sha256:e4e2ceff8b031d210364ab7239c2f00fa0c0643a0756472ded6b9081a8343e42",
+      "fileCount": 136,
+      "treeHash": "sha256:af1102d9849a18890aee80cb0d058eff01bd374fe9f2c767a52a6d6f11595909",
       "sourceRoot": "F:\\skiils工具\\mattpocock-skills",
       "sourceKind": "git-modified-as-recorded",
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "supplementAllowlist": [],
+      "revisionSourcedPaths": [
+        {
+          "path": "skills/engineering/ask-matt/SKILL.md",
+          "sha256": "63a335a64eea4a4dcd7b3c8cd2185cc537c6c65978d33b303ae5939e3134e8c6"
+        },
+        {
+          "path": "skills/engineering/code-review/SKILL.md",
+          "sha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903"
+        },
+        {
+          "path": "skills/engineering/implement/SKILL.md",
+          "sha256": "f4010e6a7fc90639a4dd67767bb0c7a9a4945487f45fd3c8120bc4469b993e31"
+        },
+        {
+          "path": "skills/engineering/tdd/SKILL.md",
+          "sha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24"
+        }
+      ],
       "importRecord": "provenance/MATT-IMPORT.json"
     },
     {
@@ -50,6 +69,7 @@
         "tests",
         "scripts"
       ],
+      "revisionSourcedPaths": [],
       "importRecord": "provenance/SLIVER-IMPORT.json"
     }
   ]

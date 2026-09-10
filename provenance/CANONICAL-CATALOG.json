@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T10:53:15.3443732Z",
+  "generatedAt": "2026-09-10T11:07:55.2368271Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -56,7 +56,7 @@
       "readiness": "compatibility",
       "status": "compatibility-selector",
       "reason": "兼容选择器；不得拥有项目级路由",
-      "sourceSha256": "f81745ae810fbf28ccf6eac5752b8955c8cd780fbb6771d0b869edf2f723a6fa",
+      "sourceSha256": "63a335a64eea4a4dcd7b3c8cd2185cc537c6c65978d33b303ae5939e3134e8c6",
       "writeAuthority": []
     },
     {
@@ -156,11 +156,11 @@
       "path": "sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
-      "domain": "primitive",
-      "readiness": "blocked",
-      "status": "blocked-unclassified-working-tree",
-      "reason": "Matt 工作树把 frontmatter 改为 mattpocock-code-review，但 plugin.json/marketplace.json 未同步；未解锁",
-      "sourceSha256": "f95c5e9273dfeb7a915a7cb54f4010a710c2c19d0c6d6c52a25da9b52edb327c",
+      "domain": "checker",
+      "readiness": "source-only",
+      "status": "source-only-checker",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门",
+      "sourceSha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903",
       "writeAuthority": []
     },
     {
@@ -504,7 +504,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "reason": "已审查、待适配器与行为 smoke；未进入 runtime",
-      "sourceSha256": "b6ad1eadeb9affefcba5a777c6ca2218536d8c608e80ca66568b1218f7d39817",
+      "sourceSha256": "f4010e6a7fc90639a4dd67767bb0c7a9a4945487f45fd3c8120bc4469b993e31",
       "writeAuthority": []
     },
     {
@@ -830,10 +830,10 @@
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "blocked",
-      "status": "blocked-unclassified-working-tree",
-      "reason": "Matt 工作树把 code-review 引用改为 mattpocock-code-review，但 manifest 未同步；未解锁",
-      "sourceSha256": "e9c7146953dce7a2e0903e24104578655cdc4733efd52f4f845d8f5e19625489",
+      "readiness": "source-only",
+      "status": "source-only-primitive",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名；待宿主行为 smoke",
+      "sourceSha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24",
       "writeAuthority": []
     },
     {

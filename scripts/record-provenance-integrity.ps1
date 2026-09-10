@@ -39,6 +39,7 @@ $snapshotEntries = @()
 $errors = @()
 $totalChecked = 0
 $totalAllowlisted = 0
+$totalRevisionVerified = 0
 
 foreach ($spec in $importSpecs) {
     $recordPath = Join-Path $repoRoot $spec.record
@@ -69,10 +70,26 @@ foreach ($spec in $importSpecs) {
         continue
     }
 
+    # 来自某个 git revision 的文件（工作树未采用）：与导入记录登记的 snapshotSha256 比对。
+    $revisionSourced = @{}
+    if ($importRecord.PSObject.Properties.Name -contains 'committedRevisionFiles') {
+        foreach ($entry in @($importRecord.committedRevisionFiles)) {
+            $revisionSourced[([string]$entry.path).Replace('\', '/')] = [string]$entry.snapshotSha256
+        }
+    }
+
     # 逐字节交叉校验
     $drift = @()
     foreach ($record in $records) {
         if (Test-PathWithinAllowlist -RelativePath $record.path -Allowlist $allowlist) { $totalAllowlisted++; continue }
+        if ($revisionSourced.ContainsKey($record.path)) {
+            if ($revisionSourced[$record.path] -ne $record.sha256) {
+                $drift += ($record.path + ' (content-vs-recorded-revision)')
+            } else {
+                $totalRevisionVerified++
+            }
+            continue
+        }
         $sourcePath = Join-Path $sourceRoot ($record.path.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
         if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
             $drift += ($record.path + ' (absent-in-source)')
@@ -138,6 +155,9 @@ foreach ($spec in $importSpecs) {
         sourceKind = $sourceKind
         sourceRevision = if ($null -eq $recordedRevision) { $null } else { [string]$recordedRevision }
         supplementAllowlist = @($allowlist)
+        revisionSourcedPaths = @(Sort-StringsOrdinal -Values ([string[]]@($revisionSourced.Keys)) | ForEach-Object {
+            [ordered]@{ path = [string]$_; sha256 = [string]$revisionSourced[$_] }
+        })
         importRecord = $spec.record
     }
 }
@@ -155,7 +175,7 @@ $document = [ordered]@{
     recordedAt = (Get-Date).ToUniversalTime().ToString('o')
     recordedAtRevision = $revision
     corroboration = [ordered]@{
-        sourceByteComparison = 'required at recording time; ' + $totalChecked + ' files byte-identical to source, ' + $totalAllowlisted + ' within supplement allowlist'
+        sourceByteComparison = 'required at recording time; ' + $totalChecked + ' files byte-identical to source, ' + $totalRevisionVerified + ' verified against recorded git revision, ' + $totalAllowlisted + ' within supplement allowlist'
         sourceState = 'git sources must match recorded HEAD and dirty set; non-git sources recorded as such'
     }
     snapshots = @($snapshotEntries)
@@ -169,6 +189,7 @@ $result = [ordered]@{
     outputPath = $outputPath
     recordedAtRevision = $revision
     sourceByteCheckedFiles = $totalChecked
+    revisionSourcedVerifiedFiles = $totalRevisionVerified
     sourceAllowlistedFiles = $totalAllowlisted
     snapshots = @($snapshotEntries | ForEach-Object {
         [ordered]@{ name = $_.name; fileCount = $_.fileCount; treeHash = $_.treeHash; sourceKind = $_.sourceKind }

@@ -1,18 +1,49 @@
 {
-  "schema": "feisheng-import-record/v1",
+  "schema": "feisheng-import-record/v2",
   "source": "mattpocock-skills",
   "sourceRoot": "F:\\skiils工具\\mattpocock-skills",
   "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
   "sourceWorkingTree": "modified",
   "sourceStatusCount": 4,
   "snapshotRoot": "sources/mattpocock-skills",
-  "snapshotFiles": 132,
+  "snapshotFiles": 136,
   "excludedDirtyFiles": [
     "skills/engineering/ask-matt/SKILL.md",
     "skills/engineering/code-review/SKILL.md",
     "skills/engineering/implement/SKILL.md",
     "skills/engineering/tdd/SKILL.md"
   ],
-  "migration": "source-snapshot-only; dirty-files-excluded; runtime-not-enabled",
-  "generatedAt": "2026-09-10T03:05:15.1972113Z"
+  "committedRevisionFiles": [
+    {
+      "path": "skills/engineering/ask-matt/SKILL.md",
+      "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "blobSha256": "007dd67edb52ab225c6b659a24c667bff8e3f3a9c4d15cb6f3fb9191e6b5fb9b",
+      "snapshotSha256": "63a335a64eea4a4dcd7b3c8cd2185cc537c6c65978d33b303ae5939e3134e8c6",
+      "normalization": "lf-to-crlf"
+    },
+    {
+      "path": "skills/engineering/code-review/SKILL.md",
+      "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "blobSha256": "36ef136c3863cd38a7a3235e2dd6f088f7662384efce603cfdfeb99b90789873",
+      "snapshotSha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903",
+      "normalization": "lf-to-crlf"
+    },
+    {
+      "path": "skills/engineering/implement/SKILL.md",
+      "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "blobSha256": "9486ad4ebc3649dfc4462811f51b7af0d3aad468fd3f8c6147a788a7e57af517",
+      "snapshotSha256": "f4010e6a7fc90639a4dd67767bb0c7a9a4945487f45fd3c8120bc4469b993e31",
+      "normalization": "lf-to-crlf"
+    },
+    {
+      "path": "skills/engineering/tdd/SKILL.md",
+      "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "blobSha256": "a36a6860bb0ec87e52551d878ee486e6435102a973c5aa8c791852add2609aaa",
+      "snapshotSha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24",
+      "normalization": "lf-to-crlf"
+    }
+  ],
+  "canonicalNamingPolicy": "canonical ids are decided by this repository; upstream uncommitted renames are recorded, not adopted",
+  "migration": "source-snapshot-only; dirty-working-tree-content-not-adopted; committed-revision-content-used; runtime-not-enabled",
+  "generatedAt": "2026-09-10T11:06:25.4025017Z"
 }

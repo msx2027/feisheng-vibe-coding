@@ -54,8 +54,8 @@
   "reasonsById": {
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
     "ui-system-guardian": "来源声明见 legal/ui-system-guardian/SOURCE-DECLARATION.md；仍待宿主行为 smoke",
-    "code-review": "Matt 工作树把 frontmatter 改为 mattpocock-code-review，但 plugin.json/marketplace.json 未同步；未解锁",
-    "tdd": "Matt 工作树把 code-review 引用改为 mattpocock-code-review，但 manifest 未同步；未解锁",
+    "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门",
+    "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名；待宿主行为 smoke",
     "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
     "domain-modeling": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
     "diagnosing-bugs": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
@@ -151,8 +151,8 @@
       "source": "mattpocock-skills"
     },
     "code-review": {
-      "domain": "primitive",
-      "readiness": "blocked",
+      "domain": "checker",
+      "readiness": "source-only",
       "source": "mattpocock-skills"
     },
     "codebase-design": {
@@ -421,7 +421,7 @@
     },
     "tdd": {
       "domain": "primitive",
-      "readiness": "blocked",
+      "readiness": "source-only",
       "source": "mattpocock-skills"
     },
     "teach": {
@@ -556,5 +556,6 @@
       "hook-writer": []
     },
     "requireDeclaredForRuntime": true
-  }
+  },
+  "canonicalNamingPolicy": "canonical id 由本仓库决定。上游未提交的工作树改名只作为事实记录，不采用、也不等待上游确认；不采用工作树内容是因为其意图不可证，而不是因为命名冲突。"
 }

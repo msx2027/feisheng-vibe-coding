@@ -40,7 +40,7 @@ $acceptedStatuses = @($catalog.decisionPolicy.acceptedStatuses)
 $records = @($catalog.records)
 
 function Sort-ByIdOrdinal {
-    param([Parameter(Mandatory = $true)][object[]]$Items)
+    param([Parameter(Mandatory = $true)][AllowEmptyCollection()][object[]]$Items)
     $map = @{}
     foreach ($item in $Items) { $map[[string]$item.id] = $item }
     $ids = [string[]]@($map.Keys)
@@ -50,7 +50,7 @@ function Sort-ByIdOrdinal {
 
 function Sort-ByKeyOrdinal {
     param(
-        [Parameter(Mandatory = $true)][object[]]$Items,
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][object[]]$Items,
         [Parameter(Mandatory = $true)][string]$Key
     )
     $map = @{}
@@ -133,10 +133,14 @@ foreach ($domain in $domainGroups) {
 $lines += ''
 $lines += '## 阻塞'
 $lines += ''
-$lines += '| id | 来源 | 域 | 原因 |'
-$lines += '|---|---|---|---|'
-foreach ($record in $blocked) {
-    $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.reason + ' |')
+if ($blocked.Count -eq 0) {
+    $lines += '（当前无阻塞项。早先因上游未提交改名而被阻塞的 `tdd`、`code-review` 已按「内容取已提交 revision、命名由本仓库决定」解除。）'
+} else {
+    $lines += '| id | 来源 | 域 | 原因 |'
+    $lines += '|---|---|---|---|'
+    foreach ($record in $blocked) {
+        $lines += ('| `' + $record.id + '` | ' + $record.source + ' | ' + $record.domain + ' | ' + $record.reason + ' |')
+    }
 }
 $lines += ''
 $lines += '## 兼容与排除'

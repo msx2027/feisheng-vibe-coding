@@ -41,6 +41,8 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 6. **不能伪称真实新 Codex 对话/归档。** 只证明了逻辑隔离的子 Agent、任务包和证据回写。
 7. **分类是数据，不是代码。** 技能分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`（`domain` × `readiness` → `statusPolicy` → `status`）；`CANONICAL-CATALOG.json` 是生成物。改分类 = 改数据后重生成，不得改生成器数组或手工编辑 catalog。
 8. **门禁只有一个实现。** Codex/Claude 投影共用 `scripts/runtime-projection-guard.ps1`；禁止平行门禁实现（本轮曾发现并修掉 Codex 侧的重复实现）。门禁从 `decisionPolicy` 读策略，不硬编码状态字面量。
+9. **canonical 命名由本仓库决定。** 上游的未提交工作树改动只作为**事实记录**，不采用、也不等待上游确认。不采用工作树内容是因为其意图不可证，而不是因为命名冲突；命名与「是否采用未提交内容」是两件不同的事。
+10. **快照内容必须是可证明的来源。** 优先取来源工作树；当工作树存在未提交改动时，取**已提交 revision 的 blob**（按已实测的换行归一化模型写入），并在导入记录里逐条登记。不得直接丢弃——丢弃会造成记录指向不存在的文件。
 
 ## 第二轮完成情况（G1–G4）
 
@@ -98,20 +100,31 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 - 跨版本：树摘要在 pwsh 7 记录、Windows PowerShell 5.1 重算一致（两侧 `verify.ps1` 均 7/7）。
 - **含义：「禁止手工修改快照」从自律变成了强制。** 修改 `sources/` 或 `governance/sliver-core/` 下任何字节都会使 `verify.ps1` 失败。
 
+## 第五轮完成情况：Matt 四项解除阻塞（命名归一化 + 采纳已提交内容）
+
+| 目标 | 结论 | 证据/入口 |
+|---|---|---|
+| 解除 Matt 四项因「上游未提交改名」而 blocked | 命名由本仓库决定（新增 `canonicalNamingPolicy`），内容改取**已提交 revision** 的 blob（字节安全导出 + 已实测的 LF→CRLF 归一化）；工作树未提交改动仅作事实记录 | `evidence/20260910-matt-canonical-naming.md` |
+| 修掉暴露的数据缺陷 | 原导入器把工作树已改动的 4 个文件**删除**，导致 4 条 catalog 记录指向不存在的文件；现快照 132 → **136**，82 条记录 0 缺失、0 哈希不符 | 同上 |
+| 连带保持一致 | inventory 对 revision 来源路径改从快照读取（否则 id 会漂到上游脏名）；provenance 新增 `revisionSourcedPaths`；删除投影门禁里硬编码的 blocked 名单 | 同上 |
+
+**结果：`blocked` 记录数 = 0。** `tdd` → `source-only-primitive`、`code-review` → `source-only-checker`。
+上游那个未提交改名仍记录在 `reasonsById` 里（作为事实，不再是 blocking 理由）。若上游日后**提交**该改名，
+那是一次**有意的重新导入**事件，不是阻塞。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
 - `accepted-primitive`：3（diagnosing-bugs、codebase-design、domain-modeling）
 - `adapter-candidate`：7（Matt）
-- `blocked-unclassified-working-tree`：2（code-review、tdd）
+- `blocked-unclassified-working-tree`：**0**（此前 code-review、tdd，已按上述策略解除）
 - Vibe：`source-only-ui` 16、`source-only-product-or-checker` 22、`source-only-unreviewed` 3、
   `event-only-source-only` 3、`source-only-checker` 1、`compatibility-alias` 1
 
 第三轮新增派生字段：每条记录带 `domain` / `readiness` / `reason`；`decisionPolicy` 新增
 `controlPlaneStatus` 与 `writeAuthorityPolicy`。分类状态值**未改变**（等价性已证明）。
 
-关键含义：**只有 3 个 Matt 原语进入候选 Codex/Claude 静态投影。所有 Vibe 技能、Vibe Hook、
-Matt `tdd`/`code-review` 都没有进入运行时。**
+关键含义：**只有 3 个 Matt 原语进入候选 Codex/Claude 静态投影。所有 Vibe 技能、Vibe Hook 都没有进入运行时。**
 
 人类可读视图：`docs/CAPABILITY-INDEX.md`（生成物）。
 
@@ -128,16 +141,13 @@ Matt `tdd`/`code-review` 都没有进入运行时。**
 解除后：改 `provenance/SKILL-CLASSIFICATION.json` 的 `readiness` → 重生成 catalog 与索引 → 跑 `scripts/verify.ps1`。
 **不得手工编辑 `CANONICAL-CATALOG.json` 或 `docs/CAPABILITY-INDEX.md`（都是生成物）。**
 
-### P0-B：Matt 四项阻塞技能
+### P0-B：Matt 四项（已解除阻塞，转为周期性复核）
 
-上游（`vinvcn/mattpocock-skills-zh-CN`）HEAD 仍为 `9fe7e7a`（2026-08-30），无新提交、无开放 PR。
-本地 4 个文件（`ask-matt`、`code-review`、`implement`、`tdd` 的 SKILL.md）仍为半改名工作树：
-`code-review` frontmatter 改为 `mattpocock-code-review`，但 `.claude-plugin/plugin.json`、
-`marketplace.json` 仍为 `code-review`。没有上游提交/PR/维护者确认前：
+**已解决。** 命名由本仓库决定；内容取自已提交 revision `9fe7e7a3`（工作树未提交的改名不采用、也不等待确认）。
+快照新增 4 个文件（132 → 136），`tdd`、`code-review` 已解除阻塞，4 条记录的断链也已修复。
 
-- `tdd`、`code-review` 维持 `blocked-unclassified-working-tree`；
-- `implement`、`ask-matt` 不得因工作树内容解锁或改写；
-- 不修改来源仓库，不把这 4 个工作树版本复制到目标仓库。
+仍需周期复核（**不阻塞任何技能**）：上游若日后提交该改名，本仓库应对照复核并决定是否有意重新导入；
+上游 HEAD 保持 `9fe7e7a3`、0 开放 PR（截至本轮）。
 
 ### P1：宿主投影与发布能力
 
@@ -147,10 +157,10 @@ Matt `tdd`/`code-review` 都没有进入运行时。**
 
 ## 当前阻塞项
 
-- **真实宿主证据缺失**：Vibe adapter-candidate 登记与 Hook 解锁的共同阻塞项。
-- **外部依赖未满足**：Matt 四项解锁依赖上游提交/PR/维护者确认。
-- **宿主稳定性**：本轮 v5 派发时 `luna_vibe_product_audit_v5` 首次被中断、`v5b` 遇 `Upstream request failed`，
+- **真实宿主证据缺失**：Vibe/Hook 解锁的共同阻塞项（唯一真正的运行时限塞）。
+- **宿主稳定性**：v5 派发时 `luna_vibe_product_audit_v5` 首次被中断、`v5b` 遇 `Upstream request failed`，
   第三次 `v5c` 成功；重派时需接受可能的中断，只采纳有回执的轮次。
+- ~~外部依赖：Matt 四项~~ → 已按第五轮策略解除（上游改名仅作复核项，不再是阻塞）。
 
 ## 本轮子 Agent 状态
 
@@ -231,5 +241,7 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-prove
 - 不把技能分类写进生成器代码或第二个文件；分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`。
 - 不为 Codex/Claude 各写一套投影门禁；两侧必须点源 `scripts/runtime-projection-guard.ps1`。
 - 不新增第二份 provenance 校验实现；记录器与验证器必须点源 `scripts/provenance-integrity.ps1`。
+- 不采用上游未提交的工作树内容（意图不可证）；命名由本仓库决定，不等上游确认。
+- 不直接丢弃来源文件：工作树已改动时取已提交 revision 的 blob 并登记，保留可寻址性。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。

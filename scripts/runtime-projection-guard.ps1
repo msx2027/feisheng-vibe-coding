@@ -188,14 +188,10 @@ function Get-ProjectionPlan {
         throw 'canonical catalog 没有 accepted-primitive 记录。'
     }
 
-    $requiredBlockedIds = @('code-review', 'tdd')
+    # blocked 记录一律不得进入投影（下方逐条校验）。
+    # 不再硬编码「哪些 id 必须 blocked」：那是一条写在代码里的分类判断，
+    # 与「分类唯一真源是 SKILL-CLASSIFICATION.json」冲突；分类改动应由数据 + 证据驱动。
     $blockedRecords = @($records | Where-Object { $_.status -like 'blocked-*' })
-    foreach ($blockedId in $requiredBlockedIds) {
-        $matchingRecords = @($records | Where-Object { $_.id -eq $blockedId })
-        if ($matchingRecords.Count -ne 1 -or $matchingRecords[0].status -notlike 'blocked-*') {
-            throw "必须保持 blocked 的记录缺失或状态错误: $blockedId"
-        }
-    }
 
     $includedRecords = @($controlPlaneRecords + $acceptedPrimitiveRecords)
     $includedPaths = @($entryPath)

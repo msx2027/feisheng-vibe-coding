@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true)]
     [string]$TargetRoot,
     [Parameter(Mandatory = $true)]
@@ -31,15 +31,28 @@ function Get-SkillRow {
     param(
         [string]$SourceId,
         [string]$SourceRoot,
-        [System.IO.FileInfo]$File
+        [System.IO.FileInfo]$File,
+        [hashtable]$RevisionSourced
     )
 
-    $content = Get-Content -Raw -Encoding UTF8 -LiteralPath $File.FullName
+    # 工作树未采用、改取已提交 revision 内容的文件：以**快照**为准
+    # （快照里就是已采纳的已提交内容），不读工作树，避免把未提交改动当成事实。
     $relativePath = $File.FullName.Substring($SourceRoot.Length).TrimStart('\', '/')
+    $key = $SourceId + '|' + ($relativePath -replace '\\', '/')
+    $contentFile = $File
+    if ($RevisionSourced.ContainsKey($key)) {
+        $snapshotPath = Join-Path $TargetRoot ($RevisionSourced[$key])
+        if (-not (Test-Path -LiteralPath $snapshotPath -PathType Leaf)) {
+            throw "revision 来源文件在快照中缺失: $snapshotPath"
+        }
+        $contentFile = Get-Item -LiteralPath $snapshotPath
+    }
+
+    $content = Get-Content -Raw -Encoding UTF8 -LiteralPath $contentFile.FullName
     $skillName = Get-FrontmatterValue -Text $content -Key 'name'
     $description = Get-FrontmatterValue -Text $content -Key 'description'
     $disabled = $content -match '(?m)^disable-model-invocation:\s*true\s*$'
-    $sha = (Get-FileHash -Algorithm SHA256 -LiteralPath $File.FullName).Hash.ToLowerInvariant()
+    $sha = (Get-FileHash -Algorithm SHA256 -LiteralPath $contentFile.FullName).Hash.ToLowerInvariant()
 
     if ([string]::IsNullOrWhiteSpace($skillName)) {
         $skillName = [System.IO.Path]::GetFileName($File.DirectoryName)
@@ -57,6 +70,20 @@ function Get-SkillRow {
 
 $rows = [System.Collections.Generic.List[object]]::new()
 $sourceSummary = [ordered]@{}
+
+# provenance 记录里登记的「改取已提交 revision 内容」的路径（单一真源：导入记录）
+$revisionSourced = @{}
+$importRecordPath = Join-Path $TargetRoot 'provenance/MATT-IMPORT.json'
+if (Test-Path -LiteralPath $importRecordPath -PathType Leaf) {
+    $importRecord = Get-Content -Raw -Encoding UTF8 -LiteralPath $importRecordPath | ConvertFrom-Json
+    if ($importRecord.PSObject.Properties.Name -contains 'committedRevisionFiles') {
+        $snapshotRoot = ([string]$importRecord.snapshotRoot).Replace('\', '/')
+        foreach ($entry in @($importRecord.committedRevisionFiles)) {
+            $rel = ([string]$entry.path).Replace('\', '/')
+            $revisionSourced[('mattpocock-skills|' + $rel)] = ($snapshotRoot + '/' + $rel)
+        }
+    }
+}
 
 foreach ($entry in $sourceRoots.GetEnumerator()) {
     $sourceId = $entry.Key
@@ -82,7 +109,7 @@ foreach ($entry in $sourceRoots.GetEnumerator()) {
     }
 
     foreach ($skillFile in $skillFiles) {
-        $rows.Add((Get-SkillRow -SourceId $sourceId -SourceRoot $sourceRoot -File $skillFile))
+        $rows.Add((Get-SkillRow -SourceId $sourceId -SourceRoot $sourceRoot -File $skillFile -RevisionSourced $revisionSourced))
     }
 }
 

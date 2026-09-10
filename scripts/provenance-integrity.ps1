@@ -144,11 +144,30 @@ function Test-ProvenanceIntegrity {
         $sourceAvailable = (-not [string]::IsNullOrWhiteSpace($sourceRoot)) -and (Test-Path -LiteralPath $sourceRoot -PathType Container)
         $sourceChecked = 0
         $sourceSkipped = 0
+        $revisionChecked = 0
         $sourceDrift = @()
+
+        # 来自某个 git revision 的文件（工作树已改动，故有意不采用工作树内容）：
+        # 与记录的 sha256 比对，不比对工作树。
+        $revisionSourced = @{}
+        if ($snapshot.PSObject.Properties.Name -contains 'revisionSourcedPaths') {
+            foreach ($entry in @($snapshot.revisionSourcedPaths)) {
+                $revisionSourced[[string]$entry.path] = [string]$entry.sha256
+            }
+        }
+
         if ($sourceAvailable) {
             $allowlist = @($snapshot.supplementAllowlist)
             foreach ($record in $records) {
                 if (Test-PathWithinAllowlist -RelativePath $record.path -Allowlist $allowlist) { $sourceSkipped++; continue }
+                if ($revisionSourced.ContainsKey($record.path)) {
+                    if ($revisionSourced[$record.path] -ne $record.sha256) {
+                        $sourceDrift += ($record.path + ' (content-vs-recorded-revision)')
+                    } else {
+                        $revisionChecked++
+                    }
+                    continue
+                }
                 $sourcePath = Join-Path $sourceRoot ($record.path.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
                 if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
                     $sourceDrift += ($record.path + ' (absent-in-source)')
@@ -177,6 +196,7 @@ function Test-ProvenanceIntegrity {
             countMatch = $countOk
             sourceAvailable = $sourceAvailable
             sourceCheckedFiles = $sourceChecked
+            revisionSourcedCheckedFiles = $revisionChecked
             sourceAllowlistedFiles = $sourceSkipped
             driftedPaths = @($drifted + $sourceDrift)
         }
@@ -187,4 +207,86 @@ function Test-ProvenanceIntegrity {
         errors = @($errors)
         snapshots = @($result)
     }
+}
+
+function Export-GitBlobToFile {
+    param(
+        [Parameter(Mandatory = $true)][string]$SourceRoot,
+        [Parameter(Mandatory = $true)][string]$Revision,
+        [Parameter(Mandatory = $true)][string]$RelativePath,
+        [Parameter(Mandatory = $true)][string]$DestinationPath,
+        [Parameter(Mandatory = $false)][switch]$NormalizeCrlf
+    )
+
+    # 字节安全地从 git 对象库导出某个 revision 的文件内容。
+    # 不能用 PowerShell 管道接 git 输出：原生输出会被当作文本行处理，破坏字节与换行。
+    #
+    # 换行：git blob 存 LF（源仓库 core.autocrlf=true），工作树与快照均为 CRLF。
+    # 已实测模型：`blob 经 LF->CRLF 归一化后 == 源工作树`（6/6 抽样逐字节相等）。
+    # -NormalizeCrlf 即应用这条已证实的检查出约定，保证快照内换行约定一致（否则
+    # 在 autocrlf 下同一文件会在 checkout 时被改回 CRLF，导致记录哈希不可复现）。
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw 'git 不可用。' }
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = 'git'
+    $psi.WorkingDirectory = $SourceRoot
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.UseShellExecute = $false
+    $psi.Arguments = 'cat-file blob "' + $Revision + ':' + $RelativePath + '"'
+
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stream = New-Object System.IO.MemoryStream
+    $bytes = $null
+    try {
+        $process.StandardOutput.BaseStream.CopyTo($stream)
+        $stderr = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        if ($process.ExitCode -ne 0) {
+            throw ('无法读取 git blob ' + $Revision + ':' + $RelativePath + ' :: ' + $stderr)
+        }
+        $bytes = $stream.ToArray()
+    } finally {
+        $stream.Dispose()
+        $process.Dispose()
+    }
+
+    $blobSha256 = Get-BytesSha256 -Bytes $bytes
+    $normalization = 'none'
+    if ($NormalizeCrlf) {
+        $text = [System.Text.Encoding]::UTF8.GetString($bytes)
+        $normalized = $text.Replace("`r`n", "`n").Replace("`n", "`r`n")
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($normalized)
+        $normalization = 'lf-to-crlf'
+    }
+
+    $directory = Split-Path -Parent $DestinationPath
+    if (-not (Test-Path -LiteralPath $directory)) { New-Item -ItemType Directory -Force -Path $directory | Out-Null }
+    [System.IO.File]::WriteAllBytes($DestinationPath, $bytes)
+
+    return [pscustomobject]@{
+        path = $RelativePath
+        revision = $Revision
+        blobSha256 = $blobSha256
+        byteCount = $bytes.Length
+        normalization = $normalization
+        sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $DestinationPath).Hash.ToLowerInvariant()
+    }
+}
+
+function Get-BytesSha256 {
+    param([Parameter(Mandatory = $true)][byte[]]$Bytes)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return ([System.BitConverter]::ToString($sha.ComputeHash($Bytes))).Replace('-', '').ToLowerInvariant()
+    } finally {
+        $sha.Dispose()
+    }
+}
+
+function Sort-StringsOrdinal {
+    param([Parameter(Mandatory = $true)][AllowEmptyCollection()][string[]]$Values)
+    $copy = [string[]]@($Values)
+    [Array]::Sort($copy, [System.StringComparer]::Ordinal)
+    return @($copy)
 }
