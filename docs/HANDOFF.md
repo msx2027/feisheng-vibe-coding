@@ -17,13 +17,14 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 ## 当前基线
 
 - 仓库：`F:\skiils工具\feisheng-vibe-coding`，分支 `main`
-- 最新提交：`b58946f`（`docs: refresh continuation handoff after G1-G4`）
-- 第二轮提交序列：
+- 基线：第二轮提交序列（递增）：
   - `5f7d60d` feat: add claude runtime projection, shared guard, and release notice gate
   - `399adc8` feat: merge vibe per-skill license ledger and close font/source gaps
   - `c257ac0` audit: cross-verify vibe groups (v5) and record adapter-candidate decision
   - `50aca5b` feat: add release package builder, release-gate CI, and normalize script encoding
   - `b58946f` docs: refresh continuation handoff after G1-G4
+  - `907e4c7` docs: record committed baseline and post-commit gate verification
+  - （当前 HEAD 以 `git -C 'F:\skiils工具\feisheng-vibe-coding' log -1 --oneline` 为准）
 - 工作树：干净（第二轮完成后已提交）。
 - 完整性核对（提交后）：catalog 82 条记录中 78 条可寻址且 SHA-256 全部一致；4 条 Matt 记录
   （`ask-matt`、`code-review`、`implement`、`tdd`）的 SKILL.md 按 `tasks/20260910-matt-clean-snapshot.md`
