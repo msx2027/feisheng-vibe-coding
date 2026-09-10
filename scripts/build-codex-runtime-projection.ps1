@@ -279,9 +279,10 @@ try {
                     path = $_.relativePath
                 }
             })
-            acceptedPrimitives = @($plan.files | Where-Object { $_.kind -eq 'accepted-primitive' } | ForEach-Object {
+            accepted = @($plan.files | Where-Object { $_.kind -ne 'control-plane' -and $_.kind -notlike 'host-*' } | ForEach-Object {
                 [ordered]@{
                     id = $_.id
+                    status = $_.kind
                     path = $_.relativePath
                 }
             })

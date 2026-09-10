@@ -75,17 +75,58 @@ $catalog = Get-Content -Raw -Encoding UTF8 -LiteralPath $catalogPath | ConvertFr
 if ($licenseMap.schema -ne 'feisheng-license-map/v1') {
     throw "不支持的 LICENSE-MAP schema: $($licenseMap.schema)"
 }
-if ($licenseMap.status -match 'partial') {
-    # partial 是当前事实状态；门禁必须确认 Vibe 仍 runtimeEligible=false
-    $vibeEntry = @($licenseMap.entries | Where-Object { $_.source -eq 'vibe-coding-skills' })
-    if ($vibeEntry.Count -ne 1 -or $vibeEntry[0].runtimeEligible -ne $false) {
-        throw 'LICENSE-MAP 的 Vibe 条目必须保持 runtimeEligible=false 直到逐技能许可证完整。'
+
+# 许可证准入策略（数据驱动，不在代码里硬编码某个来源的 flag）：
+#   - Vibe 来源是混合许可证，source 级 flag 只能是「非整体准入」的默认值；
+#     真正的 runtime 准入由 vibePerSkill.families[].runtimeEligible 逐族声明。
+#     这里把逐族策略读成可判定的数据结构：族必须显式声明布尔策略（缺字段即失败），
+#     每个技能必须恰好属于一个族。
+#   - 其他来源（sliver / matt）仍是 source 级 entries[].runtimeEligible。
+$vibeFamilyBySkill = @{}
+$vibeFamilyPolicy = @{}
+if ($licenseMap.PSObject.Properties.Name -contains 'vibePerSkill') {
+    $vibeLedger = $licenseMap.vibePerSkill
+    if ($vibeLedger.schema -ne 'feisheng-vibe-per-skill-license-ledger/v1') {
+        throw "不支持的 vibePerSkill schema: $($vibeLedger.schema)"
     }
+    if ($vibeLedger.PSObject.Properties.Name -notcontains 'families') {
+        throw 'vibePerSkill 缺少 families；无法判定 Vibe 逐技能许可证准入。'
+    }
+    foreach ($familyProperty in @($vibeLedger.families.PSObject.Properties)) {
+        $familyName = [string]$familyProperty.Name
+        $family = $familyProperty.Value
+        if ($family.PSObject.Properties.Name -notcontains 'runtimeEligible') {
+            throw "Vibe 许可证族缺少 runtimeEligible 策略（fail-closed）: $familyName"
+        }
+        $familySkills = @($family.skills)
+        if ($familySkills.Count -eq 0) {
+            throw "Vibe 许可证族没有任何技能: $familyName"
+        }
+        foreach ($skillId in $familySkills) {
+            $normalizedSkillId = [string]$skillId
+            if ([string]::IsNullOrWhiteSpace($normalizedSkillId)) { throw "Vibe 许可证族存在空技能名: $familyName" }
+            if ($vibeFamilyBySkill.ContainsKey($normalizedSkillId)) {
+                throw "Vibe 技能出现在多个许可证族（无法唯一判定准入）: $normalizedSkillId"
+            }
+            $vibeFamilyBySkill[$normalizedSkillId] = $familyName
+        }
+        $vibeFamilyPolicy[$familyName] = [pscustomobject]@{
+            family = $familyName
+            license = [string]$family.license
+            noticeSpec = [string]$family.notice
+            runtimeEligible = [bool]$family.runtimeEligible
+        }
+    }
+    if ($vibeFamilyPolicy.Count -eq 0) { throw 'vibePerSkill.families 为空，拒绝发布门禁。' }
+} else {
+    throw 'LICENSE-MAP 缺少 vibePerSkill 逐技能许可证台账；无法判定 Vibe runtime 准入（fail-closed）。'
 }
 
-# 构建 source -> notice 路径映射
+# 构建 source -> notice 路径映射（非 Vibe 来源；Vibe 逐族在逐条判定时按需解析）
 $noticeBySource = @{}
 foreach ($entry in @($licenseMap.entries)) {
+    $entrySource = [string]$entry.source
+    if ($entrySource -eq 'vibe-coding-skills') { continue }
     $noticeValue = [string]$entry.notice
     $noticePaths = @($noticeValue.Split(';') | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $resolved = @()
@@ -104,8 +145,8 @@ foreach ($entry in @($licenseMap.entries)) {
             $resolved += $noticeFull
         }
     }
-    $noticeBySource[$entry.source] = [pscustomobject]@{
-        source = $entry.source
+    $noticeBySource[$entrySource] = [pscustomobject]@{
+        source = $entrySource
         license = $entry.license
         runtimeEligible = $entry.runtimeEligible
         notices = $resolved
@@ -154,9 +195,69 @@ foreach ($item in $runtimeItems) {
             status = $item.status
             source = 'repo-owned-entry'
             license = 'repo-owned; see governance/sliver-core/LICENSE (Apache-2.0)'
+            licenseFamily = $null
             path = $item.path
             sha256 = Get-Sha256 -Path $entryFull
             notices = @('governance/sliver-core/LICENSE')
+        }
+        continue
+    }
+
+    # Vibe：逐族许可证策略（数据驱动）——不是 source 级 flag，也不是代码里的硬编码例外。
+    if ($source -eq 'vibe-coding-skills') {
+        if (-not $vibeFamilyBySkill.ContainsKey($item.id)) {
+            $errors += "runtime include 没有逐技能许可证族映射: $($item.id)"
+            continue
+        }
+        $familyName = $vibeFamilyBySkill[$item.id]
+        $familyPolicy = $vibeFamilyPolicy[$familyName]
+        if (-not $familyPolicy.runtimeEligible) {
+            $errors += "runtime include 来自 runtimeEligible=false 的许可证族: $($item.id) family=$familyName"
+            continue
+        }
+        $familyNoticePaths = @($familyPolicy.noticeSpec.Split(';') | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        $familyNotices = @()
+        $familyNoticeErrors = @()
+        foreach ($noticeRelative in $familyNoticePaths) {
+            $noticeFull = Join-ContainedPath -Root $repoRoot -RelativePath $noticeRelative
+            if (-not (Test-Path -LiteralPath $noticeFull)) {
+                $familyNoticeErrors += "许可证族的 notice 文件不存在: $familyName -> $noticeRelative"
+                continue
+            }
+            if (Test-Path -LiteralPath $noticeFull -PathType Container) {
+                $children = @(Get-ChildItem -LiteralPath $noticeFull -File | ForEach-Object { $_.FullName })
+                if ($children.Count -eq 0) {
+                    $familyNoticeErrors += "许可证族的 notice 目录为空: $familyName -> $noticeRelative"
+                    continue
+                }
+                $familyNotices += $children
+            } else {
+                $familyNotices += $noticeFull
+            }
+        }
+        if ($familyNotices.Count -eq 0 -or $familyNoticeErrors.Count -gt 0) {
+            foreach ($noticeError in @($familyNoticeErrors)) { $errors += $noticeError }
+            if ($familyNotices.Count -eq 0) {
+                $errors += "runtime include 的许可证族没有可解析的 NOTICE: $($item.id) family=$familyName"
+            }
+            continue
+        }
+
+        $sourcePath = Join-ContainedPath -Root $repoRoot -RelativePath $item.path
+        if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+            $errors += "runtime include 文件不存在: $($item.path)"
+            continue
+        }
+
+        $report += [pscustomobject]@{
+            id = $item.id
+            status = $item.status
+            source = $source
+            license = $familyPolicy.license
+            licenseFamily = $familyName
+            path = $item.path
+            sha256 = Get-Sha256 -Path $sourcePath
+            notices = @($familyNotices | ForEach-Object { $_.Substring($repoRoot.Length + 1).Replace('\', '/') })
         }
         continue
     }
@@ -183,6 +284,7 @@ foreach ($item in $runtimeItems) {
         status = $item.status
         source = $source
         license = $entryInfo.license
+        licenseFamily = $null
         path = $item.path
         sha256 = Get-Sha256 -Path $sourcePath
         notices = @($entryInfo.notices | ForEach-Object { $_.Substring($repoRoot.Length + 1).Replace('\', '/') })
@@ -206,6 +308,7 @@ $result = [ordered]@{
             status = $_.status
             source = $_.source
             license = $_.license
+            licenseFamily = $_.licenseFamily
             path = $_.path
             sha256 = $_.sha256
             notices = @($_.notices)

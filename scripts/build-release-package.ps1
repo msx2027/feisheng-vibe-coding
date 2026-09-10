@@ -87,6 +87,15 @@ if ($gate.status -ne 'PASS') {
 $catalogRelative = 'provenance/CANONICAL-CATALOG.json'
 $catalogPath = Join-Path $repoRoot $catalogRelative
 $catalogSha256 = Get-Sha256 -Path $catalogPath
+$catalog = Get-Content -Raw -Encoding UTF8 -LiteralPath $catalogPath | ConvertFrom-Json
+if ($catalog.PSObject.Properties.Name -notcontains 'decisionPolicy') {
+    throw 'canonical catalog 缺少 decisionPolicy；无法声明运行时排除集合。'
+}
+$licenseMapPath = Join-Path $repoRoot 'provenance/LICENSE-MAP.json'
+$licenseMap = Get-Content -Raw -Encoding UTF8 -LiteralPath $licenseMapPath | ConvertFrom-Json
+if ($licenseMap.PSObject.Properties.Name -notcontains 'vibePerSkill') {
+    throw 'LICENSE-MAP 缺少 vibePerSkill；无法声明 Vibe 逐族准入策略。'
+}
 
 New-Item -ItemType Directory -Force -Path $packageRootFull | Out-Null
 $runtimeRoot = Join-Path $packageRootFull 'runtime'
@@ -168,7 +177,14 @@ foreach ($copied in $copiedNotices) {
     $noticeLines += ('- ' + $copied.packagePath + '  <-  ' + $copied.repoPath)
 }
 $noticeLines += ''
-$noticeLines += 'The Vibe source remains runtimeEligible=false and contributes no runtime file to this package.'
+# 随包声明必须由数据派生，不能写死：Vibe 来源是否贡献 runtime 文件取决于逐族策略 + 分类真源。
+$vibeRuntimeItems = @($gate.runtimeItems | Where-Object { $_.source -eq 'vibe-coding-skills' })
+if ($vibeRuntimeItems.Count -eq 0) {
+    $noticeLines += 'No vibe-coding-skills file is included in this package.'
+} else {
+    $noticeLines += ('vibe-coding-skills contributes ' + $vibeRuntimeItems.Count + ' runtime file(s) under per-family license policy: ' + ((@($vibeRuntimeItems | ForEach-Object { $_.id })) -join ', '))
+}
+$noticeLines += 'vibe-coding-skills stays a mixed-license source: families declaring runtimeEligible=false are excluded from runtime regardless of classification readiness, and the source-level entry flag is only a non-blanket default.'
 $noticeText = ($noticeLines -join "`r`n") + "`r`n"
 $noticePath = Join-Path $packageRootFull 'NOTICE.txt'
 Set-Content -Encoding UTF8 -LiteralPath $noticePath -Value $noticeText
@@ -196,8 +212,10 @@ $releaseManifest = [ordered]@{
     hosts = $hostReports
     notices = $copiedNotices
     exclusions = [ordered]@{
-        vibeRuntimeEligible = $false
-        blockedSkills = @('code-review', 'tdd')
+        runtimeExcludedStatuses = @($catalog.decisionPolicy.runtimeExcludedStatuses)
+        blockedSkills = @($catalog.records | Where-Object { $_.status -like 'blocked-*' } | ForEach-Object { $_.id })
+        vibeRuntimeEligibleFamilies = @($licenseMap.vibePerSkill.families.PSObject.Properties | Where-Object { $_.Value.runtimeEligible } | ForEach-Object { $_.Name })
+        vibeRuntimeIneligibleFamilies = @($licenseMap.vibePerSkill.families.PSObject.Properties | Where-Object { -not $_.Value.runtimeEligible } | ForEach-Object { $_.Name })
         generatedMirrorAndHookSegments = @('sources', '.agents', '.claude', '.codex', 'hooks', 'codex-hooks', 'generated-mirrors')
     }
     note = 'static package assembly only; does not prove host discovery, trust, or fresh-session behavior'

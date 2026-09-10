@@ -85,6 +85,88 @@ try {
         Add-Result -Step 'catalog 与 SKILL-CLASSIFICATION.json 同步' -Passed $false -Detail $_.Exception.Message
     }
 
+    # 1b) runtime include 内容完整性
+    #     「接受」在本仓库意味着把内容导入 sources/ 之外的一等位置；那么一等副本与登记的
+    #     sourceSha256 就不能静默漂移。这道门禁把「导入的内容 == 登记的内容」变成可验证事实，
+    #     而不是靠人工记忆。（控制面记录同样纳入：sliver-core/SKILL.md 也在 catalog 里有 sha。）
+    try {
+        $catalogDoc = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/CANONICAL-CATALOG.json') | ConvertFrom-Json
+        $runtimeStatuses = @($catalogDoc.decisionPolicy.acceptedStatuses)
+        $runtimeDrift = @()
+        $runtimeChecked = 0
+        foreach ($runtimeRecord in @($catalogDoc.records)) {
+            if ($runtimeStatuses -notcontains $runtimeRecord.status) { continue }
+            $runtimeRelativePath = ([string]$runtimeRecord.path).Replace('\', '/')
+            $runtimeFullPath = Join-Path $repoRoot ($runtimeRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+            if (-not (Test-Path -LiteralPath $runtimeFullPath -PathType Leaf)) {
+                $runtimeDrift += ($runtimeRecord.id + ' (文件缺失)')
+                continue
+            }
+            $runtimeActualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeFullPath).Hash.ToLowerInvariant()
+            if ($runtimeActualHash -ne [string]$runtimeRecord.sourceSha256) {
+                $runtimeDrift += ($runtimeRecord.id + ' (sha 与登记不一致)')
+            }
+            $runtimeChecked++
+        }
+        if ($runtimeDrift.Count -gt 0) {
+            Add-Result -Step 'runtime include 内容完整性' -Passed $false -Detail ($runtimeDrift -join '; ')
+        } else {
+            Add-Result -Step 'runtime include 内容完整性' -Passed $true -Detail ('files = ' + $runtimeChecked)
+        }
+    } catch {
+        Add-Result -Step 'runtime include 内容完整性' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 1c) 导入副本与快照一致性（与 eol 无关的忠实性证据）
+    #     1b 的「与登记的 sourceSha256 比对」沿用的是既有约定，但它的字节依赖于 checkout 行为：
+    #     core.autocrlf=true 时，同一棵树里的快照与导入副本会经受同样的换行变换，
+    #     而登记的 sha 不会。所以这里再做一次「一等副本 == 它派生自的快照文件」的逐文件比对：
+    #     两边同处一个工作树，同一变换，因此这一条与机器/配置无关（已实测：fresh clone 下 1b 会因 eol 抖动，1c 不会）。
+    try {
+        $importRecordPath = Join-Path $repoRoot 'provenance/VIBE-IMPORTS.json'
+        if (-not (Test-Path -LiteralPath $importRecordPath -PathType Leaf)) {
+            Add-Result -Step '导入副本与快照一致性' -Passed $true -Detail '无 Vibe 导入记录（0 个导入技能）'
+        } else {
+            $importRecord = Get-Content -Raw -Encoding UTF8 -LiteralPath $importRecordPath | ConvertFrom-Json
+            $importFailures = @()
+            $importFileCount = 0
+            foreach ($importEntry in @($importRecord.imports)) {
+                $sourceRelativeRoot = ([string]$importEntry.sourcePath).Replace('\', '/')
+                $destinationRelativeRoot = ([string]$importEntry.destination).Replace('\', '/')
+                if ([string]::IsNullOrWhiteSpace($sourceRelativeRoot) -or [string]::IsNullOrWhiteSpace($destinationRelativeRoot)) {
+                    $importFailures += ([string]$importEntry.id + ' (导入记录缺源/目标路径)')
+                    continue
+                }
+                foreach ($fileEntry in @($importEntry.files)) {
+                    $fileRelative = ([string]$fileEntry.path).Replace('\', '/')
+                    $sourceFullPath = Join-Path $repoRoot (($sourceRelativeRoot + '/' + $fileRelative).Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+                    $destinationFullPath = Join-Path $repoRoot (($destinationRelativeRoot + '/' + $fileRelative).Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+                    if (-not (Test-Path -LiteralPath $sourceFullPath -PathType Leaf)) {
+                        $importFailures += ([string]$importEntry.id + '/' + $fileRelative + ' (快照文件缺失)')
+                        continue
+                    }
+                    if (-not (Test-Path -LiteralPath $destinationFullPath -PathType Leaf)) {
+                        $importFailures += ([string]$importEntry.id + '/' + $fileRelative + ' (导入副本缺失)')
+                        continue
+                    }
+                    $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourceFullPath).Hash.ToLowerInvariant()
+                    $destinationHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $destinationFullPath).Hash.ToLowerInvariant()
+                    if ($sourceHash -ne $destinationHash) {
+                        $importFailures += ([string]$importEntry.id + '/' + $fileRelative + ' (与快照不一致)')
+                    }
+                    $importFileCount++
+                }
+            }
+            if ($importFailures.Count -gt 0) {
+                Add-Result -Step '导入副本与快照一致性' -Passed $false -Detail ($importFailures -join '; ')
+            } else {
+                Add-Result -Step '导入副本与快照一致性' -Passed $true -Detail ('files = ' + $importFileCount)
+            }
+        }
+    } catch {
+        Add-Result -Step '导入副本与快照一致性' -Passed $false -Detail $_.Exception.Message
+    }
+
     # 2) 能力索引新鲜度
     try {
         $regenIndex = Join-Path $workRoot 'CAPABILITY-INDEX.md'

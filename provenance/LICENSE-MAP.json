@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-license-map/v1",
-  "status": "partial; runtime-third-party-disabled",
+  "status": "partial; per-family runtime eligibility (authoritative field: vibePerSkill.families[].runtimeEligible)",
   "owner": "runtime-projection",
   "entries": [
     {
@@ -24,7 +24,8 @@
       "license": "mixed; per bundled skill",
       "notice": "sources/vibe-coding-skills/docs/legal",
       "runtimeEligible": false,
-      "reason": "per-skill license review is COMPLETE (46/46 mapped into 8 families, font gap closed), but runtime inclusion stays disabled until accepted vibe records are physically imported outside sources/ and the release-notice gate policy is relaxed in the same batch"
+      "runtimeEligibleScope": "source-level default only; for this source the authoritative per-skill decision is vibePerSkill.families[].runtimeEligible (read by scripts/validate-release-notices.ps1)",
+      "reason": "per-skill license review is COMPLETE (46/46 mapped into 8 families, font gap closed) and per-family runtime eligibility is now the machine-readable policy; the source-level flag stays false because the source as a whole is not blanket-eligible. Physically imported + promoted records as of 2026-09-10: audit, critique, harden, optimize (family impeccable-bundled-product-checker-overlap, Apache-2.0)."
     }
   ],
   "vibePerSkill": {
@@ -36,7 +37,7 @@
       "legal/fonts/NOTICE.md",
       "legal/ui-system-guardian/SOURCE-DECLARATION.md"
     ],
-    "note": "per-skill license mapping is informational for license completeness review only; runtimeEligible stays false for the whole vibe source until per-skill notices are independently reviewed",
+    "note": "per-skill license ledger. `runtimeEligible` is per FAMILY and is the authoritative machine-readable runtime-inclusion policy for the vibe source: true = the license and notice evidence for this family allow runtime distribution; false = do not enter runtime regardless of classification readiness. Entering runtime additionally requires readiness=accepted in SKILL-CLASSIFICATION.json, physical import outside sources/, and the other runtimePromotionPolicy gates - so a true flag is a license-level permission, not a promotion.",
     "families": {
       "ui-ux-pro-max-bundled": {
         "license": "MIT",
@@ -47,7 +48,9 @@
           "design-system",
           "ui-styling",
           "brand"
-        ]
+        ],
+        "runtimeEligible": true,
+        "reason": "bundled MIT declaration with the license text vendored in the snapshot; redistribution notice is resolvable"
       },
       "impeccable-bundled": {
         "license": "Apache-2.0",
@@ -66,18 +69,22 @@
           "polish",
           "quieter",
           "typeset"
-        ]
+        ],
+        "runtimeEligible": true,
+        "reason": "upstream Apache-2.0 (pbakaus/impeccable v2.1.7) with the license text and the Anthropic frontend-design NOTICE vendored in the snapshot"
       },
       "impeccable-bundled-product-checker-overlap": {
         "license": "Apache-2.0 (same impeccable side bundled declaration)",
         "upstream": "https://github.com/pbakaus/impeccable (v2.1.7)",
-        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-impeccable-bundled.txt",
+        "notice": "sources/vibe-coding-skills/docs/legal/LICENSE-impeccable-bundled.txt; sources/vibe-coding-skills/docs/legal/NOTICE-impeccable-bundled.txt",
         "skills": [
           "audit",
           "critique",
           "harden",
           "optimize"
-        ]
+        ],
+        "runtimeEligible": true,
+        "reason": "upstream Apache-2.0 with license + NOTICE vendored; NOTICE retained because these impeccable-side skills derive from the work that carries the Anthropic frontend-design attribution (Apache-2.0 section 4(d)). Promoted 2026-09-10 as the first Vibe runtime batch (evidence/20260910-vibe-checker-promotion.md)"
       },
       "impeccable-bundled-unreviewed-overlap": {
         "license": "Apache-2.0 (same impeccable side bundled declaration)",
@@ -86,7 +93,9 @@
         "skills": [
           "clarify",
           "shape"
-        ]
+        ],
+        "runtimeEligible": true,
+        "reason": "license-eligible (upstream Apache-2.0); runtime entry is still blocked by classification readiness because these two skills are semantically unreviewed, not by licensing"
       },
       "vibe-original-product-checker": {
         "license": "vibe distribution (private); see upstream package.json + README license section",
@@ -111,7 +120,9 @@
           "target-runtime-setup",
           "test-automation",
           "ui-system-guardian"
-        ]
+        ],
+        "runtimeEligible": false,
+        "reason": "upstream is a private distribution (package.json private:true, version 0.0.0-private) that grants no per-skill license text; the repo-local SOURCE-DECLARATION is a source record, not an upstream grant, so it is not a redistributable notice. Blocked in data rather than in code so the judgment is reviewable. Lifting this needs an upstream per-skill license statement or an independent legal review, recorded here as a new decision"
       },
       "vibe-original-checker": {
         "license": "vibe distribution (private); see upstream package.json + README license section",
@@ -119,7 +130,9 @@
         "notice": "none; source-only checker",
         "skills": [
           "vibe-code-review"
-        ]
+        ],
+        "runtimeEligible": false,
+        "reason": "same private-distribution gap as vibe-original-product-checker, plus no notice target at all (the notice field is a placeholder, not a path)"
       },
       "vibe-original-unreviewed": {
         "license": "vibe distribution (private); unreviewed",
@@ -127,7 +140,9 @@
         "notice": "none; source-only-unreviewed",
         "skills": [
           "beginner-flow-guide"
-        ]
+        ],
+        "runtimeEligible": false,
+        "reason": "private distribution with no per-skill license text and no resolvable notice"
       },
       "vibe-event-only": {
         "license": "vibe distribution (private); event-only source-only",
@@ -137,7 +152,9 @@
           "evolution-engine",
           "experience-elevator",
           "feedback-writer"
-        ]
+        ],
+        "runtimeEligible": false,
+        "reason": "private distribution with no per-skill license text and no resolvable notice; additionally these are event-only capabilities"
       },
       "vibe-compatibility-alias": {
         "license": "vibe distribution (private); compatibility alias",
@@ -145,7 +162,9 @@
         "notice": "none; compatibility-alias",
         "skills": [
           "vibe-coding-skills"
-        ]
+        ],
+        "runtimeEligible": false,
+        "reason": "private distribution with no per-skill license text; it is a compatibility alias, not an owner of any capability"
       }
     },
     "fontGapResolved": {

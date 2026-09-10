@@ -1,0 +1,77 @@
+{
+  "schema": "feisheng-vibe-skill-import-record/v1",
+  "owner": "provenance",
+  "source": "vibe-coding-skills",
+  "snapshotRoot": "sources/vibe-coding-skills",
+  "destinationRoot": "skills/checker/<id>",
+  "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+  "sourceRevisionSource": "provenance/LICENSE-MAP.json vibePerSkill.families[].upstream (sourceCommit)",
+  "note": "物理导入的派生来源台账。导入内容自本记录起是仓库一等内容；readiness 决策只写在 SKILL-CLASSIFICATION.json。",
+  "imports": [
+    {
+      "id": "audit",
+      "sourceDir": "audit",
+      "sourcePath": "sources/vibe-coding-skills/skills/audit",
+      "destination": "skills/checker/audit",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995"
+        }
+      ]
+    },
+    {
+      "id": "critique",
+      "sourceDir": "critique",
+      "sourcePath": "sources/vibe-coding-skills/skills/critique",
+      "destination": "skills/checker/critique",
+      "fileCount": 4,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91"
+        },
+        {
+          "path": "reference/cognitive-load.md",
+          "sha256": "7653f0a2f60f6d0471581f4b84c24df5408e70f8e2b727a6cdf3872dcf42676f"
+        },
+        {
+          "path": "reference/heuristics-scoring.md",
+          "sha256": "c047724521f6f73e2eecacf62e77498848370a8e4a0b32c900bd87ae9f1134ea"
+        },
+        {
+          "path": "reference/personas.md",
+          "sha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca"
+        }
+      ]
+    },
+    {
+      "id": "harden",
+      "sourceDir": "harden",
+      "sourcePath": "sources/vibe-coding-skills/skills/harden",
+      "destination": "skills/checker/harden",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3"
+        }
+      ]
+    },
+    {
+      "id": "optimize",
+      "sourceDir": "optimize",
+      "sourcePath": "sources/vibe-coding-skills/skills/optimize",
+      "destination": "skills/checker/optimize",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2026-09-10T12:09:26.1076560Z"
+}

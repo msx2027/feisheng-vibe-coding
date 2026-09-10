@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T11:56:41.0838771Z",
+  "generatedAt": "2026-09-10T12:10:16.0927693Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -62,15 +62,17 @@
     {
       "id": "audit",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/audit/SKILL.md",
+      "path": "skills/checker/audit/SKILL.md",
       "sourceRevision": null,
       "invocation": "user-invoked",
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "domain": "checker",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "只读检查器（writeAuthority=none）：产出可访问性/性能/主题/响应式/anti-pattern 检查报告，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/audit 并登记派生来源（见 evidence/20260910-vibe-checker-promotion.md）",
       "sourceSha256": "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "beginner-flow-guide",
@@ -207,15 +209,17 @@
     {
       "id": "critique",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/critique/SKILL.md",
+      "path": "skills/checker/critique/SKILL.md",
       "sourceRevision": null,
       "invocation": "user-invoked",
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "domain": "checker",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "只读检查器（writeAuthority=none）：产出启发式/认知负荷评审，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/critique（同上）",
       "sourceSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "delight",
@@ -458,15 +462,17 @@
     {
       "id": "harden",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/harden/SKILL.md",
+      "path": "skills/checker/harden/SKILL.md",
       "sourceRevision": null,
       "invocation": "user-invoked",
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "domain": "checker",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "只读检查器（writeAuthority=none）：产出生产可用性缺口清单（错误态/空态/溢出/i18n），不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/harden（同上）",
       "sourceSha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "hotspot-governor",
@@ -562,15 +568,17 @@
     {
       "id": "optimize",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/optimize/SKILL.md",
+      "path": "skills/checker/optimize/SKILL.md",
       "sourceRevision": null,
       "invocation": "user-invoked",
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "domain": "checker",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "只读检查器（writeAuthority=none）：产出性能优化建议，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/optimize（同上）",
       "sourceSha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "overdrive",
@@ -1219,7 +1227,8 @@
     "controlPlaneStatus": "control-plane",
     "acceptedStatuses": [
       "control-plane",
-      "accepted-primitive"
+      "accepted-primitive",
+      "accepted-checker"
     ],
     "runtimeExcludedStatuses": [
       "adapter-candidate",

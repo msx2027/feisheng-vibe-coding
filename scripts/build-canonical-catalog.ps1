@@ -88,10 +88,14 @@ function Get-RecordId {
     return $id
 }
 
-# path 派生：已验收原语已导入目标仓库，路径指向导入副本
-# （由 readiness 语义决定，而不是硬编码名单）
+# path 派生：已验收记录指向一等导入副本，而不是 sources/ 快照。
+# 为什么：scripts/runtime-projection-guard.ps1 禁止把 sources 段带进运行时 bundle，
+# 所以 readiness=accepted 的路径必须位于 sources/ 之外（结构前提，写在本脚本以便 fail-closed 生效）。
+#   - Matt 原语：skills/engineering/<candidate>/SKILL.md
+#   - Vibe 检查器：skills/checker/<id>/SKILL.md（由 scripts/import-vibe-skills.ps1 导入）
 function Get-RecordPath {
     param(
+        [Parameter(Mandatory = $true)][string]$Id,
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Candidate,
         [Parameter(Mandatory = $true)][string]$Relative,
@@ -101,6 +105,9 @@ function Get-RecordPath {
         return 'governance/sliver-core/SKILL.md'
     }
     if ($Source -eq 'vibe-coding-skills') {
+        if ($Readiness -eq 'accepted') {
+            return 'skills/checker/' + $Id + '/SKILL.md'
+        }
         return 'sources/vibe-coding-skills/' + $Relative
     }
     if ($Source -eq 'mattpocock-skills') {
@@ -141,8 +148,20 @@ foreach ($row in @($inventory.skills)) {
         throw "分类 source 不一致: skill '$id' 分类记录 source=$entrySource，实际=$source"
     }
 
-    $path = Get-RecordPath -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness
+    $path = Get-RecordPath -Id $id -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness
     $status = Get-DerivedStatus -Id $id -Domain $domain -Readiness $readiness
+
+    # 结构前提门禁（fail-closed）：accepted 的 Vibe 记录必须声明 sourceDir，
+    # 且必须等于上游 skills/ 下的目录名（= inventory 的 canonicalCandidate），
+    # 否则物理导入位置无法与快照目录一一对应。
+    if ($source -eq 'vibe-coding-skills' -and $readiness -eq 'accepted') {
+        if (-not ($entry.PSObject.Properties.Name -contains 'sourceDir') -or [string]::IsNullOrWhiteSpace([string]$entry.sourceDir)) {
+            throw "accepted 的 Vibe 记录必须声明 sourceDir: skill '$id'"
+        }
+        if ([string]$entry.sourceDir -ne $candidate) {
+            throw "accepted 的 Vibe 记录 sourceDir 必须等于上游目录名: skill '$id' sourceDir='$($entry.sourceDir)' 上游目录='$candidate'"
+        }
+    }
 
     $writeAuthority = @()
     if ($entry.PSObject.Properties.Name -contains 'writeAuthority' -and $null -ne $entry.writeAuthority) {

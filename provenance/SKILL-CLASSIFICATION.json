@@ -2,18 +2,20 @@
   "schema": "feisheng-skill-classification/v1",
   "owner": "skill-catalog",
   "status": "active",
-  "note": "分类唯一真源。build-canonical-catalog.ps1 只从本文件 + SKILL-INVENTORY.json 派生 CANONICAL-CATALOG.json；改分类 = 改本文件，不再改 PowerShell 数组。domain 与 readiness 是正交两轴，status 由 statusPolicy 派生。 status 是给消费者的兼容别名（generated alias）；未来收敛阶段消费者应直接读 readiness，status 可移除。accepted 只对 primitive 域开放策略行：把非 primitive 域提升为运行时是一笔需要显式决策的动作，故意保持 fail-closed。 duplicateGroups 的语义裁决真源也在本文件；每个 group 的 owner 必须是 OWNER-LEDGER.json 中登记的 owner id，成员必须是本文件 skills 中的 canonical id（生成 catalog 时 fail-closed 校验）。",
+  "note": "分类唯一真源。build-canonical-catalog.ps1 只从本文件 + SKILL-INVENTORY.json 派生 CANONICAL-CATALOG.json；改分类 = 改本文件，不再改 PowerShell 数组。domain 与 readiness 是正交两轴，status 由 statusPolicy 派生。 status 是给消费者的兼容别名（generated alias）；未来收敛阶段消费者应直接读 readiness，status 可移除。accepted 策略行只对已做过显式提升决策的域开放：primitive 域自始开放，checker 域于 2026-09-10 由「impeccable 检查器族」一批显式开启（见 evidence/20260910-vibe-checker-promotion.md）。其余域保持 fail-closed，缺策略行时生成器直接报错。 duplicateGroups 的语义裁决真源也在本文件；每个 group 的 owner 必须是 OWNER-LEDGER.json 中登记的 owner id，成员必须是本文件 skills 中的 canonical id（生成 catalog 时 fail-closed 校验）。",
   "runtimePolicy": {
     "controlPlaneStatus": "control-plane",
     "acceptedStatuses": [
       "control-plane",
-      "accepted-primitive"
+      "accepted-primitive",
+      "accepted-checker"
     ],
     "note": "只有 acceptedStatuses 可进入 runtime 投影；其余一律 runtime-excluded（fail-closed）"
   },
   "statusPolicy": {
     "adapter|candidate": "adapter-candidate",
     "alias|compatibility": "compatibility-alias",
+    "checker|accepted": "accepted-checker",
     "checker|blocked": "blocked-unclassified-working-tree",
     "checker|candidate": "adapter-candidate",
     "checker|source-only": "source-only-checker",
@@ -58,7 +60,11 @@
     "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
     "domain-modeling": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
     "diagnosing-bugs": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
-    "codebase-design": "仅提供 deep module / interface / seam 共享词汇，不声明写入权（同上）"
+    "codebase-design": "仅提供 deep module / interface / seam 共享词汇，不声明写入权（同上）",
+    "audit": "只读检查器（writeAuthority=none）：产出可访问性/性能/主题/响应式/anti-pattern 检查报告，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/audit 并登记派生来源（见 evidence/20260910-vibe-checker-promotion.md）",
+    "critique": "只读检查器（writeAuthority=none）：产出启发式/认知负荷评审，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/critique（同上）",
+    "harden": "只读检查器（writeAuthority=none）：产出生产可用性缺口清单（错误态/空态/溢出/i18n），不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/harden（同上）",
+    "optimize": "只读检查器（writeAuthority=none）：产出性能优化建议，不修不写；impeccable 侧 bundled（Apache-2.0），已物理导入 skills/checker/optimize（同上）"
   },
   "duplicateGroups": [
     {
@@ -213,9 +219,13 @@
       "source": "mattpocock-skills"
     },
     "audit": {
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "domain": "checker",
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "audit",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "beginner-flow-guide": {
       "domain": "unreviewed",
@@ -271,9 +281,13 @@
       "source": "vibe-coding-skills"
     },
     "critique": {
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "domain": "checker",
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "critique",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "delight": {
       "domain": "ui",
@@ -372,9 +386,13 @@
       "source": "mattpocock-skills"
     },
     "harden": {
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "domain": "checker",
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "harden",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "hotspot-governor": {
       "domain": "product-or-checker",
@@ -412,9 +430,13 @@
       "source": "mattpocock-skills"
     },
     "optimize": {
-      "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "domain": "checker",
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "optimize",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "overdrive": {
       "domain": "ui",
@@ -665,8 +687,10 @@
     ],
     "evidence": [
       "evidence/20260910-tool-batch-promotion.md",
-      "provenance/HOST-DISCOVERY-EVIDENCE.json"
+      "provenance/HOST-DISCOVERY-EVIDENCE.json",
+      "evidence/20260910-vibe-checker-promotion.md"
     ],
-    "structuralPrerequisite": "accepted 记录的 path 必须位于 sources/ 之外（一等导入位置），否则无法进入投影：scripts/runtime-projection-guard.ps1 明确禁止把 sources 段带进运行时 bundle。参考已验收 Matt 原语的做法：导入到 skills/engineering/<id>/SKILL.md。另：scripts/validate-release-notices.ps1 目前硬编码要求 Vibe 条目 runtimeEligible=false，放宽它必须与 PHYSICAL IMPORT 同批完成，不能先翻 flag。"
+    "structuralPrerequisite": "accepted 记录的 path 必须位于 sources/ 之外（一等导入位置），否则无法进入投影：scripts/runtime-projection-guard.ps1 明确禁止把 sources 段带进运行时 bundle。Vibe 技能的导入约定：accepted 记录必须声明 sourceDir，由 scripts/import-vibe-skills.ps1 从快照导入到 skills/checker/<id>/（派生来源登记在 provenance/VIBE-IMPORTS.json），catalog 生成器据此改写 path。许可证侧同批完成策略化：vibePerSkill.families[].runtimeEligible 是逐族策略真源，scripts/validate-release-notices.ps1 读它而不是硬编码 source 级 flag；缺字段即 fail-closed。",
+    "runtimeIneligibilityPolicy": "runtimeEligible=false 的许可证族不得进入 runtime：vibe-original-* 族的上游是 private 分发包，未逐技能授予许可证文本，属「来源/许可证未通过」而非「待办」。解除需要上游逐技能许可证声明或独立法律审查，并同步改本文件的分类真源。"
   }
 }

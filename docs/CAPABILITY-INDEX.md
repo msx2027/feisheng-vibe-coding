@@ -4,17 +4,21 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 4、待启用 7、来源专用 63、阻塞 0、兼容/排除 8。
+统计：共 **82** 项来源技能 —— 可用 8、待启用 7、来源专用 59、阻塞 0、兼容/排除 8。
 
 ## 现在可用（进入 runtime 静态投影）
 
-仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive` 可进入 runtime；其余一律排除。
+仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker` 可进入 runtime；其余一律排除。
 
 | id | 来源 | 域 | 状态 | 可写（writeAuthority） | 路径 |
 |---|---|---|---|---|---|
+| `audit` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/audit/SKILL.md` |
 | `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/codebase-design/SKILL.md` |
+| `critique` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/critique/SKILL.md` |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `skills/engineering/diagnosing-bugs/SKILL.md` |
 | `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `skills/engineering/domain-modeling/SKILL.md` |
+| `harden` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/harden/SKILL.md` |
+| `optimize` | vibe-coding-skills | checker | accepted-checker | none | `skills/checker/optimize/SKILL.md` |
 | `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `governance/sliver-core/SKILL.md` |
 
 再次提醒：投影是**静态候选**，宿主 discovery / trust / fresh-session smoke 仍为 `UNVERIFIED`。
@@ -45,7 +49,7 @@
   - 原因：仅限结构化事件调用；需宿主事件契约与独立审查
 - **primitive**（11）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`tdd`、`wizard`、`writing-for-agents`
   - 原因：来源专用工程原语；未验收
-- **product-or-checker**（22）：`architecture-foundation`、`audit`、`bug-fixer`、`codebase-memory-scout`、`critique`、`design-brief-builder`、`design-maker`、`dev-builder`、`dev-planner`、`doc-sync-guardian`、`harden`、`hotspot-governor`、`optimize`、`product-spec-builder`、`release-builder`、`requirements-test-designer`、`rule-harvester`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`test-automation`、`ui-system-guardian`
+- **product-or-checker**（18）：`architecture-foundation`、`bug-fixer`、`codebase-memory-scout`、`design-brief-builder`、`design-maker`、`dev-builder`、`dev-planner`、`doc-sync-guardian`、`hotspot-governor`、`product-spec-builder`、`release-builder`、`requirements-test-designer`、`rule-harvester`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`test-automation`、`ui-system-guardian`
   - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke
 - **ui**（16）：`adapt`、`animate`、`bolder`、`brand`、`colorize`、`delight`、`design-system`、`distill`、`impeccable`、`layout`、`overdrive`、`polish`、`quieter`、`typeset`、`ui-styling`、`ui-ux-pro-max`
   - 原因：UI 来源专用；许可证台账已合并，待宿主行为 smoke
