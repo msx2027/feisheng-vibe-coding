@@ -187,7 +187,14 @@ foreach ($property in $classification.skills.PSObject.Properties) {
     }
 }
 
-$records = @($records | Sort-Object id, source)
+# 记录排序：必须跨 PowerShell 版本确定，因此用 ordinal（码位）排序。
+# 不能用 `Sort-Object id`：records 是 OrderedDictionary，那样是静默 no-op；
+# 也不能用 culture-aware 排序（ICU vs NLS 对 `-` 等标点的权重不同，已实测出跨版本差异）。
+$recordById = @{}
+foreach ($record in $records) { $recordById[[string]$record['id']] = $record }
+$sortedIds = [string[]]@($recordById.Keys)
+[Array]::Sort($sortedIds, [System.StringComparer]::Ordinal)
+$records = @($sortedIds | ForEach-Object { $recordById[$_] })
 
 # decisionPolicy 由 runtimePolicy 派生；runtimeExcludedStatuses 自动补集（fail-closed）
 $controlPlaneStatus = [string]$classification.runtimePolicy.controlPlaneStatus

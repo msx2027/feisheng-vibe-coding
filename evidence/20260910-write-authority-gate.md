@@ -107,3 +107,39 @@ verify: 7/7 steps passed
 - `status` 仍是给消费者的兼容别名（收敛阶段应移除，消费者改读 `readiness`）。
 - Claude 构建器仍保留 Claude 特有逻辑与 Sliver 资产路径常量（这是宿主差异，不是门禁重复）。
 - 宿主 discovery / trust / fresh-session smoke 仍 `UNVERIFIED`。
+
+---
+
+## 六、附带修复：跨 PowerShell 版本的生成不确定性（真实 bug）
+
+### 发现
+
+在 Windows PowerShell 5.1 下跑 `verify.ps1` 时，「catalog 与 SKILL-CLASSIFICATION.json 同步」**误报失败**。
+排查后发现是真实的跨版本不确定性：
+
+1. 生成器里 `$records` 是 `[ordered]@{}`（`OrderedDictionary`），而 `Sort-Object id` 对字典是**静默 no-op**——
+   即「排序」从未生效过，committed catalog 的顺序其实是 inventory 顺序；
+2. PS 5.1 与 PS 7 对该无效排序的行为不同，导致同一真源在两端产出**不同顺序**；
+3. 改成显式索引取键后排序生效，但又暴露第二层问题：`Sort-Object` 是 **culture-aware** 的，
+   而 PS 5.1（.NET Framework / NLS）与 PS 7（.NET / ICU）对 `-` 等标点的权重不同——
+   实测 `code-review` 与 `codebase-design` 的先后顺序在两端相反。
+
+### 修复
+
+- 生成器改为 **ordinal（码位）排序**：`[Array]::Sort([string[]]$ids, [System.StringComparer]::Ordinal)`，
+  不依赖 culture，也不依赖 `Sort-Object` 对字典的行为；
+- 能力索引生成器同样改为 ordinal 排序（`Sort-ByIdOrdinal` / `Sort-ByKeyOrdinal`），
+  并对函数返回值统一 `@()` 包装（PS 5.1 + StrictMode 下单元素数组会被解包，`.Count` 会抛错）。
+
+### 验证
+
+```text
+catalog          pwsh7 vs PS5.1 : IDENTICAL（顺序敏感比较）
+capability index pwsh7 vs PS5.1 : IDENTICAL
+Windows PowerShell 5.1 : verify 6/6 passed, VERIFY_EXIT=0
+PowerShell 7 (含打包)  : verify 7/7 passed, VERIFY_EXIT=0
+等价性复核：82 条记录 legacy 字段 0 处不一致（writeAuthority 为本轮有意变更）
+```
+
+影响：catalog/索引的字节输出现在跨版本确定；`verify.ps1` 在 5.1 与 7 下结论一致。
+副作用（有意）：catalog 记录顺序由「inventory 顺序」变为「id 字典序」，manifest 中的文件顺序随之变化。

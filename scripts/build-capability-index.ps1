@@ -39,6 +39,27 @@ $resolvedOutput = if ([string]::IsNullOrWhiteSpace($OutputPath)) {
 $acceptedStatuses = @($catalog.decisionPolicy.acceptedStatuses)
 $records = @($catalog.records)
 
+function Sort-ByIdOrdinal {
+    param([Parameter(Mandatory = $true)][object[]]$Items)
+    $map = @{}
+    foreach ($item in $Items) { $map[[string]$item.id] = $item }
+    $ids = [string[]]@($map.Keys)
+    [Array]::Sort($ids, [System.StringComparer]::Ordinal)
+    return @($ids | ForEach-Object { $map[$_] })
+}
+
+function Sort-ByKeyOrdinal {
+    param(
+        [Parameter(Mandatory = $true)][object[]]$Items,
+        [Parameter(Mandatory = $true)][string]$Key
+    )
+    $map = @{}
+    foreach ($item in $Items) { $map[[string]$item.$Key] = $item }
+    $keys = [string[]]@($map.Keys)
+    [Array]::Sort($keys, [System.StringComparer]::Ordinal)
+    return @($keys | ForEach-Object { $map[$_] })
+}
+
 function Group-ByKey {
     param(
         [Parameter(Mandatory = $true)][object[]]$Items,
@@ -53,11 +74,11 @@ function Group-ByKey {
     return $map
 }
 
-$runtime = @($records | Where-Object { $acceptedStatuses -contains $_.status } | Sort-Object id)
-$pending = @($records | Where-Object { $_.status -eq 'adapter-candidate' } | Sort-Object id)
-$blocked = @($records | Where-Object { $_.status -like 'blocked-*' } | Sort-Object id)
-$excluded = @($records | Where-Object { $_.readiness -eq 'excluded' -or $_.readiness -eq 'compatibility' } | Sort-Object id)
-$sourceOnly = @($records | Where-Object { $_.readiness -eq 'source-only' } | Sort-Object id)
+$runtime = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $acceptedStatuses -contains $_.status }))
+$pending = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.status -eq 'adapter-candidate' }))
+$blocked = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.status -like 'blocked-*' }))
+$excluded = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.readiness -eq 'excluded' -or $_.readiness -eq 'compatibility' }))
+$sourceOnly = @(Sort-ByIdOrdinal -Items @($records | Where-Object { $_.readiness -eq 'source-only' }))
 
 $lines = @()
 $lines += '# 能力索引（生成物）'
@@ -101,8 +122,9 @@ $lines += '## 来源专用（未启用）'
 $lines += ''
 $lines += '按域分组列出；`reason` 为未启用的统一原因。'
 $lines += ''
-foreach ($domain in @($sourceOnly | Group-Object domain | Sort-Object Name)) {
-    $items = @($domain.Group | Sort-Object id)
+$domainGroups = @(Sort-ByKeyOrdinal -Items @($sourceOnly | Group-Object domain) -Key Name)
+foreach ($domain in $domainGroups) {
+    $items = @(Sort-ByIdOrdinal -Items @($domain.Group))
     $reason = [string]$items[0].reason
     $ids = @($items | ForEach-Object { '`' + $_.id + '`' }) -join '、'
     $lines += ('- **' + $domain.Name + '**（' + $items.Count + '）：' + $ids)
