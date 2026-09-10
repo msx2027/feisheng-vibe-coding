@@ -1,0 +1,12 @@
+# 生成的宿主镜像和临时验证输出
+dist/
+.tmp/
+.cache/
+adapters/*/generated/
+
+# 本地凭据与运行状态
+.env
+.env.*
+*.sqlite
+*.sqlite3
+

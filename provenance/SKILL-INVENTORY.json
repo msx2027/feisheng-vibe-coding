@@ -1,0 +1,680 @@
+﻿{
+    "schema":  "feisheng-skill-inventory/v1",
+    "generatedAt":  "2026-09-10T02:19:48.7079822Z",
+    "sourceSummary":  {
+                          "sliver-vibe-coding":  {
+                                                     "sourceSkillFiles":  1,
+                                                     "internalRouteRegistry":  "references/routes-index.md"
+                                                 },
+                          "vibe-coding-skills":  {
+                                                     "sourceSkillFiles":  46,
+                                                     "sourceRoot":  "skills/"
+                                                 },
+                          "mattpocock-skills":  {
+                                                    "sourceSkillFiles":  35,
+                                                    "sourceRoot":  "skills/"
+                                                }
+                      },
+    "exactNameDuplicates":  [
+
+                            ],
+    "skills":  [
+                   {
+                       "source":  "sliver-vibe-coding",
+                       "canonicalCandidate":  "sliver-vibe-coding",
+                       "path":  "SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "Use when technical and non-technical users ask AI to plan, explain, audit, or advance a software project at any scope: idea/intake, startup, takeover, rescue, project guidance, local UI or behavior changes, bugs, tests, config, feature/change/refactor/review, architecture, frontend/backend/database/security, validation, Git/privacy, release/deploy, handoff, or AGENTS/dev-docs project truth.",
+                       "sha256":  "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "adapt",
+                       "path":  "skills\\adapt\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `adapt`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Adapt designs to work across screen sizes, devices, contexts,...",
+                       "sha256":  "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "animate",
+                       "path":  "skills\\animate\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `animate`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions animation, 微交互, 过渡, motion,...",
+                       "sha256":  "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "architecture-foundation",
+                       "path":  "skills\\architecture-foundation\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `architecture-foundation`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当新项目准备进入开发，或已有项目发生跨模块、数据、接口、权限、部署、技术栈或架构变化时使用",
+                       "sha256":  "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "audit",
+                       "path":  "skills\\audit\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `audit`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 可访问性, 性能, 主题, 响应式, anti-pattern audit...",
+                       "sha256":  "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "beginner-flow-guide",
+                       "path":  "skills\\beginner-flow-guide\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅由当前对话已激活的 `vibe-coding-skills` 总入口按需调用的新手辅助路由器；不作为用户自然语言的独立入口，不单独自动触发具体 Skill",
+                       "sha256":  "935a5962df0346b4946645a0d2ab40e0853c108bc8eeab99fd25e4d1698987af"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "bolder",
+                       "path":  "skills\\bolder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `bolder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user says the design looks bland, generic, too...",
+                       "sha256":  "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "brand",
+                       "path":  "skills\\brand\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `brand`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Brand voice, visual identity, messaging frameworks, UI token...",
+                       "sha256":  "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "bug-fixer",
+                       "path":  "skills\\bug-fixer\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `bug-fixer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说“这个功能坏了”“报错了”“不正常”，或用大白话描述故障现象（打开是白屏、一直转圈圈加载不出来...",
+                       "sha256":  "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "clarify",
+                       "path":  "skills\\clarify\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `clarify`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions confusing text, unclear labels,...",
+                       "sha256":  "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "codebase-memory-scout",
+                       "path":  "skills\\codebase-memory-scout\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `codebase-memory-scout`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当需要用 codebase-memory-mcp 做代码图侦察、影响面分析...",
+                       "sha256":  "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "code-review",
+                       "path":  "skills\\code-review\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `code-review`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要审查代码、检查质量、验证功能是否完整，或需要对照 Spec 和设计稿验证代码实现时使用",
+                       "sha256":  "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "colorize",
+                       "path":  "skills\\colorize\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `colorize`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions gray, dull, lacking warmth,...",
+                       "sha256":  "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "critique",
+                       "path":  "skills\\critique\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `critique`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user asks to review, critique, evaluate, or...",
+                       "sha256":  "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "delight",
+                       "path":  "skills\\delight\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `delight`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user asks for 惊喜感, 更有趣, 情绪, 人格化体验, delight,...",
+                       "sha256":  "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "design-brief-builder",
+                       "path":  "skills\\design-brief-builder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `design-brief-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要确定设计风格、视觉方向，或说",
+                       "sha256":  "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "design-maker",
+                       "path":  "skills\\design-maker\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `design-maker`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目设计简报完成后、用户需要生成设计稿时使用",
+                       "sha256":  "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "design-system",
+                       "path":  "skills\\design-system\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `design-system`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Token architecture, component specifications, CSS...",
+                       "sha256":  "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "dev-builder",
+                       "path":  "skills\\dev-builder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `dev-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目开发计划就绪、用户说要开始写代码或继续开发下一个 Phase 时使用",
+                       "sha256":  "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "dev-planner",
+                       "path":  "skills\\dev-planner\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `dev-planner`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目需求文档已完成、需要规划怎么分阶段开发时使用",
+                       "sha256":  "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "distill",
+                       "path":  "skills\\distill\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `distill`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user asks to 简化, 减少噪音, simplify, declutter,...",
+                       "sha256":  "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "doc-sync-guardian",
+                       "path":  "skills\\doc-sync-guardian\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `doc-sync-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当代码、Skill、Hook、脚本、命令、目录结构或工作流规则发生变化，需要同步更新相关文档并阻止文...",
+                       "sha256":  "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "evolution-engine",
+                       "path":  "skills\\evolution-engine\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅由 SessionStart / evolution-runner structured-event caller 调用，不接受普通用户自然语言或 `vibe-coding-skills` 总入口路由；由 evolution-runner sub-agent 调用",
+                       "sha256":  "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "experience-elevator",
+                       "path":  "skills\\experience-elevator\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅由 UserPromptSubmit Hook 的结构化纠错信号 structured-event caller 调用，不接受普通用户自然语言或 `vibe-coding-skills` 总入口路由；只处理 target-project，自动判断并记录 L0，升档、删除、硬化必须有用户确认凭据",
+                       "sha256":  "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "feedback-writer",
+                       "path":  "skills\\feedback-writer\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅由 feedback-observer 子 Agent structured-event caller 调用，不接受普通用户自然语言或 `vibe-coding-skills` 总入口路由；由 feedback-observer sub-agent 调用",
+                       "sha256":  "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "harden",
+                       "path":  "skills\\harden\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `harden`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发。Make interfaces production-ready: error handling, empty states, onboarding flows, i18n, text overflow, and edge cases. Use when the user asks for 空状态, 边界情况, 生产可用, hardening, production-ready UI, error states, overflow, or i18n.",
+                       "sha256":  "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "hotspot-governor",
+                       "path":  "skills\\hotspot-governor\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `hotspot-governor`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说核心热区、大文件、超大组件、文件太长、模块越来越大、这一坨太大、看不懂、别往这里塞...",
+                       "sha256":  "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "impeccable",
+                       "path":  "skills\\impeccable\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `impeccable`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Create distinctive, production-grade frontend interfaces...",
+                       "sha256":  "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "layout",
+                       "path":  "skills\\layout\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `layout`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Improve layout, spacing, and visual rhythm for broad...",
+                       "sha256":  "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "optimize",
+                       "path":  "skills\\optimize\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `optimize`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions 页面卡顿, 性能, slow, laggy, janky,...",
+                       "sha256":  "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "overdrive",
+                       "path":  "skills\\overdrive\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `overdrive`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 惊艳, 高阶动效, wow, impress, go...",
+                       "sha256":  "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "polish",
+                       "path":  "skills\\polish\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `polish`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Performs a final quality pass for alignment, spacing,...",
+                       "sha256":  "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "product-spec-builder",
+                       "path":  "skills\\product-spec-builder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `product-spec-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说想做一个产品、应用或工具，或者说要加功能、改需求、调 UI 时使用",
+                       "sha256":  "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "quieter",
+                       "path":  "skills\\quieter\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `quieter`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions 更克制, 太花, too bold, too loud,...",
+                       "sha256":  "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "release-builder",
+                       "path":  "skills\\release-builder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `release-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要打包、部署、发布、上线，或项目开发完成准备交付时使用",
+                       "sha256":  "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "requirements-test-designer",
+                       "path":  "skills\\requirements-test-designer\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `requirements-test-designer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要把 PRD、需求文档、用户故事、验收标准、接口说明或设计稿说明转成工程级测...",
+                       "sha256":  "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "rule-harvester",
+                       "path":  "skills\\rule-harvester\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `rule-harvester`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说",
+                       "sha256":  "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "shape",
+                       "path":  "skills\\shape\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `shape`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use only when the user explicitly says shape, 用 shape 规划, or...",
+                       "sha256":  "8a75ce770b2e26a6fe01b60d489d4be4336d863204d3d0674a82e5060a1883f7"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "skill-builder",
+                       "path":  "skills\\skill-builder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `skill-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要创建新技能，或 EVOLUTION.md 提议自动生成新 Skill 时使用",
+                       "sha256":  "0b8cbf368dabbc9e5c9c92ac5ee3427d2f588a8aa0dc51279241193ec7822ce0"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "target-constitution-setup",
+                       "path":  "skills\\target-constitution-setup\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `target-constitution-setup`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户首次接入目标项目、要求生成项目画像 / 宪法设计包，或需要把...",
+                       "sha256":  "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "target-runtime-setup",
+                       "path":  "skills\\target-runtime-setup\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `target-runtime-setup`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目已完成宪法设计层，或用户只要求刷新 / 检查 / 合并 AGENTS.md 与...",
+                       "sha256":  "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "test-automation",
+                       "path":  "skills\\test-automation\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `test-automation`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要加自动化测试、补 E2E / 回归、接入 Playwright / Vitest /...",
+                       "sha256":  "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "typeset",
+                       "path":  "skills\\typeset\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `typeset`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user mentions fonts, type, readability, text...",
+                       "sha256":  "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "ui-styling",
+                       "path":  "skills\\ui-styling\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-styling`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use only when the user explicitly asks for 页面样式体系,...",
+                       "sha256":  "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "ui-system-guardian",
+                       "path":  "skills\\ui-system-guardian\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-system-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要初始化组件库、补 token、补基础组件 / variant、治理 UI 债务...",
+                       "sha256":  "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "ui-ux-pro-max",
+                       "path":  "skills\\ui-ux-pro-max\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-ux-pro-max`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发。UI/UX design intelligence for explicit design enhancement requests: visual direction, color, typography, tokens, design system, UX quality, accessibility, layout, chart, and stack-specific UI guidance. Use only when the user asks for design enhancement or another Skill routes here; ordinary page design stays on the product/design main chain.",
+                       "sha256":  "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a"
+                   },
+                   {
+                       "source":  "vibe-coding-skills",
+                       "canonicalCandidate":  "vibe-coding-skills",
+                       "path":  "skills\\vibe-coding-skills\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "只有用户在当前对话中明确调用 `vibe-coding-skills` 或 `/vibe-coding-skills` 后，才允许把普通自然语言交给总入口路由；唯一用户可见的 Skill 总入口；cmd: /vibe-coding-skills",
+                       "sha256":  "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "ask-matt",
+                       "path":  "skills\\engineering\\ask-matt\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "询问当前情境适合哪个技能或流程；它是本仓库所有 skills 的路由器。",
+                       "sha256":  "f81745ae810fbf28ccf6eac5752b8955c8cd780fbb6771d0b869edf2f723a6fa"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "codebase-design",
+                       "path":  "skills\\engineering\\codebase-design\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "用于设计深模块的共享词汇。适用于用户想设计或改进模块接口、寻找深化机会、决定 seam 放在哪里、让代码更容易测试或更适合 AI 导航，或其他技能需要深模块词汇时。",
+                       "sha256":  "034a2108095725d36964b49c6160d7bc6c4189db8fdaacecb235bf50975db19d"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "mattpocock-code-review",
+                       "path":  "skills\\engineering\\code-review\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "从固定点（commit、branch、tag 或 merge-base）开始，按 Standards（代码是否符合本仓库记录的编码标准？）和 Spec（代码是否符合来源 issue/spec 的要求？）两个轴线审查变更。两个审查会在并行子代理中运行，并并排报告。适用于用户想审查 branch、PR、进行中的变更，或要求 “review since X” 时。",
+                       "sha256":  "f95c5e9273dfeb7a915a7cb54f4010a710c2c19d0c6d6c52a25da9b52edb327c"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "diagnosing-bugs",
+                       "path":  "skills\\engineering\\diagnosing-bugs\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "面向棘手缺陷和性能回退的诊断循环。适用于用户说 “diagnose” / “debug this”，或报告某些东西 broken、throwing、failing、slow 时。",
+                       "sha256":  "279dc45fa48f3f53f1e156f2401f2c0799a5adcb0af419ce1bdeafc901644fb4"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "domain-modeling",
+                       "path":  "skills\\engineering\\domain-modeling\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "构建并打磨项目的领域模型。适用于用户想明确领域术语或通用语言、记录架构决策，或其他技能需要维护领域模型时。",
+                       "sha256":  "1c65adfbf5ec15ed90375e3227225df49b8f79355a4141b13c745ebb5bbb0975"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "grill-with-docs",
+                       "path":  "skills\\engineering\\grill-with-docs\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "一个用来打磨计划或设计的持续追问式访谈，并在过程中创建文档（ADRs 和词汇表）。",
+                       "sha256":  "4136a85499648838ebbca0d562e1bc9862f4c58c37cc54d7b36ac5ffd73766c1"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "implement",
+                       "path":  "skills\\engineering\\implement\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "基于 spec 或 ticket 集合实现一段工作。",
+                       "sha256":  "b6ad1eadeb9affefcba5a777c6ca2218536d8c608e80ca66568b1218f7d39817"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "improve-codebase-architecture",
+                       "path":  "skills\\engineering\\improve-codebase-architecture\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "扫描代码库中的深化机会，生成可视化 HTML 报告，然后围绕你选中的候选项继续追问。",
+                       "sha256":  "ad007cf1320facfc8ee95f91b5d0a44874bdb01c8b6be451531fe4cae3c10825"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "prototype",
+                       "path":  "skills\\engineering\\prototype\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "构建一次性原型来回答一个设计问题。适用于用户想验证某个 state model 或 logic 是否感觉对，或探索 UI 应该长什么样时。",
+                       "sha256":  "8ab3de2954ce49d5cabb1581c3df49583df3143ea4d2b7075b26ba741c8f4bac"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "research",
+                       "path":  "skills\\engineering\\research\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "对照高可信一手来源调研问题，并把发现保存为仓库中的 Markdown 文件。适用于用户想调研主题、收集文档或 API 事实，或把阅读工作委托给后台代理时。",
+                       "sha256":  "0b8941dafc8d4d5ad03f1836f03304689daf2759c2b85b373cf376e6351a5b26"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "resolving-merge-conflicts",
+                       "path":  "skills\\engineering\\resolving-merge-conflicts\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "适用于需要解决正在进行的 git merge/rebase 冲突时。",
+                       "sha256":  "519dbbc6e85baed0ef1b79277ade3f739568389c6c86fe96dcca0a2cec6fea2d"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "setup-matt-pocock-skills",
+                       "path":  "skills\\engineering\\setup-matt-pocock-skills\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "为此仓库配置 engineering skills——设置其 issue tracker、triage labels 词汇与 domain docs 布局。在首次使用其他 engineering skills 前运行一次。",
+                       "sha256":  "f04a93257af880ab8f24317d551f046873f0a955afff23a38320f8df5f1d2ba6"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "tdd",
+                       "path":  "skills\\engineering\\tdd\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "测试驱动开发。适用于用户想用先写测试的方式构建功能或修复缺陷、提到 “red-green-refactor”，或需要集成测试时。",
+                       "sha256":  "e9c7146953dce7a2e0903e24104578655cdc4733efd52f4f845d8f5e19625489"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "to-spec",
+                       "path":  "skills\\engineering\\to-spec\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把当前对话转成 spec 并发布到项目 issue tracker——不做访谈，只综合已经讨论的内容。",
+                       "sha256":  "c91cb3a5da41eb031dd50fe10dd45e1aa00297631a1a3e2f8cf261faa7708673"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "to-tickets",
+                       "path":  "skills\\engineering\\to-tickets\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把 plan、spec 或当前对话拆成一组 tracer-bullet tickets，每个 ticket 声明 blocking edges，并发布到已配置的 tracker；本地用每 ticket 一个文件中的文本 edge，真实 tracker 用 native blocking links。",
+                       "sha256":  "d6192cbf6ada63cbaa0cdd0cdee3577f8e5aee02227c96d7d02056da1044d8c9"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "triage",
+                       "path":  "skills\\engineering\\triage\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "让 issues 和 external PRs 通过一组 triage roles 状态机——分类、验证、必要时 grilling，并写出 agent-ready briefs。",
+                       "sha256":  "cfeb68d0dddcbecca6f3f23293b3fe2eac1a9d7e6c187554c6c56add4b234a05"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "wayfinder",
+                       "path":  "skills\\engineering\\wayfinder\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把单个 agent session 装不下的一大块工作规划成 issue tracker 上的 decision tickets shared map，并逐一解决，直到通往 destination 的路清晰。",
+                       "sha256":  "d98c70ce8b1b7b28995bc1888a2c0f951628bba4f9a7aa912ab8dcd8584ed938"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "wizard",
+                       "path":  "skills\\engineering\\wizard\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "生成一个交互式 bash wizard，逐步引导人完成只有他们能执行的手动流程。用于 provisioning 基础设施、设置 credentials 或 CI secrets、走查不熟悉的第三方 dashboard，或运行一次性 migration 或 cutover。对于 agent 自己就能执行的步骤，不要调用它。",
+                       "sha256":  "83c4393bd617f986bee4db69410a49b98f3709e56b88537440ac27a5601643ae"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "claude-handoff",
+                       "path":  "skills\\in-progress\\claude-handoff\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把当前对话交接给一个全新的 background agent，让它立即接手工作。",
+                       "sha256":  "124e2d74701cbf0ae284786b6fcbac245685048fb9190acfbdd4da087c794d53"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "loop-me",
+                       "path":  "skills\\in-progress\\loop-me\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "在这个工作区中，就我想构建的工作流规格访谈我。",
+                       "sha256":  "5e71c9237b71b92cac024e2c39cf327fa39a434a32c2a21d691cf538b4bd9186"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "setup-ts-deep-modules",
+                       "path":  "skills\\in-progress\\setup-ts-deep-modules\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "在 TypeScript repo 中接入 dependency-cruiser，让每个 package 成为 deep module：implementation 隐藏在 subfolders 中，只能通过 entry-point files 访问。User-invoked。",
+                       "sha256":  "5209335c065f0c70fe0f17d4319e5a3903b108e20b28b0a74f141039496ba0b7"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "writing-beats",
+                       "path":  "skills\\in-progress\\writing-beats\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "Writing, exploit——把原始素材组装成一段节拍旅程，在某个 beat 依赖一个术语之前先把它 grounded。",
+                       "sha256":  "a2938105d06c433a3a6dd14cfc97f0b7bd7e642846af45b60474cf89141d1f0a"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "writing-fragments",
+                       "path":  "skills\\in-progress\\writing-fragments\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "Writing, explore——挖掘原始 fragments，暂不施加任何结构。",
+                       "sha256":  "91d0c454480148491edf19843cf58df6d0ea2173cbcad478819c0c3b907258df"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "writing-shape",
+                       "path":  "skills\\in-progress\\writing-shape\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "Writing, exploit——把原始素材塑造成文章，一段一段地推进。",
+                       "sha256":  "167605204f191bf4d61993385d51dc5f1eb863da442fae11439c3a9d44a44962"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "git-guardrails-claude-code",
+                       "path":  "skills\\misc\\git-guardrails-claude-code\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "设置 Claude Code hooks，在危险 git commands（push、reset --hard、clean、branch -D 等）执行前阻止它们。适用于用户想防止破坏性 git 操作、添加 git safety hooks，或在 Claude Code 中阻止 git push/reset 时。",
+                       "sha256":  "f0c004a8b262384cdcdf9997944395457850dab72c1cc8f8964232d1b397479b"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "migrate-to-shoehorn",
+                       "path":  "skills\\misc\\migrate-to-shoehorn\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "将测试文件从 `as` 类型断言迁移到 @total-typescript/shoehorn。适用于用户提到 shoehorn、想替换测试中的 `as`，或需要局部测试数据时。",
+                       "sha256":  "d8f5bb2bb0b6e71c275b8322491ba7b05433d9fde71131288400bd5afa40de09"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "scaffold-exercises",
+                       "path":  "skills\\misc\\scaffold-exercises\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "创建包含章节、题目、答案和讲解的练习目录结构，并确保通过 linting。适用于用户想 scaffold exercises、创建 exercise stubs，或设置新的课程章节时。",
+                       "sha256":  "3427ef3cd98377dc1a694c0ddfcfc10df82ef5f53ff7f056f97179c395ae356e"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "setup-pre-commit",
+                       "path":  "skills\\misc\\setup-pre-commit\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "在当前仓库设置 Husky pre-commit hooks，集成 lint-staged (Prettier)、类型检查和测试。适用于用户想添加 pre-commit hooks、设置 Husky、配置 lint-staged，或在提交时运行格式化、类型检查和测试时。",
+                       "sha256":  "65a5739b72e044554f96d684367d1be84533c19a309e925687e77571cdbd0bf9"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "grilling",
+                       "path":  "skills\\productivity\\grilling\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "围绕计划、decision 或 idea 持续追问用户。适用于用户想对自己的思路做压力测试，或使用任何 “grill” 触发措辞时。",
+                       "sha256":  "d32d56c99281ceea4e6e966dac7ed70d18fad038dfa025bf3bfdee2355ba3e14"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "grill-me",
+                       "path":  "skills\\productivity\\grill-me\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "一个用来打磨计划或设计的持续追问式访谈。",
+                       "sha256":  "81f76a5c60e2ae46b89f58e8fc6c8c851238cde9c2a4871676a30c037151d744"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "handoff",
+                       "path":  "skills\\productivity\\handoff\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把当前对话压缩成交接文档，让另一个代理接手。",
+                       "sha256":  "285336265158b5c2e52303219dc7d89f74c0470251df75159abce486aeed35f3"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "teach",
+                       "path":  "skills\\productivity\\teach\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "在这个工作区中教用户一个新技能或概念。",
+                       "sha256":  "519feea61bc64a191cbe91b5fd8538bd1fecd0fb47e237c3927333628420a91e"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "to-questionnaire",
+                       "path":  "skills\\productivity\\to-questionnaire\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "把你无法完整回答的 decision 转成一份交给他人填写的 questionnaire。",
+                       "sha256":  "b651bfe94665815e7a76978db90d6ad3ec4b3e029f8e441d27cca5e35229221a"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "wait-what",
+                       "path":  "skills\\productivity\\wait-what\\SKILL.md",
+                       "invocation":  "user-invoked",
+                       "description":  "停一下。刚才那条消息没有说清楚——重新表述一遍。",
+                       "sha256":  "1724444ad1c6009fc503708ead7292a7815878ee97bae1a13136f6ea2baf353a"
+                   },
+                   {
+                       "source":  "mattpocock-skills",
+                       "canonicalCandidate":  "writing-for-agents",
+                       "path":  "skills\\productivity\\writing-for-agents\\SKILL.md",
+                       "invocation":  "model-invoked-or-user-invoked",
+                       "description":  "为 agent 编写文档。适用于创建或编辑 skills，或修改 AGENTS.md 或 CLAUDE.md 时。",
+                       "sha256":  "4d3ae4ce6a181fbb0bc4024982f27432e52185d37439c90ec593c18be0b59a8d"
+                   }
+               ],
+    "semanticDecisions":  "provenance/SKILL-DECISIONS.md"
+}

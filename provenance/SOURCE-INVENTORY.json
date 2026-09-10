@@ -1,0 +1,35 @@
+{
+  "schema": "feisheng-source-inventory/v1",
+  "status": "baseline-captured-content-migration-blocked",
+  "sources": [
+    {
+      "id": "sliver-vibe-coding",
+      "path": "F:\\skiils工具\\sliver-vibe-coding",
+      "role": "governance-candidate",
+      "license": "Apache-2.0",
+      "migration": "not-started"
+    },
+    {
+      "id": "vibe-coding-skills",
+      "path": "F:\\skiils工具\\vibe-coding-skills",
+      "role": "host-and-product-candidate",
+      "license": "mixed-third-party; verify per path",
+      "migration": "blocked-pending-drift-repair"
+    },
+    {
+      "id": "mattpocock-skills",
+      "path": "F:\\skiils工具\\mattpocock-skills",
+      "role": "engineering-primitives-candidate",
+      "license": "MIT plus localized/source notices",
+      "migration": "blocked-pending-working-tree-audit"
+    }
+  ],
+  "requiredEvidence": [
+    "source revision or immutable snapshot",
+    "working tree status",
+    "per-file provenance",
+    "license and NOTICE mapping",
+    "invocation and write-target mapping",
+    "source-to-runtime rebuild result"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "feisheng-source-baseline/v1",
+  "capturedAt": "2026-09-10",
+  "purpose": "迁移前只读基线；不是统一仓库的完成声明。",
+  "sources": {
+    "sliver-vibe-coding": {
+      "path": "F:\\skiils工具\\sliver-vibe-coding",
+      "git": {"present": true, "validation": "python scripts/validate_skill.py -> pass"},
+      "license": "Apache-2.0",
+      "migrationGate": "eligible-for-control-plane-review"
+    },
+    "vibe-coding-skills": {
+      "path": "F:\\skiils工具\\vibe-coding-skills",
+      "git": {"present": false},
+      "manifestFiles": 1341,
+      "manifestSha256Mismatches": 50,
+      "quickStrictHealth": {
+        "exitCode": 1,
+        "failed": 97,
+        "passed": 214,
+        "mirrorSyncFailures": 95,
+        "routingManifest": "stale"
+      },
+      "migrationGate": "blocked-pending-source-mirror-repair-and-immutable-snapshot"
+    },
+    "mattpocock-skills": {
+      "path": "F:\\skiils工具\\mattpocock-skills",
+      "git": {
+        "present": true,
+        "uncommittedFiles": [
+          "skills/engineering/ask-matt/SKILL.md",
+          "skills/engineering/code-review/SKILL.md",
+          "skills/engineering/implement/SKILL.md",
+          "skills/engineering/tdd/SKILL.md"
+        ]
+      },
+      "license": "MIT plus localized/source notices",
+      "migrationGate": "blocked-pending-working-tree-classification"
+    }
+  },
+  "commands": [
+    "node F:\\skiils工具\\vibe-coding-skills\\tools\\vibe-health-check.mjs F:\\skiils工具\\vibe-coding-skills --profile package --level quick --strict --json",
+    "node F:\\skiils工具\\vibe-coding-skills\\tools\\check-routing-manifest.mjs F:\\skiils工具\\vibe-coding-skills --json",
+    "python F:\\skiils工具\\sliver-vibe-coding\\scripts\\validate_skill.py",
+    "PowerShell: recompute MANIFEST.json file SHA-256 values"
+  ],
+  "overallGate": "BLOCKED_FOR_CONTENT_MIGRATION"
+}
+

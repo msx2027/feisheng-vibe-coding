@@ -1,0 +1,37 @@
+{
+  "schema": "feisheng-owner-ledger/v1",
+  "status": "skeleton",
+  "owners": [
+    {
+      "id": "route-catalog",
+      "path": "governance/routes-index.md",
+      "writes": ["primary-route", "operation", "conditional-lens", "reference-loading"],
+      "projections": ["runtime route JSON", "host route hints"]
+    },
+    {
+      "id": "skill-catalog",
+      "path": "provenance/SKILL-INVENTORY.json",
+      "writes": ["canonical-skill-id", "invocation", "source", "dependencies", "outputs"],
+      "projections": ["README skill lists", "plugin manifests", "host discovery metadata"]
+    },
+    {
+      "id": "target-truth",
+      "path": "docs/target-truth-schema.json",
+      "writes": ["requirements", "plan", "terminology", "task-state", "acceptance-evidence"],
+      "adapters": ["vibe .vibe-docs.json", "Matt issue tracker", "project document index"]
+    },
+    {
+      "id": "runtime-projection",
+      "path": "packaging/runtime-projection.json",
+      "writes": ["host-bundle-include", "host-overlay", "generated-mirror", "manifest"],
+      "projections": ["Codex", "Claude"]
+    }
+  ],
+  "forbidden": [
+    "duplicate project-level router",
+    "manual generated mirror edits",
+    "parallel truth authorities",
+    "untracked hook writers"
+  ]
+}
+
