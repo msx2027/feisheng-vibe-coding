@@ -1,0 +1,55 @@
+{
+  "schema": "feisheng-vibe-hook-adapter/v1",
+  "owner": "runtime-projection",
+  "status": "defined-disabled-pending-gates",
+  "source": {
+    "id": "vibe-coding-skills",
+    "config": "sources/vibe-coding-skills/codex-hooks.json",
+    "executionAllowed": false
+  },
+  "runner": {
+    "path": "scripts/invoke-vibe-hook-adapter.ps1",
+    "singleRunner": true,
+    "sourceRunnerExecution": false
+  },
+  "eventNamespace": "feisheng.vibe",
+  "events": {
+    "SessionStart": { "timeoutSeconds": 10, "handler": "session-start" },
+    "UserPromptSubmit": { "timeoutSeconds": 5, "handler": "prompt-submit" },
+    "PreToolUse": { "timeoutSeconds": 30, "handler": "pre-tool-use" },
+    "PostToolUse": { "timeoutSeconds": 5, "handler": "post-tool-use" },
+    "Stop": { "timeoutSeconds": 5, "handler": "stop" }
+  },
+  "idempotency": {
+    "required": true,
+    "key": "sha256(eventNamespace,eventName,hostSessionId,hostEventId,toolUseId)",
+    "stateStore": "target-repository/.feisheng/vibe-hook-state/",
+    "retentionSeconds": 600
+  },
+  "failurePolicy": {
+    "contractIntegrity": "fail-closed",
+    "untrustedSource": "fail-closed",
+    "disabledAdapter": "reject-with-exit-3",
+    "handlerFailureWhenEnabled": "record-and-return-host-policy"
+  },
+  "writeWhitelist": [],
+  "forbidden": [
+    "source-hook-execution",
+    "direct-.claude-state-writes",
+    "direct-.codex-hook-installation",
+    "untracked-hook-writers",
+    "parallel-hook-runners"
+  ],
+  "enablePrerequisites": [
+    "per-skill-license-and-notice-map",
+    "verified-source-revision",
+    "host-discovery-and-fresh-session-smoke",
+    "event-order-and-concurrency-smoke",
+    "approved-write-whitelist-and-rollback-plan",
+    "independent-logical-review"
+  ],
+  "rollback": {
+    "action": "remove generated host overlay only; preserve source snapshot and evidence",
+    "trigger": "any prerequisite, manifest, write-boundary, or smoke failure"
+  }
+}

@@ -32,6 +32,15 @@
     "licenseMap": "provenance/LICENSE-MAP.json"
   },
   "builder": "scripts/build-codex-runtime-projection.ps1",
+  "hookAdapters": {
+    "vibe": {
+      "contract": "adapters/vibe-hooks/contract.json",
+      "status": "defined-disabled-pending-gates",
+      "include": [],
+      "exclude": ["sources/vibe-coding-skills/codex-hooks", "sources/vibe-coding-skills/codex-hooks.json"],
+      "freshSessionSmoke": "UNVERIFIED"
+    }
+  },
   "rollback": {
     "required": true,
     "condition": "any manifest, hook, plugin, provenance, or fresh-session smoke failure"
