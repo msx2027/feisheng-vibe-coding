@@ -43,6 +43,11 @@ source-only、blocked 或回滚，不能因为「看起来可用」就接入。
 8. **门禁只有一个实现。** Codex/Claude 投影共用 `scripts/runtime-projection-guard.ps1`；禁止平行门禁实现（本轮曾发现并修掉 Codex 侧的重复实现）。门禁从 `decisionPolicy` 读策略，不硬编码状态字面量。
 9. **canonical 命名由本仓库决定。** 上游的未提交工作树改动只作为**事实记录**，不采用、也不等待上游确认。不采用工作树内容是因为其意图不可证，而不是因为命名冲突；命名与「是否采用未提交内容」是两件不同的事。
 10. **快照内容必须是可证明的来源。** 优先取来源工作树；当工作树存在未提交改动时，取**已提交 revision 的 blob**（按已实测的换行归一化模型写入），并在导入记录里逐条登记。不得直接丢弃——丢弃会造成记录指向不存在的文件。
+11. **本仓库自持，不再依靠任何上游。** owner 于 2026-09-10 明确：`feisheng-vibe-coding` 自此由 owner 自行维护，
+   不再等待任何上游确认，也不产出上游问题报告。上游差异（如未提交的工作树改动）只作**事实记录 + 周期复核项**，不构成阻塞。
+   - **待定影响（需 owner 决定，本轮未改）**：自持后我们**有权**修改 vendored 内容（例如 Sliver 的 3 个模板资产
+     在 Claude Code 下会触发 YAML frontmatter 解析告警）。但那样会打破与来源的字节一致性，使 provenance 模型需要升级为
+     「vendor + 本地补丁偏差登记」。本轮**未**修改任何 vendored 内容；现有 provenance 门禁（字节一致 + 树摘要）保持不变。
 
 ## 第二轮完成情况（G1–G4）
 
@@ -133,6 +138,33 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
    （`assets/project-audit/audit-report.md`、`assets/project-decision/adr.md`、`assets/project-feature/feature-truth.md`）。
    它们是 Sliver 上游内容且与来源逐字节一致 —— **不得为消错而修改**，应作为上游发现上报。
 
+## 第七轮完成情况：深度校验解锁 + Codex 发现性验证
+
+用户授权：① 一次 `git fetch`（解锁深度校验）；② Codex 侧 smoke。同时确立新原则：**本仓库自持，不再依靠任何上游**。
+
+| 事项 | 结果 |
+|---|---|
+| ① 受信任基线对象 | ✅ 常规 fetch / `--tags` 都取不到（不在任何分支/标签历史），**按 SHA 直连 fetch 成功**（只写来源 `.git`，工作树未动） |
+| ① 深度校验 | ✅ **claude-code 76 文件 PASS、codex 78 文件 PASS**（`validate_runtime_bundle --trusted-base-root`） |
+| ② Codex discovery | ✅ **VERIFIED**：`codex debug prompt-input` A/B — available skills **204 vs 203**，且该技能**新获自己的根 `r0`（`~/.codex/skills`）** |
+
+证据：`evidence/20260910-host-smoke-codex-and-bundle-validation.md`；双宿主可复现脚本：`scripts/smoke-host-skill-discovery.ps1`。
+
+### 本轮三个带设计含义的发现
+
+1. **一次安装服务两个宿主**：`~/.claude/skills` 与 `F:\skiils工具\_adapters\shared\skills` 是同一目录（junction），
+   而 Codex 把它当自己的技能根 `r1`。因此本轮**移除了冗余的 Codex 专属安装**，避免重复注册。
+2. **Codex 的真实入口是仓库根 `AGENTS.md`**（模型可见输入里会被注入为 instructions），
+   而我们的 **Codex 投影并未包含 `AGENTS.md`** → 已记为待补缺口。
+3. **调 Sliver 的 Python 工具必须带 `-B`**：否则在快照里生成 `__pycache__`，会被我们自己的 provenance 门禁拦下（实测过）。
+
+### 宿主安装与脚手架约定（owner 要求）
+
+- 安装状态：`~/.claude/skills/sliver-vibe-coding` 已装（76 文件，共享根，两宿主可见）；Codex 专属根已卸载；
+  回滚：`Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\skills\sliver-vibe-coding"`。
+- 所有测试脚手架放在 **`<repo>/_smoke/`**（已 gitignore），**总目标完成后统一清理**；不得污染其它 Claude/Codex 配置与既有技能。
+- 宿主安装只经 Sliver 自带 `build_runtime_bundle.py` + `runtime-manifest.json` 白名单；不得自造安装集。
+
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
 - `control-plane`：1（sliver-vibe-coding）
@@ -172,14 +204,15 @@ Codex 侧当时仍是平行实现。已在两处补记更正，并在本轮完�
 
 ### P1：宿主投影与发布能力
 
-1. **真实宿主 smoke**：Claude 侧 **discovery 已验证**（见第六轮）；Codex 侧 discovery、两侧的 trust 与技能行为仍未验证。不得写入更多真实宿主目录，除非另有授权与回滚方案。
+1. **真实宿主 smoke**：Claude 与 Codex 的 **discovery 均已验证**；两侧的 trust、技能行为、Hook 强制仍未验证；
+   我们自己的 Codex 投影（缺 `AGENTS.md`）尚未做其自身的 discovery smoke。不得写入更多真实宿主目录，除非另有授权与回滚方案。
 2. **发布包已可装配，CI 未真实运行**：`scripts/build-release-package.ps1` 本地两套 PowerShell 均验证通过（19 文件、0 违规、包内投影 Validate 通过）；`.github/workflows/release-gate.yml` 仅本地 YAML 校验，未在真实 runner 执行。
 3. **Hook 未解锁**：需要 per-skill license、host discovery、事件顺序/并发、写白名单/回滚和独立逻辑审查全部通过。
 
 ## 当前阻塞项
 
-- **深度运行时校验**：`validate_runtime_bundle` 需受信任基线 git 对象 `29695fe0…`；本地不可得（不自行 fetch 来源仓库）。
-- **宿主 trust / 技能行为 / Hook 强制**：仍 `UNVERIFIED`（Claude discovery 已闭环）。
+- **宿主 trust / 技能行为 / Hook 强制**：仍 `UNVERIFIED`（两宿主 discovery 已闭环）。
+- **Codex 投影缺 `AGENTS.md`**：与宿主真实入口机制不匹配，待补。
 - **宿主稳定性**：v5 派发时 `luna_vibe_product_audit_v5` 首次被中断、`v5b` 遇 `Upstream request failed`，
   第三次 `v5c` 成功；重派时需接受可能的中断，只采纳有回执的轮次。
 
@@ -266,5 +299,8 @@ pwsh -NoProfile -File 'F:\skiils工具\feisheng-vibe-coding\scripts\record-prove
 - 不直接丢弃来源文件：工作树已改动时取已提交 revision 的 blob 并登记，保留可寻址性。
 - 宿主安装只经 Sliver 自带 `build_runtime_bundle.py` + `runtime-manifest.json` 白名单；不得自造安装集，不得覆盖既有技能目录，必须留回滚命令。
 - 不为消除宿主告警而修改上游资产文件（会破坏与来源的字节一致性）。
+- **本仓库自持，不再依靠任何上游**：不产出上游问题报告、不等待上游确认；上游改名/差异仅作事实记录与周期复核项。
+- 测试脚手架一律放 `<repo>/_smoke/`（gitignore），总目标完成后清理；不得污染其它 Claude/Codex 配置、不得覆盖既有技能。
+- 调 Sliver 自带 Python 工具必须带 `-B`（否则在快照里生成 `__pycache__`，会被 provenance 门禁拦下）。
 - 不把 static smoke 写成真实宿主可用，也不把中断的子 Agent 回执写成独立审计通过。
 - 不把发布包写成发布授权。

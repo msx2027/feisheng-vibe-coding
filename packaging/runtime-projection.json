@@ -14,7 +14,10 @@
         "skills/engineering/domain-modeling/SKILL.md"
       ],
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
-      "freshSessionSmoke": "UNVERIFIED"
+      "freshSessionDiscovery": "VERIFIED for the Sliver control-plane bundle; A/B codex debug prompt-input: available skills 204 vs 203 and the skill gained its own root r0 (~/.codex/skills)",
+      "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-codex-and-bundle-validation.md",
+      "freshSessionSmoke": "PARTIAL; control-plane bundle discovery verified, this projection bundle itself not yet probe-tested",
+      "knownGap": "codex injects the repository root AGENTS.md as instructions, but this projection's include list has no AGENTS.md"
     },
     "claude": {
       "status": "candidate-unverified; static-smoke-only; host-discovery-verified",
@@ -33,6 +36,33 @@
       "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-claude-discovery.md",
       "freshSessionSmoke": "PARTIAL; discovery verified, host trust and skill behavior still UNVERIFIED",
       "runtimeBundleValidation": "UNAVAILABLE; Sliver validate_runtime_bundle requires trusted baseline git object 29695fe099c6b38c9b5c470abbb2e065fc1ff936 which is absent from the local source checkout"
+    }
+  },
+  "hostDiscovery": {
+    "verifiedAt": "2026-09-10",
+    "note": "verified scope is discovery only; host trust, skill behavior, and Hook enforcement remain UNVERIFIED",
+    "claudeCode": {
+      "mechanism": "user skills root (managed/project roots empty on this machine)",
+      "root": "~/.claude/skills",
+      "sliverControlPlaneBundle": "VERIFIED (A/B loaded skills 169 vs 168)",
+      "evidence": "evidence/20260910-host-smoke-claude-discovery.md"
+    },
+    "codex": {
+      "mechanism": "skill roots plus repository-root AGENTS.md injected as instructions",
+      "root": "~/.codex/skills (r0)",
+      "sliverControlPlaneBundle": "VERIFIED (A/B available skills 204 vs 203; gained root r0)",
+      "evidence": "evidence/20260910-host-smoke-codex-and-bundle-validation.md"
+    },
+    "sharedRootFact": "~/.claude/skills and F:\\skiils工具\\_adapters\\shared\\skills are the same directory (junction); codex reads it as r1, so a single install serves both hosts",
+    "installState": {
+      "~/.claude/skills/sliver-vibe-coding": "installed (shared root; serves both hosts)",
+      "~/.codex/skills/sliver-vibe-coding": "uninstalled after verification to avoid double registration",
+      "rollback": "Remove-Item -Recurse -Force \"$env:USERPROFILE\\.claude\\skills\\sliver-vibe-coding\""
+    },
+    "bundleValidation": {
+      "claude-code": "PASS (76 files; trusted baseline 29695fe099c6b38c9b5c470abbb2e065fc1ff936 obtained by direct-SHA fetch)",
+      "codex": "PASS (78 files)",
+      "note": "validator states static/package proof only; fresh-session behavior is evaluated separately by the smoke script"
     }
   },
   "buildContract": {
