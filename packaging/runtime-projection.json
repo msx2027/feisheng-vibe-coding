@@ -1,0 +1,31 @@
+{
+  "schema": "feisheng-runtime-projection/v1",
+  "owner": "runtime-projection",
+  "status": "contract-only; runtime-not-enabled",
+  "sourceOwners": ["route-catalog", "skill-catalog", "target-truth"],
+  "hosts": {
+    "codex": {
+      "status": "unverified",
+      "include": [],
+      "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
+      "freshSessionSmoke": "UNVERIFIED"
+    },
+    "claude": {
+      "status": "unverified",
+      "include": [],
+      "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
+      "freshSessionSmoke": "UNVERIFIED"
+    }
+  },
+  "buildContract": {
+    "inputs": ["provenance/SKILL-INVENTORY.json", "governance/sliver-core/references/routes-index.md", "docs/target-truth-schema.json"],
+    "generatedOutputsOnly": true,
+    "manualMirrorEdits": false,
+    "requiresSourceRevision": true,
+    "requiresLicenseMapping": true
+  },
+  "rollback": {
+    "required": true,
+    "condition": "any manifest, hook, plugin, provenance, or fresh-session smoke failure"
+  }
+}

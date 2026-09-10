@@ -1,0 +1,2 @@
+REQ-ID,Requirement Summary,Scenario-ID,Scenario Summary,TC-ID,Test Case Title,Test Type,Priority,Coverage Status,Automation Candidate,Automation Level,Manual Acceptance Status,Change Status,Source
+REQ-001,有效用户可提交 draft 订单并进入待审批,SCN-001,提交合法 draft 订单,TC-001,有效用户提交订单后状态变为待审批,happy path,P1,covered,是,E2E,不适用,new,需求文档.md

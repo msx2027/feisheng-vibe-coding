@@ -1,0 +1,37 @@
+{
+  "name": "__NPM_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "main": ".electron-dist/main.js",
+  "scripts": {
+    "dev": "node scripts/dev-electron.mjs",
+    "dev:web": "next dev",
+    "dev:desktop": "npm run build:electron && electron .electron-dist/main.js",
+    "check:docs": "node tools/build-target-doc-index.mjs . --check && node tools/check-target-doc-drift.mjs . --quick --strict && node tools/check-lifecycle-doc-budget.mjs . --strict",
+    "check:health": "npm run check:docs && node tools/vibe-health-check.mjs . --profile target --level quick",
+    "check:api-contracts": "node tools/check-api-contracts.mjs .",
+    "check:hotspots": "node tools/check-hotspots.mjs .",
+    "check:runtime-sync": "node tools/check-runtime-sync.mjs .",
+    "check:ui-reuse": "node tools/check-ui-reuse.mjs . --all",
+    "build": "npm run check:health && next build && npm run build:electron",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "prepare:electron": "node node_modules/electron/install.js"
+  },
+  "dependencies": {
+    "electron": "43.4.0",
+    "next": "15.5.21",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "postcss": "8.5.23",
+    "sharp": "0.35.0",
+    "nanoid": "3.3.18"
+  }
+}

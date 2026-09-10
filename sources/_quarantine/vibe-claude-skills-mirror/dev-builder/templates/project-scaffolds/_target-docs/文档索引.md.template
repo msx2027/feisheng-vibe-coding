@@ -1,0 +1,15 @@
+# 文档索引
+
+本文件只提供导航，不复制需求、计划、契约或验收正文。内容由 `build-target-doc-index.mjs` 根据 `.vibe-docs.json` 刷新。
+
+| 角色 | 路径 | Owner | 权威类型 | 加载策略 |
+| --- | --- | --- | --- | --- |
+| productSpec | `需求文档.md` | product-spec-builder | source | onDemand |
+| productSpecChangelog | `需求变更.md` | product-spec-builder | log | onDemand |
+| designBrief | `docs/设计简报.md` | design-brief-builder | source | onDemand |
+| devPlan | `开发计划.md` | dev-planner | source | onDemand |
+| currentExecution | `docs/plans/执行光标.md` | dev-builder | projection | onDemand |
+| manualAcceptance | `验收记录.md` | dev-builder | log | onDemand |
+| interfaceContracts | `接口契约.md` | product-spec-builder | source | onDemand |
+| projectProfile | `项目画像.md` | target-constitution-setup | source | onDemand |
+| constitutionDesign | `宪法设计.md` | target-constitution-setup | source | onDemand |

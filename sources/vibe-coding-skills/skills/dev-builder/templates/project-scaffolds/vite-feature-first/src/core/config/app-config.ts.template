@@ -1,0 +1,4 @@
+export const appConfig = {
+  projectName: "__PROJECT_NAME__",
+  title: "__PROJECT_TITLE__"
+} as const;

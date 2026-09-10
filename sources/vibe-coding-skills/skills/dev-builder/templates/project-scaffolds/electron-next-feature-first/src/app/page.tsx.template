@@ -1,0 +1,5 @@
+import { DesktopHomeScreen } from "@/features/desktop-home";
+
+export default function HomePage() {
+  return <DesktopHomeScreen />;
+}

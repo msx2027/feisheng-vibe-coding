@@ -1,0 +1,19 @@
+{
+  "name": "__NPM_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "__NPM_PACKAGE_NAME__": "src/index.mjs"
+  },
+  "scripts": {
+    "dev": "node src/index.mjs --help",
+    "check:docs": "node tools/build-target-doc-index.mjs . --check && node tools/check-target-doc-drift.mjs . --quick --strict && node tools/check-lifecycle-doc-budget.mjs . --strict",
+    "check:health": "npm run check:docs && node tools/vibe-health-check.mjs . --profile target --level quick",
+    "check:api-contracts": "node tools/check-api-contracts.mjs .",
+    "check:hotspots": "node tools/check-hotspots.mjs .",
+    "check:runtime-sync": "node tools/check-runtime-sync.mjs .",
+    "build": "npm run check:health && node --check src/index.mjs",
+    "smoke": "node src/index.mjs --health"
+  }
+}

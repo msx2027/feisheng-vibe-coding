@@ -1,0 +1,14 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+import "@/shared/ui/tokens.css";
+import { AppProviders } from "@/shared/providers/app-providers";
+import { HomePage } from "@/pages/home-page";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <AppProviders>
+      <HomePage />
+    </AppProviders>
+  </React.StrictMode>
+);

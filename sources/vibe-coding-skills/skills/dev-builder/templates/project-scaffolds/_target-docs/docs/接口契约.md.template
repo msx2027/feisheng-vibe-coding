@@ -1,0 +1,17 @@
+# 接口契约
+
+> 本文件记录目标项目的业务能力接口契约。开发时先查这里，已有能力入口能覆盖时只复用或扩展，不另造平行接口。
+
+## 契约清单
+
+| 能力ID | 统一能力 | 入口类型 | 契约入口 | 调用方 | 状态 | 说明 |
+| --- | --- | --- | --- | --- | --- | --- |
+| initial-no-interface | 暂无业务接口 | none | none | none | active | 初始项目尚无 API、service、public entry、server action、fetch wrapper、IPC / event 或 schema 契约；新增真实能力前先把契约登记到本表。 |
+
+## 填写规则
+
+- `能力ID` 使用稳定 kebab-case；同一业务能力只登记一个主 ID。
+- `入口类型` 只允许 `endpoint / service / publicEntry / schema / event / none`。
+- server action 通常登记为 `publicEntry` 或 `service`；fetch wrapper 登记为 `service`；IPC channel / 事件通道登记为 `event`。
+- 同一 `能力ID + 入口类型` 只能有一个 `契约入口`；需要第二个入口时，先判断是不是新业务能力。
+- 已存在入口能覆盖时，优先复用或扩展旧入口；确需新增时，在说明里写清和旧入口的边界差异、迁移关系、调用方影响和测试证据。

@@ -1,0 +1,229 @@
+[
+  {
+    "id": "novice-no-process",
+    "utterance": "我不会走流程，你先帮我看看",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["新手导航卡", "micro preflight", "我不会走流程"],
+    "mustNotRoute": [],
+    "notes": "新手迷茫入口先接管并做轻量预检，不要求用户背 Skill 名。"
+  },
+  {
+    "id": "activated-natural-bug",
+    "utterance": "vibe-coding-skills，页面一直转圈，帮我处理",
+    "activation": "current-turn",
+    "expectedRoute": "bug-fixer",
+    "expectedTier": "T3",
+    "mustContain": ["当前对话", "vibe-coding-skills", "bug-fixer"],
+    "mustNotRoute": [],
+    "notes": "同一轮先调用总入口再给普通自然语言，允许总入口根据 routeHints 路由。"
+  },
+  {
+    "id": "activated-follow-up-performance",
+    "utterance": "上一条已经调用 vibe-coding-skills，现在帮我查一下页面性能",
+    "activation": "prior-turn",
+    "expectedRoute": "optimize",
+    "expectedTier": "T2",
+    "mustContain": ["当前对话", "页面卡顿 / 性能", "optimize"],
+    "mustNotRoute": [],
+    "notes": "总入口在前一轮已打开时，后续普通自然语言仍可使用 routeHints。"
+  },
+  {
+    "id": "halfway-adoption",
+    "utterance": "别人写了一半，AI 写乱了，项目越来越乱",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["半路接管", "现状证据", "第一个安全任务"],
+    "mustNotRoute": [],
+    "notes": "半路接管先审计现状和风险，不按空项目重建。"
+  },
+  {
+    "id": "environment-startup",
+    "utterance": "本地打不开，端口被占用，环境变量怎么填",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["环境启动", "package scripts", "端口"],
+    "mustNotRoute": [],
+    "notes": "环境启动问题先做状态扫描和可运行性证据，不让用户手输一堆命令。"
+  },
+  {
+    "id": "feature-start",
+    "utterance": "我要加一个功能，加一个页面",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["我想加功能 / 改需求 / 改页面", "product-spec-builder"],
+    "mustNotRoute": [],
+    "notes": "功能开工先进入需求更新，不直接跳到 dev-builder。"
+  },
+  {
+    "id": "acceptance-release",
+    "utterance": "我怎么确认能不能给用户用，上线前检查一下",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["验收上线", "release-builder", "待用户验收"],
+    "mustNotRoute": [],
+    "notes": "上线前检查走发布/验收链路，并区分自动化和人工验收。"
+  },
+  {
+    "id": "security-privacy",
+    "utterance": "env 能不能提交，会不会泄露内部资料",
+    "expectedRoute": "hazard-mode",
+    "expectedTier": "T3+",
+    "mustContain": ["安全隐私", "secret", "hazard mode"],
+    "mustNotRoute": [],
+    "notes": "安全隐私自然话要升级高风险处理，不能走小任务快车道。"
+  },
+  {
+    "id": "explicit-security-file-query",
+    "utterance": "帮我看看 .env.production 这个文件有没有权限或泄露问题",
+    "expectedRoute": "hazard-mode",
+    "expectedTier": "T3+",
+    "mustContain": ["安全隐私", "权限", "不走小任务快车道"],
+    "mustNotRoute": [],
+    "notes": "对象明确不能覆盖安全和权限风险；单文件查询仍必须升级。"
+  },
+  {
+    "id": "readme-one-line",
+    "utterance": "只改 README 一句说明",
+    "expectedRoute": "fast-lane",
+    "expectedTier": "T0",
+    "mustContain": ["小任务快车道", "改 README 一句"],
+    "mustNotRoute": [],
+    "notes": "明确对象和低风险动作继续走 T0/T1 快车道。"
+  },
+  {
+    "id": "ui-micro-tweak",
+    "utterance": "按钮颜色改一下，组件间距小一点",
+    "expectedRoute": "ui-micro-tweak-fast-lane",
+    "expectedTier": "T1",
+    "mustContain": ["UI 微调快车道", "按钮颜色", "组件间距"],
+    "mustNotRoute": ["impeccable"],
+    "notes": "明确对象和 visual-only 调整不进入完整设计质量层。"
+  },
+  {
+    "id": "symptom-blank-screen",
+    "utterance": "打开是白屏，啥都没有",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["白屏", "bug-fixer"],
+    "mustNotRoute": [],
+    "notes": "小白只会描述现象；白屏是典型故障信号，按 bug 走 T3，不当成普通样式问题。"
+  },
+  {
+    "id": "symptom-spinner",
+    "utterance": "一直转圈圈，加载不出来",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["转圈圈", "bug-fixer"],
+    "mustNotRoute": [],
+    "notes": "转圈圈 / 加载不出来是运行时故障的大白话，走 bug-fixer 定位根因。"
+  },
+  {
+    "id": "symptom-red-errors",
+    "utterance": "弹出一堆看不懂的英文红字",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["一堆红字", "bug-fixer"],
+    "mustNotRoute": [],
+    "notes": "小白不会说报错 / 异常，只会说红字；等价于报错,走 bug-fixer。"
+  },
+  {
+    "id": "symptom-no-response",
+    "utterance": "按钮点了没反应",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["点了没反应", "bug-fixer"],
+    "mustNotRoute": [],
+    "notes": "点了没反应是功能失效现象，不是 UI 微调；走 bug-fixer 而非快车道。"
+  },
+  {
+    "id": "wish-from-scratch",
+    "utterance": "我想从头做一个记账的小工具",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["从头做一个", "product-spec-builder"],
+    "mustNotRoute": [],
+    "notes": "从零做不是加功能,先进需求澄清,不直接跳开发。"
+  },
+  {
+    "id": "slow-laggy",
+    "utterance": "点一下要等好久，越来越卡",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["越来越卡", "optimize"],
+    "mustNotRoute": [],
+    "notes": "小白说卡 / 等好久等价于性能问题,走 optimize,不当成普通 review。"
+  },
+  {
+    "id": "mobile-broken",
+    "utterance": "在手机上打开全是乱的",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["手机上打开", "adapt"],
+    "mustNotRoute": [],
+    "notes": "手机上乱是响应式的大白话,走 adapt,不当普通样式小改。"
+  },
+  {
+    "id": "file-too-long-scared",
+    "utterance": "这个文件太长了，我都不敢动",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["不敢动", "hotspot-governor"],
+    "mustNotRoute": [],
+    "notes": "文件太长 / 不敢动走热区治理先诊断拆分路线,不默认直接大重构。"
+  },
+  {
+    "id": "check-for-pitfalls",
+    "utterance": "帮我看看这写得有没有问题，有没有坑",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["有没有坑", "code-review"],
+    "mustNotRoute": [],
+    "notes": "看看有没有坑等价于代码审查,走 code-review。"
+  },
+  {
+    "id": "share-with-others",
+    "utterance": "我做完了，怎么让别人也能打开用",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T3",
+    "mustContain": ["让别人也能打开", "release-builder"],
+    "mustNotRoute": [],
+    "notes": "让别人也能用是发布 / 上线的大白话,走 release-builder 并区分人工验收。"
+  },
+  {
+    "id": "unclear-vague-feeling",
+    "utterance": "这个感觉怪怪的，不太对",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["需求还没成形", "先给猜测让你点头", "禁止直接开干"],
+    "mustNotRoute": [],
+    "notes": "只有情绪没有对象,意图还没成形;先澄清不硬开干。"
+  },
+  {
+    "id": "unclear-you-decide",
+    "utterance": "你看着办吧，你觉得呢",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["需求还没成形", "一次只问一个"],
+    "mustNotRoute": [],
+    "notes": "用户把判断丢回来,不代表可以随便猜;先一次一个问题挖清楚。"
+  },
+  {
+    "id": "unclear-cant-express",
+    "utterance": "我也不知道咋说，反正就是不好用",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["说不清", "先问再动"],
+    "mustNotRoute": [],
+    "notes": "用户知道难受但定位不出来;先问再动,禁止硬开干。"
+  },
+  {
+    "id": "ambiguous-layout-broken",
+    "utterance": "排版乱了，错位了",
+    "expectedRoute": "no-skill",
+    "expectedTier": "T2",
+    "mustContain": ["排版乱", "先反问是坏了还是想改"],
+    "mustNotRoute": [],
+    "notes": "排版乱可能是 bug 也可能是设计,天生歧义;先反问一句再定向,不硬跳。"
+  }
+]

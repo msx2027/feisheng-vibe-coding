@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "documentIndex": "文档索引.md",
+  "productSpec": "docs/需求文档.md",
+  "productSpecChangelog": "docs/需求变更.md",
+  "designBrief": "docs/设计简报.md",
+  "devPlan": "docs/项目治理/开发计划.md",
+  "currentExecution": "docs/plans/执行光标.md",
+  "manualAcceptance": "docs/项目治理/验收记录.md",
+  "interfaceContracts": "docs/接口契约.md",
+  "projectProfile": "docs/项目治理/项目画像.md",
+  "constitutionDesign": "docs/项目治理/宪法设计.md",
+  "documents": [
+    { "role": "documentIndex", "path": "文档索引.md", "owner": "doc-sync-guardian", "authority": "projection", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec", "productSpecChangelog", "designBrief", "devPlan", "currentExecution", "manualAcceptance", "interfaceContracts", "projectProfile", "constitutionDesign"], "sections": [] },
+    { "role": "productSpec", "path": "docs/需求文档.md", "owner": "product-spec-builder", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": [], "sections": [] },
+    { "role": "productSpecChangelog", "path": "docs/需求变更.md", "owner": "product-spec-builder", "authority": "log", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec"], "sections": [] },
+    { "role": "designBrief", "path": "docs/设计简报.md", "owner": "design-brief-builder", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec"], "sections": [] },
+    { "role": "devPlan", "path": "docs/项目治理/开发计划.md", "owner": "dev-planner", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec", "designBrief", "interfaceContracts"], "sections": [] },
+    { "role": "currentExecution", "path": "docs/plans/执行光标.md", "owner": "dev-builder", "authority": "projection", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["devPlan"], "sections": [] },
+    { "role": "manualAcceptance", "path": "docs/项目治理/验收记录.md", "owner": "dev-builder", "authority": "log", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec", "devPlan"], "sections": [] },
+    { "role": "interfaceContracts", "path": "docs/接口契约.md", "owner": "product-spec-builder", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["productSpec"], "sections": [] },
+    { "role": "projectProfile", "path": "docs/项目治理/项目画像.md", "owner": "target-constitution-setup", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": [], "sections": [] },
+    { "role": "constitutionDesign", "path": "docs/项目治理/宪法设计.md", "owner": "target-constitution-setup", "authority": "source", "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "estimatedTokens": 0, "dependsOn": ["projectProfile"], "sections": [] }
+  ],
+  "taskContext": { "enabled": false, "taskCapsulesRoot": "docs/plans/任务" },
+  "markdownGovernance": { "enabled": true, "maxTokens": 8000, "facadeMaxTokens": 3000, "archiveDirectories": [] },
+  "loadPolicy": { "always": ["documentIndex"], "never": [], "note": "always 只放轻量导航角色，默认仅 documentIndex；最多 3 个角色且合计不超过 12,000 token；never 禁止自动加载；其余为 onDemand，必须经 resolver 按 role 与 selector 读取" }
+}

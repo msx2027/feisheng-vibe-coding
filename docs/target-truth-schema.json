@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "feisheng://target-truth/v1",
+  "title": "Feisheng target project truth",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "projectId", "requirements", "plan", "terminology", "taskState", "acceptanceEvidence"],
+  "properties": {
+    "schema": { "const": "feisheng-target-truth/v1" },
+    "projectId": { "type": "string", "minLength": 1 },
+    "requirements": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "plan": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "terminology": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "taskState": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "acceptanceEvidence": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "writePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "adaptersOnly"],
+      "properties": {
+        "owner": { "const": "target-truth" },
+        "adaptersOnly": { "const": true },
+        "allowedAdapters": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "source", "updatedAt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["unknown", "draft", "active", "blocked", "accepted", "superseded"] },
+        "source": { "type": "string", "minLength": 1 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

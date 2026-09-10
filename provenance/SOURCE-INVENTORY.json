@@ -14,14 +14,27 @@
       "path": "F:\\skiils工具\\vibe-coding-skills",
       "role": "host-and-product-candidate",
       "license": "mixed-third-party; verify per path",
-      "migration": "blocked-pending-drift-repair"
+      "migration": "source-snapshot-accepted; runtime-migration-blocked-pending-host-and-license-gates",
+      "snapshot": {
+        "path": "sources/vibe-coding-skills",
+        "files": 550,
+        "sha256Mismatches": 0,
+        "unexpectedFiles": 0,
+        "treeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca"
+      }
     },
     {
       "id": "mattpocock-skills",
       "path": "F:\\skiils工具\\mattpocock-skills",
       "role": "engineering-primitives-candidate",
       "license": "MIT plus localized/source notices",
-      "migration": "blocked-pending-working-tree-audit"
+      "migration": "blocked-pending-working-tree-classification-confirmation",
+      "workingTreeAudit": {
+        "status": "accepted",
+        "evidence": "evidence/20260910-matt-dirty-classification.md",
+        "unclassifiedFiles": 4,
+        "migrationAllowed": false
+      }
     }
   ],
   "requiredEvidence": [

@@ -1,0 +1,131 @@
+---
+name: distill
+description: 仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `distill`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发。Strip designs to their essence by removing unnecessary complexity. Use when the user asks to 简化, 减少噪音, simplify, declutter, remove elements, or make a UI cleaner and more focused. Do not use for explicit T1 UI micro-tweaks with a named element/component and clear visual-only action.
+version: 2.1.1
+user-invocable: false
+argument-hint: "[target]"
+disable-model-invocation: true
+---
+[Vibe Coding Adapter]
+    本 Skill 可被显式点名，但仍必须先继承本包主控纪律，不得绕过 `AGENTS.md` / `CLAUDE.md`。
+    - 先判定 `execution tier`；涉及 Skill / Hook / Tool / Agent、发布、权限、安全、数据、文件系统、shell、network 或外部 MCP 时，按 T3+ hazard mode 执行。
+    - 目标项目生命周期文档先读 `.vibe-docs.json`，再按角色映射读写四字中文 `.md`；legacy 英文文档只作为迁移输入。
+    - 正式前端页面先识别 UI 包、design tokens、组件盘点、设计复审报告和设计系统复用门禁；页面层优先复用 UI / token / 组件。
+    - 需要用户真实点击、操作或观察时，输出人工验收状态；只有用户明确确认后才能记录为 `用户已确认`。
+    - 涉及 `.pen` 或 Pencil 时，必须使用 Pencil desktop 客户端和 desktop MCP server；不得 fallback 到 VS Code。
+    - references 只按 [按需加载 references] 或本文件 Reference Navigation 命中场景读取，不默认全量读取。
+Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification.
+
+## MANDATORY PREPARATION
+
+Invoke /impeccable — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run /impeccable teach first.
+Fast-path exception: if the request is an explicit T0/T1 visual tweak with named file/component/screenshot and action, low risk, and no missing design direction decision, do not invoke this Skill; use the UI micro-tweak fast lane. If this Skill was explicitly invoked, use existing context and skip `/impeccable teach`; when context is missing and materially affects the design direction, teach remains mandatory.
+
+---
+
+## Assess Current State
+
+Analyze what makes the design feel complex or cluttered:
+
+1. **Identify complexity sources**:
+   - **Too many elements**: Competing buttons, redundant information, visual clutter
+   - **Excessive variation**: Too many colors, fonts, sizes, styles without purpose
+   - **Information overload**: Everything visible at once, no progressive disclosure
+   - **Visual noise**: Unnecessary borders, shadows, backgrounds, decorations
+   - **Confusing hierarchy**: Unclear what matters most
+   - **Feature creep**: Too many options, actions, or paths forward
+
+2. **Find the essence**:
+   - What's the primary user goal? (There should be ONE)
+   - What's actually necessary vs nice-to-have?
+   - What can be removed, hidden, or combined?
+   - What's the 20% that delivers 80% of value?
+
+If any of these are unclear from the codebase, STOP and call the AskUserQuestion tool to clarify.
+
+**CRITICAL**: Simplicity is not about removing features - it's about removing obstacles between users and their goals. Every element should justify its existence.
+
+## Plan Simplification
+
+Create a ruthless editing strategy:
+
+- **Core purpose**: What's the ONE thing this should accomplish?
+- **Essential elements**: What's truly necessary to achieve that purpose?
+- **Progressive disclosure**: What can be hidden until needed?
+- **Consolidation opportunities**: What can be combined or integrated?
+
+**IMPORTANT**: Simplification is hard. It requires saying no to good ideas to make room for great execution. Be ruthless.
+
+## Simplify the Design
+
+Systematically remove complexity across these dimensions:
+
+### Information Architecture
+- **Reduce scope**: Remove secondary actions, optional features, redundant information
+- **Progressive disclosure**: Hide complexity behind clear entry points (accordions, modals, step-through flows)
+- **Combine related actions**: Merge similar buttons, consolidate forms, group related content
+- **Clear hierarchy**: ONE primary action, few secondary actions, everything else tertiary or hidden
+- **Remove redundancy**: If it's said elsewhere, don't repeat it here
+
+### Visual Simplification
+- **Reduce color palette**: Use 1-2 colors plus neutrals, not 5-7 colors
+- **Limit typography**: One font family, 3-4 sizes maximum, 2-3 weights
+- **Remove decorations**: Eliminate borders, shadows, backgrounds that don't serve hierarchy or function
+- **Flatten structure**: Reduce nesting, remove unnecessary containers—never nest cards inside cards
+- **Remove unnecessary cards**: Cards aren't needed for basic layout; use spacing and alignment instead
+- **Consistent spacing**: Use one spacing scale, remove arbitrary gaps
+
+### Layout Simplification
+- **Linear flow**: Replace complex grids with simple vertical flow where possible
+- **Remove sidebars**: Move secondary content inline or hide it
+- **Full-width**: Use available space generously instead of complex multi-column layouts
+- **Consistent alignment**: Pick left or center, stick with it
+- **Generous white space**: Let content breathe, don't pack everything tight
+
+### Interaction Simplification
+- **Reduce choices**: Fewer buttons, fewer options, clearer path forward (paradox of choice is real)
+- **Smart defaults**: Make common choices automatic, only ask when necessary
+- **Inline actions**: Replace modal flows with inline editing where possible
+- **Remove steps**: Can signup be one step instead of three? Can checkout be simplified?
+- **Clear CTAs**: ONE obvious next step, not five competing actions
+
+### Content Simplification
+- **Shorter copy**: Cut every sentence in half, then do it again
+- **Active voice**: "Save changes" not "Changes will be saved"
+- **Remove jargon**: Plain language always wins
+- **Scannable structure**: Short paragraphs, bullet points, clear headings
+- **Essential information only**: Remove marketing fluff, legalese, hedging
+- **Remove redundant copy**: No headers restating intros, no repeated explanations, say it once
+
+### Code Simplification
+- **Remove unused code**: Dead CSS, unused components, orphaned files
+- **Flatten component trees**: Reduce nesting depth
+- **Consolidate styles**: Merge similar styles, use utilities consistently
+- **Reduce variants**: Does that component need 12 variations, or can 3 cover 90% of cases?
+
+**NEVER**:
+- Remove necessary functionality (simplicity ≠ feature-less)
+- Sacrifice accessibility for simplicity (clear labels and ARIA still required)
+- Make things so simple they're unclear (mystery ≠ minimalism)
+- Remove information users need to make decisions
+- Eliminate hierarchy completely (some things should stand out)
+- Oversimplify complex domains (match complexity to actual task complexity)
+
+## Verify Simplification
+
+Ensure simplification improves usability:
+
+- **Faster task completion**: Can users accomplish goals more quickly?
+- **Reduced cognitive load**: Is it easier to understand what to do?
+- **Still complete**: Are all necessary features still accessible?
+- **Clearer hierarchy**: Is it obvious what matters most?
+- **Better performance**: Does simpler design load faster?
+
+## Document Removed Complexity
+
+If you removed features or options:
+- Document why they were removed
+- Consider if they need alternative access points
+- Note any user feedback to monitor
+
+Remember: You have great taste and judgment. Simplification is an act of confidence - knowing what to keep and courage to remove the rest. As Antoine de Saint-Exupéry said: "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away."

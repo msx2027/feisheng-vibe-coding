@@ -1,0 +1,44 @@
+[
+  {
+    "id": "novice-cannot-understand-large-file",
+    "userText": "这一坨太大我看不懂，你先告诉我怎么办",
+    "expectedConclusion": "有提醒线",
+    "expectedRoute": "等待用户确认",
+    "expectedResponse": "**热区结论**\n有提醒线\n\n**证据**\n- src/features/order-flow.ts：超过 300 行提醒线，需要看职责边界。\n\n**风险**\n- 这不是功能故障，但继续堆会增加理解成本、误改概率和回归定位成本。\n\n**拆分路线**\n1. 先标出订单流程里的稳定 helper 和纯数据转换。\n2. 再把可独立验证的领域步骤迁到小模块。\n3. 暂不移动核心流程入口，避免一次性大改。\n\n**后续路由**\n等待用户确认\n\n**人工验收状态**\n需要用户确认拆分方案"
+  },
+  {
+    "id": "stop-adding-to-hotspot",
+    "userText": "别往这里塞了，先看看 staged 里是不是又堆大了",
+    "expectedConclusion": "有阻断候选",
+    "expectedRoute": "code-review",
+    "expectedResponse": "**热区结论**\n有阻断候选\n\n**证据**\n- src/runtime/runner.ts：暂存的新生产文件超过 300 行硬门禁，且位于 runtime 核心路径。\n\n**风险**\n- 继续把非平凡逻辑塞进 runner 会放大误改概率，回归失败时也更难定位。\n\n**拆分路线**\n1. 先判断新逻辑是否必须落在 runner。\n2. 能下沉到 command handler 或 adapter 的逻辑优先移出。\n3. runner 本体只保留调度和边界处理。\n\n**后续路由**\ncode-review\n\n**人工验收状态**\n需要用户确认拆分方案"
+  },
+  {
+    "id": "large-react-component",
+    "userText": "这个超大组件怎么办，我只是觉得它越来越难改",
+    "expectedConclusion": "有提醒线",
+    "expectedRoute": "ui-system-guardian",
+    "expectedResponse": "**热区结论**\n有提醒线\n\n**证据**\n- src/components/HugePanel.tsx：React 组件超过 180 行组件线。\n\n**风险**\n- 大组件会把展示、状态、view model 和样式债务混在一起，后续 UI 修改更容易互相影响。\n\n**拆分路线**\n1. 先拆纯展示子组件。\n2. 再抽状态 hook 或 view model。\n3. 如果发现 UI 包、token 或组件复用缺口，交给 UI 系统治理。\n\n**后续路由**\nui-system-guardian\n\n**人工验收状态**\n需要用户确认拆分方案"
+  },
+  {
+    "id": "large-test-file",
+    "userText": "这个测试文件太大了，后面还要继续加用例吗",
+    "expectedConclusion": "有核心热区",
+    "expectedRoute": "test-automation",
+    "expectedResponse": "**热区结论**\n有核心热区\n\n**证据**\n- tests/checkout.e2e.test.ts：测试文件超过 800 行热区线。\n\n**风险**\n- 大测试文件会让场景、fixture 和断言互相缠住，失败时很难知道是哪条路径坏了。\n\n**拆分路线**\n1. 先按 checkout 能力或用户路径分组。\n2. 再抽共享 fixture 和 helper。\n3. 暂不改断言语义，避免测试治理变成功能变更。\n\n**后续路由**\ntest-automation\n\n**人工验收状态**\n需要用户确认拆分方案"
+  },
+  {
+    "id": "large-schema-config",
+    "userText": "这个 schema/config 越来越大，是不是该拆一下",
+    "expectedConclusion": "有提醒线",
+    "expectedRoute": "dev-builder",
+    "expectedResponse": "**热区结论**\n有提醒线\n\n**证据**\n- src/schema/customer.schema.ts：超过 300 行提醒线，并命中 schema/config 类别。\n\n**风险**\n- schema/config 继续变大，会让调用方 import 边界和字段归属变模糊。\n\n**拆分路线**\n1. 先按领域或能力拆出稳定 schema 文件。\n2. 保留统一导出入口，减少调用方大面积改 import。\n3. 高风险字段迁移先不动。\n\n**后续路由**\ndev-builder\n\n**人工验收状态**\n需要用户确认拆分方案"
+  },
+  {
+    "id": "start-implementing-split-plan",
+    "userText": "同意，开始按方案拆，但别乱动别的",
+    "expectedConclusion": "有核心热区",
+    "expectedRoute": "dev-builder",
+    "expectedResponse": "**热区结论**\n有核心热区\n\n**证据**\n- src/actions/order-actions.ts：超过 800 行热区线，并位于 action 核心路径。\n\n**风险**\n- action 入口继续膨胀会把命令处理、错误映射和事件桥接混在一起。\n\n**拆分路线**\n1. 先确认本轮只拆已同意的最小职责。\n2. 实施前写清验证命令和回滚边界。\n3. 不移动未覆盖测试的核心流程。\n\n**后续路由**\ndev-builder\n\n**人工验收状态**\n需要用户确认拆分范围"
+  }
+]

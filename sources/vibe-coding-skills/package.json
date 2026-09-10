@@ -1,0 +1,28 @@
+{
+  "name": "vibe",
+  "version": "0.0.0-private",
+  "private": true,
+  "description": "Dual-runtime distribution package for vibe coding skills.",
+  "engines": {
+    "node": ">=22 <26"
+  },
+  "scripts": {
+    "check:health": "node tools/test-spec-driven-gates.mjs && node tools/vibe-health-check.mjs . --profile package --level quick --strict",
+    "check:source-health": "node tools/test-spec-driven-gates.mjs && node tools/vibe-health-check.mjs . --profile package --level quick --strict",
+    "test:health": "node --test tools/test-vibe-health-check.mjs",
+    "test:tdd-policy": "node tools/test-strict-tdd-policy.mjs",
+    "test:tdd-scenarios": "node tools/test-strict-tdd-human-scenarios.mjs",
+    "test:review-policy": "node tools/test-review-policy.mjs",
+    "test:spec-driven-gates": "node tools/test-spec-driven-gates.mjs",
+    "test:architecture-foundation": "node tools/test-architecture-foundation.mjs",
+    "test:experience-governance": "node tools/test-experience-governance-closure.mjs && node tools/test-experience-governance-doc-contracts.mjs",
+    "test:hotspots": "node tools/test-hotspots.mjs",
+    "test:guardrails": "node tools/test-target-guardrails.mjs",
+    "test:target-doc-governance": "node --test tools/test-target-doc-governance.mjs",
+    "test:target-doc-auto-sync": "node tools/test-target-doc-auto-sync.mjs",
+    "test:target-doc-migration": "node --test tools/test-target-doc-migration.mjs",
+    "test:trusted-executables": "node tools/test-trusted-executables.mjs",
+    "check:constitution-rules": "node tools/check-constitution-rules.mjs",
+    "test:constitution-rules": "node --test tools/test-constitution-rules.mjs"
+  }
+}

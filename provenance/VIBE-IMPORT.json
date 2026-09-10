@@ -1,0 +1,3371 @@
+{
+  "schema": "feisheng-import-record/v2",
+  "taskId": "20260910-vibe-snapshot-closure",
+  "targetBaseline": "699d53db84275a42ae8a2676b0dfe899e3f996ed",
+  "source": "vibe-coding-skills",
+  "sourceRoot": "F:\\skiils工具\\vibe-coding-skills",
+  "sourceRevision": null,
+  "sourceWorkingTree": "not-a-git-checkout",
+  "snapshotRoot": "sources/vibe-coding-skills",
+  "snapshotFiles": 550,
+  "sourceFiles": 1342,
+  "approvedAllowlistFiles": 550,
+  "sourceMissingApprovedFiles": [],
+  "snapshotMissingApprovedFiles": [],
+  "snapshotUnexpectedFiles": [],
+  "sourceFilesOutsideAllowlist": 792,
+  "sha256Algorithm": "SHA-256",
+  "sha256CheckedFiles": 550,
+  "sha256Mismatches": 0,
+  "sha256MismatchPaths": [],
+  "sourceAllowlistTreeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca",
+  "snapshotTreeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca",
+  "excluded": [
+    {
+      "path": ".agents",
+      "present": false
+    },
+    {
+      "path": ".claude/skills",
+      "present": false
+    },
+    {
+      "path": ".claude/agents",
+      "present": false
+    },
+    {
+      "path": ".codex",
+      "present": false
+    },
+    {
+      "path": "MANIFEST.json",
+      "present": false
+    },
+    {
+      "path": "skills/ROUTING-MANIFEST.json",
+      "present": false
+    }
+  ],
+  "quarantine": "sources/_quarantine/vibe-claude-skills-mirror and sources/_quarantine/vibe-claude-agents-mirror",
+  "quarantineMovedFiles": [
+    {
+      "source": "sources/vibe-coding-skills/skills/ROUTING-MANIFEST.json",
+      "destination": "sources/_quarantine/vibe-claude-skills-mirror/formal-snapshot/ROUTING-MANIFEST.json",
+      "sha256": "35a9b31ca7e07fc1297bdfdadb914f5782c72c711274a9e23ec7f4445234f758"
+    }
+  ],
+  "migration": "source-snapshot-only; runtime-not-enabled",
+  "rebuild": {
+    "script": "scripts/import-vibe-source.ps1",
+    "scriptCopiesSkillsDirectory": true,
+    "scriptExplicitlyRemovesExcludedRouteManifest": true,
+    "reproducibleClosure": true,
+    "freshCleanTargetExecution": "not-run",
+    "reason": "The importer copies the skills directory and then explicitly removes skills/ROUTING-MANIFEST.json before recording the snapshot count."
+  },
+  "validationStatus": "accepted",
+  "generatedAt": "2026-09-10T02:57:50.0553914Z",
+  "note": "Approved source paths were copied and checked byte-for-byte. Generated mirrors and stale manifests are excluded from the formal snapshot; runtime projection and fresh-session smoke remain unverified.",
+  "fileSha256": [
+    {
+      "path": ".claude/CLAUDE.md",
+      "sourceSha256": "98b538b3c102889f3677b10e51c48d9eceb02ad58eddeb3a25525ea80a1ae4e5",
+      "snapshotSha256": "98b538b3c102889f3677b10e51c48d9eceb02ad58eddeb3a25525ea80a1ae4e5",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/confirm-screenshot-project-before-diagnosis.md",
+      "sourceSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
+      "snapshotSha256": "33986256feca1b238b82ec36443813e7d089607272ec19e804227bfa0c9919f9",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/FEEDBACK-INDEX.md",
+      "sourceSha256": "73a57d922b5caca3c88a6519632fae79db2d5f5729a85037813fb14dcbfb35fe",
+      "snapshotSha256": "73a57d922b5caca3c88a6519632fae79db2d5f5729a85037813fb14dcbfb35fe",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/separate-skill-package-and-target-project-scope.md",
+      "sourceSha256": "64319ebda0f787ebf6350d87a96557e306707528b493b47b603700368806f3a9",
+      "snapshotSha256": "64319ebda0f787ebf6350d87a96557e306707528b493b47b603700368806f3a9",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/templates/feedback-index-template.md",
+      "sourceSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
+      "snapshotSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/feedback/templates/feedback-topic-template.md",
+      "sourceSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "snapshotSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/auto-sync-target-doc-index.sh",
+      "sourceSha256": "72e131fd6828a6ac6f4d75b38aa4d8e9b6a59155f2aa74f10bfa3109173c9f95",
+      "snapshotSha256": "72e131fd6828a6ac6f4d75b38aa4d8e9b6a59155f2aa74f10bfa3109173c9f95",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/check-evolution.sh",
+      "sourceSha256": "8ec79218bb1d35870d169d64730ccd07c1965013cdb7fb74767697bd0f111618",
+      "snapshotSha256": "8ec79218bb1d35870d169d64730ccd07c1965013cdb7fb74767697bd0f111618",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/check-routing-session.sh",
+      "sourceSha256": "b4ffcc319b107f30ff2791bffbbc3bfaa950ee5cdbe0b0567678e4f0e26364ab",
+      "snapshotSha256": "b4ffcc319b107f30ff2791bffbbc3bfaa950ee5cdbe0b0567678e4f0e26364ab",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/detect-feedback-signal.sh",
+      "sourceSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
+      "snapshotSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/INDEX.md",
+      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/mark-doc-sync-needed.sh",
+      "sourceSha256": "d585f83ea8b8b1030ed6be2bcf522714cc1ab7ef11d9d78ba5e9d6a587c37917",
+      "snapshotSha256": "d585f83ea8b8b1030ed6be2bcf522714cc1ab7ef11d9d78ba5e9d6a587c37917",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/mark-review-needed.sh",
+      "sourceSha256": "3701f3e3d872a881574ece3d9219528d46523e4ca17a7f8d3df916d689b72ba7",
+      "snapshotSha256": "3701f3e3d872a881574ece3d9219528d46523e4ca17a7f8d3df916d689b72ba7",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/mark-source-change-needed.sh",
+      "sourceSha256": "5e7cfa22dd3eedcec94f40c41d8caf9315ad5331d9a385b4f9d12fffd12c94db",
+      "snapshotSha256": "5e7cfa22dd3eedcec94f40c41d8caf9315ad5331d9a385b4f9d12fffd12c94db",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/pre-commit-check.sh",
+      "sourceSha256": "041eb8cb929460205a106e5437ae68fb0c36730d5946469aa9366296b500a39b",
+      "snapshotSha256": "041eb8cb929460205a106e5437ae68fb0c36730d5946469aa9366296b500a39b",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/hooks/stop-gate.sh",
+      "sourceSha256": "cf85e5b0ffe4aa8d3f86f23e8fae2cb5617c695dc035a2f3ef1f94ba116bd20f",
+      "snapshotSha256": "cf85e5b0ffe4aa8d3f86f23e8fae2cb5617c695dc035a2f3ef1f94ba116bd20f",
+      "sha256Match": true
+    },
+    {
+      "path": ".claude/settings.json",
+      "sourceSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
+      "snapshotSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
+      "sha256Match": true
+    },
+    {
+      "path": "AGENTS.md",
+      "sourceSha256": "4940fabdfc8580914eab1c57a83bf6b06d657ddff66a719020461d18622baf16",
+      "snapshotSha256": "4940fabdfc8580914eab1c57a83bf6b06d657ddff66a719020461d18622baf16",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/code-reviewer.md",
+      "sourceSha256": "bb191c99107f285ce7ada47206d15e3d4d687bfbe09432aa5f63fc30dbc572fa",
+      "snapshotSha256": "bb191c99107f285ce7ada47206d15e3d4d687bfbe09432aa5f63fc30dbc572fa",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/evolution-runner.md",
+      "sourceSha256": "136d1bef399311c34d3a33905edb3635a02a5aee37d0cfd2eddd7521a7cc8477",
+      "snapshotSha256": "136d1bef399311c34d3a33905edb3635a02a5aee37d0cfd2eddd7521a7cc8477",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/feedback-observer.md",
+      "sourceSha256": "3b5a4f5d95a038d3e79a70a08131882742024cf2903f083ee4aafe326b942432",
+      "snapshotSha256": "3b5a4f5d95a038d3e79a70a08131882742024cf2903f083ee4aafe326b942432",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/implementer.md",
+      "sourceSha256": "837b79b9ed5f1c31a8bd8ae390462d023c7f9e3f92b87282d88c79c4e2f580cc",
+      "snapshotSha256": "837b79b9ed5f1c31a8bd8ae390462d023c7f9e3f92b87282d88c79c4e2f580cc",
+      "sha256Match": true
+    },
+    {
+      "path": "agents/INDEX.md",
+      "sourceSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
+      "snapshotSha256": "5059522cfc5567f2a70a957fb51e48629e02ef24836e6099232fb9cf494603db",
+      "sha256Match": true
+    },
+    {
+      "path": "CLAUDE.md",
+      "sourceSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
+      "snapshotSha256": "c0bca23baef90f64b3900f9b8e87a38813a5c161c5c049d89f5435f53a61c22e",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks.json",
+      "sourceSha256": "84eefc5dee02cfa0d3b92b3137cbe97d20249bbd0011d856a7117f41ad200178",
+      "snapshotSha256": "84eefc5dee02cfa0d3b92b3137cbe97d20249bbd0011d856a7117f41ad200178",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/auto-sync-target-doc-index.ps1",
+      "sourceSha256": "e6f511e5900094f44868610e42c112d3daf6f5c86a6a5f3cf6b74ee94dd653cc",
+      "snapshotSha256": "e6f511e5900094f44868610e42c112d3daf6f5c86a6a5f3cf6b74ee94dd653cc",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/check-evolution.ps1",
+      "sourceSha256": "0f7129043d0ad3018d311f607fd308c5e192511c5cd172fc425b6c3084d6ed8b",
+      "snapshotSha256": "0f7129043d0ad3018d311f607fd308c5e192511c5cd172fc425b6c3084d6ed8b",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/check-evolution.sh",
+      "sourceSha256": "3bb6777418d193e019b84b53b73709bd62f038d1bc609dd73de05317ea65b124",
+      "snapshotSha256": "3bb6777418d193e019b84b53b73709bd62f038d1bc609dd73de05317ea65b124",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/check-routing-session.ps1",
+      "sourceSha256": "9e05f6377237db89a1ff725054c2f748f94e2a16ac06e56b55b52d0f58bda0d4",
+      "snapshotSha256": "9e05f6377237db89a1ff725054c2f748f94e2a16ac06e56b55b52d0f58bda0d4",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/detect-feedback-signal.ps1",
+      "sourceSha256": "6d40038fca9463c8ec7b70303fd71b1f31d8149117093d4160056490904d8f33",
+      "snapshotSha256": "6d40038fca9463c8ec7b70303fd71b1f31d8149117093d4160056490904d8f33",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/detect-feedback-signal.sh",
+      "sourceSha256": "f087c78a917b5a9a679502661185a052073a162859dcd4dac7565f7c322b0f39",
+      "snapshotSha256": "f087c78a917b5a9a679502661185a052073a162859dcd4dac7565f7c322b0f39",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/INDEX.md",
+      "sourceSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
+      "snapshotSha256": "3deff81fcae34fd81a3507c07037087daf97403acae2c7866029d3287d25035f",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-doc-sync-needed.ps1",
+      "sourceSha256": "02533130384b7d17b19e08b2ffc9599cd0b0acac84516c3077b37dd5b8689923",
+      "snapshotSha256": "02533130384b7d17b19e08b2ffc9599cd0b0acac84516c3077b37dd5b8689923",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-doc-sync-needed.sh",
+      "sourceSha256": "bf09cd26fe5ef09c48534490a41499f9013079c9ecc8974f69139f5b393c2f14",
+      "snapshotSha256": "bf09cd26fe5ef09c48534490a41499f9013079c9ecc8974f69139f5b393c2f14",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-review-needed.ps1",
+      "sourceSha256": "8931e3a5f3a2616ab9d2f38f5df64e40eb5ed0bc36722e6b5d9a15943771aaeb",
+      "snapshotSha256": "8931e3a5f3a2616ab9d2f38f5df64e40eb5ed0bc36722e6b5d9a15943771aaeb",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-review-needed.sh",
+      "sourceSha256": "88f3551a3ff3cd16faa01f170fe2f6dd95f1725db33021453d1e2cf8643dbf15",
+      "snapshotSha256": "88f3551a3ff3cd16faa01f170fe2f6dd95f1725db33021453d1e2cf8643dbf15",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-source-change-needed.ps1",
+      "sourceSha256": "d40d6d59212cf6f19f7c65ae0e928c672b4d49bfc0c35e6961c32e301171f70a",
+      "snapshotSha256": "d40d6d59212cf6f19f7c65ae0e928c672b4d49bfc0c35e6961c32e301171f70a",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/mark-source-change-needed.sh",
+      "sourceSha256": "caa0eb21a9bec58d7f4dd125567eff4980fbde95a44b8afd8292a114ce62d6ee",
+      "snapshotSha256": "caa0eb21a9bec58d7f4dd125567eff4980fbde95a44b8afd8292a114ce62d6ee",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/pre-commit-check.ps1",
+      "sourceSha256": "d973613f6090ae9eddbf28595476c8ac3539c343082595891f89b148a3a7c0be",
+      "snapshotSha256": "d973613f6090ae9eddbf28595476c8ac3539c343082595891f89b148a3a7c0be",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/pre-commit-check.sh",
+      "sourceSha256": "f4fcdc7cdb98e83fcbc307b70f519891ef4e3f19063c159a61eaad01db83d16a",
+      "snapshotSha256": "f4fcdc7cdb98e83fcbc307b70f519891ef4e3f19063c159a61eaad01db83d16a",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/run-hook.ps1",
+      "sourceSha256": "5bba7633f6692cda249b0812f535be178db632b2aadb5b73ca504786d53a9830",
+      "snapshotSha256": "5bba7633f6692cda249b0812f535be178db632b2aadb5b73ca504786d53a9830",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/shared-changes.ps1",
+      "sourceSha256": "bdecb3394f45025cbdb116269e9e08693fdba4e94f5887311de486c85b301f30",
+      "snapshotSha256": "bdecb3394f45025cbdb116269e9e08693fdba4e94f5887311de486c85b301f30",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/shared-docs.ps1",
+      "sourceSha256": "0f3e225a06902255435ecbe64183e53c35c139d5e1262b60e096b83e1a8f06e4",
+      "snapshotSha256": "0f3e225a06902255435ecbe64183e53c35c139d5e1262b60e096b83e1a8f06e4",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/shared-paths.ps1",
+      "sourceSha256": "4981724b051828ad709de38b9eb4782e61d237ea65d1fff379b27725a681ef34",
+      "snapshotSha256": "4981724b051828ad709de38b9eb4782e61d237ea65d1fff379b27725a681ef34",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/shared.ps1",
+      "sourceSha256": "8168f9c419f2f4314c17c503e7fb5fd093591c59580ab0bdf7142ed118cabe73",
+      "snapshotSha256": "8168f9c419f2f4314c17c503e7fb5fd093591c59580ab0bdf7142ed118cabe73",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/stop-gate.ps1",
+      "sourceSha256": "0acc271d9d3e8f16bb3020517a6bc4cef8835fe32e54feb3fc50c46ae010b506",
+      "snapshotSha256": "0acc271d9d3e8f16bb3020517a6bc4cef8835fe32e54feb3fc50c46ae010b506",
+      "sha256Match": true
+    },
+    {
+      "path": "codex-hooks/stop-gate.sh",
+      "sourceSha256": "8b1a624acf704cb9d1b00bd84bd74a209f5e7c2d33583aee5ab434541c6f2c2a",
+      "snapshotSha256": "8b1a624acf704cb9d1b00bd84bd74a209f5e7c2d33583aee5ab434541c6f2c2a",
+      "sha256Match": true
+    },
+    {
+      "path": "docs/legal/BUNDLED-DESIGN-SKILLS-SOURCES.md",
+      "sourceSha256": "cd0921f20dac13e860d89129b3088e475622d18173b13e5110299f96ca350c8a",
+      "snapshotSha256": "cd0921f20dac13e860d89129b3088e475622d18173b13e5110299f96ca350c8a",
+      "sha256Match": true
+    },
+    {
+      "path": "docs/legal/LICENSE-impeccable-bundled.txt",
+      "sourceSha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "snapshotSha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "sha256Match": true
+    },
+    {
+      "path": "docs/legal/LICENSE-ui-ux-pro-max-bundled.txt",
+      "sourceSha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "snapshotSha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "sha256Match": true
+    },
+    {
+      "path": "docs/legal/NOTICE-impeccable-bundled.txt",
+      "sourceSha256": "9b62c0ed7b409d5bc62e026b4bbde03b9d152c7081ec7c53c0dee849fd7ed6d6",
+      "snapshotSha256": "9b62c0ed7b409d5bc62e026b4bbde03b9d152c7081ec7c53c0dee849fd7ed6d6",
+      "sha256Match": true
+    },
+    {
+      "path": "feedback/templates/feedback-index-template.md",
+      "sourceSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
+      "snapshotSha256": "c72e809c92dccf769f00f60d5153fd685e56f7f15b0c79414f31ff28c4b34f56",
+      "sha256Match": true
+    },
+    {
+      "path": "feedback/templates/feedback-topic-template.md",
+      "sourceSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "snapshotSha256": "c1dada14edc2e5f253f6b1ac522adc9e546824b3399571593e06f53c1df1c827",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/auto-sync-target-doc-index.sh",
+      "sourceSha256": "72e131fd6828a6ac6f4d75b38aa4d8e9b6a59155f2aa74f10bfa3109173c9f95",
+      "snapshotSha256": "72e131fd6828a6ac6f4d75b38aa4d8e9b6a59155f2aa74f10bfa3109173c9f95",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/check-evolution.sh",
+      "sourceSha256": "8ec79218bb1d35870d169d64730ccd07c1965013cdb7fb74767697bd0f111618",
+      "snapshotSha256": "8ec79218bb1d35870d169d64730ccd07c1965013cdb7fb74767697bd0f111618",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/check-routing-session.sh",
+      "sourceSha256": "b4ffcc319b107f30ff2791bffbbc3bfaa950ee5cdbe0b0567678e4f0e26364ab",
+      "snapshotSha256": "b4ffcc319b107f30ff2791bffbbc3bfaa950ee5cdbe0b0567678e4f0e26364ab",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/detect-feedback-signal.sh",
+      "sourceSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
+      "snapshotSha256": "4c88c787e2907243d4d689a5fed4bf7beddfe6b37ff1ceddc4e5db6e6734ebba",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/INDEX.md",
+      "sourceSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "snapshotSha256": "398c38aacc71e4ca60b81e55d11296cfc3c7e2c8730092d14fd2bceaf94d27b3",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/mark-doc-sync-needed.sh",
+      "sourceSha256": "d585f83ea8b8b1030ed6be2bcf522714cc1ab7ef11d9d78ba5e9d6a587c37917",
+      "snapshotSha256": "d585f83ea8b8b1030ed6be2bcf522714cc1ab7ef11d9d78ba5e9d6a587c37917",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/mark-review-needed.sh",
+      "sourceSha256": "3701f3e3d872a881574ece3d9219528d46523e4ca17a7f8d3df916d689b72ba7",
+      "snapshotSha256": "3701f3e3d872a881574ece3d9219528d46523e4ca17a7f8d3df916d689b72ba7",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/mark-source-change-needed.sh",
+      "sourceSha256": "5e7cfa22dd3eedcec94f40c41d8caf9315ad5331d9a385b4f9d12fffd12c94db",
+      "snapshotSha256": "5e7cfa22dd3eedcec94f40c41d8caf9315ad5331d9a385b4f9d12fffd12c94db",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/pre-commit-check.sh",
+      "sourceSha256": "041eb8cb929460205a106e5437ae68fb0c36730d5946469aa9366296b500a39b",
+      "snapshotSha256": "041eb8cb929460205a106e5437ae68fb0c36730d5946469aa9366296b500a39b",
+      "sha256Match": true
+    },
+    {
+      "path": "hooks/stop-gate.sh",
+      "sourceSha256": "cf85e5b0ffe4aa8d3f86f23e8fae2cb5617c695dc035a2f3ef1f94ba116bd20f",
+      "snapshotSha256": "cf85e5b0ffe4aa8d3f86f23e8fae2cb5617c695dc035a2f3ef1f94ba116bd20f",
+      "sha256Match": true
+    },
+    {
+      "path": "package.json",
+      "sourceSha256": "2d7e9685aea75684c6423303a5ce5d3a109cd2cfaedcddd16b97f969bedb6440",
+      "snapshotSha256": "2d7e9685aea75684c6423303a5ce5d3a109cd2cfaedcddd16b97f969bedb6440",
+      "sha256Match": true
+    },
+    {
+      "path": "README.md",
+      "sourceSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
+      "snapshotSha256": "a7c96219d52cdbf463570a5b1a7c2a4f5c77e4b9f973a8a654ad2680fcde7341",
+      "sha256Match": true
+    },
+    {
+      "path": "settings.json",
+      "sourceSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
+      "snapshotSha256": "822a1758bdc3bd08511f22324c3a7d99952a204392cf30c1b667b46c4cf87b89",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/adapt/SKILL.md",
+      "sourceSha256": "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3",
+      "snapshotSha256": "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/animate/SKILL.md",
+      "sourceSha256": "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b",
+      "snapshotSha256": "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/architecture-foundation/references/foundation-dimensions.md",
+      "sourceSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
+      "snapshotSha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/architecture-foundation/SKILL.md",
+      "sourceSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
+      "snapshotSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/audit/SKILL.md",
+      "sourceSha256": "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995",
+      "snapshotSha256": "112b76c94760b016a80416f00c97f86daf3b7b4bf9f89f54a8bb504e471bb995",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/beginner-flow-guide/references/route-matrix.md",
+      "sourceSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
+      "snapshotSha256": "32150dbbdc373beda53dbc15cf5aa5eeeee275edbb947eb4bce114159390be96",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/beginner-flow-guide/SKILL.md",
+      "sourceSha256": "935a5962df0346b4946645a0d2ab40e0853c108bc8eeab99fd25e4d1698987af",
+      "snapshotSha256": "935a5962df0346b4946645a0d2ab40e0853c108bc8eeab99fd25e4d1698987af",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/bolder/SKILL.md",
+      "sourceSha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e",
+      "snapshotSha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/approval-checklist.md",
+      "sourceSha256": "1bc2887f2f6956a3008f2c1168e0844d3862af903e9f5ea341c107c24e47c319",
+      "snapshotSha256": "1bc2887f2f6956a3008f2c1168e0844d3862af903e9f5ea341c107c24e47c319",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/asset-organization.md",
+      "sourceSha256": "f9eaa9a9e2c9b7dc366aa934e7f17f51f0f254a47f0f311218e5ea2ef4bbba2f",
+      "snapshotSha256": "f9eaa9a9e2c9b7dc366aa934e7f17f51f0f254a47f0f311218e5ea2ef4bbba2f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/brand-guideline-template.md",
+      "sourceSha256": "392db8cf10fef492221c15a86e68590074bf5716de1f2982f41c01fbe30567cc",
+      "snapshotSha256": "392db8cf10fef492221c15a86e68590074bf5716de1f2982f41c01fbe30567cc",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/color-palette-management.md",
+      "sourceSha256": "c429298ffe3955edb8b22c9f51426fef75e83d02848cd4300e89c0d3fc34b44a",
+      "snapshotSha256": "c429298ffe3955edb8b22c9f51426fef75e83d02848cd4300e89c0d3fc34b44a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/consistency-checklist.md",
+      "sourceSha256": "f8b521471f979a91cf9fbb8d623499045164fbca913d87872fdd5862f56f93ca",
+      "snapshotSha256": "f8b521471f979a91cf9fbb8d623499045164fbca913d87872fdd5862f56f93ca",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/logo-usage-rules.md",
+      "sourceSha256": "2cb525047bd623c31e8101e462d6d873a2b56dd118154f8ae56f8359292afd4b",
+      "snapshotSha256": "2cb525047bd623c31e8101e462d6d873a2b56dd118154f8ae56f8359292afd4b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/messaging-framework.md",
+      "sourceSha256": "24b2500a72867b55dd10f4bf359178b0eb347fddd852659ce47b69d9f597d4e6",
+      "snapshotSha256": "24b2500a72867b55dd10f4bf359178b0eb347fddd852659ce47b69d9f597d4e6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/typography-specifications.md",
+      "sourceSha256": "921c3d9e6ddfde2677b9a3e32eee94c7922f54f22c1f380c5ed2eb25a7d5bfa9",
+      "snapshotSha256": "921c3d9e6ddfde2677b9a3e32eee94c7922f54f22c1f380c5ed2eb25a7d5bfa9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/update.md",
+      "sourceSha256": "dc413ceb7e112a182a19bede81d8dca3c4ae601619428ab9d5bbfcec47b61f08",
+      "snapshotSha256": "dc413ceb7e112a182a19bede81d8dca3c4ae601619428ab9d5bbfcec47b61f08",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/visual-identity.md",
+      "sourceSha256": "63f0cfc5d95403d8e12aca4d839cc28471515574d9a431334bfbb96c15407c31",
+      "snapshotSha256": "63f0cfc5d95403d8e12aca4d839cc28471515574d9a431334bfbb96c15407c31",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/references/voice-framework.md",
+      "sourceSha256": "08c15ac79f81cd964c5efbe593131b61a093c7e1b060d5dd28b17f3cc5b331fb",
+      "snapshotSha256": "08c15ac79f81cd964c5efbe593131b61a093c7e1b060d5dd28b17f3cc5b331fb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/scripts/extract-colors.cjs",
+      "sourceSha256": "591dd2f9f6193bae35efcedfbce71b60b81c4c70de2138bcc7f4831c9ad98df8",
+      "snapshotSha256": "591dd2f9f6193bae35efcedfbce71b60b81c4c70de2138bcc7f4831c9ad98df8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/scripts/inject-brand-context.cjs",
+      "sourceSha256": "5b98abdeb5c636f247102cd235f1d3421db7a4de53fd853360feaa0c471b5c96",
+      "snapshotSha256": "5b98abdeb5c636f247102cd235f1d3421db7a4de53fd853360feaa0c471b5c96",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/scripts/sync-brand-to-tokens.cjs",
+      "sourceSha256": "a44d0c2ef448b653e5ed992a5476114b9e458ff0bcb69df235598bb2b4a1726c",
+      "snapshotSha256": "a44d0c2ef448b653e5ed992a5476114b9e458ff0bcb69df235598bb2b4a1726c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/scripts/validate-asset.cjs",
+      "sourceSha256": "8db716b4beee754897dfa1513ad9206c38d56f995c13cb567f95c446a39fa82a",
+      "snapshotSha256": "8db716b4beee754897dfa1513ad9206c38d56f995c13cb567f95c446a39fa82a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/SKILL.md",
+      "sourceSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
+      "snapshotSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/brand/templates/brand-guidelines-starter.md",
+      "sourceSha256": "d157a57b15f0b458c79636d11de42f3c89f03d8c0bbea1bdd3cf1c3542b2140d",
+      "snapshotSha256": "d157a57b15f0b458c79636d11de42f3c89f03d8c0bbea1bdd3cf1c3542b2140d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/bug-fixer/SKILL.md",
+      "sourceSha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec",
+      "snapshotSha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/clarify/SKILL.md",
+      "sourceSha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb",
+      "snapshotSha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/llm-coding-antipatterns.md",
+      "sourceSha256": "344872ee8923ee8d7a89c2abb2749dcd14ddc426fcefb4df64605ee22ebe13cb",
+      "snapshotSha256": "344872ee8923ee8d7a89c2abb2749dcd14ddc426fcefb4df64605ee22ebe13cb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/output-style.md",
+      "sourceSha256": "ab558a0e4444a659885322cb3b834a551576e47a6e670d814d8732813ef6517d",
+      "snapshotSha256": "ab558a0e4444a659885322cb3b834a551576e47a6e670d814d8732813ef6517d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/review-dimensions.md",
+      "sourceSha256": "9e7aed1708c346b77ff8622a2e43a7ec849cfc16c0e7e049297b67ffdb8c8d2f",
+      "snapshotSha256": "9e7aed1708c346b77ff8622a2e43a7ec849cfc16c0e7e049297b67ffdb8c8d2f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/review-profiles.md",
+      "sourceSha256": "5e276a4217fe071323a2e81d318ec587da74071d113929c3a2d26e42f2dee075",
+      "snapshotSha256": "5e276a4217fe071323a2e81d318ec587da74071d113929c3a2d26e42f2dee075",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/review-strategy.md",
+      "sourceSha256": "4bc70a9a57f0a1e66a76d2054360e3a235ccd65db7624a76da6696b773cb468e",
+      "snapshotSha256": "4bc70a9a57f0a1e66a76d2054360e3a235ccd65db7624a76da6696b773cb468e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/references/workflow.md",
+      "sourceSha256": "5122e3a1b4571c358d1c150c4fb34a34b7ecc377a65d3f44164dea08969c2122",
+      "snapshotSha256": "5122e3a1b4571c358d1c150c4fb34a34b7ecc377a65d3f44164dea08969c2122",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/code-review/SKILL.md",
+      "sourceSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
+      "snapshotSha256": "f056c73726f5fcf8861c3dcdd270caacafb9dd91364b90b6b7e40a743de1317e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/codebase-memory-scout/references/workflow.md",
+      "sourceSha256": "01c3cda53f10e41816a6e2e2eccba79638ee03acdc119bf41a96568982ab65a8",
+      "snapshotSha256": "01c3cda53f10e41816a6e2e2eccba79638ee03acdc119bf41a96568982ab65a8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/codebase-memory-scout/SKILL.md",
+      "sourceSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
+      "snapshotSha256": "3cb816fed287f9abeeb2e9e720d4efb8096aefc512362d062e4d8b6172ae80bb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/colorize/SKILL.md",
+      "sourceSha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812",
+      "snapshotSha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/critique/reference/cognitive-load.md",
+      "sourceSha256": "7653f0a2f60f6d0471581f4b84c24df5408e70f8e2b727a6cdf3872dcf42676f",
+      "snapshotSha256": "7653f0a2f60f6d0471581f4b84c24df5408e70f8e2b727a6cdf3872dcf42676f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/critique/reference/heuristics-scoring.md",
+      "sourceSha256": "c047724521f6f73e2eecacf62e77498848370a8e4a0b32c900bd87ae9f1134ea",
+      "snapshotSha256": "c047724521f6f73e2eecacf62e77498848370a8e4a0b32c900bd87ae9f1134ea",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/critique/reference/personas.md",
+      "sourceSha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca",
+      "snapshotSha256": "9941b4bb0205e295ca2baa470db4b25e835ab090e42eaa502dc2a38edf1835ca",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/critique/SKILL.md",
+      "sourceSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
+      "snapshotSha256": "8b308ae0ae1a7b229f023edc0281dd6c3d995b3cfaa1802b7929be3f419f5d91",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/delight/SKILL.md",
+      "sourceSha256": "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b",
+      "snapshotSha256": "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-brief-builder/SKILL.md",
+      "sourceSha256": "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181",
+      "snapshotSha256": "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-brief-builder/templates/design-brief-template.md",
+      "sourceSha256": "a949c0e38ca8e15b55032dc95b8763c7fc80d8ac2a7cd63bbd79c9d39fd9a31e",
+      "snapshotSha256": "a949c0e38ca8e15b55032dc95b8763c7fc80d8ac2a7cd63bbd79c9d39fd9a31e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-maker/SKILL.md",
+      "sourceSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
+      "snapshotSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/component-specs.md",
+      "sourceSha256": "b265d979a741dd748d4e595e6898ae430faeef4f6d13d7a634fa6241b91d2da4",
+      "snapshotSha256": "b265d979a741dd748d4e595e6898ae430faeef4f6d13d7a634fa6241b91d2da4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/component-tokens.md",
+      "sourceSha256": "e27f8f5999badee425c98235eabbd2cb3ebe2a1a364766d5c7a6b3134ceaaec8",
+      "snapshotSha256": "e27f8f5999badee425c98235eabbd2cb3ebe2a1a364766d5c7a6b3134ceaaec8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/primitive-tokens.md",
+      "sourceSha256": "91e6caa12646c08c8aadf8e09399aed65760a25c8d80595936d81a9131118fc3",
+      "snapshotSha256": "91e6caa12646c08c8aadf8e09399aed65760a25c8d80595936d81a9131118fc3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/semantic-tokens.md",
+      "sourceSha256": "97e16d8061bbc22e82b51966a7015e3fc990932902e4647843506669a1cdebcc",
+      "snapshotSha256": "97e16d8061bbc22e82b51966a7015e3fc990932902e4647843506669a1cdebcc",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/states-and-variants.md",
+      "sourceSha256": "8dacb95d57d4bb37d8a99cc55515ff26da272056f837d29abc74aedcaa3ba104",
+      "snapshotSha256": "8dacb95d57d4bb37d8a99cc55515ff26da272056f837d29abc74aedcaa3ba104",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/tailwind-integration.md",
+      "sourceSha256": "0409f1335bcb8dfc76735d65469e9417944fc3a2d9b001db60c15683cc1090c0",
+      "snapshotSha256": "0409f1335bcb8dfc76735d65469e9417944fc3a2d9b001db60c15683cc1090c0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/references/token-architecture.md",
+      "sourceSha256": "925f4049c4c4313d9fd5df98cdfd52004112aca49fba1664ad85e76bc9dce4d3",
+      "snapshotSha256": "925f4049c4c4313d9fd5df98cdfd52004112aca49fba1664ad85e76bc9dce4d3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/scripts/embed-tokens.cjs",
+      "sourceSha256": "8e69196dc2bbbe3caaa78ebf4484add71813a66b117fd2ff499bafc88ea8e342",
+      "snapshotSha256": "8e69196dc2bbbe3caaa78ebf4484add71813a66b117fd2ff499bafc88ea8e342",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/scripts/generate-tokens.cjs",
+      "sourceSha256": "aac8a0f4ec4dccf0d371f9ee5a9111e44977bb0cad7e40a3754aba5571aa1231",
+      "snapshotSha256": "aac8a0f4ec4dccf0d371f9ee5a9111e44977bb0cad7e40a3754aba5571aa1231",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/scripts/validate-tokens.cjs",
+      "sourceSha256": "f68a6d9a58e36f0df83aa3f21ec7fb55f1fe981a351e78fa285af072f1cdc043",
+      "snapshotSha256": "f68a6d9a58e36f0df83aa3f21ec7fb55f1fe981a351e78fa285af072f1cdc043",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/SKILL.md",
+      "sourceSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
+      "snapshotSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/design-system/templates/design-tokens-starter.json",
+      "sourceSha256": "5444f477b06bab9c72e2cc289d4a9104efef653391c9639972bcb712d5f2d81e",
+      "snapshotSha256": "5444f477b06bab9c72e2cc289d4a9104efef653391c9639972bcb712d5f2d81e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/anti-rationalization.md",
+      "sourceSha256": "7abee3abb868ea32a25809131a1db3a35dd2b154c5aa46e1a82742b1f1448c8f",
+      "snapshotSha256": "7abee3abb868ea32a25809131a1db3a35dd2b154c5aa46e1a82742b1f1448c8f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/development-rules.md",
+      "sourceSha256": "28288240f6ac111000d761e46d4110b65ce0918ec17cb63c019acf136e3c69ec",
+      "snapshotSha256": "28288240f6ac111000d761e46d4110b65ce0918ec17cb63c019acf136e3c69ec",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/development-strategy.md",
+      "sourceSha256": "004aa2fb35bfd6f0b37627bb62ffa09ae44b6c92f82663b925f3fdea286500c3",
+      "snapshotSha256": "004aa2fb35bfd6f0b37627bb62ffa09ae44b6c92f82663b925f3fdea286500c3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/file-structure.md",
+      "sourceSha256": "3dfed112983644de5a645709448938decaf49d583bcdbe0e00a6caa5e9879f3e",
+      "snapshotSha256": "3dfed112983644de5a645709448938decaf49d583bcdbe0e00a6caa5e9879f3e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/output-style.md",
+      "sourceSha256": "6f4cf008bea73e138308ec30d04c494440348638f9952adf8cd161263138f46e",
+      "snapshotSha256": "6f4cf008bea73e138308ec30d04c494440348638f9952adf8cd161263138f46e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/phase-completion.md",
+      "sourceSha256": "721c21e27d2cd4e17c882e7d53034e990d120521db7a85ffb22a39c01fdd805c",
+      "snapshotSha256": "721c21e27d2cd4e17c882e7d53034e990d120521db7a85ffb22a39c01fdd805c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/ui-token-component-reuse.md",
+      "sourceSha256": "239c9715340c59da6f2e3d00bc4248987ae84bee6111bb0dcc3bbff80a880f6f",
+      "snapshotSha256": "239c9715340c59da6f2e3d00bc4248987ae84bee6111bb0dcc3bbff80a880f6f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/workflow-continuous-development.md",
+      "sourceSha256": "4396f92bd224bb60fd0fa14c2f633fcf6edf47fb82f100b582e299eec0fbcc55",
+      "snapshotSha256": "4396f92bd224bb60fd0fa14c2f633fcf6edf47fb82f100b582e299eec0fbcc55",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/references/workflow-initialization.md",
+      "sourceSha256": "8b7a70a21b46d149bd743184096e32ab2b19642f766ffe687a57edcefe707314",
+      "snapshotSha256": "8b7a70a21b46d149bd743184096e32ab2b19642f766ffe687a57edcefe707314",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/SKILL.md",
+      "sourceSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
+      "snapshotSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/button.tsx.template",
+      "sourceSha256": "2e83f0589b58b5535a1c2902cb1759dded12b9b79dfc8a1d33c2906f914282ea",
+      "snapshotSha256": "2e83f0589b58b5535a1c2902cb1759dded12b9b79dfc8a1d33c2906f914282ea",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/card.tsx.template",
+      "sourceSha256": "38c499e1e9b940dd738acd690ffb1ac197cd8f4d6cf1ff92a79d6f4c7de6e4b9",
+      "snapshotSha256": "38c499e1e9b940dd738acd690ffb1ac197cd8f4d6cf1ff92a79d6f4c7de6e4b9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/index.ts.template",
+      "sourceSha256": "cf92efb6f9ecd429bda8c570ba213ae9300e2363e04b026a1ccf5563045cc6d7",
+      "snapshotSha256": "cf92efb6f9ecd429bda8c570ba213ae9300e2363e04b026a1ccf5563045cc6d7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_shared-ui/src/shared/ui/tokens.css.template",
+      "sourceSha256": "9704e88a58a866cb84060825caccb15e8b100e4f6debc76190d55c81030cae87",
+      "snapshotSha256": "9704e88a58a866cb84060825caccb15e8b100e4f6debc76190d55c81030cae87",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/_vibe-docs.json.template",
+      "sourceSha256": "3fa61949e50b8c2c91ebaaf18da4b8d7b07b63eead5d1d996d8f7516723a3d66",
+      "snapshotSha256": "3fa61949e50b8c2c91ebaaf18da4b8d7b07b63eead5d1d996d8f7516723a3d66",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
+      "sourceSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
+      "snapshotSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/接口契约.md.template",
+      "sourceSha256": "cc9efd7ff8b1b6fb767b618e764196a1abc004f8615d568d8e689ed25848e2a5",
+      "snapshotSha256": "cc9efd7ff8b1b6fb767b618e764196a1abc004f8615d568d8e689ed25848e2a5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/设计简报.md.template",
+      "sourceSha256": "7be643e181c8cc8e9cacbdcb3f6a69bb36dc0579d6dd8c9ae63a548382f8df06",
+      "snapshotSha256": "7be643e181c8cc8e9cacbdcb3f6a69bb36dc0579d6dd8c9ae63a548382f8df06",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/开发计划.md.template",
+      "sourceSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
+      "snapshotSha256": "aa6c583bf5a72c33510ac62063339f357641f5055b012d2dcf5ed22197941df6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/宪法设计.md.template",
+      "sourceSha256": "ae34fb6a6cf4ae2086fee9a6e683b6e8a29cb72221e8865694e550b9b7f2de10",
+      "snapshotSha256": "ae34fb6a6cf4ae2086fee9a6e683b6e8a29cb72221e8865694e550b9b7f2de10",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/项目画像.md.template",
+      "sourceSha256": "7cdefe3f8b6f4581d92f556be807aac7144f56d20af6d7990b0b4deea5e14b70",
+      "snapshotSha256": "7cdefe3f8b6f4581d92f556be807aac7144f56d20af6d7990b0b4deea5e14b70",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/项目治理/验收记录.md.template",
+      "sourceSha256": "34ca6559816bb3b9628d7099188831f854bf46917c62299b83fd35684d479ddf",
+      "snapshotSha256": "34ca6559816bb3b9628d7099188831f854bf46917c62299b83fd35684d479ddf",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求变更.md.template",
+      "sourceSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
+      "snapshotSha256": "eabf40ce3dd623d84df7ac9f4f333ef38d5cad93a59a5915b1eca8338efea265",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/需求文档.md.template",
+      "sourceSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
+      "snapshotSha256": "97c35eb4a47bdad7b9e648e2de074e59d58b9237951b1f3e4f14f4b4c1be3dc2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/_target-docs/docs/plans/执行光标.md.template",
+      "sourceSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
+      "snapshotSha256": "811f234641023d3de887d93b8bf207f52ce22b1e312bff21d7559529f277ebd7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/cli-feature-first/_gitignore.template",
+      "sourceSha256": "bead60c938bbb7159cb8fd2b301c7ffa6f7328d80d1cd98ce9910f6c20bca8af",
+      "snapshotSha256": "bead60c938bbb7159cb8fd2b301c7ffa6f7328d80d1cd98ce9910f6c20bca8af",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/cli-feature-first/package-lock.json.template",
+      "sourceSha256": "7dc3fb34d4fda42f60a80e974867601ddf219fc724dc4fd8fcb4adb4653fd006",
+      "snapshotSha256": "7dc3fb34d4fda42f60a80e974867601ddf219fc724dc4fd8fcb4adb4653fd006",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/cli-feature-first/package.json.template",
+      "sourceSha256": "6ead858f04b7776d7d05578882da34070aaab313b24c06fb89d08c4234513a8b",
+      "snapshotSha256": "6ead858f04b7776d7d05578882da34070aaab313b24c06fb89d08c4234513a8b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/cli-feature-first/src/index.mjs.template",
+      "sourceSha256": "9e67f5405cd5309ad468b08466a66d50626ba7f30a0ff5c7f3c5ef45f4c71e32",
+      "snapshotSha256": "9e67f5405cd5309ad468b08466a66d50626ba7f30a0ff5c7f3c5ef45f4c71e32",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/_gitignore.template",
+      "sourceSha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb",
+      "snapshotSha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/electron/main.ts.template",
+      "sourceSha256": "c3aa1878fed43349f0522401b38d1643e44d3b6edd65bac9522935ce88c0c7b1",
+      "snapshotSha256": "c3aa1878fed43349f0522401b38d1643e44d3b6edd65bac9522935ce88c0c7b1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/electron/preload.ts.template",
+      "sourceSha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "snapshotSha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/package-lock.json.template",
+      "sourceSha256": "b2aed95528ab13d05c552cc4c9b1b82e19d24ef6139a0cb32d5a8aeb972e0799",
+      "snapshotSha256": "b2aed95528ab13d05c552cc4c9b1b82e19d24ef6139a0cb32d5a8aeb972e0799",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/package.json.template",
+      "sourceSha256": "da255e1bd9fbdfb867cd536875e788faf92579b8dd67e43fc12b8f3451d34ff5",
+      "snapshotSha256": "da255e1bd9fbdfb867cd536875e788faf92579b8dd67e43fc12b8f3451d34ff5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/scripts/dev-electron.mjs.template",
+      "sourceSha256": "79c5fb60e531ba7a3343e7cb755efb0749ed69514c44bc2821e20ce3c57c9507",
+      "snapshotSha256": "79c5fb60e531ba7a3343e7cb755efb0749ed69514c44bc2821e20ce3c57c9507",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/app/layout.tsx.template",
+      "sourceSha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5",
+      "snapshotSha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/app/page.tsx.template",
+      "sourceSha256": "9f69489652a1ba3b9dfd536f6315b693c967d84376572227afa4d3c9f02db5cb",
+      "snapshotSha256": "9f69489652a1ba3b9dfd536f6315b693c967d84376572227afa4d3c9f02db5cb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/core/config/app-config.ts.template",
+      "sourceSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "snapshotSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/features/desktop-home/components/desktop-home-screen.tsx.template",
+      "sourceSha256": "fa55a43cfd66c903b03c5306b24557a633f743f9963636144128dd7b22a2668b",
+      "snapshotSha256": "fa55a43cfd66c903b03c5306b24557a633f743f9963636144128dd7b22a2668b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/features/desktop-home/index.ts.template",
+      "sourceSha256": "59bb727b56dc499a69fd4923f18d40a519bfa878c4f0b712a4804a86bfcc68de",
+      "snapshotSha256": "59bb727b56dc499a69fd4923f18d40a519bfa878c4f0b712a4804a86bfcc68de",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/src/shared/providers/app-providers.tsx.template",
+      "sourceSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "snapshotSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/tsconfig.electron.json.template",
+      "sourceSha256": "8f28fd95f9a925f47a095334a7b2685959cbc381336eec1d1b42742ac1bdf9c8",
+      "snapshotSha256": "8f28fd95f9a925f47a095334a7b2685959cbc381336eec1d1b42742ac1bdf9c8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/electron-next-feature-first/tsconfig.json.template",
+      "sourceSha256": "ab6df004120ad40f4b80262515909abcbad3a0f49be6c8de79ec64a2263f6330",
+      "snapshotSha256": "ab6df004120ad40f4b80262515909abcbad3a0f49be6c8de79ec64a2263f6330",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/_gitignore.template",
+      "sourceSha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb",
+      "snapshotSha256": "905a13d449edae19be24dff2dfd48ad0bed9c711413c3c0d4b43be3da15b8bbb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/package-lock.json.template",
+      "sourceSha256": "67fc7ee27534051db0bbcc199ee39e1abe74a7720896796693282669a78ab029",
+      "snapshotSha256": "67fc7ee27534051db0bbcc199ee39e1abe74a7720896796693282669a78ab029",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/package.json.template",
+      "sourceSha256": "64aeedbb43a5a3860e44a96a7f2629f17c920dfb69165c15f1212266a077c47d",
+      "snapshotSha256": "64aeedbb43a5a3860e44a96a7f2629f17c920dfb69165c15f1212266a077c47d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/app/layout.tsx.template",
+      "sourceSha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5",
+      "snapshotSha256": "e4ed90390d80cc82f48891a98d1e2e05c9b65810c3b978fce24fc2b65f0147e5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/app/page.tsx.template",
+      "sourceSha256": "91b9b93e518c9f15a72c0360f3ee80c8a308588ec5fb16fce76e402017c3124d",
+      "snapshotSha256": "91b9b93e518c9f15a72c0360f3ee80c8a308588ec5fb16fce76e402017c3124d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/core/config/app-config.ts.template",
+      "sourceSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "snapshotSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/features/home/components/home-screen.tsx.template",
+      "sourceSha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf",
+      "snapshotSha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/features/home/index.ts.template",
+      "sourceSha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2",
+      "snapshotSha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/src/shared/providers/app-providers.tsx.template",
+      "sourceSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "snapshotSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/next-feature-first/tsconfig.json.template",
+      "sourceSha256": "7712455dafe0055ed4e21b987cda3258e4dbbd8a2d0ad4dbb21723739298e79f",
+      "snapshotSha256": "7712455dafe0055ed4e21b987cda3258e4dbbd8a2d0ad4dbb21723739298e79f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/_gitignore.template",
+      "sourceSha256": "e50b9195e8f67d8a5eb2221637b604487c861cbb83b6b6b1c06e104001bcdb11",
+      "snapshotSha256": "e50b9195e8f67d8a5eb2221637b604487c861cbb83b6b6b1c06e104001bcdb11",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/index.html.template",
+      "sourceSha256": "981805c2aa1980b5dbdc6209397e445ffe1ab2b66523f5b02a4f6a80eadbf228",
+      "snapshotSha256": "981805c2aa1980b5dbdc6209397e445ffe1ab2b66523f5b02a4f6a80eadbf228",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/package-lock.json.template",
+      "sourceSha256": "3d4ae8b3e3a8f51af39d6d1d1ef5a86eec996a0d92c2fc000a197ceb0f37e5ba",
+      "snapshotSha256": "3d4ae8b3e3a8f51af39d6d1d1ef5a86eec996a0d92c2fc000a197ceb0f37e5ba",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/package.json.template",
+      "sourceSha256": "11a59b16fefbf11664662eb26c1012734e3c532e9355e1e94ac8e824c792248e",
+      "snapshotSha256": "11a59b16fefbf11664662eb26c1012734e3c532e9355e1e94ac8e824c792248e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/core/config/app-config.ts.template",
+      "sourceSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "snapshotSha256": "d3b68a43b0166a7f587fb2f65a24118af8f60887fedf615c554c6fd17cc598d3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/features/home/components/home-screen.tsx.template",
+      "sourceSha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf",
+      "snapshotSha256": "0b3080743be245017891baf0fc5ef20df4fa216b1f4630d0d3ae82a3c11e3bcf",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/features/home/index.ts.template",
+      "sourceSha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2",
+      "snapshotSha256": "516b58b534b761e6a5cba2c18cb9e13ec3f13d2df04a73d2f9d40cda53441fb2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/main.tsx.template",
+      "sourceSha256": "f2214ece1e999eda538953a968504c45bf8c42f92d751ad4d5e736fe43d6293d",
+      "snapshotSha256": "f2214ece1e999eda538953a968504c45bf8c42f92d751ad4d5e736fe43d6293d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/pages/home-page.tsx.template",
+      "sourceSha256": "51cb8fc32009fdc50e243ef8d2f6b319de5630c962a7e67f37a65aaa0567b864",
+      "snapshotSha256": "51cb8fc32009fdc50e243ef8d2f6b319de5630c962a7e67f37a65aaa0567b864",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/src/shared/providers/app-providers.tsx.template",
+      "sourceSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "snapshotSha256": "792bde03692e60b781549486da4306d3e2cb41a21a865734922be75404df0242",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/tsconfig.json.template",
+      "sourceSha256": "c94da4eb583edf3db57b5bf4ecd185b5d5c57b3b897fec64a9e35e63e4bac90c",
+      "snapshotSha256": "c94da4eb583edf3db57b5bf4ecd185b5d5c57b3b897fec64a9e35e63e4bac90c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-builder/templates/project-scaffolds/vite-feature-first/vite.config.ts.template",
+      "sourceSha256": "c3667a1f1b18309e75e17a81a9393fa486daa2fc03549c643c4d472960c8c7eb",
+      "snapshotSha256": "c3667a1f1b18309e75e17a81a9393fa486daa2fc03549c643c4d472960c8c7eb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/references/analysis-dimensions.md",
+      "sourceSha256": "e2507ca2a46b37459d9ed551ecf9cc66f67e0faf91e87ebe9a42cda203d33d73",
+      "snapshotSha256": "e2507ca2a46b37459d9ed551ecf9cc66f67e0faf91e87ebe9a42cda203d33d73",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/references/analysis-strategy.md",
+      "sourceSha256": "b0f67fadd3a16759bda6fd7b5eff2242edd3b18468389ed73d27b20815420207",
+      "snapshotSha256": "b0f67fadd3a16759bda6fd7b5eff2242edd3b18468389ed73d27b20815420207",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/references/sufficiency-check.md",
+      "sourceSha256": "ad2b8fab8aeb4d027494b487618700aeb6bd90cd960d812c171653b86b984ff6",
+      "snapshotSha256": "ad2b8fab8aeb4d027494b487618700aeb6bd90cd960d812c171653b86b984ff6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/references/workflow-generation.md",
+      "sourceSha256": "a3cb07be7a563ef870c933e99496e9497fcd5cba85aa10310db25e0b5adc6473",
+      "snapshotSha256": "a3cb07be7a563ef870c933e99496e9497fcd5cba85aa10310db25e0b5adc6473",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/references/workflow-iteration.md",
+      "sourceSha256": "0015c696a2fde6627dfcb905ce293d48f59fbeea096456dc1ff1f06b63e95ed3",
+      "snapshotSha256": "0015c696a2fde6627dfcb905ce293d48f59fbeea096456dc1ff1f06b63e95ed3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/SKILL.md",
+      "sourceSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
+      "snapshotSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/templates/current-execution-template.md",
+      "sourceSha256": "305454fe74efe896586463af550f1e4e8dca19aed580f70396e1864056a6e8e1",
+      "snapshotSha256": "305454fe74efe896586463af550f1e4e8dca19aed580f70396e1864056a6e8e1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/templates/dev-plan-template.md",
+      "sourceSha256": "4523458e0fbfbb2ca802e387339467b76b9aea1e22c94a0bd40c1996914cc7ec",
+      "snapshotSha256": "4523458e0fbfbb2ca802e387339467b76b9aea1e22c94a0bd40c1996914cc7ec",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/dev-planner/templates/phase-detail-template.md",
+      "sourceSha256": "d2eebbe9f39e254e93481fc1db3d2f0805cab3018c6c249570c1dc7c95bd74fd",
+      "snapshotSha256": "d2eebbe9f39e254e93481fc1db3d2f0805cab3018c6c249570c1dc7c95bd74fd",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/distill/SKILL.md",
+      "sourceSha256": "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb",
+      "snapshotSha256": "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/doc-sync-guardian/references/document-surfaces.md",
+      "sourceSha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e",
+      "snapshotSha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/doc-sync-guardian/references/markdown-governance.md",
+      "sourceSha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc",
+      "snapshotSha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/doc-sync-guardian/SKILL.md",
+      "sourceSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
+      "snapshotSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/evolution-engine/SKILL.md",
+      "sourceSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
+      "snapshotSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/experience-elevator/references/ledger-and-elevation.md",
+      "sourceSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
+      "snapshotSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/experience-elevator/SKILL.md",
+      "sourceSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
+      "snapshotSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/feedback-writer/SKILL.md",
+      "sourceSha256": "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c",
+      "snapshotSha256": "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/harden/SKILL.md",
+      "sourceSha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3",
+      "snapshotSha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/hotspot-governor/SKILL.md",
+      "sourceSha256": "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7",
+      "snapshotSha256": "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/LICENSE",
+      "sourceSha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "snapshotSha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/NOTICE.md",
+      "sourceSha256": "62567465cc0c0ff7cee09091263d413f67be4707910191f92fea3c86008d3623",
+      "snapshotSha256": "62567465cc0c0ff7cee09091263d413f67be4707910191f92fea3c86008d3623",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/color-and-contrast.md",
+      "sourceSha256": "3113174f4b0047027338a904e2b0c0084b353f0d5a0e2a94e21d8bf0c3e7e05f",
+      "snapshotSha256": "3113174f4b0047027338a904e2b0c0084b353f0d5a0e2a94e21d8bf0c3e7e05f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/craft.md",
+      "sourceSha256": "0306588fdc1328ffcc363cd3000582c13d9b1d1032f5c74bfdda3e983d1b4a4e",
+      "snapshotSha256": "0306588fdc1328ffcc363cd3000582c13d9b1d1032f5c74bfdda3e983d1b4a4e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/extract.md",
+      "sourceSha256": "373b01edad793cf1a9c65d3af756195eb02d3c75a39893431a2761e267c5cf40",
+      "snapshotSha256": "373b01edad793cf1a9c65d3af756195eb02d3c75a39893431a2761e267c5cf40",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/interaction-design.md",
+      "sourceSha256": "7f545df683b1897460cdc8d94adfa1410c4c4a23fdb1545fbe95dc6e9af1b486",
+      "snapshotSha256": "7f545df683b1897460cdc8d94adfa1410c4c4a23fdb1545fbe95dc6e9af1b486",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/motion-design.md",
+      "sourceSha256": "c35a59b5f795721c914cfccf9b470e89a5010c563cd85ab46a67031531678f3f",
+      "snapshotSha256": "c35a59b5f795721c914cfccf9b470e89a5010c563cd85ab46a67031531678f3f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/responsive-design.md",
+      "sourceSha256": "5add44195a42cf7fa82aecadaad79b8875446b930e06d087d73f3722533fd95a",
+      "snapshotSha256": "5add44195a42cf7fa82aecadaad79b8875446b930e06d087d73f3722533fd95a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/spatial-design.md",
+      "sourceSha256": "10c743ee8245fc1be9e8af2b79dd08b0dae19fcde33d46c9730c000d7e13b7cd",
+      "snapshotSha256": "10c743ee8245fc1be9e8af2b79dd08b0dae19fcde33d46c9730c000d7e13b7cd",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/typography.md",
+      "sourceSha256": "e7f1479d6ee2baea38fd28850395c6baf8799dd44f07fac287f75573c367f167",
+      "snapshotSha256": "e7f1479d6ee2baea38fd28850395c6baf8799dd44f07fac287f75573c367f167",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/reference/ux-writing.md",
+      "sourceSha256": "0cd5e958d92be6e2331cb199d6ed5d98597aa20ec4922d4c3df56e7753cfc00c",
+      "snapshotSha256": "0cd5e958d92be6e2331cb199d6ed5d98597aa20ec4922d4c3df56e7753cfc00c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/scripts/cleanup-deprecated.mjs",
+      "sourceSha256": "b37ab725f73b376b7d2a9c0b0dd976f5d4a4ad76b578d1110eb0c28e908b35a4",
+      "snapshotSha256": "b37ab725f73b376b7d2a9c0b0dd976f5d4a4ad76b578d1110eb0c28e908b35a4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/impeccable/SKILL.md",
+      "sourceSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
+      "snapshotSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/INDEX.md",
+      "sourceSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
+      "snapshotSha256": "82a5936280c9c6a1f6cd373a503e42756f352c9af39c69988e7defb5c88680e7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/layout/SKILL.md",
+      "sourceSha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d",
+      "snapshotSha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/optimize/SKILL.md",
+      "sourceSha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02",
+      "snapshotSha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/overdrive/SKILL.md",
+      "sourceSha256": "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537",
+      "snapshotSha256": "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/polish/SKILL.md",
+      "sourceSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
+      "snapshotSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/conversation-strategy.md",
+      "sourceSha256": "980c3e851e11fbbaf9a107711ca0db051ac348c238c44ee110533dd79046602b",
+      "snapshotSha256": "980c3e851e11fbbaf9a107711ca0db051ac348c238c44ee110533dd79046602b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/output-style.md",
+      "sourceSha256": "d06c5bf14eaf2b6eaf9df268b11370bd79464f55f7769a33abccb2b96c132552",
+      "snapshotSha256": "d06c5bf14eaf2b6eaf9df268b11370bd79464f55f7769a33abccb2b96c132552",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/requirement-dimensions.md",
+      "sourceSha256": "6c49e3bfb24d84a8f62635ec9a72d199043804c2ca6d835c5fbc9b21499bd04b",
+      "snapshotSha256": "6c49e3bfb24d84a8f62635ec9a72d199043804c2ca6d835c5fbc9b21499bd04b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/skill-scope.md",
+      "sourceSha256": "ee2182d6449c9b7002974781a4d41741cd964a767f5676ef57d396f8d3ce90f0",
+      "snapshotSha256": "ee2182d6449c9b7002974781a4d41741cd964a767f5676ef57d396f8d3ce90f0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/startup-check.md",
+      "sourceSha256": "2ab6cec5d8f4f7779aba460663407175c599bbabd8d6888054d4d8a5406dfa35",
+      "snapshotSha256": "2ab6cec5d8f4f7779aba460663407175c599bbabd8d6888054d4d8a5406dfa35",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/sufficiency-check.md",
+      "sourceSha256": "24ad2316959892a0eff480714ed05f405f496c2072bd907204844b072ff9a945",
+      "snapshotSha256": "24ad2316959892a0eff480714ed05f405f496c2072bd907204844b072ff9a945",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/workflow-iteration.md",
+      "sourceSha256": "b875bc2c22a06050152917db129cc0cb9afb6c314bcd1f4f74eee739129edbe2",
+      "snapshotSha256": "b875bc2c22a06050152917db129cc0cb9afb6c314bcd1f4f74eee739129edbe2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/references/workflow-zero-to-one.md",
+      "sourceSha256": "370a5d3ce5277cf318450154989d1f49fffa4b1ac29a357766901c5d97ef4be8",
+      "snapshotSha256": "370a5d3ce5277cf318450154989d1f49fffa4b1ac29a357766901c5d97ef4be8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/SKILL.md",
+      "sourceSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
+      "snapshotSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/templates/changelog-template.md",
+      "sourceSha256": "d1ce7b849977dec7658f0310973ee4fe42ff2f13900a0984153d91060f5ca8ff",
+      "snapshotSha256": "d1ce7b849977dec7658f0310973ee4fe42ff2f13900a0984153d91060f5ca8ff",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/templates/manual-acceptance-template.md",
+      "sourceSha256": "d26630d81d6541d85bc703c224eadba3a0c6320643d86496f774ad92d44658d7",
+      "snapshotSha256": "d26630d81d6541d85bc703c224eadba3a0c6320643d86496f774ad92d44658d7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/product-spec-builder/templates/product-spec-template.md",
+      "sourceSha256": "6fc5e37f136b69674658f9c4920be0c254b93374ac8d0a937e2d5c9f783a48e8",
+      "snapshotSha256": "6fc5e37f136b69674658f9c4920be0c254b93374ac8d0a937e2d5c9f783a48e8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/quieter/SKILL.md",
+      "sourceSha256": "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1",
+      "snapshotSha256": "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/release-builder/SKILL.md",
+      "sourceSha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374",
+      "snapshotSha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/api-contract-checklist.md",
+      "sourceSha256": "1db9a0f79adc56dbbb1d1de1df0c9f8bfe15758ffa85ff812fe19fedd3154615",
+      "snapshotSha256": "1db9a0f79adc56dbbb1d1de1df0c9f8bfe15758ffa85ff812fe19fedd3154615",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/automation-handoff.md",
+      "sourceSha256": "b64edd38376a5b78054ca4351ad1c3c46521f9880af67cccb62037dfd117740b",
+      "snapshotSha256": "b64edd38376a5b78054ca4351ad1c3c46521f9880af67cccb62037dfd117740b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/clarifying-questions.md",
+      "sourceSha256": "839188c33be2c50576e40c0f50902c288f81c806ff9efbe8563bdb0a3fc1b867",
+      "snapshotSha256": "839188c33be2c50576e40c0f50902c288f81c806ff9efbe8563bdb0a3fc1b867",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/domain-risk-catalog.md",
+      "sourceSha256": "07a560c7fff6b0254115ac0f73256fe2e0931703eb8a3cc5dcd63834d92e1d2e",
+      "snapshotSha256": "07a560c7fff6b0254115ac0f73256fe2e0931703eb8a3cc5dcd63834d92e1d2e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/id-and-traceability.md",
+      "sourceSha256": "abd58d732335831818f171b2f0423ba4a598f45e393d842d05dbb2a74a78e879",
+      "snapshotSha256": "abd58d732335831818f171b2f0423ba4a598f45e393d842d05dbb2a74a78e879",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/large-prd-slicing.md",
+      "sourceSha256": "0d8a8da01ac948986e6bdc0e056b7bafdd87764a8d5552febffcf0440b9ecfad",
+      "snapshotSha256": "0d8a8da01ac948986e6bdc0e056b7bafdd87764a8d5552febffcf0440b9ecfad",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/output-formats.md",
+      "sourceSha256": "138ce80c0384c076b04ce0b84911b85ebb988457052cb8aeea700295a803be6e",
+      "snapshotSha256": "138ce80c0384c076b04ce0b84911b85ebb988457052cb8aeea700295a803be6e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/production-simulation.md",
+      "sourceSha256": "92de58d39be3479819027dd8372061dec56df9c49b4a9c243d877147a41eabee",
+      "snapshotSha256": "92de58d39be3479819027dd8372061dec56df9c49b4a9c243d877147a41eabee",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/quality-gate.md",
+      "sourceSha256": "1fb77ee09388cf5fcb0390bc31193ece8d6c2dae2287407f33dd93be0a55bd67",
+      "snapshotSha256": "1fb77ee09388cf5fcb0390bc31193ece8d6c2dae2287407f33dd93be0a55bd67",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/test-design-taxonomy.md",
+      "sourceSha256": "eadde96a7232b543cd5dd7e65ff2677d1c1568a30480decd99da4d5644deed6b",
+      "snapshotSha256": "eadde96a7232b543cd5dd7e65ff2677d1c1568a30480decd99da4d5644deed6b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/references/workflow.md",
+      "sourceSha256": "a9e7ec7c9be78a4dde577b9731898911f90f0a97f63ed55c1ef359cfcf240814",
+      "snapshotSha256": "a9e7ec7c9be78a4dde577b9731898911f90f0a97f63ed55c1ef359cfcf240814",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/scripts/simulate-production-suite.mjs",
+      "sourceSha256": "fda1ae8280cf1e3168ca5504810248d3310d60918ca2621ec93944fbbfeee3df",
+      "snapshotSha256": "fda1ae8280cf1e3168ca5504810248d3310d60918ca2621ec93944fbbfeee3df",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/scripts/validate-test-suite.mjs",
+      "sourceSha256": "f2ee5652b8642655071961e1ef211a834ce24136611fd8a06cabc054cb1244eb",
+      "snapshotSha256": "f2ee5652b8642655071961e1ef211a834ce24136611fd8a06cabc054cb1244eb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/SKILL.md",
+      "sourceSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
+      "snapshotSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/templates/test-case-export-template.csv",
+      "sourceSha256": "1df6952986cb15a716f8f3d2a8ac0fbe2a2039d07016fd32f05ac490f44bdd96",
+      "snapshotSha256": "1df6952986cb15a716f8f3d2a8ac0fbe2a2039d07016fd32f05ac490f44bdd96",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/templates/test-suite-template.md",
+      "sourceSha256": "dd72545e77f0ede1c633e56d6c61845f7661197b1f71e7322dd9e54d0eb2c4de",
+      "snapshotSha256": "dd72545e77f0ede1c633e56d6c61845f7661197b1f71e7322dd9e54d0eb2c4de",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/requirements-test-designer/templates/traceability-matrix-template.csv",
+      "sourceSha256": "a5972c8f61f2352d09020161e8ef7e5729a82a6e8f49a74427c51478decadaae",
+      "snapshotSha256": "a5972c8f61f2352d09020161e8ef7e5729a82a6e8f49a74427c51478decadaae",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/rule-harvester/SKILL.md",
+      "sourceSha256": "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310",
+      "snapshotSha256": "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/shape/SKILL.md",
+      "sourceSha256": "8a75ce770b2e26a6fe01b60d489d4be4336d863204d3d0674a82e5060a1883f7",
+      "snapshotSha256": "8a75ce770b2e26a6fe01b60d489d4be4336d863204d3d0674a82e5060a1883f7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/skill-builder/SKILL.md",
+      "sourceSha256": "0b8cbf368dabbc9e5c9c92ac5ee3427d2f588a8aa0dc51279241193ec7822ce0",
+      "snapshotSha256": "0b8cbf368dabbc9e5c9c92ac5ee3427d2f588a8aa0dc51279241193ec7822ce0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/skill-builder/templates/skill-template.md",
+      "sourceSha256": "467d204e290b661ff25ff7d490c7ffdfe3aef65a7fb94bd875d5d8cd2307824d",
+      "snapshotSha256": "467d204e290b661ff25ff7d490c7ffdfe3aef65a7fb94bd875d5d8cd2307824d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/target-constitution-setup/references/workflow.md",
+      "sourceSha256": "c55f96b5984d9933cb7dd17e71eab849aa40a6da992f83706cdf345d9adf18a8",
+      "snapshotSha256": "c55f96b5984d9933cb7dd17e71eab849aa40a6da992f83706cdf345d9adf18a8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/target-constitution-setup/SKILL.md",
+      "sourceSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
+      "snapshotSha256": "158c255d5a56464c59d111b16ed05c6bd18ba9d8c747063ea51b4f10472cdfe9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/target-runtime-setup/references/constitution-audit.md",
+      "sourceSha256": "92f4b77afb89a645ad16a1c17c8ffc247c14964f0bcc7edbc86ee2df9ad57c58",
+      "snapshotSha256": "92f4b77afb89a645ad16a1c17c8ffc247c14964f0bcc7edbc86ee2df9ad57c58",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/target-runtime-setup/SKILL.md",
+      "sourceSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
+      "snapshotSha256": "b1db7778567783530a882f0269f69b3c9e5221abb4971399ac3a70fe6b012bd4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/test-automation/references/framework-selection.md",
+      "sourceSha256": "fcea2eff7a35ba33dc778bbb9c756414ec687b2adc3bf3fa9fde13e813e1198b",
+      "snapshotSha256": "fcea2eff7a35ba33dc778bbb9c756414ec687b2adc3bf3fa9fde13e813e1198b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/test-automation/references/ui-acceptance-harness.md",
+      "sourceSha256": "7ac1607343a51ad714479229edb51a426c76e9461384f331d879f1e27d1e5e97",
+      "snapshotSha256": "7ac1607343a51ad714479229edb51a426c76e9461384f331d879f1e27d1e5e97",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/test-automation/references/workflow.md",
+      "sourceSha256": "c6d7ea023cda9befe3d646198b4b91334e50378ae2967bd93d4acc49da306c63",
+      "snapshotSha256": "c6d7ea023cda9befe3d646198b4b91334e50378ae2967bd93d4acc49da306c63",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/test-automation/SKILL.md",
+      "sourceSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
+      "snapshotSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/typeset/SKILL.md",
+      "sourceSha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a",
+      "snapshotSha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/ArsenalSC-OFL.txt",
+      "sourceSha256": "8ddd61b18ba2c0d0dbe4a691cf5f1a0673f473d02fa0546e67ee88c006aeff6e",
+      "snapshotSha256": "8ddd61b18ba2c0d0dbe4a691cf5f1a0673f473d02fa0546e67ee88c006aeff6e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/ArsenalSC-Regular.ttf",
+      "sourceSha256": "65e6f89df58f68fd905b3add34a79dd6106aa3b3044df0dad9676fff53d504b9",
+      "snapshotSha256": "65e6f89df58f68fd905b3add34a79dd6106aa3b3044df0dad9676fff53d504b9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BigShoulders-Bold.ttf",
+      "sourceSha256": "b43bcd198b9fdf717dd42aa61a34dba32e01aceaeae659d689afd0ca52c37ea2",
+      "snapshotSha256": "b43bcd198b9fdf717dd42aa61a34dba32e01aceaeae659d689afd0ca52c37ea2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BigShoulders-OFL.txt",
+      "sourceSha256": "fbc746aabf0eb1847dfd92e2efc4596d79fa897d60b8e64062a22f585508fb3f",
+      "snapshotSha256": "fbc746aabf0eb1847dfd92e2efc4596d79fa897d60b8e64062a22f585508fb3f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BigShoulders-Regular.ttf",
+      "sourceSha256": "18a879fc71978a4447150705caf880a9da3860083c259fd29e6dc03057b6842a",
+      "snapshotSha256": "18a879fc71978a4447150705caf880a9da3860083c259fd29e6dc03057b6842a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Boldonse-OFL.txt",
+      "sourceSha256": "45cc82ab4032273c0924025ffcf8f0665a68e1a5955e3f7247e5daf1deeb1326",
+      "snapshotSha256": "45cc82ab4032273c0924025ffcf8f0665a68e1a5955e3f7247e5daf1deeb1326",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Boldonse-Regular.ttf",
+      "sourceSha256": "cc2e540604565c0f90a7d8d46194a2f42fc9c45512cd2e39bf03b50eb68c35a4",
+      "snapshotSha256": "cc2e540604565c0f90a7d8d46194a2f42fc9c45512cd2e39bf03b50eb68c35a4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BricolageGrotesque-Bold.ttf",
+      "sourceSha256": "a737b146fe0d77ffe8a86e3cd16700dd431d3b1e420d4fd80e142cd68a1cb50d",
+      "snapshotSha256": "a737b146fe0d77ffe8a86e3cd16700dd431d3b1e420d4fd80e142cd68a1cb50d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BricolageGrotesque-OFL.txt",
+      "sourceSha256": "0e4f4eb8534bc66a76aca13dd19c1f9731b2008866b29ccff182b764649df9b4",
+      "snapshotSha256": "0e4f4eb8534bc66a76aca13dd19c1f9731b2008866b29ccff182b764649df9b4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/BricolageGrotesque-Regular.ttf",
+      "sourceSha256": "972a6d098c9867ae131d0ea99e221e63976b11a19d4b931c2c7ace525674e4f6",
+      "snapshotSha256": "972a6d098c9867ae131d0ea99e221e63976b11a19d4b931c2c7ace525674e4f6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/CrimsonPro-Bold.ttf",
+      "sourceSha256": "48f191e38355c8db100eb3ce157c20f9302a3b9a37b44a660f77ecfce3986609",
+      "snapshotSha256": "48f191e38355c8db100eb3ce157c20f9302a3b9a37b44a660f77ecfce3986609",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/CrimsonPro-Italic.ttf",
+      "sourceSha256": "52318db3526b644e6efa60be0b3ca5a50e40fbe8bd026c261e0aa206f0772267",
+      "snapshotSha256": "52318db3526b644e6efa60be0b3ca5a50e40fbe8bd026c261e0aa206f0772267",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/CrimsonPro-OFL.txt",
+      "sourceSha256": "35680d14547b6748b6f362a052a46d22764ce5eccf96e18b74f567bb2ee58114",
+      "snapshotSha256": "35680d14547b6748b6f362a052a46d22764ce5eccf96e18b74f567bb2ee58114",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/CrimsonPro-Regular.ttf",
+      "sourceSha256": "48fad08cb1917a7b2f2c6fe5135d6c07743a6663cf7631ec4481108aaf081422",
+      "snapshotSha256": "48fad08cb1917a7b2f2c6fe5135d6c07743a6663cf7631ec4481108aaf081422",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/DMMono-OFL.txt",
+      "sourceSha256": "bfe7842fcb88323e2981e24710c25202677385a8c75fb6a87217b275a0247ae3",
+      "snapshotSha256": "bfe7842fcb88323e2981e24710c25202677385a8c75fb6a87217b275a0247ae3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/DMMono-Regular.ttf",
+      "sourceSha256": "f98ada968dc3b6b2c08d3f5caaf266977df0bfe0929372b93df5a06cf2ace450",
+      "snapshotSha256": "f98ada968dc3b6b2c08d3f5caaf266977df0bfe0929372b93df5a06cf2ace450",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/EricaOne-OFL.txt",
+      "sourceSha256": "e0de629968b52255548d5fafcf30b24ff9edae0eda362380755a75816404d0fa",
+      "snapshotSha256": "e0de629968b52255548d5fafcf30b24ff9edae0eda362380755a75816404d0fa",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/EricaOne-Regular.ttf",
+      "sourceSha256": "db1d89e80e33a8a01beaaac7a85df582857d24a43f1e181461aa7ff5d701476a",
+      "snapshotSha256": "db1d89e80e33a8a01beaaac7a85df582857d24a43f1e181461aa7ff5d701476a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/GeistMono-Bold.ttf",
+      "sourceSha256": "75c0828d5c1ee44b9ef9f4df577bf41595ec362e2ea3f1e558590c9e92c7949d",
+      "snapshotSha256": "75c0828d5c1ee44b9ef9f4df577bf41595ec362e2ea3f1e558590c9e92c7949d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/GeistMono-OFL.txt",
+      "sourceSha256": "6a873c900f584109b13ae0aaf81d6e3cf0a68751a216b03f7b6c68d547057bb4",
+      "snapshotSha256": "6a873c900f584109b13ae0aaf81d6e3cf0a68751a216b03f7b6c68d547057bb4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/GeistMono-Regular.ttf",
+      "sourceSha256": "a55c1b51cda4afeab9e471e7947b85a20f7c8831d7e6b1470c1b7fbdc0f0f15e",
+      "snapshotSha256": "a55c1b51cda4afeab9e471e7947b85a20f7c8831d7e6b1470c1b7fbdc0f0f15e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Gloock-OFL.txt",
+      "sourceSha256": "c0a3f3125ac491ef3d1f09f401be4834c646562f647e44f2bcbc49f0466c656d",
+      "snapshotSha256": "c0a3f3125ac491ef3d1f09f401be4834c646562f647e44f2bcbc49f0466c656d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Gloock-Regular.ttf",
+      "sourceSha256": "e86b4ce66dbd3f1f83eee8db99ec96e0da1128c3f53df0e9b3b7472025dfe960",
+      "snapshotSha256": "e86b4ce66dbd3f1f83eee8db99ec96e0da1128c3f53df0e9b3b7472025dfe960",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexMono-Bold.ttf",
+      "sourceSha256": "dbd2a2fb024579438d6400a84e57579bfd2dbe67c306c8fd9fde92a61e4f2eea",
+      "snapshotSha256": "dbd2a2fb024579438d6400a84e57579bfd2dbe67c306c8fd9fde92a61e4f2eea",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexMono-OFL.txt",
+      "sourceSha256": "5294ce778857e1eb02e830b6ab06435537d38f43055327e73d03a2d4d57d5123",
+      "snapshotSha256": "5294ce778857e1eb02e830b6ab06435537d38f43055327e73d03a2d4d57d5123",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexMono-Regular.ttf",
+      "sourceSha256": "ab08018ccd276b79fb2c636bb95b9c543598f9d50505fe92506fcb4dae7810cd",
+      "snapshotSha256": "ab08018ccd276b79fb2c636bb95b9c543598f9d50505fe92506fcb4dae7810cd",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexSerif-Bold.ttf",
+      "sourceSha256": "b8d294e9b5c5a0940f167c3ced0f7ef2e3f57082ca3ff096ef30e86e26c1c159",
+      "snapshotSha256": "b8d294e9b5c5a0940f167c3ced0f7ef2e3f57082ca3ff096ef30e86e26c1c159",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexSerif-BoldItalic.ttf",
+      "sourceSha256": "da64b75f4284f53e7b5c71fa190a35b8bf3494fe19f1804c81c3a53340bca570",
+      "snapshotSha256": "da64b75f4284f53e7b5c71fa190a35b8bf3494fe19f1804c81c3a53340bca570",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexSerif-Italic.ttf",
+      "sourceSha256": "b11f1048745e715a55c9d837b3f10226ca3d78867b7db7251ddad8f98dcf0f38",
+      "snapshotSha256": "b11f1048745e715a55c9d837b3f10226ca3d78867b7db7251ddad8f98dcf0f38",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/IBMPlexSerif-Regular.ttf",
+      "sourceSha256": "77cd233a2af8dc6b1022faea3bb3b01f3c75af68bcf530cb6aeb15982ff3dbb7",
+      "snapshotSha256": "77cd233a2af8dc6b1022faea3bb3b01f3c75af68bcf530cb6aeb15982ff3dbb7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSans-Bold.ttf",
+      "sourceSha256": "444f85bf1c4b0e1ce1ca624f6be54bcd832207714ccaf4ea99ee531341683bdf",
+      "snapshotSha256": "444f85bf1c4b0e1ce1ca624f6be54bcd832207714ccaf4ea99ee531341683bdf",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSans-BoldItalic.ttf",
+      "sourceSha256": "3762f6cef95d6039489ad5ba5787d4c30f17a1ad01e9ac3c816ed69692722a68",
+      "snapshotSha256": "3762f6cef95d6039489ad5ba5787d4c30f17a1ad01e9ac3c816ed69692722a68",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSans-Italic.ttf",
+      "sourceSha256": "78e85858e371b2cb4e18f617c10f0f937c0e12a0887ffee98555b24ed305b3a7",
+      "snapshotSha256": "78e85858e371b2cb4e18f617c10f0f937c0e12a0887ffee98555b24ed305b3a7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSans-OFL.txt",
+      "sourceSha256": "bf4dc6d13a8cccd4807133c77a1ee9619a16b92cb23322258725ab6731c2f6e5",
+      "snapshotSha256": "bf4dc6d13a8cccd4807133c77a1ee9619a16b92cb23322258725ab6731c2f6e5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSans-Regular.ttf",
+      "sourceSha256": "a22cb26e48fd79bcb01bf2fc92d36785474dce36d9c544ab0a8868c2657c4a87",
+      "snapshotSha256": "a22cb26e48fd79bcb01bf2fc92d36785474dce36d9c544ab0a8868c2657c4a87",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSerif-Italic.ttf",
+      "sourceSha256": "9c86e4d5a47b50224a2463a9eca8535835257c8e85c470c2c6b454b1af6f046e",
+      "snapshotSha256": "9c86e4d5a47b50224a2463a9eca8535835257c8e85c470c2c6b454b1af6f046e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/InstrumentSerif-Regular.ttf",
+      "sourceSha256": "56ac3be03ac3ba283196b3e77850ab2ffcf56cfb6fd3212c5620109a972f8c99",
+      "snapshotSha256": "56ac3be03ac3ba283196b3e77850ab2ffcf56cfb6fd3212c5620109a972f8c99",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Italiana-OFL.txt",
+      "sourceSha256": "8373b11312ace78c4cec2e8f9f6aa9f2330601107dac7bcf899c6f2dbd40c5a5",
+      "snapshotSha256": "8373b11312ace78c4cec2e8f9f6aa9f2330601107dac7bcf899c6f2dbd40c5a5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Italiana-Regular.ttf",
+      "sourceSha256": "15c4dd6ab8cf4a29ba8826f65edcbe2f6c266c557d34d081f25072dfd5605fd2",
+      "snapshotSha256": "15c4dd6ab8cf4a29ba8826f65edcbe2f6c266c557d34d081f25072dfd5605fd2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/JetBrainsMono-Bold.ttf",
+      "sourceSha256": "a2349098b9e45419e7bf0e2958d6c4937a049dded37387b08be725be4c7615f3",
+      "snapshotSha256": "a2349098b9e45419e7bf0e2958d6c4937a049dded37387b08be725be4c7615f3",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/JetBrainsMono-OFL.txt",
+      "sourceSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+      "snapshotSha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/JetBrainsMono-Regular.ttf",
+      "sourceSha256": "b6b1ff4ddefe36d7f2a6174e1d001cab374e594519ee9049af028d577b64c5f5",
+      "snapshotSha256": "b6b1ff4ddefe36d7f2a6174e1d001cab374e594519ee9049af028d577b64c5f5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Jura-Light.ttf",
+      "sourceSha256": "c891a381df056b2c4dfe85841e911bf45da0890fa21a7b2692cbe5ea1f505e1e",
+      "snapshotSha256": "c891a381df056b2c4dfe85841e911bf45da0890fa21a7b2692cbe5ea1f505e1e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Jura-Medium.ttf",
+      "sourceSha256": "c72965cb732a92872643819fd1734128238583cc36b116313859137a51d3368a",
+      "snapshotSha256": "c72965cb732a92872643819fd1734128238583cc36b116313859137a51d3368a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Jura-OFL.txt",
+      "sourceSha256": "eaf9bdb675f6d87e5feb88199ab3ea581d3bd2082f426e384fa9c394576d7260",
+      "snapshotSha256": "eaf9bdb675f6d87e5feb88199ab3ea581d3bd2082f426e384fa9c394576d7260",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/LibreBaskerville-OFL.txt",
+      "sourceSha256": "55959eef5b0c3b2e3c1c7631b8ff0f9447d75de20f29cfa7db5bcfb026763343",
+      "snapshotSha256": "55959eef5b0c3b2e3c1c7631b8ff0f9447d75de20f29cfa7db5bcfb026763343",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/LibreBaskerville-Regular.ttf",
+      "sourceSha256": "2101302538d9e88adb679031c04623e4578b5745e89566284fd2c508d79acae0",
+      "snapshotSha256": "2101302538d9e88adb679031c04623e4578b5745e89566284fd2c508d79acae0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Lora-Bold.ttf",
+      "sourceSha256": "7d74015e950c2fb66519c7295b8155621d22200ae2ca2a4c6b43ce3c490cac87",
+      "snapshotSha256": "7d74015e950c2fb66519c7295b8155621d22200ae2ca2a4c6b43ce3c490cac87",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Lora-BoldItalic.ttf",
+      "sourceSha256": "152f87e71f5ddb60d5c57ecd9132807c947e65c42977193c9164e7c5a6690081",
+      "snapshotSha256": "152f87e71f5ddb60d5c57ecd9132807c947e65c42977193c9164e7c5a6690081",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Lora-Italic.ttf",
+      "sourceSha256": "be627e595184e8afe521f08da0607eee613f1997d423bc8dadc5798995581377",
+      "snapshotSha256": "be627e595184e8afe521f08da0607eee613f1997d423bc8dadc5798995581377",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Lora-OFL.txt",
+      "sourceSha256": "62e37a82d3f1ef2a70712885fa8b3144b65fd144d8e748d6196b690a354d792c",
+      "snapshotSha256": "62e37a82d3f1ef2a70712885fa8b3144b65fd144d8e748d6196b690a354d792c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Lora-Regular.ttf",
+      "sourceSha256": "7ed00e7c9cdf16ab7e2fd2361fe45d4f0b61263cd60aae398b27b7ee08108827",
+      "snapshotSha256": "7ed00e7c9cdf16ab7e2fd2361fe45d4f0b61263cd60aae398b27b7ee08108827",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/NationalPark-Bold.ttf",
+      "sourceSha256": "69ac4c301c4a7233c6e602d12a92c54d7967b575f4449951c45ce773f7acff53",
+      "snapshotSha256": "69ac4c301c4a7233c6e602d12a92c54d7967b575f4449951c45ce773f7acff53",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/NationalPark-OFL.txt",
+      "sourceSha256": "81c6c71d83b5b45d7344f96df12bb4a2477a5b092a9144757ee1d0f50f855175",
+      "snapshotSha256": "81c6c71d83b5b45d7344f96df12bb4a2477a5b092a9144757ee1d0f50f855175",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/NationalPark-Regular.ttf",
+      "sourceSha256": "a477338b7e18308d476650dfe31235ef86a883572665e56ffb5fb80f82009b58",
+      "snapshotSha256": "a477338b7e18308d476650dfe31235ef86a883572665e56ffb5fb80f82009b58",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/NothingYouCouldDo-OFL.txt",
+      "sourceSha256": "7c2a6970584ddad04919816163746f83b378078015899b18468b40f05e9ce128",
+      "snapshotSha256": "7c2a6970584ddad04919816163746f83b378078015899b18468b40f05e9ce128",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/NothingYouCouldDo-Regular.ttf",
+      "sourceSha256": "d866f985896d3280f4fce72db7e17302c24a0c1fdb0699b6b5ed3af14f944d57",
+      "snapshotSha256": "d866f985896d3280f4fce72db7e17302c24a0c1fdb0699b6b5ed3af14f944d57",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Outfit-Bold.ttf",
+      "sourceSha256": "6654b93d21301ec61887d3cedd6c11d9df1b1dfb63f9cf45ac7995f6e2235ab1",
+      "snapshotSha256": "6654b93d21301ec61887d3cedd6c11d9df1b1dfb63f9cf45ac7995f6e2235ab1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Outfit-OFL.txt",
+      "sourceSha256": "1945b62cd76da9a3051a1660dde72afaa64ffc2666d30e7a78356d651653ba2f",
+      "snapshotSha256": "1945b62cd76da9a3051a1660dde72afaa64ffc2666d30e7a78356d651653ba2f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Outfit-Regular.ttf",
+      "sourceSha256": "f24945365147c9e783e91d8649959b59be6b00c9ee4ecd2f6b33afbb2dd871fe",
+      "snapshotSha256": "f24945365147c9e783e91d8649959b59be6b00c9ee4ecd2f6b33afbb2dd871fe",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/PixelifySans-Medium.ttf",
+      "sourceSha256": "38397504f71c122b03d234ea6f55118e3d5bdbddffd82bedddbd7755d3b3be82",
+      "snapshotSha256": "38397504f71c122b03d234ea6f55118e3d5bdbddffd82bedddbd7755d3b3be82",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/PixelifySans-OFL.txt",
+      "sourceSha256": "7f54d1d9f1ae1ba9f2722f978145f90324fea34ca3c2304b3a29cfa96ac6037e",
+      "snapshotSha256": "7f54d1d9f1ae1ba9f2722f978145f90324fea34ca3c2304b3a29cfa96ac6037e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/PoiretOne-OFL.txt",
+      "sourceSha256": "2eaf541f7eb8b512e4c757a5212060abf5b6edfef230e9d7640bf736b315c33a",
+      "snapshotSha256": "2eaf541f7eb8b512e4c757a5212060abf5b6edfef230e9d7640bf736b315c33a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/PoiretOne-Regular.ttf",
+      "sourceSha256": "9cf265b139648b36b6c0afdfeb0bf27f7e66db9a16094bc40f644d8da05bc318",
+      "snapshotSha256": "9cf265b139648b36b6c0afdfeb0bf27f7e66db9a16094bc40f644d8da05bc318",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/RedHatMono-Bold.ttf",
+      "sourceSha256": "7ef48353f4be5ddb90f000f6fad48f2b62b3e8c27d9818d8d45ff46c201065e0",
+      "snapshotSha256": "7ef48353f4be5ddb90f000f6fad48f2b62b3e8c27d9818d8d45ff46c201065e0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/RedHatMono-OFL.txt",
+      "sourceSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+      "snapshotSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/RedHatMono-Regular.ttf",
+      "sourceSha256": "452fe826871b37539f5212b20c87cf30f82f58dd2741f1c96edd1dcbdc0db6b4",
+      "snapshotSha256": "452fe826871b37539f5212b20c87cf30f82f58dd2741f1c96edd1dcbdc0db6b4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Silkscreen-OFL.txt",
+      "sourceSha256": "6b849745119bbe85ec01fd080c9cd50234da9f52ac6e48b55d1a424a0c4d7ca9",
+      "snapshotSha256": "6b849745119bbe85ec01fd080c9cd50234da9f52ac6e48b55d1a424a0c4d7ca9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Silkscreen-Regular.ttf",
+      "sourceSha256": "49567408600809e25147e9225ac4f37f410e2df45a750696c45027531fb65f1b",
+      "snapshotSha256": "49567408600809e25147e9225ac4f37f410e2df45a750696c45027531fb65f1b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/SmoochSans-Medium.ttf",
+      "sourceSha256": "dd76e6e77cce82f827a8654cd906e9ce58f3aaf78adda63c4a7f655b8ecb41f0",
+      "snapshotSha256": "dd76e6e77cce82f827a8654cd906e9ce58f3aaf78adda63c4a7f655b8ecb41f0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/SmoochSans-OFL.txt",
+      "sourceSha256": "74c9c4eb88e891483e1b7bc54780b452cbf4f4df66d4e71881d7569aa2130749",
+      "snapshotSha256": "74c9c4eb88e891483e1b7bc54780b452cbf4f4df66d4e71881d7569aa2130749",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Tektur-Medium.ttf",
+      "sourceSha256": "52bbe8c9b057b3d2da4eeace31a524b1ea26a1375ae34319cf6900ccc57a4c82",
+      "snapshotSha256": "52bbe8c9b057b3d2da4eeace31a524b1ea26a1375ae34319cf6900ccc57a4c82",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Tektur-OFL.txt",
+      "sourceSha256": "3f1466cb5438f31782eeb6e895f3a655bc4d090e24263e331f555357d1cb734e",
+      "snapshotSha256": "3f1466cb5438f31782eeb6e895f3a655bc4d090e24263e331f555357d1cb734e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/Tektur-Regular.ttf",
+      "sourceSha256": "162e1b36c4718c5b051b36c971ad7e50d341944f35618f480422ebbe72988f98",
+      "snapshotSha256": "162e1b36c4718c5b051b36c971ad7e50d341944f35618f480422ebbe72988f98",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/WorkSans-Bold.ttf",
+      "sourceSha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2",
+      "snapshotSha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/WorkSans-BoldItalic.ttf",
+      "sourceSha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34",
+      "snapshotSha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/WorkSans-Italic.ttf",
+      "sourceSha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada",
+      "snapshotSha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/WorkSans-OFL.txt",
+      "sourceSha256": "ace8c22a3326318b54e67c3691857929634205533f454a70ef5a3473ddb2e2ba",
+      "snapshotSha256": "ace8c22a3326318b54e67c3691857929634205533f454a70ef5a3473ddb2e2ba",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/WorkSans-Regular.ttf",
+      "sourceSha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4",
+      "snapshotSha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/YoungSerif-OFL.txt",
+      "sourceSha256": "cdcb8039606b40a027a6d24586ec62d5fe29c701343d82a048c829cb28a3dd28",
+      "snapshotSha256": "cdcb8039606b40a027a6d24586ec62d5fe29c701343d82a048c829cb28a3dd28",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/canvas-fonts/YoungSerif-Regular.ttf",
+      "sourceSha256": "f8dc08f77abad753a00670af70756a8ace938e5c3f0b770f4f4c2071c4bd8fc6",
+      "snapshotSha256": "f8dc08f77abad753a00670af70756a8ace938e5c3f0b770f4f4c2071c4bd8fc6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/LICENSE.txt",
+      "sourceSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "snapshotSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/canvas-design-system.md",
+      "sourceSha256": "2d436f68537a045de77edac427143cd13f706d3466f34f4fd57f78011bb9644e",
+      "snapshotSha256": "2d436f68537a045de77edac427143cd13f706d3466f34f4fd57f78011bb9644e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/shadcn-accessibility.md",
+      "sourceSha256": "7ee019437f4a75d4a748e2d5cef6b95fb57b450bfb16a79a49e3c2e8e9664cc9",
+      "snapshotSha256": "7ee019437f4a75d4a748e2d5cef6b95fb57b450bfb16a79a49e3c2e8e9664cc9",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/shadcn-components.md",
+      "sourceSha256": "9361c3ce6f34837f790619d3cb3b7b0bc7a8839c94fa3eb9d27630cf19134c49",
+      "snapshotSha256": "9361c3ce6f34837f790619d3cb3b7b0bc7a8839c94fa3eb9d27630cf19134c49",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/shadcn-theming.md",
+      "sourceSha256": "2790b19da95cc36035d3c7e33d16eed3cb1c16a15b639d9f9122d15089917307",
+      "snapshotSha256": "2790b19da95cc36035d3c7e33d16eed3cb1c16a15b639d9f9122d15089917307",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/tailwind-customization.md",
+      "sourceSha256": "95861c24650f1356e24c46f8d451be84a958daf09908a5d89d1fe81933a8d7b5",
+      "snapshotSha256": "95861c24650f1356e24c46f8d451be84a958daf09908a5d89d1fe81933a8d7b5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/tailwind-responsive.md",
+      "sourceSha256": "8d00ae620df26daea4623c7bf996d6e612e09d359305fcfa2b40cab757ed840c",
+      "snapshotSha256": "8d00ae620df26daea4623c7bf996d6e612e09d359305fcfa2b40cab757ed840c",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/references/tailwind-utilities.md",
+      "sourceSha256": "aba1c40ef84f43beea142ae310371e332541f39d973df90a71f1854823effda1",
+      "snapshotSha256": "aba1c40ef84f43beea142ae310371e332541f39d973df90a71f1854823effda1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/scripts/requirements.txt",
+      "sourceSha256": "b62ef815fabeca1bb7920f3b9f3bb7354c8142cb9ce622cf8c79a213d17bd824",
+      "snapshotSha256": "b62ef815fabeca1bb7920f3b9f3bb7354c8142cb9ce622cf8c79a213d17bd824",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/scripts/shadcn_add.py",
+      "sourceSha256": "4f84e9c097948d4619fc0eeff597cfac529d0f3c8b4e22cae07016070253e33b",
+      "snapshotSha256": "4f84e9c097948d4619fc0eeff597cfac529d0f3c8b4e22cae07016070253e33b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/scripts/tailwind_config_gen.py",
+      "sourceSha256": "fd0e7b96fdb0d24b9ac85e87aed1dae6a2399b6c508809b3db71a32696584511",
+      "snapshotSha256": "fd0e7b96fdb0d24b9ac85e87aed1dae6a2399b6c508809b3db71a32696584511",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-styling/SKILL.md",
+      "sourceSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
+      "snapshotSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-system-guardian/references/audit-rules.md",
+      "sourceSha256": "950ab11d96228913ced7873204bf1871f4a58099339e84baa207d4a4e20db3be",
+      "snapshotSha256": "950ab11d96228913ced7873204bf1871f4a58099339e84baa207d4a4e20db3be",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-system-guardian/references/workflow.md",
+      "sourceSha256": "43b86640cfd4e65824f1aef4698b67947386c436e88afa297c8f9f49fb98e191",
+      "snapshotSha256": "43b86640cfd4e65824f1aef4698b67947386c436e88afa297c8f9f49fb98e191",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-system-guardian/SKILL.md",
+      "sourceSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
+      "snapshotSha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/_sync_all.py",
+      "sourceSha256": "b540b3a4f87598ae29048b3cceae1fc17b39b629aee2cbe5c802ffc7b48abf6d",
+      "snapshotSha256": "b540b3a4f87598ae29048b3cceae1fc17b39b629aee2cbe5c802ffc7b48abf6d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/app-interface.csv",
+      "sourceSha256": "2a17ef810dab715ce1f339861817a8fbe3ccc38142b70517301e874803e838ac",
+      "snapshotSha256": "2a17ef810dab715ce1f339861817a8fbe3ccc38142b70517301e874803e838ac",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/charts.csv",
+      "sourceSha256": "ebb565308115f955791b0431797a89d9b3587c25d5babb9428d10712c4924817",
+      "snapshotSha256": "ebb565308115f955791b0431797a89d9b3587c25d5babb9428d10712c4924817",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/colors.csv",
+      "sourceSha256": "69ee8c1147b269599d20ca418bdd6f32563a9aa2d962fb9a9b8dec66bf7b1ba4",
+      "snapshotSha256": "69ee8c1147b269599d20ca418bdd6f32563a9aa2d962fb9a9b8dec66bf7b1ba4",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/design.csv",
+      "sourceSha256": "6f0ae42f16b3cbfa3f07050268387557859ff666e2651b1b82763f099d724b3f",
+      "snapshotSha256": "6f0ae42f16b3cbfa3f07050268387557859ff666e2651b1b82763f099d724b3f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/draft.csv",
+      "sourceSha256": "e190c796b707858a5436dc4c27f9ee9bb6618014ca73f533e423abe5ce9e4d06",
+      "snapshotSha256": "e190c796b707858a5436dc4c27f9ee9bb6618014ca73f533e423abe5ce9e4d06",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/google-fonts.csv",
+      "sourceSha256": "2c03a3cd134d126bd9d6a7dc2a6360dc5272219ad6df3eb9315b031f806e1487",
+      "snapshotSha256": "2c03a3cd134d126bd9d6a7dc2a6360dc5272219ad6df3eb9315b031f806e1487",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/icons.csv",
+      "sourceSha256": "f376c29fb4df37b4bdb366a5aa70cb211ba3dd8b435390aaa03152a64b07d2e8",
+      "snapshotSha256": "f376c29fb4df37b4bdb366a5aa70cb211ba3dd8b435390aaa03152a64b07d2e8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/landing.csv",
+      "sourceSha256": "080cedbcd61ff8ec9520f33929baa76bee9589e783f83b2f8d824a466b6a46d7",
+      "snapshotSha256": "080cedbcd61ff8ec9520f33929baa76bee9589e783f83b2f8d824a466b6a46d7",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/products.csv",
+      "sourceSha256": "9fd9e776ba847cf44c1ea78f95fe5e33b2c56bb7e186e3cfff9c49bc7fcb691b",
+      "snapshotSha256": "9fd9e776ba847cf44c1ea78f95fe5e33b2c56bb7e186e3cfff9c49bc7fcb691b",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/react-performance.csv",
+      "sourceSha256": "904c8afcda229629545912dde0e8ac37503757131f0169f80b016f1f58c4fd3f",
+      "snapshotSha256": "904c8afcda229629545912dde0e8ac37503757131f0169f80b016f1f58c4fd3f",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/angular.csv",
+      "sourceSha256": "dd7cc2a2b34cd8f0508bd05b067545e7a44f7724440c432d491d92a61a8fb6c1",
+      "snapshotSha256": "dd7cc2a2b34cd8f0508bd05b067545e7a44f7724440c432d491d92a61a8fb6c1",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/astro.csv",
+      "sourceSha256": "ad18dae3ab6d148d37d144592df80dc1825b6c9e86d9d2d68fdda77434206a37",
+      "snapshotSha256": "ad18dae3ab6d148d37d144592df80dc1825b6c9e86d9d2d68fdda77434206a37",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/flutter.csv",
+      "sourceSha256": "fe36d404c799781e8ba6e9a8179b45799ed5126a545528550cd2eb0f2346e8c5",
+      "snapshotSha256": "fe36d404c799781e8ba6e9a8179b45799ed5126a545528550cd2eb0f2346e8c5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/html-tailwind.csv",
+      "sourceSha256": "7aef38e75c53559470afcfa91580a9917ca8b7dbf8b92110389e23e93703ac52",
+      "snapshotSha256": "7aef38e75c53559470afcfa91580a9917ca8b7dbf8b92110389e23e93703ac52",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv",
+      "sourceSha256": "6c8fd4b0391c342c12b0af15610cd5becbeccaef0bbe8dcfc01d928c3195d93e",
+      "snapshotSha256": "6c8fd4b0391c342c12b0af15610cd5becbeccaef0bbe8dcfc01d928c3195d93e",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/laravel.csv",
+      "sourceSha256": "50e11e60a64b30f329af25ae71f4b8bbdb43bafc1865451b74f9f540a88964d5",
+      "snapshotSha256": "50e11e60a64b30f329af25ae71f4b8bbdb43bafc1865451b74f9f540a88964d5",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/nextjs.csv",
+      "sourceSha256": "e828ccc04843742f52f545a068e8a9ab0d2b97c0e771f7e93bf0cef74da05554",
+      "snapshotSha256": "e828ccc04843742f52f545a068e8a9ab0d2b97c0e771f7e93bf0cef74da05554",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv",
+      "sourceSha256": "05d6e74501b2b6a636faed32450622759f49a5bcafad971f5f4e7eba0eb7be71",
+      "snapshotSha256": "05d6e74501b2b6a636faed32450622759f49a5bcafad971f5f4e7eba0eb7be71",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/nuxtjs.csv",
+      "sourceSha256": "f7a3f2d9542856d00199f85c6c023b7c284cc698e2e6e12d61afce2edacb24d6",
+      "snapshotSha256": "f7a3f2d9542856d00199f85c6c023b7c284cc698e2e6e12d61afce2edacb24d6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/react-native.csv",
+      "sourceSha256": "a08ca77fcf6b6d9531982dce465366296013bfcf12d2938ac72ad57cf0c4f085",
+      "snapshotSha256": "a08ca77fcf6b6d9531982dce465366296013bfcf12d2938ac72ad57cf0c4f085",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/react.csv",
+      "sourceSha256": "e5624ab41d33427d88e41d07581ce4eca59b37b36ab72a6ad43a9c8e2d0a1c72",
+      "snapshotSha256": "e5624ab41d33427d88e41d07581ce4eca59b37b36ab72a6ad43a9c8e2d0a1c72",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/shadcn.csv",
+      "sourceSha256": "395c2e415ef6f48a474acccdc8eb2c7258a6ed751a5037ba171a2d8823e02ded",
+      "snapshotSha256": "395c2e415ef6f48a474acccdc8eb2c7258a6ed751a5037ba171a2d8823e02ded",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/svelte.csv",
+      "sourceSha256": "71af52d64f266c88070b91dbbaa900c2f8074b6baae9f35eaea6ba9cec6fd803",
+      "snapshotSha256": "71af52d64f266c88070b91dbbaa900c2f8074b6baae9f35eaea6ba9cec6fd803",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/swiftui.csv",
+      "sourceSha256": "c9c2d2510f8e66281a2514e8dd0125a6b653b9ef53a71281b5e7dfe003d5b569",
+      "snapshotSha256": "c9c2d2510f8e66281a2514e8dd0125a6b653b9ef53a71281b5e7dfe003d5b569",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/threejs.csv",
+      "sourceSha256": "f1c05f8f269fc4784170c837f4ff43b50042f00bbd6ba7dbef2896081a052544",
+      "snapshotSha256": "f1c05f8f269fc4784170c837f4ff43b50042f00bbd6ba7dbef2896081a052544",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/stacks/vue.csv",
+      "sourceSha256": "c2724915d3c11cd67263f25896cff721f787a0fdd8326002d31e9f5806dfd8f8",
+      "snapshotSha256": "c2724915d3c11cd67263f25896cff721f787a0fdd8326002d31e9f5806dfd8f8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/styles.csv",
+      "sourceSha256": "9b5089dcde8999333b36878252a255cc3bacbb2fe7b836c76cc7f7aa2abb643d",
+      "snapshotSha256": "9b5089dcde8999333b36878252a255cc3bacbb2fe7b836c76cc7f7aa2abb643d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/typography.csv",
+      "sourceSha256": "dbea262a54e3bfa2e6c3b15989a365d5ef4c43349316aff46635e82ca825adce",
+      "snapshotSha256": "dbea262a54e3bfa2e6c3b15989a365d5ef4c43349316aff46635e82ca825adce",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/ui-reasoning.csv",
+      "sourceSha256": "41976082ecae1100da937c949215dc6694393e03f3c2a7444dd92a9edb43cb11",
+      "snapshotSha256": "41976082ecae1100da937c949215dc6694393e03f3c2a7444dd92a9edb43cb11",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/data/ux-guidelines.csv",
+      "sourceSha256": "1870ee048f2a2bdd60709f8f7adf7f3b6dcad560bc005c8b2915a8ac8639820d",
+      "snapshotSha256": "1870ee048f2a2bdd60709f8f7adf7f3b6dcad560bc005c8b2915a8ac8639820d",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/references/cli-usage.md",
+      "sourceSha256": "f653f4d25579d435e7514aef5bcd7a7b0d7a3214d83b854fedb15b33523bffeb",
+      "snapshotSha256": "f653f4d25579d435e7514aef5bcd7a7b0d7a3214d83b854fedb15b33523bffeb",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/references/professional-ui-checklist.md",
+      "sourceSha256": "81dff7776c700ac5857fd60dc778ed9276b9737e899b7a02321a50fc92be29be",
+      "snapshotSha256": "81dff7776c700ac5857fd60dc778ed9276b9737e899b7a02321a50fc92be29be",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/references/quick-reference.md",
+      "sourceSha256": "5f9989ea39d0aac0802e28b4f42fb002869dbf36bac1c27f0238cc2a26595788",
+      "snapshotSha256": "5f9989ea39d0aac0802e28b4f42fb002869dbf36bac1c27f0238cc2a26595788",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/scripts/core.py",
+      "sourceSha256": "772b4d567c7a948c5d4a10343473b4123fec04238d250c9ffce31d0733f752c0",
+      "snapshotSha256": "772b4d567c7a948c5d4a10343473b4123fec04238d250c9ffce31d0733f752c0",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "sourceSha256": "1ec8ccf7b5bb2ea3613979bb579116f89cd967d6a660ae2e254f23dcc79098b8",
+      "snapshotSha256": "1ec8ccf7b5bb2ea3613979bb579116f89cd967d6a660ae2e254f23dcc79098b8",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/scripts/search.py",
+      "sourceSha256": "f5cd217ae49290446ba727231df4d6086e9c1fc0c0a0a0ed08a0c6456b533ae6",
+      "snapshotSha256": "f5cd217ae49290446ba727231df4d6086e9c1fc0c0a0a0ed08a0c6456b533ae6",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/ui-ux-pro-max/SKILL.md",
+      "sourceSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
+      "snapshotSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/vibe-coding-skills/references/route-matrix.md",
+      "sourceSha256": "e60ba05e505f1f58e9ff92ce242459ac9a721e6b8120a2433b471902f7813757",
+      "snapshotSha256": "e60ba05e505f1f58e9ff92ce242459ac9a721e6b8120a2433b471902f7813757",
+      "sha256Match": true
+    },
+    {
+      "path": "skills/vibe-coding-skills/SKILL.md",
+      "sourceSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
+      "snapshotSha256": "85f7b7a3674fdab96bd5356954187f03e28ce4e35550dd0e12eacb737f210fa6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/architecture-foundation-policy.mjs",
+      "sourceSha256": "42c8d56740d65143e00d2a2d26b30b94cfb0a6416d0a8cf624e74da44ac4ad85",
+      "snapshotSha256": "42c8d56740d65143e00d2a2d26b30b94cfb0a6416d0a8cf624e74da44ac4ad85",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/archive-lifecycle-docs.mjs",
+      "sourceSha256": "a0b8df00cceb9c7da8550c06f807ef3090e3509945602a16451d00e93a8ce770",
+      "snapshotSha256": "a0b8df00cceb9c7da8550c06f807ef3090e3509945602a16451d00e93a8ce770",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/auto-sync-target-doc-index.mjs",
+      "sourceSha256": "79113a6a2f27ad10a4e8ed325170b6e62841718f71ff880401e75a863aedd799",
+      "snapshotSha256": "79113a6a2f27ad10a4e8ed325170b6e62841718f71ff880401e75a863aedd799",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/build-lite-package.mjs",
+      "sourceSha256": "4499d6d25bca34d33bd96ff595c147d54a5f242200e892d955709617923e27ac",
+      "snapshotSha256": "4499d6d25bca34d33bd96ff595c147d54a5f242200e892d955709617923e27ac",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/build-target-doc-index.mjs",
+      "sourceSha256": "e66d574cc5abf36685dda2fb623b0c666370d3b394b33f1016db9c267be38d9d",
+      "snapshotSha256": "e66d574cc5abf36685dda2fb623b0c666370d3b394b33f1016db9c267be38d9d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-api-contracts.mjs",
+      "sourceSha256": "041b1991c6e5b795a13a58ef73d95545a03f981fd358abd38e4e363abfdf06dd",
+      "snapshotSha256": "041b1991c6e5b795a13a58ef73d95545a03f981fd358abd38e4e363abfdf06dd",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-constitution-rules.mjs",
+      "sourceSha256": "d08aa2b69f65581e35e185264a88e3715611ce554a85dee40f2fe489cf9b1860",
+      "snapshotSha256": "d08aa2b69f65581e35e185264a88e3715611ce554a85dee40f2fe489cf9b1860",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-experience-ledger.mjs",
+      "sourceSha256": "f521efeb7b1bd385266adca5c74fa21a6e88b8ab4fe1a4ccc0468f401ede2ca6",
+      "snapshotSha256": "f521efeb7b1bd385266adca5c74fa21a6e88b8ab4fe1a4ccc0468f401ede2ca6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-global-skill-overlap.ps1",
+      "sourceSha256": "981ae69b7a6a4297943f84df1e7329a09a73b598ac1f50f53cd9f0476f33409c",
+      "snapshotSha256": "981ae69b7a6a4297943f84df1e7329a09a73b598ac1f50f53cd9f0476f33409c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-hotspots.mjs",
+      "sourceSha256": "bbf4193f737cdd998e2aec11e4918e7499df30e5d9d80550ed7a123b6a408457",
+      "snapshotSha256": "bbf4193f737cdd998e2aec11e4918e7499df30e5d9d80550ed7a123b6a408457",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-lifecycle-doc-budget.mjs",
+      "sourceSha256": "e4c3d835ff7a8330206d08992c71b2ccbab0d2553cdae739d7e5d4dd53ebce73",
+      "snapshotSha256": "e4c3d835ff7a8330206d08992c71b2ccbab0d2553cdae739d7e5d4dd53ebce73",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-markdown-governance.mjs",
+      "sourceSha256": "b5a3f0815f545d494639eabf1426d9b19b47ecac46b497bcda46aa8b57d40ed1",
+      "snapshotSha256": "b5a3f0815f545d494639eabf1426d9b19b47ecac46b497bcda46aa8b57d40ed1",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-project-structure.sh",
+      "sourceSha256": "0bd359352bad9c33a0006f182e5e112eed68bc8774b63e3dfecb79bbc3c6f12b",
+      "snapshotSha256": "0bd359352bad9c33a0006f182e5e112eed68bc8774b63e3dfecb79bbc3c6f12b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-release-source-provenance.mjs",
+      "sourceSha256": "63dd319e572a06ca2a1c9864d9a1fa17c68c6df81f2df2783b1fe7887c054b54",
+      "snapshotSha256": "63dd319e572a06ca2a1c9864d9a1fa17c68c6df81f2df2783b1fe7887c054b54",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-routing-manifest.mjs",
+      "sourceSha256": "afacd3567a373cb5b448b58acde776af9626f55d2e1216639e6b0ac458849150",
+      "snapshotSha256": "afacd3567a373cb5b448b58acde776af9626f55d2e1216639e6b0ac458849150",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-runtime-link-provenance.mjs",
+      "sourceSha256": "ab422994a58293d09c821537579fba61412944bb44e83ff3c457439d5dac6d34",
+      "snapshotSha256": "ab422994a58293d09c821537579fba61412944bb44e83ff3c457439d5dac6d34",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-runtime-sync.mjs",
+      "sourceSha256": "e8beec7a422ea0be69194853d55a8964c46588ec9bc16ce7d336333247aa1dd8",
+      "snapshotSha256": "e8beec7a422ea0be69194853d55a8964c46588ec9bc16ce7d336333247aa1dd8",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-skill-token-budget.mjs",
+      "sourceSha256": "ad8d596a4820fd037b051951e14aac3dc29c197d33d9729e2b179d2a101bd52b",
+      "snapshotSha256": "ad8d596a4820fd037b051951e14aac3dc29c197d33d9729e2b179d2a101bd52b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-target-constitution.mjs",
+      "sourceSha256": "93819220b2064330155b09444e2c56357ff1950eeac2b11950d1c1d942ca931a",
+      "snapshotSha256": "93819220b2064330155b09444e2c56357ff1950eeac2b11950d1c1d942ca931a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-target-doc-drift.mjs",
+      "sourceSha256": "deb230d108fcc63b1bf0e60a4ac9fa726299f36606711f32f1b4265e5243c3a2",
+      "snapshotSha256": "deb230d108fcc63b1bf0e60a4ac9fa726299f36606711f32f1b4265e5243c3a2",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-target-doc-names.mjs",
+      "sourceSha256": "dabc2a78173a3aa562dddda887dee36fb06454f2b0870259cebc5a89a1cbbfea",
+      "snapshotSha256": "dabc2a78173a3aa562dddda887dee36fb06454f2b0870259cebc5a89a1cbbfea",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-target-doc-precommit.mjs",
+      "sourceSha256": "209ddeac1f88070e3106e2a9e09000bf773e7436ec6d4a4e3d8fa7d4caecc23a",
+      "snapshotSha256": "209ddeac1f88070e3106e2a9e09000bf773e7436ec6d4a4e3d8fa7d4caecc23a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-target-guardrails.mjs",
+      "sourceSha256": "57716685df510e86abd0a6c886988182b47946a651fc0cf16126d81287aa6fba",
+      "snapshotSha256": "57716685df510e86abd0a6c886988182b47946a651fc0cf16126d81287aa6fba",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-terminology-consistency.sh",
+      "sourceSha256": "b6dec85acae178a37bdf9dee8c5a9d19189cd174a878c3fe45533df41ee2a15d",
+      "snapshotSha256": "b6dec85acae178a37bdf9dee8c5a9d19189cd174a878c3fe45533df41ee2a15d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/check-ui-reuse.mjs",
+      "sourceSha256": "4da029ffa245544e37bf36982aafd547f09687b22b9bb48f1eee866bc6d7f461",
+      "snapshotSha256": "4da029ffa245544e37bf36982aafd547f09687b22b9bb48f1eee866bc6d7f461",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/constitution-rules.mjs",
+      "sourceSha256": "b67181a158453a7f038774643c79de15cf8434a73866fdd1f8b05dc96334ea6c",
+      "snapshotSha256": "b67181a158453a7f038774643c79de15cf8434a73866fdd1f8b05dc96334ea6c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/current-execution-template-helpers.ps1",
+      "sourceSha256": "e79aa3cf432da33fdf269f29493f1baf804e37640b2ce7e8a7191bd2607db740",
+      "snapshotSha256": "e79aa3cf432da33fdf269f29493f1baf804e37640b2ce7e8a7191bd2607db740",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/detect-experience-signal.mjs",
+      "sourceSha256": "30a2e8e2df55731b46ee76c43a467383b27f13847c16e0b1d3c681269a5c1543",
+      "snapshotSha256": "30a2e8e2df55731b46ee76c43a467383b27f13847c16e0b1d3c681269a5c1543",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-doc-helpers.sh",
+      "sourceSha256": "2f40ec8ad8919bfb1ab22ff8bab0cf5bf87a1dd7d0285ab88f9d06d4f78afb3b",
+      "snapshotSha256": "2f40ec8ad8919bfb1ab22ff8bab0cf5bf87a1dd7d0285ab88f9d06d4f78afb3b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-gate.sh",
+      "sourceSha256": "3859d5032eda9e918286a1e52daa4d02627a039860530d0d3b5ddb5d9fc073b0",
+      "snapshotSha256": "3859d5032eda9e918286a1e52daa4d02627a039860530d0d3b5ddb5d9fc073b0",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-helpers.sh",
+      "sourceSha256": "f57a4ba10281aeed42626cbeeecfa42bc66281fbb38c10db15047bb8800d0d42",
+      "snapshotSha256": "f57a4ba10281aeed42626cbeeecfa42bc66281fbb38c10db15047bb8800d0d42",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-path-helpers.sh",
+      "sourceSha256": "6417b0e79f2f734e8c5eb18d281ff6d0b4fd25c485ccd46ba842c051b600cd43",
+      "snapshotSha256": "6417b0e79f2f734e8c5eb18d281ff6d0b4fd25c485ccd46ba842c051b600cd43",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-state-helpers.sh",
+      "sourceSha256": "7efd5fc4a44962a772fc64042d8b29b72ace18b252728763f88419d69c0e716a",
+      "snapshotSha256": "7efd5fc4a44962a772fc64042d8b29b72ace18b252728763f88419d69c0e716a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/doc-sync-tier-helpers.sh",
+      "sourceSha256": "92da1a480075f9dbb8ce5c3178af6a709c1367fcf9019634db5e1cfc5f2decd5",
+      "snapshotSha256": "92da1a480075f9dbb8ce5c3178af6a709c1367fcf9019634db5e1cfc5f2decd5",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/experience-anchor-contract.mjs",
+      "sourceSha256": "8480d2f555ce68015372dcf5380a2143f94331012d45aaba1da5bea96100d227",
+      "snapshotSha256": "8480d2f555ce68015372dcf5380a2143f94331012d45aaba1da5bea96100d227",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/experience-governance.mjs",
+      "sourceSha256": "41b957d53acf2681ba0e2b19ff2710e9556560807e40b725ebacf3f96c2e7cd1",
+      "snapshotSha256": "41b957d53acf2681ba0e2b19ff2710e9556560807e40b725ebacf3f96c2e7cd1",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/experience-ledger-core.mjs",
+      "sourceSha256": "200a52976a326d5a0305e4aa795640d5c159e2fc2de90eec5541d8a05d284769",
+      "snapshotSha256": "200a52976a326d5a0305e4aa795640d5c159e2fc2de90eec5541d8a05d284769",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/experience-managed-blocks.mjs",
+      "sourceSha256": "448cceace9a9f05d9acceaacedb5ac66d9a4d261dc71bdc96036dbe7364d8530",
+      "snapshotSha256": "448cceace9a9f05d9acceaacedb5ac66d9a4d261dc71bdc96036dbe7364d8530",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/fixtures/hotspot-governor-human-scenarios.json",
+      "sourceSha256": "e61d9bc3804c4543ac5b21f80eba836724dc36bea363a3a163bc98c2ba38e132",
+      "snapshotSha256": "e61d9bc3804c4543ac5b21f80eba836724dc36bea363a3a163bc98c2ba38e132",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/fixtures/routing-novice-cases.json",
+      "sourceSha256": "c15c15fedb08627a10afccb0207594c65ae3f0e13b756e83899da2c0816a53ca",
+      "snapshotSha256": "c15c15fedb08627a10afccb0207594c65ae3f0e13b756e83899da2c0816a53ca",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/generate-routing-manifest.mjs",
+      "sourceSha256": "f4d10bc2a0f685a80b40e6e91d7786babfe080dfffb58309f15026e68b600d5b",
+      "snapshotSha256": "f4d10bc2a0f685a80b40e6e91d7786babfe080dfffb58309f15026e68b600d5b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/generate-target-task-handoff.mjs",
+      "sourceSha256": "448be68b44352bf38a8baae2c939a463fc481aa00608c72b2dba30802ab9199c",
+      "snapshotSha256": "448be68b44352bf38a8baae2c939a463fc481aa00608c72b2dba30802ab9199c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/hotspot-git.mjs",
+      "sourceSha256": "c2c58fa220fe048fc34092e162fe374cba8cfb35ad9c0292ea8ec43b72deb7ae",
+      "snapshotSha256": "c2c58fa220fe048fc34092e162fe374cba8cfb35ad9c0292ea8ec43b72deb7ae",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/hotspot-policy.mjs",
+      "sourceSha256": "192a570154a484a78092d76bc600eaf63dca4d19b4874ad8cb528cb6a0e1151b",
+      "snapshotSha256": "192a570154a484a78092d76bc600eaf63dca4d19b4874ad8cb528cb6a0e1151b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/INDEX.md",
+      "sourceSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
+      "snapshotSha256": "3d10537e54b08b5dfc72eb1fffea538d20ee70d6c8e69ac63a650c15e613a29b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/init-target-constitution.mjs",
+      "sourceSha256": "98a3610dc89b7f25597bb602687df7b5e2930d495bc18e13a7622eea3f1ed563",
+      "snapshotSha256": "98a3610dc89b7f25597bb602687df7b5e2930d495bc18e13a7622eea3f1ed563",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/init-target-runtime.mjs",
+      "sourceSha256": "8cf766979ad019937cce1e3e3ff155b731e0dd3e33dc7d9cf976f7eccbc38080",
+      "snapshotSha256": "8cf766979ad019937cce1e3e3ff155b731e0dd3e33dc7d9cf976f7eccbc38080",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/init-target-task-context.mjs",
+      "sourceSha256": "da29139ba017a016b5a6d50c9b414fe45ff23340e21b3dc7d5c1107b6862bfa6",
+      "snapshotSha256": "da29139ba017a016b5a6d50c9b414fe45ff23340e21b3dc7d5c1107b6862bfa6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/install-git-hooks.ps1",
+      "sourceSha256": "e58244cee99a7d9f1f97ff009e63c8600477ad2c4d5f1ad6480f668b9279fc1d",
+      "snapshotSha256": "e58244cee99a7d9f1f97ff009e63c8600477ad2c4d5f1ad6480f668b9279fc1d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/install-git-hooks.sh",
+      "sourceSha256": "316556324aa04ef2b3695403e6923555202ac01d249e19d017bf83081ffee862",
+      "snapshotSha256": "316556324aa04ef2b3695403e6923555202ac01d249e19d017bf83081ffee862",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/mark-review-clean.sh",
+      "sourceSha256": "67fe7258f55178e2f8e1dfe2715821b07c5ed26dff8d4abdf8e2bfecadcccdec",
+      "snapshotSha256": "67fe7258f55178e2f8e1dfe2715821b07c5ed26dff8d4abdf8e2bfecadcccdec",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/mark-t2-check-clean.mjs",
+      "sourceSha256": "13e24ee7b179d7cf4d7da6fb042f9fae318852ab50ef508ddcfce2f6331762aa",
+      "snapshotSha256": "13e24ee7b179d7cf4d7da6fb042f9fae318852ab50ef508ddcfce2f6331762aa",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/markdown-governance-core.mjs",
+      "sourceSha256": "3fc0e2e0b75b2741b978aba5e662f0f17bdd8d73a6352f864b5f3cb57fcc007d",
+      "snapshotSha256": "3fc0e2e0b75b2741b978aba5e662f0f17bdd8d73a6352f864b5f3cb57fcc007d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/migrate-target-doc-system.mjs",
+      "sourceSha256": "56166c051aec6343e87c1a1be147312deaffed231dcb33e9a7d58e8276314477",
+      "snapshotSha256": "56166c051aec6343e87c1a1be147312deaffed231dcb33e9a7d58e8276314477",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/minimal-quality-gate.sh",
+      "sourceSha256": "63a5fdb308acd0d84a69e50b2fec50c71dbb6666e7dfdd3d4ba26d3e502f58ca",
+      "snapshotSha256": "63a5fdb308acd0d84a69e50b2fec50c71dbb6666e7dfdd3d4ba26d3e502f58ca",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-hygiene.ps1",
+      "sourceSha256": "c2b732797b0979ce8de13e70a65f32879e1b847df5f4713e5009f88cec42ed0b",
+      "snapshotSha256": "c2b732797b0979ce8de13e70a65f32879e1b847df5f4713e5009f88cec42ed0b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-hygiene.sh",
+      "sourceSha256": "163ee06b942bb8b405ccc47f6d89363832c1f6e9a5a1a4b0d191da2a06179f7e",
+      "snapshotSha256": "163ee06b942bb8b405ccc47f6d89363832c1f6e9a5a1a4b0d191da2a06179f7e",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-resume.ps1",
+      "sourceSha256": "5170200a6bdddf30c3215767526091859e3e35f80b9d6df11e8c41ebf5e153d8",
+      "snapshotSha256": "5170200a6bdddf30c3215767526091859e3e35f80b9d6df11e8c41ebf5e153d8",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-resume.sh",
+      "sourceSha256": "74d92bff919af515ae224d7dc8a8ce7bbfe8beb681783d64be07e6462da101cc",
+      "snapshotSha256": "74d92bff919af515ae224d7dc8a8ce7bbfe8beb681783d64be07e6462da101cc",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-state.ps1",
+      "sourceSha256": "f82ca0a36ec1cd28fb5ab9b93cc28ebc9dac26ef20c6d0a5feb7bce8d176977b",
+      "snapshotSha256": "f82ca0a36ec1cd28fb5ab9b93cc28ebc9dac26ef20c6d0a5feb7bce8d176977b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/plan-state.sh",
+      "sourceSha256": "69fdde2e8f659054fa65af94587257f2bd0687871c33ff89d4f08f49460b4fa8",
+      "snapshotSha256": "69fdde2e8f659054fa65af94587257f2bd0687871c33ff89d4f08f49460b4fa8",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/pre-commit-gate.sh",
+      "sourceSha256": "95c7b2dadad8615d51c5d35dd60168c7d4366ed65dde6eb4accaa8a7a56ebe90",
+      "snapshotSha256": "95c7b2dadad8615d51c5d35dd60168c7d4366ed65dde6eb4accaa8a7a56ebe90",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/render-project-scaffold.sh",
+      "sourceSha256": "6d81db23bc72fab5027311313d9374d7342cc33e07e34abbbcddb180a7b3856d",
+      "snapshotSha256": "6d81db23bc72fab5027311313d9374d7342cc33e07e34abbbcddb180a7b3856d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/resolve-target-doc-context.mjs",
+      "sourceSha256": "78e0c033daf132a7ea54470a4c3009f20f7c852dd5ad29c6b10c957fc9b51d12",
+      "snapshotSha256": "78e0c033daf132a7ea54470a4c3009f20f7c852dd5ad29c6b10c957fc9b51d12",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/review-gate.sh",
+      "sourceSha256": "b7fa232c1ef6a8b0e1df9426f414abc834c2e4af56ba9f1facee615945fd21a3",
+      "snapshotSha256": "b7fa232c1ef6a8b0e1df9426f414abc834c2e4af56ba9f1facee615945fd21a3",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/routing-session-gate.mjs",
+      "sourceSha256": "03a153a866dc5ee28be96c9c64bad0b38616439ba7a55504a538ca7a4b5c0005",
+      "snapshotSha256": "03a153a866dc5ee28be96c9c64bad0b38616439ba7a55504a538ca7a4b5c0005",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/safe-target-fs.mjs",
+      "sourceSha256": "567afb308f6f175cfba942373f06bc77ab7433dc5a6f59705a7a5d2efd2cd9d2",
+      "snapshotSha256": "567afb308f6f175cfba942373f06bc77ab7433dc5a6f59705a7a5d2efd2cd9d2",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/setup-repo.ps1",
+      "sourceSha256": "b6abfb3a825b1d41c37c1d40439661683eaec37c99691685b0e3690ee962f0ef",
+      "snapshotSha256": "b6abfb3a825b1d41c37c1d40439661683eaec37c99691685b0e3690ee962f0ef",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/setup-repo.sh",
+      "sourceSha256": "ab6d9643e1c873830a5382b86e40f465e30ea9f5f6d815400fe78da08624321a",
+      "snapshotSha256": "ab6d9643e1c873830a5382b86e40f465e30ea9f5f6d815400fe78da08624321a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/setup-target-hooks.mjs",
+      "sourceSha256": "53f709256244857349e3694be0d465d00090202817497bc64f7e2a13d2c58c62",
+      "snapshotSha256": "53f709256244857349e3694be0d465d00090202817497bc64f7e2a13d2c58c62",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/structural-gate.sh",
+      "sourceSha256": "042560242d37c21b0572643ce40391bc90f5aa19a812fae11edd306286d59934",
+      "snapshotSha256": "042560242d37c21b0572643ce40391bc90f5aa19a812fae11edd306286d59934",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/structural-lint.mjs",
+      "sourceSha256": "79a88478b15d8b8b7041ff91ce5fed22172f26839922299f439fb30bf981cb14",
+      "snapshotSha256": "79a88478b15d8b8b7041ff91ce5fed22172f26839922299f439fb30bf981cb14",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/sync-compat.ps1",
+      "sourceSha256": "6cadb8e3315f49fe4e30132b82d36807a8fc6e5052f82baa90b0eae8819a318d",
+      "snapshotSha256": "6cadb8e3315f49fe4e30132b82d36807a8fc6e5052f82baa90b0eae8819a318d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-doc-index-core.mjs",
+      "sourceSha256": "6a713e1dd5d5b0523749bb237264d854de86eb85382ff5eeec2a20935f9f071e",
+      "snapshotSha256": "6a713e1dd5d5b0523749bb237264d854de86eb85382ff5eeec2a20935f9f071e",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-doc-manifest-core.mjs",
+      "sourceSha256": "a5dee07f32baa2fd917bcfece0fd473c7ee34689577bffa1884166a74fb8b14b",
+      "snapshotSha256": "a5dee07f32baa2fd917bcfece0fd473c7ee34689577bffa1884166a74fb8b14b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-doc-manifest-schema.mjs",
+      "sourceSha256": "ac363e2629341e88f82ceba334456fb068ea1a6a2fb41a4f321214deb00236a9",
+      "snapshotSha256": "ac363e2629341e88f82ceba334456fb068ea1a6a2fb41a4f321214deb00236a9",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-doc-migration-helpers.mjs",
+      "sourceSha256": "2d9095bfd84a2d7ed6a43a51d0ffd374ae8536a94cc194c087e10d4fa8bb5957",
+      "snapshotSha256": "2d9095bfd84a2d7ed6a43a51d0ffd374ae8536a94cc194c087e10d4fa8bb5957",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-doc-transaction.mjs",
+      "sourceSha256": "38f71485470e453e615aa9d6448546d3558f3f340f047ae5b60034dca7bc4396",
+      "snapshotSha256": "38f71485470e453e615aa9d6448546d3558f3f340f047ae5b60034dca7bc4396",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-hook-config.mjs",
+      "sourceSha256": "18b7fd21b6b821091612da6e06e28741daede606a94c64cff1478df700ebc778",
+      "snapshotSha256": "18b7fd21b6b821091612da6e06e28741daede606a94c64cff1478df700ebc778",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/target-task-continuity-core.mjs",
+      "sourceSha256": "88cd94542f2c665588c13f3442b148bc3163365762ad04f2f5a32b4bd4f1196a",
+      "snapshotSha256": "88cd94542f2c665588c13f3442b148bc3163365762ad04f2f5a32b4bd4f1196a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/terminology-content-helpers.sh",
+      "sourceSha256": "9731de5ee21842e29b694d53d5820bb3851ab1797a9f338dae8c3812ab3ed172",
+      "snapshotSha256": "9731de5ee21842e29b694d53d5820bb3851ab1797a9f338dae8c3812ab3ed172",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/terminology-gate.sh",
+      "sourceSha256": "29934e8e69d516f8f142e15a92c7a057116dcdf26d39c8bfaf8e5f9b1702b641",
+      "snapshotSha256": "29934e8e69d516f8f142e15a92c7a057116dcdf26d39c8bfaf8e5f9b1702b641",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/terminology-path-helpers.sh",
+      "sourceSha256": "fff1aa7f112c3ef59fb0287b8619751332ccbe0b7109838454656fc4aec30802",
+      "snapshotSha256": "fff1aa7f112c3ef59fb0287b8619751332ccbe0b7109838454656fc4aec30802",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-agent-tool-source-contract.mjs",
+      "sourceSha256": "d75a6c28b12288e769496ed95a2f9e1e32c4eecbd7357a3cfcd5a106d05160f7",
+      "snapshotSha256": "d75a6c28b12288e769496ed95a2f9e1e32c4eecbd7357a3cfcd5a106d05160f7",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-api-contracts.mjs",
+      "sourceSha256": "a752ef8e1e17dba0e0c8f20d4c5c946b95915c165a489b9dadca4af1e3274b8e",
+      "snapshotSha256": "a752ef8e1e17dba0e0c8f20d4c5c946b95915c165a489b9dadca4af1e3274b8e",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-api-contracts.sh",
+      "sourceSha256": "661cbf722293d511051cf36928475c9c8cb3a9cecbf7bdf05366135cbe1c123d",
+      "snapshotSha256": "661cbf722293d511051cf36928475c9c8cb3a9cecbf7bdf05366135cbe1c123d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-architecture-foundation.mjs",
+      "sourceSha256": "7ef2e733a7778460dac6a254e80d7acdfc0fe90853a4bb723a3db95bff608312",
+      "snapshotSha256": "7ef2e733a7778460dac6a254e80d7acdfc0fe90853a4bb723a3db95bff608312",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-build-lite-package.mjs",
+      "sourceSha256": "57985e40bac85105d8b85f23e906bb06658dba65bbbb16f4383a33e068fe5fd3",
+      "snapshotSha256": "57985e40bac85105d8b85f23e906bb06658dba65bbbb16f4383a33e068fe5fd3",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-check-experience-ledger.mjs",
+      "sourceSha256": "ba489a922142bb64357d98e25a8bf24b3254a315a1cceef8ea0badf7d9149d20",
+      "snapshotSha256": "ba489a922142bb64357d98e25a8bf24b3254a315a1cceef8ea0badf7d9149d20",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-codex-hook-git-trust.ps1",
+      "sourceSha256": "12a0c1244b899a82cecb9a61fc3efb80bb5e0ffeb15b284421015680156474fc",
+      "snapshotSha256": "12a0c1244b899a82cecb9a61fc3efb80bb5e0ffeb15b284421015680156474fc",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-constitution-rules.mjs",
+      "sourceSha256": "e1fdc60101166847dccf92143a11386fa78403ac8a5f5a359d1f0786d66fd804",
+      "snapshotSha256": "e1fdc60101166847dccf92143a11386fa78403ac8a5f5a359d1f0786d66fd804",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-design-brief-source-contract.mjs",
+      "sourceSha256": "c0a7069eba5086b967657f27284b13be64574be646cdec3b7f05b03bb6943c8a",
+      "snapshotSha256": "c0a7069eba5086b967657f27284b13be64574be646cdec3b7f05b03bb6943c8a",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-execution-tier-gates.sh",
+      "sourceSha256": "3a375e40ffeeb7deaa6ea8548a76237e7a32cec42160f0a8566a0fe1a6bf1478",
+      "snapshotSha256": "3a375e40ffeeb7deaa6ea8548a76237e7a32cec42160f0a8566a0fe1a6bf1478",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-experience-governance-anchor.mjs",
+      "sourceSha256": "b32c786561a2b32ad6fb276fbee082b0ce5a62378aee43f503540ebed7c78eb6",
+      "snapshotSha256": "b32c786561a2b32ad6fb276fbee082b0ce5a62378aee43f503540ebed7c78eb6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-experience-governance-closure.mjs",
+      "sourceSha256": "d065ce9bc0c728f6e2ae61bfb83d73e3415eb9a3581617ea30aca77ba47a6110",
+      "snapshotSha256": "d065ce9bc0c728f6e2ae61bfb83d73e3415eb9a3581617ea30aca77ba47a6110",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-experience-governance-doc-contracts.mjs",
+      "sourceSha256": "db9da1318d471033e999f10773e694bedb576495653d7519acf8502ff871c9f5",
+      "snapshotSha256": "db9da1318d471033e999f10773e694bedb576495653d7519acf8502ff871c9f5",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-experience-ledger-core.mjs",
+      "sourceSha256": "8b575f019763e1ac1fde08a527053e084deaee0054540a668517bbab898c4f19",
+      "snapshotSha256": "8b575f019763e1ac1fde08a527053e084deaee0054540a668517bbab898c4f19",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-external-skill-boundaries.mjs",
+      "sourceSha256": "902f1ce271befa218fe4b53350b790ae46b92951e167997232ee3878199647df",
+      "snapshotSha256": "902f1ce271befa218fe4b53350b790ae46b92951e167997232ee3878199647df",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-golden-path-examples.sh",
+      "sourceSha256": "8d3b3939e5444762359b8f1163040546ae228728a0f6f15bcfaef19411dc478f",
+      "snapshotSha256": "8d3b3939e5444762359b8f1163040546ae228728a0f6f15bcfaef19411dc478f",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-golden-path-real-code.mjs",
+      "sourceSha256": "0f486176833db638521abc4162e91e6cf3d6129923a56f9d8ee47dab767a8b48",
+      "snapshotSha256": "0f486176833db638521abc4162e91e6cf3d6129923a56f9d8ee47dab767a8b48",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-hook-path-classification.sh",
+      "sourceSha256": "aaf789afe6243e6c24bd48b5cb358047d6f3b74457b9880f5f8c86a5ed9237c4",
+      "snapshotSha256": "aaf789afe6243e6c24bd48b5cb358047d6f3b74457b9880f5f8c86a5ed9237c4",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-hotspot-governor-behavior.mjs",
+      "sourceSha256": "f5ba16bfc39f44dc75f44843e7dab42b0c9aacac244f8c38a3ed3fc7f1ab8c35",
+      "snapshotSha256": "f5ba16bfc39f44dc75f44843e7dab42b0c9aacac244f8c38a3ed3fc7f1ab8c35",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-hotspot-governor-human-scenarios.mjs",
+      "sourceSha256": "b161df92f18db3e5256d03dfc0b2f9fb0818c099cfe55815c6e0288a91c97c9c",
+      "snapshotSha256": "b161df92f18db3e5256d03dfc0b2f9fb0818c099cfe55815c6e0288a91c97c9c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-hotspots.mjs",
+      "sourceSha256": "6b04c0254a9c076b57cb067379eb311d09eb9e1e8aa779327342ab3c6daedffe",
+      "snapshotSha256": "6b04c0254a9c076b57cb067379eb311d09eb9e1e8aa779327342ab3c6daedffe",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-minimal-quality-gate.sh",
+      "sourceSha256": "82b7b5041b7ac635687ab4455cce7a8dbba0932412985d356f53faa41dfd363e",
+      "snapshotSha256": "82b7b5041b7ac635687ab4455cce7a8dbba0932412985d356f53faa41dfd363e",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-path-security.mjs",
+      "sourceSha256": "7cfd55b099501c3ae01413123deebdabff868edd08867709e09dc776ca01a31c",
+      "snapshotSha256": "7cfd55b099501c3ae01413123deebdabff868edd08867709e09dc776ca01a31c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-plan-state-transitions.mjs",
+      "sourceSha256": "5114543af6de6e72196145ff4d0d004e03521d14257ef2bc5a1320a9f7bd57b3",
+      "snapshotSha256": "5114543af6de6e72196145ff4d0d004e03521d14257ef2bc5a1320a9f7bd57b3",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-render-project-scaffold-security.sh",
+      "sourceSha256": "e894c85a4305d4b174716905548875cbf5083afc4a8b6f6ca99a09811eb0253c",
+      "snapshotSha256": "e894c85a4305d4b174716905548875cbf5083afc4a8b6f6ca99a09811eb0253c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-review-policy.mjs",
+      "sourceSha256": "7f85110e62defa25fa455677552bc62d8a19ffbe53acc563e846701504a8e1c9",
+      "snapshotSha256": "7f85110e62defa25fa455677552bc62d8a19ffbe53acc563e846701504a8e1c9",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-routing-keywords.mjs",
+      "sourceSha256": "1150ee6e19e23b920ebe9049b9a69e2070d26fc7e66f16a842d908262fe61463",
+      "snapshotSha256": "1150ee6e19e23b920ebe9049b9a69e2070d26fc7e66f16a842d908262fe61463",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-routing-manifest.mjs",
+      "sourceSha256": "296e8877c18b12202e15df9bc221c9c4114abebc41a043fcb92eaa39e9e80dff",
+      "snapshotSha256": "296e8877c18b12202e15df9bc221c9c4114abebc41a043fcb92eaa39e9e80dff",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-routing-session-gate.mjs",
+      "sourceSha256": "08df588d2c004a676174f392ef7b90009686f80cb44e682e178fcb786d97d938",
+      "snapshotSha256": "08df588d2c004a676174f392ef7b90009686f80cb44e682e178fcb786d97d938",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-runtime-project-scaffold.sh",
+      "sourceSha256": "8bbbdb2ec5c480be4bb5621b3fd75d96771176d3b3ca2f5af7a1990dd92d045f",
+      "snapshotSha256": "8bbbdb2ec5c480be4bb5621b3fd75d96771176d3b3ca2f5af7a1990dd92d045f",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-scaffold-doc-placement.mjs",
+      "sourceSha256": "78920f64bc284919fd45587feb91bc61d9508feab73ca568663c2d61a43fae6b",
+      "snapshotSha256": "78920f64bc284919fd45587feb91bc61d9508feab73ca568663c2d61a43fae6b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-scaffold-lockfiles.sh",
+      "sourceSha256": "a1ffbb5b5f541405eafa1f93068cdccc5e6e4fabccfa69201a0f960a22f6e8b6",
+      "snapshotSha256": "a1ffbb5b5f541405eafa1f93068cdccc5e6e4fabccfa69201a0f960a22f6e8b6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-setup-target-hooks.mjs",
+      "sourceSha256": "f579b11b3e8d1db496f92a9637ffa73ab8927305f9cb4ed7830f23cc776084db",
+      "snapshotSha256": "f579b11b3e8d1db496f92a9637ffa73ab8927305f9cb4ed7830f23cc776084db",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-skill-token-budget.mjs",
+      "sourceSha256": "28fce631aafc44ac8ac47ebd2fd138f94b436e2ee56915d6c1daa05cf8c908e4",
+      "snapshotSha256": "28fce631aafc44ac8ac47ebd2fd138f94b436e2ee56915d6c1daa05cf8c908e4",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-spec-driven-gates.mjs",
+      "sourceSha256": "7dcb3eb873182ac7781abd3909face532a3f629827c2c481d1354a1a35962690",
+      "snapshotSha256": "7dcb3eb873182ac7781abd3909face532a3f629827c2c481d1354a1a35962690",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-strict-tdd-human-scenarios.mjs",
+      "sourceSha256": "dd89da544172a2d5c682c118f262315f738bc13b9ef3f4838fdde69b0454278b",
+      "snapshotSha256": "dd89da544172a2d5c682c118f262315f738bc13b9ef3f4838fdde69b0454278b",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-strict-tdd-policy.mjs",
+      "sourceSha256": "44d5de0c32280dd4dab2ae9ec0c34ac10d4c8c030c8c95e7b5bc5c21c40e1252",
+      "snapshotSha256": "44d5de0c32280dd4dab2ae9ec0c34ac10d4c8c030c8c95e7b5bc5c21c40e1252",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-structural-gate.sh",
+      "sourceSha256": "666c34231b866fcb960ef4cab5d4147670f531a488baba844b1c2acfdad864cb",
+      "snapshotSha256": "666c34231b866fcb960ef4cab5d4147670f531a488baba844b1c2acfdad864cb",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-sync-compat-safety.ps1",
+      "sourceSha256": "68e81764c680c3f757ffea207526aa4030680520fa83071b88927d3f445e4591",
+      "snapshotSha256": "68e81764c680c3f757ffea207526aa4030680520fa83071b88927d3f445e4591",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-constitution.mjs",
+      "sourceSha256": "aa09b5f50b94eefc9eca8da7e4373980eb4bf426426c3fcbfde1c54d2d853b69",
+      "snapshotSha256": "aa09b5f50b94eefc9eca8da7e4373980eb4bf426426c3fcbfde1c54d2d853b69",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-doc-auto-sync.mjs",
+      "sourceSha256": "da2c15cb10f565db9988c6c3aaaeea3a63ef4e60f854b304b0c6b6c4017e77c6",
+      "snapshotSha256": "da2c15cb10f565db9988c6c3aaaeea3a63ef4e60f854b304b0c6b6c4017e77c6",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-doc-governance.mjs",
+      "sourceSha256": "af211eda9ab5dc20f9a7fb24261f4fb1610a1a220c828eb15fc389ffc3b0ccea",
+      "snapshotSha256": "af211eda9ab5dc20f9a7fb24261f4fb1610a1a220c828eb15fc389ffc3b0ccea",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-doc-migration.mjs",
+      "sourceSha256": "da65d2f4ff5b582d4eb732be76dfafdeaab907a4fb89db1b6c2ae28e4700e3c3",
+      "snapshotSha256": "da65d2f4ff5b582d4eb732be76dfafdeaab907a4fb89db1b6c2ae28e4700e3c3",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-doc-names.sh",
+      "sourceSha256": "cb843957d87ae839330edbc6cb1439257732e01b8a91e499314545ca9f9dae8d",
+      "snapshotSha256": "cb843957d87ae839330edbc6cb1439257732e01b8a91e499314545ca9f9dae8d",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-doc-transaction.mjs",
+      "sourceSha256": "5e689be2d680417fc5fedff225dff42f2ade61eb05840b608456ae50db6117c8",
+      "snapshotSha256": "5e689be2d680417fc5fedff225dff42f2ade61eb05840b608456ae50db6117c8",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-guardrails.mjs",
+      "sourceSha256": "f58851de3bd01c5623f2c5d7615e37b05fbb4557f4771bd17916787518409c1c",
+      "snapshotSha256": "f58851de3bd01c5623f2c5d7615e37b05fbb4557f4771bd17916787518409c1c",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-lifecycle-path-contract.mjs",
+      "sourceSha256": "3c8bee41e197db5d053a62b8f2f18452025c6e8e33ca7ab5243a5744bd42f074",
+      "snapshotSha256": "3c8bee41e197db5d053a62b8f2f18452025c6e8e33ca7ab5243a5744bd42f074",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-runtime.mjs",
+      "sourceSha256": "20ced356aba91bce682aed647c0c97ebf8d9765ca8e88fabf70d09b83c0b12d1",
+      "snapshotSha256": "20ced356aba91bce682aed647c0c97ebf8d9765ca8e88fabf70d09b83c0b12d1",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-task-context.mjs",
+      "sourceSha256": "f73a614875ee2fbd2d3d172aad8798a46d34a6908eed5443103c1b21fcef9772",
+      "snapshotSha256": "f73a614875ee2fbd2d3d172aad8798a46d34a6908eed5443103c1b21fcef9772",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-task-continuity-review-fixes.mjs",
+      "sourceSha256": "4f64878ced6735edb451de8817fdf38449f04d7bf8a8a481e92b1104f1c48b89",
+      "snapshotSha256": "4f64878ced6735edb451de8817fdf38449f04d7bf8a8a481e92b1104f1c48b89",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-target-task-continuity.mjs",
+      "sourceSha256": "1c18851407f391f44440590fb278ae4799bf388d04a856f2c305e410e038bdaf",
+      "snapshotSha256": "1c18851407f391f44440590fb278ae4799bf388d04a856f2c305e410e038bdaf",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-terminology-consistency.sh",
+      "sourceSha256": "e411c29882f992ae066191c7a5f9256543f1a51262f0c22175fc73106a6544ad",
+      "snapshotSha256": "e411c29882f992ae066191c7a5f9256543f1a51262f0c22175fc73106a6544ad",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-terminology-gate.sh",
+      "sourceSha256": "4052306e9c442853f5176e95704b0d07b2c3fd09f5ac126c0d46f816f3b8af98",
+      "snapshotSha256": "4052306e9c442853f5176e95704b0d07b2c3fd09f5ac126c0d46f816f3b8af98",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-trusted-executables.mjs",
+      "sourceSha256": "0d34ca8153451416222d8ff8f6e18acafe1cd2b04857e7c897f7fbbb109d4afb",
+      "snapshotSha256": "0d34ca8153451416222d8ff8f6e18acafe1cd2b04857e7c897f7fbbb109d4afb",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-ui-reuse.mjs",
+      "sourceSha256": "1712630d6182fead0c1495ce6779e0c3dc84944a4b7aa0e5aaccb4d2e6b2d61e",
+      "snapshotSha256": "1712630d6182fead0c1495ce6779e0c3dc84944a4b7aa0e5aaccb4d2e6b2d61e",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-update-target-task-state.mjs",
+      "sourceSha256": "b1371d7bb146661b7d9e0bc5dd16a5d0c1c803595aefa312b6ae70fb9df471ce",
+      "snapshotSha256": "b1371d7bb146661b7d9e0bc5dd16a5d0c1c803595aefa312b6ae70fb9df471ce",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/test-vibe-health-check.mjs",
+      "sourceSha256": "001e9911734bad01a58f6f58c4c9ccce34e2aaf998b6b23a47dda752c814bdc7",
+      "snapshotSha256": "001e9911734bad01a58f6f58c4c9ccce34e2aaf998b6b23a47dda752c814bdc7",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/trusted-git.mjs",
+      "sourceSha256": "212b849e575d4b6745d7808721432cb54b37a9fdec7b76e4a9fc1b39bcb6aecc",
+      "snapshotSha256": "212b849e575d4b6745d7808721432cb54b37a9fdec7b76e4a9fc1b39bcb6aecc",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/update-target-task-knowledge.mjs",
+      "sourceSha256": "214fdc84294e51bbf8bc5ebeea29c0af5664b486bb1fe7b28af45d8f845d4ebe",
+      "snapshotSha256": "214fdc84294e51bbf8bc5ebeea29c0af5664b486bb1fe7b28af45d8f845d4ebe",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/update-target-task-state.mjs",
+      "sourceSha256": "f934e7d447e689787a3a9bc3021202f2ce160c8eaed7e3fb2a637ab95b946601",
+      "snapshotSha256": "f934e7d447e689787a3a9bc3021202f2ce160c8eaed7e3fb2a637ab95b946601",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/verify-lite-package.mjs",
+      "sourceSha256": "3d84e8b823cb2acfa5a6c7866c47d2d3a80c1b0e04fdd27ee483b18eca33a96f",
+      "snapshotSha256": "3d84e8b823cb2acfa5a6c7866c47d2d3a80c1b0e04fdd27ee483b18eca33a96f",
+      "sha256Match": true
+    },
+    {
+      "path": "tools/vibe-health-check.mjs",
+      "sourceSha256": "52214a94d500e1548c14f4bca6e7ebbc9bb346fa0536cbeb7776cb2d56e14b58",
+      "snapshotSha256": "52214a94d500e1548c14f4bca6e7ebbc9bb346fa0536cbeb7776cb2d56e14b58",
+      "sha256Match": true
+    }
+  ]
+}

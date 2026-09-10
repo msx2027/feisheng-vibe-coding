@@ -1,0 +1,47 @@
+# 项目画像
+
+## 项目边界
+
+- 项目根目录：由脚手架生成后确认。
+- 接入类型：新项目 bootstrap。
+- 项目做什么：以 `需求文档.md` 为准。
+- 不做什么：未验证能力不写成已完成。
+
+## 技术栈证据
+
+- 语言：TypeScript / JavaScript，以 `package.json` 与源码为准。
+- 框架：以脚手架模板和 `package.json` 为准。
+- 包管理器：npm。
+- 入口文件：以生成后的源码目录为准。
+- 配置文件：`package.json`。
+
+## 启动和验证
+
+- `npm run check:health`：统一目标项目体检。
+- `npm run build`：构建或类型验证。
+- 缺失或未验证命令：按生成后的 `package.json.scripts` 判断。
+
+## Owner Map
+
+| Owner | 状态 | 证据 | 说明 |
+| --- | --- | --- | --- |
+| product | 已确认 | `需求文档.md` | 产品边界和生命周期文档映射 |
+| config | 已确认 | `package.json` | 配置文件和脚本 |
+| tests | 已确认 | `check:health` | 自动化体检入口 |
+| backend | 未验证 | 未验证 | API、server route 或后端依赖 |
+| schema | 未验证 | 未验证 | 数据 schema 或 migration |
+| auth | 未验证 | 未验证 | 认证、权限或 RBAC 证据 |
+| deploy | 未验证 | 未验证 | 部署配置、CI 或 deploy 脚本 |
+
+## 风险和停止条件
+
+- 没有实际运行过命令、截图、日志、报告或用户验收路径时，不声明完成、通过或修好。
+- 涉及 API、schema、auth、permission、payment、deployment、migration、secret、数据删除或公开访问时，先确认 owner、真源和验证路径。
+- 未验证 owner 只能写成 `未验证`，不得写成已落地能力。
+
+## 未验证项
+
+- backend：未找到真实后端或 API 证据时保持未验证。
+- schema：未找到 schema 或 migration 证据时保持未验证。
+- auth：未找到认证或权限证据时保持未验证。
+- deploy：未找到部署配置或脚本时保持未验证。

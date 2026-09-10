@@ -1,0 +1,73 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=[System.IO.Path]::GetFullPath((Get-Location).Path); while (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) { $parent=Split-Path -Parent $root; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $root) { exit 0 }; $root=$parent }; $runner=Join-Path $root '.codex\\hooks\\run-hook.ps1'; if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { exit 0 }; & $runner -Hook 'check-evolution'; exit $LASTEXITCODE\"",
+            "statusMessage": "Checking evolution backlog",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$roots=@(); if ($env:VIBE_CODING_SKILLS_HOME) { $roots += $env:VIBE_CODING_SKILLS_HOME }; $cursor=[System.IO.Path]::GetFullPath((Get-Location).Path); for ($i=0; $i -lt 64; $i++) { if (Test-Path -LiteralPath (Join-Path $cursor '.codex\\hooks\\check-routing-session.ps1') -PathType Leaf) { $roots += $cursor; break }; $parent=Split-Path -Parent $cursor; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $cursor) { break }; $cursor=$parent }; $hook=$roots | ForEach-Object { @((Join-Path $_ 'codex-hooks\\check-routing-session.ps1'),(Join-Path $_ '.codex\\hooks\\check-routing-session.ps1')) } | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1; if (-not $hook) { exit 0 }; $utf8=New-Object System.Text.UTF8Encoding($false); $global:OutputEncoding=$utf8; [Console]::InputEncoding=$utf8; [Console]::OutputEncoding=$utf8; $payload=[Console]::In.ReadToEnd(); & $hook -HookInput $payload; exit $LASTEXITCODE\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=[System.IO.Path]::GetFullPath((Get-Location).Path); while (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) { $parent=Split-Path -Parent $root; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $root) { exit 0 }; $root=$parent }; $runner=Join-Path $root '.codex\\hooks\\run-hook.ps1'; if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { exit 0 }; & $runner -Hook 'detect-feedback-signal'; exit $LASTEXITCODE\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=[System.IO.Path]::GetFullPath((Get-Location).Path); while (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) { $parent=Split-Path -Parent $root; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $root) { exit 0 }; $root=$parent }; $runner=Join-Path $root '.codex\\hooks\\run-hook.ps1'; if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { exit 0 }; & $runner -Hook 'pre-commit-check'; exit $LASTEXITCODE\"",
+            "statusMessage": "Checking git commit",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=[System.IO.Path]::GetFullPath((Get-Location).Path); while (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) { $parent=Split-Path -Parent $root; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $root) { exit 0 }; $root=$parent }; $runner=Join-Path $root '.codex\\hooks\\run-hook.ps1'; if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { exit 0 }; & $runner -Hook 'mark-source-change-needed'; exit $LASTEXITCODE\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=[System.IO.Path]::GetFullPath((Get-Location).Path); while (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) { $parent=Split-Path -Parent $root; if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $root) { exit 0 }; $root=$parent }; $runner=Join-Path $root '.codex\\hooks\\run-hook.ps1'; if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { exit 0 }; & $runner -Hook 'stop-gate'; exit $LASTEXITCODE\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
