@@ -721,5 +721,14 @@
         "generated-mirrors"
       ]
     }
+  },
+  "routeBinding": {
+    "ownerFiles": [
+      "governance/sliver-core/references/engineering-execution.md"
+    ],
+    "exemptRecords": [
+      "sliver-vibe-coding"
+    ],
+    "note": "路由绑定真源：runtime 已接入技能必须在其绑定 owner 文件里被引用且唯一命中一次；绑定 owner 之外的任何 references 文件都不得再引用技能路径（不得引入第二入口）；绑定 owner 里也不得出现未被 runtime 接入的技能路径。"
   }
 }

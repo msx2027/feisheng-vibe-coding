@@ -273,6 +273,21 @@ try {
         Add-Result -Step '来源快照完整性' -Passed $false -Detail $_.Exception.Message
     }
 
+    # 3b) 路由绑定：runtime 已接入技能必须在绑定 owner 里唯一命中一次（真源：classification.routeBinding）
+    try {
+        $binding = Invoke-Child -Script (Join-Path $repoRoot 'scripts/validate-route-bindings.ps1') -Arguments @{
+            RepositoryRoot = $repoRoot
+        }
+        $bindingParsed = ($binding.Output -join "`n") | ConvertFrom-Json
+        if ($bindingParsed.status -ne 'PASS') {
+            Add-Result -Step '路由绑定' -Passed $false -Detail ((@($bindingParsed.errors) -join '; '))
+        } else {
+            Add-Result -Step '路由绑定' -Passed $true -Detail ('admitted=' + $bindingParsed.admitted + ' bound=' + $bindingParsed.bound + ' scanned=' + $bindingParsed.referenceFilesScanned)
+        }
+    } catch {
+        Add-Result -Step '路由绑定' -Passed $false -Detail $_.Exception.Message
+    }
+
     # 4) 发布 NOTICE 门禁
     try {
         $gate = Invoke-Child -Script (Join-Path $repoRoot 'scripts/validate-release-notices.ps1') -Arguments @{

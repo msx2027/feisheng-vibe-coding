@@ -2,10 +2,10 @@
   "schema": "feisheng-provenance-integrity/v1",
   "algorithm": "sha256-lines-v1",
   "algorithmDefinition": "record = file line as \"relativePath/with/slashes`nfileSha256\"; sort paths Ordinal; join with LF and append trailing LF; digest = SHA-256 of UTF-8 (no BOM) bytes",
-  "recordedAt": "2026-09-10T11:37:51.7584740Z",
-  "recordedAtRevision": "fd18fbe8e3f3662e61be177a9ba07ac26e71bd43",
+  "recordedAt": "2026-09-10T13:41:45.0060317Z",
+  "recordedAtRevision": "955577eb37bab5356dfdf1f27eafec5e4f05d84c",
   "corroboration": {
-    "sourceByteComparison": "required at recording time; 754 files byte-identical to source, 4 verified against recorded git revision, 3 registered local patch(es) verified, 148 within supplement allowlist",
+    "sourceByteComparison": "required at recording time; 753 files byte-identical to source, 4 verified against recorded git revision, 4 registered local patch(es) verified, 148 within supplement allowlist",
     "sourceState": "git sources must match recorded HEAD and dirty set; non-git sources recorded as such"
   },
   "snapshots": [
@@ -56,7 +56,7 @@
       "name": "sliver-core",
       "path": "governance/sliver-core",
       "fileCount": 220,
-      "treeHash": "sha256:25127370bc06b354ce2e74beb45a1173efc379477c15f39637d1f291e8cdca19",
+      "treeHash": "sha256:442b8585a3b4ede6010cdd4691d64bb950561fd774de0035d1ff5dc225b34b62",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
@@ -90,6 +90,12 @@
           "patchedSha256": "a877d81ff0d87a85398c19a02e7184660aa0906ad0f43f7839b30600b2d6575e",
           "originalSha256": "7dac5bfae82b88cb07011a6560ea85740bb2c791fdc7654051860231d3de442d",
           "patchId": "sliver-template-frontmatter-quoted"
+        },
+        {
+          "path": "references/engineering-execution.md",
+          "patchedSha256": "31f4edbf8044f663e62f45c06893c5aa3d60a40f92094ad492c74efa6f93a02f",
+          "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
+          "patchId": "sliver-route-binding-capability-providers"
         }
       ],
       "importRecord": "provenance/SLIVER-IMPORT.json"

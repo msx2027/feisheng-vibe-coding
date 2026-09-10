@@ -1,6 +1,8 @@
 # Task 20260910-control-plane-runtime-closure-and-route-binding
 
-状态：第 1 步 accepted（控制面 runtime 闭包已完成，见 evidence/20260910-control-plane-runtime-closure.md）；第 2 步（路由绑定）open
+状态：**两步均 accepted**。第 1 步见 evidence/20260910-control-plane-runtime-closure.md；第 2 步（路由绑定）见 evidence/20260910-route-binding.md。
+
+第 2 步实际采用的形态：绑定写在 `references/engineering-execution.md`（被 Load 命中 9 次的执行主干 owner，已拥有 Owner-Layer Rules / Debug Evidence Ladder / Verification Matrix）新增的 `## Internal Capability Providers` 小节里；门禁 = `scripts/validate-route-bindings.ps1`（verify 步骤 `3b)`），策略真源 = classification 的 `routeBinding`。7 条已接入技能全部唯一命中；7 个反例实测全部按预期失败。
 
 > 本任务包是「继续做路由绑定」的**压缩上下文**：读完本文件即可继续，不需要对话历史。
 
