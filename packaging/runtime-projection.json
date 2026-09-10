@@ -17,8 +17,16 @@
       "freshSessionSmoke": "UNVERIFIED"
     },
     "claude": {
-      "status": "unverified",
-      "include": [],
+      "status": "candidate-unverified; static-smoke-only",
+      "include": [
+        "SKILL.md",
+        "governance/sliver-core/SKILL.md",
+        "skills/engineering/diagnosing-bugs/SKILL.md",
+        "skills/engineering/codebase-design/SKILL.md",
+        "skills/engineering/domain-modeling/SKILL.md",
+        "CLAUDE.md",
+        "adapters/claude/runtime-adapter.md"
+      ],
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
       "freshSessionSmoke": "UNVERIFIED"
     }
@@ -31,7 +39,10 @@
     "requiresLicenseMapping": true,
     "licenseMap": "provenance/LICENSE-MAP.json"
   },
-  "builder": "scripts/build-codex-runtime-projection.ps1",
+  "builder": [
+    "scripts/build-codex-runtime-projection.ps1",
+    "scripts/build-claude-runtime-projection.ps1"
+  ],
   "hookAdapters": {
     "vibe": {
       "contract": "adapters/vibe-hooks/contract.json",
