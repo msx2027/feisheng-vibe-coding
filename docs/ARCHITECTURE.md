@@ -12,7 +12,7 @@
 
 ### skill-catalog
 
-拥有技能的 canonical id、来源、调用类型、触发边界、输出形态和依赖。README、plugin manifest 和宿主清单只能由它生成或校验。
+拥有技能的 canonical id、来源、调用类型、触发边界、输出形态和依赖。`provenance/SKILL-INVENTORY.json` 只记录三份来源的原始事实；`provenance/SKILL-DECISIONS.md` 记录人工语义判断；`provenance/CANONICAL-CATALOG.json` 才是统一仓库的唯一技能决策真源。README、plugin manifest 和宿主清单只能由它生成或校验。
 
 ### target-truth
 
@@ -40,4 +40,3 @@
 - Vibe Hooks 与 Sliver continuity 必须经过事件分发器、命名空间、顺序和幂等规则。
 - Matt plugin、中文翻译同步和 `agents/openai.yaml` 需要独立 provenance。
 - Apache-2.0、MIT、OFL 和 NOTICE 必须按来源目录保留。
-
