@@ -1,0 +1,87 @@
+# 静态发布门禁（CI）
+#
+# 本工作流只跑静态门禁与静态候选包装配：
+#   - 发布 NOTICE 门禁（provenance/LICENSE-MAP.json 映射）
+#   - Vibe Hook 适配器保持禁用（拒绝执行来源 Hook）
+#   - Codex / Claude 静态投影 Build + Validate（catalog/SHA/blocked 门禁）
+#   - 发布候选包装配（zip + NOTICE + release manifest）
+#
+# 本工作流不是发布授权，也不证明真实宿主 discovery / trust / fresh-session 行为；
+# 不安装任何宿主插件，不写入真实 Codex/Claude 目录。
+#
+# 运行环境：PowerShell 7 (pwsh) 是唯一规范化构建运行时；Windows PowerShell 5.1 也能运行同一套
+# 门禁，但 ConvertTo-Json 的格式差异会产生不同的 manifest 字节（值相同）。
+
+name: release-gate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-gates:
+    name: static release gates
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PowerShell version
+        shell: pwsh
+        run: $PSVersionTable | Out-String | Write-Host
+
+      - name: Release NOTICE gate
+        shell: pwsh
+        run: |
+          $result = ./scripts/validate-release-notices.ps1 -RepositoryRoot $env:GITHUB_WORKSPACE
+          if ($LASTEXITCODE -ne 0) { throw "NOTICE gate failed with exit code $LASTEXITCODE" }
+          $result | Out-String | Write-Host
+
+      - name: Vibe Hook adapter remains disabled
+        shell: pwsh
+        run: |
+          ./tests/test-vibe-hook-adapter.ps1 -RepositoryRoot $env:GITHUB_WORKSPACE
+
+      - name: Codex static projection (build + validate)
+        shell: pwsh
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP ('codex-' + [guid]::NewGuid().ToString('N'))
+          $build = ./scripts/build-codex-runtime-projection.ps1 -Mode Build -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
+          if ($LASTEXITCODE -ne 0) { throw "Codex build failed with exit code $LASTEXITCODE" }
+          $validate = ./scripts/build-codex-runtime-projection.ps1 -Mode Validate -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
+          if ($LASTEXITCODE -ne 0) { throw "Codex validate failed with exit code $LASTEXITCODE" }
+          $validate | Out-String | Write-Host
+
+      - name: Claude static projection (build + validate)
+        shell: pwsh
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP ('claude-' + [guid]::NewGuid().ToString('N'))
+          $build = ./scripts/build-claude-runtime-projection.ps1 -Mode Build -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
+          if ($LASTEXITCODE -ne 0) { throw "Claude build failed with exit code $LASTEXITCODE" }
+          $validate = ./scripts/build-claude-runtime-projection.ps1 -Mode Validate -RepositoryRoot $env:GITHUB_WORKSPACE -OutputRoot $out
+          if ($LASTEXITCODE -ne 0) { throw "Claude validate failed with exit code $LASTEXITCODE" }
+          $validate | Out-String | Write-Host
+
+      - name: Release package assembly (static candidate)
+        shell: pwsh
+        run: |
+          $pkg = Join-Path $env:RUNNER_TEMP ('release-' + [guid]::NewGuid().ToString('N'))
+          $label = 'ci-' + $env:GITHUB_RUN_ID
+          $result = ./scripts/build-release-package.ps1 -TargetHost Both -RepositoryRoot $env:GITHUB_WORKSPACE -PackageRoot $pkg -Label $label
+          if ($LASTEXITCODE -ne 0) { throw "packaging failed with exit code $LASTEXITCODE" }
+          $parsed = $result | ConvertFrom-Json
+          if (@($parsed.forbiddenSegmentViolations).Count -gt 0) { throw "package contains forbidden segments" }
+          Write-Host ("zip: " + $parsed.zipPath)
+          Write-Host ("zip sha256: " + $parsed.zipSha256)
+
+      - name: Upload static candidate package (not a release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: feisheng-vibe-coding-static-candidate
+          path: ${{ runner.temp }}/feisheng-vibe-coding-ci-*.zip
+          if-no-files-found: error
+          retention-days: 14
