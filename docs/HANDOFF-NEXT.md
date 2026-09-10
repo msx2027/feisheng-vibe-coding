@@ -20,13 +20,13 @@
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
-**注意**：D2/D3 是当前**最大的未知**，也是唯一还没做的事。前面所有工作（catalog、门禁、投影、路由绑定、闭包、安装）都是为这三条铺路。
+**注意**：D2/D3 曾是最大未知。2026-09-11 T2 实测：**D3 机制链路全通**（路由工具可执行、「项目体检」路由被选中、owner 被加载、包内文件可读可执行——单目录形态成立）；**D2 自动触发未达成**，主因是宿主侧全局内存 `~/.claude/CLAUDE.md` 的旧路由块（仓库外，需 owner 决定），证据见 `evidence/20260911-trigger-behavior-and-entry-fix.md`。
 
 ---
 
 ## 2. 一分钟现状（数字快照）
 
-- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交 `cb05fb1`
+- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交 `507a07f`
 - 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **13/13**；fresh clone 两种 shell × 两种 `autocrlf` 均 13/13（2026-09-11 起为 13 步：新增宿主中性投影步骤）
 - 分类：**82 条记录**，其中 **8 条 runtime 已接入**（控制面 1 + Matt 原语 3 + Vibe 检查器 4）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
@@ -34,7 +34,7 @@
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets），runtime bundle 共 **90** 文件
 - 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**180 条**，其中我们的包 `feisheng-vibe-coding` **92 文件**（宿主中性投影，决策 #4 已实施）
 - 宿主发现性实测：Claude **162** 个技能（含我们 1 个入口）；Codex **204**（含我们包内 9 个 `SKILL.md`）。⚠️ 该计数在 Claude 形态安装时采得，切到中性形态后尚未重采（文件数只少 1 个顶层 CLAUDE.md 与 2 个 overlay，预期不变，以 T2 重采为准）
-- 存量：`evidence/` 39、`tasks/` 37、`scripts/` 21
+- 存量：`evidence/` 40、`tasks/` 37、`scripts/` 21
 
 ---
 
@@ -159,7 +159,8 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 5 | `955577e` | 记录「Load 列不能放技能路径」这一实测约束 | `tasks/20260910-control-plane-runtime-closure-and-route-binding.md` |
 | 6 | `091b6f2` | **路由绑定**：7/7 唯一命中 + 门禁 `3b)` + 7 个反例实测 | `evidence/20260910-route-binding.md` |
 | 7 | `ca998d8` `559d7fc` `2ea9fc1` `48f7ab1` `527b1bc` | 目标审计 → 文档纠错 → **安装入口 + 宿主实证** → **退役旧入口** → **overlay 落点修正** | `evidence/20260910-host-install-and-discovery.md` |
-| 8 | `4fe8f43` `cb05fb1` | **T1 选项 A 实施**：宿主中性投影（共享主体抽进 guard，三 writer 薄壳）+ 安装默认 Shared + 门禁 13 步 + DryRun 副作用修复 | `evidence/20260911-host-neutral-shared-projection.md` |
+| 8 | `4fe8f43` `cb05fb1` `1155d8a` | **T1 选项 A 实施**：宿主中性投影（共享主体抽进 guard，三 writer 薄壳）+ 安装默认 Shared + 门禁 13 步 + DryRun 副作用修复 | `evidence/20260911-host-neutral-shared-projection.md` |
+| 9 | `507a07f` | **T2 触发行为实测 + T3 入口修复**：D3 链路全通、紧急检查点通过（包内文件可读可执行）；D2 卡在宿主全局路由块（owner 决定）；入口加「启动动作」第一跳 | `evidence/20260911-trigger-behavior-and-entry-fix.md` |
 
 ---
 
@@ -206,11 +207,12 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 
 ## 8. 未验证清单（不要越界声明）
 
-- 宿主 **trust**、技能**真实行为**、**Hook 强制** —— 三者均 `UNVERIFIED`
-- **自然语言触发是否真的按控制面选到正确路由** —— 只有「被识别」级证据（技能出现在清单里），**没有行为级证据**
-- 控制面协议里那些相对路径（`references/…`、`scripts/…`）在**真实宿主会话中是否真的可读/可执行** —— 未验证
+- 宿主 **trust**、Hook 强制 —— 均 `UNVERIFIED`
+- **纯自然语言自动触发（D2）**：未达成，阻塞在宿主侧全局路由块（owner 决定，见 9.2/9.3）；
+  入口被显式引用后的完整链路已实测走通（D3）
+- `-p` 会话中技能**描述**是否进入模型决策上下文 —— UNVERIFIED（模型自述没有；无宿主日志可证）
 - 发布 CI **从未在真实 GitHub runner 跑过**（本地已等价复现 fresh clone 情形）
-- 宿主侧对 `assets/` 模板、`agents/openai.yaml` 插件的实际使用 —— 未验证
+- 宿主侧对 `assets/` 模板的实际使用 —— 未验证（`agents/openai.yaml` 只属宿主专属投影，共享根已不含）
 
 ---
 
@@ -226,35 +228,32 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
   overlay 目标、hostAdapter、结果附加字段），三个 writer 都是薄壳；没有第三个复制版 builder。
 - 实施中发现并修复：带 `-Force` 的 DryRun 会删掉旧安装（`cb05fb1`）——DryRun 现在只读。
 
-### 9.2 T2【核心】**触发行为验证**（D2/D3 的唯一证据来源）
+### 9.2 T2【已完成 2026-09-11】**触发行为验证**（D2/D3 的唯一证据来源）
 
-**目标**：证明「用户说一句中文，入口被加载，并路由到正确能力」。
+实测结论（全部 stream-json 观察证据，见 `evidence/20260911-trigger-behavior-and-entry-fix.md`）：
+- **D3 全通**：显式引用入口后，宿主注入 SKILL.md + base directory；模型读控制面 SKILL.md、中性 runtime-adapter.md、
+  执行 `runtime_decision_contract.py route-catalog`、选中主路由「项目体检」、查投影、加载 owner（routes-intake.md）并实际体检。
+- **紧急检查点通过**：宿主能读、能执行包内非 SKILL.md 文件（单目录形态成立，不需要停下来重新决策）。
+- **D2 未达成**：纯中文需求不自动触发。根因 ①宿主全局内存 `~/.claude/CLAUDE.md` 旧路由块主动把工程需求引向
+  独立 `tdd`/`code-review` 等条目（仓库外，owner 决定）；②共享根仍有 4 个竞争性旧顶层技能
+  （退役须等 T4 把 tdd/code-review 接入后配套做，防能力回退）；③薄壳入口缺第一跳指针（已修，见 9.3）。
+- Codex 侧可用性复测：204 条目含我们根入口 + 控制面 + 7 个嵌套条目（`sliver-vibe-coding` 名字出现 = 决策 #2 已知代价）。
 
-**方法（沿用 Sliver 的 A/B 口径，已在本机跑通）**：
-```bash
-# Claude：全新会话 + 中文自然语言需求
-claude --debug-file <log> -p '<一句真实中文需求，例如：帮我看看这个项目现在有什么风险>'
-# 解析日志：Loaded (\d+) unique skills；再人工/脚本判读是否加载了我们的入口
-# Codex：
-codex debug prompt-input   # 统计 (file: r\d+)，看是否出现 feisheng-vibe-coding 及其嵌套条目
-```
-**注意**：`claude -p` 消耗真实额度（用户已多次授权此类探测）。建议一次测 1–2 条真实指令，而不是批量烧额度。
+### 9.3 T3【已完成 2026-09-11】**按 T2 的结果修触发**
 
-**验收**：能观察到「入口技能被加载」+「选择了某个主路由」+「加载了该路由的 owner / 调用了某个 provider」。
-如果做不到，把差距写成下一批的修复项（T3）。
+- ✅ 已修（`507a07f`）：入口 SKILL.md 增加「启动动作」——第一条指令指向 `governance/sliver-core/SKILL.md` 的
+  Startup Protocol，并禁止跳过控制面直接作答。对「技能已被引用」的一切路径生效。
+- ⏸️ 未动（等 owner）：入口 description 已符合触发面最佳实践（中英文触发语句都在），但探测显示 `-p` 会话里
+  描述是否在决策时可见本身 UNVERIFIED，盲目改描述无法验证，不折腾。
+- ⏸️ owner 决定项：更新 `~/.claude/CLAUDE.md`（及镜像 `C:\Users\MSX\AGENTS.md`）的「Skills 路由规则」块，
+  把统一入口 `feisheng-vibe-coding` 立为项目级请求的第一路由——这是 D2 转绿的关键一步（建议文案已给 owner）。
 
-### 9.3 T3 **按 T2 的结果修触发**（可能包含）
+### 9.4 T4 **阶段 2 收尾**：`tdd` / `code-review`（⚠️ 与全局路由块更新配套，顺序不可反）
 
-- 入口描述是否够宽/够准（现已在 `SKILL.md` 里覆盖中文 + 英文关键词）
-- 控制面是否在宿主会话中**可读**（相对路径解析、`<sliver-runtime-root>` 解析）
-- 若宿主只读 `SKILL.md` 而不给读 bundle 内其它文件，则单目录形态**从根上不成立** ——
-  那就要回到「形态」重新决策（这是本目标的真正风险点，必须在 T2 里尽早暴露）
-- 需要时给 `Internal Capability Providers` 的 7 条补更明确的触发条件
-
-### 9.4 T4 **阶段 2 收尾**：`tdd` / `code-review`
-
-两者现为 `source-only-*`，理由明确写着「待宿主行为 smoke」。T2 通过后可评估接入。
+两者现为 `source-only-*`，理由明确写着「待宿主行为 smoke」。**必须先接入它们、再退役共享根里的
+独立 `tdd`/`code-review`/`vibe-coding-skills` 顶层条目**——先退役会造成用户能力回退。
 注意它们的内容取自已提交 revision `9fe7e7a3` 的 blob（**不采用**上游工作树未提交的改名）。
+配套建议：T4 接入完成 + owner 更新全局路由块后，一次性做「共享根旧条目退役 + D2 复测」。
 
 ### 9.5 T5 **阶段 4 批次**（需 owner 定批次口径）
 
