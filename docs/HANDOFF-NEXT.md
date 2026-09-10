@@ -1,160 +1,231 @@
-# 接手必读（2026-09-10，功能重叠裁决补全后刷新）
+# 接手必读（2026-09-10，首批 Vibe 检查器接入后刷新）
 
 > 本文是**最新交接**，优先级高于 `docs/HANDOFF.md` 中的所有历史轮次记录。冲突时以本文为准。
-> 上一版交接（当时第一优先是功能重叠裁决补全）已被本轮完成，其完整历史仍见 `docs/HANDOFF.md` 与本文件末尾。
+> 上一版交接（当时第一优先是「物理导入 + 门禁策略化」）已被本轮完成。
 
 ## 0. 仓库状态
 
-- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；功能重叠裁决补全的提交为 `c7f1f66`，
+- 仓库 `F:/skiils工具/feisheng-vibe-coding`，分支 `main`；本批提交为 `3e14dd3`，
   之后仅剩本交接刷新提交，**工作树干净**。
-- 门禁：`pwsh scripts/verify.ps1` = **7/7 PASS**；加 `-IncludePackage` = **8/8 PASS**（发布包 22 文件、0 违规）。
-- 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要全部一致
-  （matt 有 4 个按已提交 revision 校验；sliver 有 3 个已登记本地补丁）。
-- 存量：`evidence/` 32 份、`tasks/` 33 份、`scripts/` 17 个。
-- 脚手架 `_smoke/`（169 个文件，已 gitignore）：**总目标完成后统一清理**，勿提前删（内含宿主 junction 回滚映射等证据）。
+- 门禁：`pwsh scripts/verify.ps1 -IncludePackage` = **10/10 PASS**（本轮新增 2 项内容完整性门禁；
+  发布包 32 文件、0 违规）。提交后已复跑确认（`core.autocrlf=true` 会改写换行，见踩坑 10）。
+- runtime 覆盖：**4 → 8**（Sliver control-plane + 3 Matt 原语 + 4 Vibe 检查器）。
+- 来源快照：`vibe-coding-skills=553`、`mattpocock-skills=136`、`sliver-core=220`，树摘要一致。
+- 存量：`evidence/` 33 份、`tasks/` 35 份、`scripts/` 18 个。
+- 脚手架 `_smoke/`（169 个文件，已 gitignore）：**总目标完成后统一清理**，勿提前删。
 
-## 1. 本轮完成：功能重叠裁决补全（原「第一优先」）
+## 1. 本轮完成：首批 Vibe 技能物理导入 + 运行时门禁策略化
 
-`duplicateGroups` 3 → **11 组**，覆盖交接点名的 **11 簇 / 50 个技能**；机读真源仍是
-`provenance/SKILL-CLASSIFICATION.json`（未改 `readiness`/`status`）。
+**结构前提**：`scripts/runtime-projection-guard.ps1` 禁止把 `sources` 段带进运行时 bundle，
+所以在本仓库「接受一个技能」**意味着把内容物理导入到 `sources/` 之外的一等位置**。
+上一轮只翻分类标签，被三个门禁同时如实拒绝；本轮把前提补齐。
 
-| 交接簇 | 组 id | owner | 成员 |
-|---|---|---|---|
-| review/审查 + test/测试 | `review-and-test` | `validation-gate` | code-review、vibe-code-review、audit、critique、harden、tdd、test-automation、requirements-test-designer |
-| bug/排障 | `bug-rescue` | `bug-rescue` | bug-fixer、diagnosing-bugs |
-| plan/spec/计划 | `truth-and-planning` | `target-truth` | product-spec-builder、dev-planner、to-spec、to-tickets、wayfinder |
-| design/UI设计 | `ui-quality` | `ui-quality` | design-maker、design-brief-builder、ui-ux-pro-max、impeccable、design-system、layout、polish、prototype |
-| memory/上下文 | `context-and-handoff` | `context-handoff` | codebase-memory-scout、handoff、claude-handoff |
-| writing/文档 | `doc-authoring` | `doc-authoring` | writing-for-agents、writing-shape、writing-beats、writing-fragments、doc-sync-guardian |
-| skill治理 | `skill-governance` | `skill-catalog` | skill-builder、rule-harvester、wizard、target-constitution-setup、target-runtime-setup、setup-ts-deep-modules |
-| 澄清/提问 | `clarification-and-grilling` | `target-truth` | clarify、grilling、grill-me、grill-with-docs、to-questionnaire、wait-what |
-| 架构 | `architecture` | `architecture` | architecture-foundation、improve-codebase-architecture、codebase-design、domain-modeling |
-| git/冲突 | `git-and-release` | `git-release` | resolving-merge-conflicts、git-guardrails-claude-code、release-builder |
-| （既有）总入口 | `project-entry` | `route-catalog` | 别名 vibe-coding-skills、ask-matt |
+**接入批次**：impeccable 侧 bundled 只读检查器 **4 个** —— `audit`、`critique`、`harden`、`optimize`
+（Apache-2.0，`writeAuthority=none`，宿主证据 `model-visible`）。
 
-要点：
+| 步骤 | 落地物 |
+|---|---|
+| 1. 物理导入 | `scripts/import-vibe-skills.ps1`（新增，唯一导入路径，数据驱动：分类真源里 `readiness=accepted` 的 Vibe 记录即待导入集）；内容 `sources/vibe-coding-skills/skills/<dir>/` → `skills/checker/<id>/`；派生来源台账 `provenance/VIBE-IMPORTS.json`（逐文件 SHA-256 + sourceCommit，revision 从 LICENSE-MAP 读取，不硬编码） |
+| 2. 生成器路径规则 | `build-canonical-catalog.ps1`：accepted 的 Vibe 记录 path → `skills/checker/<id>/SKILL.md`；并 fail-closed 要求 `sourceDir` 存在且等于上游目录名 |
+| 3. NOTICE 门禁策略化 | `LICENSE-MAP.json` 新增逐族策略 `vibePerSkill.families[].runtimeEligible`（8 族全部显式声明）；`validate-release-notices.ps1` 读该字段，**删除**硬编码的「Vibe 条目必须 runtimeEligible=false」不变量 |
+| 4. 分类真源 | `SKILL-CLASSIFICATION.json`：新增 `checker|accepted → accepted-checker`；`acceptedStatuses` 加入该状态；4 条记录 → `domain=checker / readiness=accepted / writeAuthority=["none"] / sourceDir=<上游目录>` |
+| 5. 投影与包 | Codex/Claude 投影 manifest 的 `acceptedPrimitives`（硬编码 kind）→ `accepted`（含 status）；`build-release-package.ps1` 删除「Vibe 不贡献 runtime 文件」的硬编码声明，改为从门禁报告派生 |
+| 6. 新门禁 | `verify.ps1` 新增：① runtime include 与登记的 `sourceSha256` 一致；② 导入副本与快照逐文件一致（**与 eol 无关**） |
 
-- **不删技能、不降级**：全量保留内容 + 声明归属 + Sliver 唯一路由；每组的 `rule` 写清「何时用谁」。
-- **owner 归一化**：`project-entry` 的 `sliver-vibe-coding`→`route-catalog`；`review-and-test` 的
-  `sliver-validation-gate`→`validation-gate`。新增登记 7 个域 owner：
-  `validation-gate`、`bug-rescue`、`ui-quality`、`context-handoff`、`doc-authoring`、`architecture`、`git-release`。
-- **新门禁**：`scripts/build-canonical-catalog.ps1` 生成前 fail-closed 校验
-  ①group.owner 必须在 `OWNER-LEDGER.json`；②成员必须是 canonical id；③group.id 唯一。已用反例实测。
-- **能力索引**：`docs/CAPABILITY-INDEX.md` 新增「功能重叠裁决（duplicateGroups）」表。
-- 证据：`evidence/20260910-overlap-arbitration.md`；任务：`tasks/20260910-overlap-arbitration.md`。
+**关键范围决策（与上一版交接的建议不同，且必须保留理由）**：
+上一版建议首批 13 个只读检查器。按许可证证据逐项复核后，**只有 4 个可以进入 runtime**：
 
-## 2. 【下一步第一优先】物理导入 + 门禁策略化（提升 runtime 覆盖）
+- 可接入：`audit`、`critique`、`harden`、`optimize` → 族 `impeccable-bundled-product-checker-overlap`，`runtimeEligible=true`。
+- 不可接入（9 个）：`bug-fixer`、`codebase-memory-scout`、`design-brief-builder`、`design-maker`、
+  `hotspot-governor`、`requirements-test-designer`、`test-automation`、`ui-system-guardian`
+  → 族 `vibe-original-product-checker`；`vibe-code-review` → 族 `vibe-original-checker`。
+  两族的 `runtimeEligible=false`：上游是 **private 分发包**（`package.json` `private:true`、
+  `0.0.0-private`），**未逐技能授予许可证文本**；`legal/ui-system-guardian/SOURCE-DECLARATION.md`
+  是仓库内的**来源记录**，不是上游许可授予，不能当可再分发的 NOTICE。
 
-**关键结论（被门禁实测逼出）**：在本仓库「接受一个技能」**意味着把内容物理导入到 `sources/` 之外的一等位置**，
-因为 `scripts/runtime-projection-guard.ps1` **禁止 `sources` 段进入运行时 bundle**。已验收的 Matt 原语是范例
-（路径 `skills/engineering/<id>/SKILL.md`）。
+即：这 9 个的排除理由是**来源/许可证未通过**，不是「待办」。解除需要「上游逐技能许可证声明」
+或「独立法律审查」，并同步改真源。这是本轮把原本写在文档里的法律判断**下沉为机读数据**的产物。
 
-四步（已写入 `SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.structuralPrerequisite`）：
+**反例实测**（都按预期拒绝，已回退）：
 
-1. 把 `sources/vibe-coding-skills/skills/<id>/` 复制到一等位置（如 `skills/product/<id>/`），登记派生来源（源路径 + 源 SHA）。
-2. `build-canonical-catalog.ps1` 对 `readiness=accepted` 的 Vibe 记录改用导入后路径（照 Matt 原语模式）。
-3. **NOTICE 门禁策略化**：`validate-release-notices.ps1` **硬编码**要求「Vibe 条目必须 `runtimeEligible=false`」；
-   放宽必须与物理导入**同批**，**不能先翻 flag**（本轮之前试过：verify 直接 4/8 拒绝，已回退）。
-4. 再改 readiness 并跑全套门禁。
+| 反例 | 实测 |
+|---|---|
+| 向 `skills/checker/audit/SKILL.md` 追加一行 | `[FAIL] runtime include 内容完整性 — audit (sha 与登记不一致)` |
+| 族 `impeccable-bundled-product-checker-overlap.runtimeEligible=false` | `[FAIL] 发布 NOTICE 门禁`（族级策略生效） |
+| 重复运行导入脚本 | `目标位置已存在，拒绝覆盖: skills/checker/audit` |
 
-已具备前提：Vibe 46/46 许可证族已映射（`LICENSE-MAP.json` 的 `vibePerSkill`，8 族，字体缺口已补上游 OFL + revision）；
-逐技能宿主证据在 `provenance/HOST-DISCOVERY-EVIDENCE.json`（62 model-visible / 14 installed-user-invoked-only / 6 not-installed）。
+**明确未做（不得越界声明）**：
 
-**建议首批**：审计明确记为「只读 checker / 文档输出工具」的 13 个（`writeAuthority=none`）：
-`audit, bug-fixer, codebase-memory-scout, critique, design-brief-builder, design-maker, harden, hotspot-governor, optimize, requirements-test-designer, test-automation, ui-system-guardian, vibe-code-review`。
+1. 投影契约仍是**「每条记录一个已批准文件」**：`critique` 的 `reference/*.md`、以及既有 Matt 原语的
+   `DEEPENING.md` / `ADR-FORMAT.md` / `agents/` 都**没有**进入 bundle。导入是目录完整的，投影不是。
+2. 这 4 个检查器依赖**未接入的 `impeccable` 父技能**（正文要求先 `Invoke /impeccable`），
+   即 bundle 内是**部分依赖闭包**，不是可独立完整运行的技能。
+3. 宿主 **trust**、技能**行为正确性**、Hook 强制：全部仍 `UNVERIFIED`；本轮未做任何宿主 smoke。
+4. 未重采宿主证据（复用 2026-09-10 快照）。
 
-## 3. 【最后做】Hook 解锁（风险最大）
+证据：`evidence/20260910-vibe-checker-promotion.md`；任务：`tasks/20260910-vibe-checker-promotion.md`。
 
-**尚未开始**。门槛：per-skill license（已具备）+ host discovery + 事件顺序/并发验证 + 写白名单/回滚 + **独立逻辑审查**。
-**独立逻辑审查当前主 Agent 难以自供**（子 Agent 多次 503/中断），且 Hook 会写进宿主、影响每次工具调用、可阻断操作
-→ 需 owner 明确授权并在专门会话中做。
+## 2. 【下一步第一优先】换行可复现性：既有核心缺陷，很可能同时压着 CI
 
-## 4. 82 个技能的构成（回答"是否全量吸收"）
+**这是本轮验证时附带发现的既有缺陷，与本批改动无关（HEAD `591710a` 即可复现）。**
+
+实测（`git clone` 到新目录后跑门禁）：
+
+| 门禁 | 本机工作树 | fresh clone |
+|---|---|---|
+| `runtime include 内容完整性` | PASS (8) | **FAIL**（4 条 Vibe 记录 sha 与登记不一致） |
+| `导入副本与快照一致性` | PASS (7) | **PASS (7)**（刻意设计为与 eol 无关） |
+| `来源快照完整性` | PASS | **FAIL**（vibe 快照 492 文件 content-vs-source） |
+| fresh clone 总计数 | 10/10 | **8/10** |
+
+根因：
+
+1. 仓库**没有 `.gitattributes`**，换行完全由使用者本地 `core.autocrlf` 决定（本机 `true`）。
+2. git 索引只保存规范化后的 **LF** blob；而 `PROVENANCE-INTEGRITY.json` 的 `treeHash`、catalog 的
+   `sourceSha256`、`VIBE-IMPORTS.json` 的逐文件 sha 全都是在**工作树字节**上算的。
+3. 三个来源的工作树字节与来源项目**逐字节相等**且换行不同：
+   `vibe-coding-skills` = LF、`mattpocock-skills` = CRLF、`sliver-core` = CRLF（本轮实测 3/3 EQUAL）。
+4. fresh clone 时 LF blob 被 materialize 成 CRLF ⇒ 与 Vibe 的 LF 来源不一致 ⇒ 门禁失败。
+
+**为什么这是第一优先**：`.github/workflows/release-gate.yml` 在 fresh checkout 上跑 `verify.ps1`；
+Windows runner 的 git 默认 `core.autocrlf=true`，因此**CI 很可能是红的**（CI 从未真跑过，
+见第 6 节）。同时这条缺陷让「逐字节一致的来源快照」这个核心主张在别的机器上不成立。
+
+**修复方案（已探明成本很低，因为工作树字节不需要动）**：
+
+1. 新增 `.gitattributes`，对必须保真的树声明不转换：`sources/** -text`、`skills/** -text`、
+   `governance/sliver-core/** -text`（`-text` = 检出时原样写出 blob）。
+2. 用**当前工作树字节**重新 add 这些树（`git -c core.autocrlf=false add`；**不要**用
+   `git add --renormalize`，它会全收敛成 LF，与 Matt/Sliver 的 CRLF 来源相反）。
+3. 因为工作树字节不变，**所有已记录 sha 仍然有效**（无需重算 `PROVENANCE-INTEGRITY` / catalog /
+   `VIBE-IMPORTS`）。唯一变化是 blob 内容。
+4. 验收必须是**新目录 clone 后 `verify.ps1 -IncludePackage` = 10/10**（本机跑绿不算数）。
+
+风险：这是一次**大范围一次性 blob 规范化**（约 909 个文件），必须在**同一次提交**里完成
+`.gitattributes` + 重新 add，否则中间态门禁变红。详细边界见 `tasks/20260910-line-ending-reproducibility.md`。
+
+> 建议：这一步会改写大量已提交 blob，属于宽影响操作，**执行前请 owner 明确确认**再动手。
+
+## 3. 【下一步第二优先】让 runtime 单位「目录忠实」
+
+当前 `path` 是**单个文件**，所以被接受的技能在 bundle 里只有 `SKILL.md`（缺 `reference/`、`templates/`、
+`scripts/`，也缺 Matt 原语的 `DEEPENING.md` 等）。这让「已接入」在功能上不完整。
+
+做法（有界、可验证）：catalog 记录增加「导入根 + 文件清单」字段（由导入目录生成，仍是显式白名单），
+`runtime-projection-guard.ps1` 按该清单展开 `filePlan`，manifest 记录每个文件。
+必须同时覆盖既有 Matt 原语，否则又是一次不一致。**不要**直接把整个目录塞进 bundle（会破坏显式白名单语义）。
+
+## 4. 【最后做】Hook 解锁（风险最大）
+
+**尚未开始**。门槛：per-skill license（部分具备）+ host discovery + 事件顺序/并发验证 + 写白名单/回滚
++ **独立逻辑审查**（当前主 Agent 难以自供，子 Agent 多次 503/中断）。Hook 会写进宿主、影响每次工具调用、
+可阻断操作 → 需 owner 明确授权并在专门会话中做。注意：`vibe-original-*` 族 `runtimeEligible=false`，
+该族技能不得因 Hook 解锁而绕过许可证门禁。
+
+## 5. 82 个技能的构成与当前可用集合
 
 | 来源 | 源侧 SKILL.md | 我们登记 | 说明 |
 |---|---|---|---|
 | sliver-vibe-coding | 1 | 1 | 22 条主路由 + 9 lens 是 `references/*.md`，非独立技能 |
-| vibe-coding-skills | **138** | **46** | 138 = `skills/` 46 + `.claude/skills/` 46 + `.agents/skills/` 46；后两者是**宿主适配变体**（同名不同内容） |
+| vibe-coding-skills | **138** | **46** | 138 = `skills/` 46 + `.claude/skills/` 46 + `.agents/skills/` 46；后两者是宿主适配变体 |
 | mattpocock-skills | 36 | 35 | 未登记 `.skills/translate-skill`（翻译维护 meta-技能，建议不补） |
-
-**关键佐证**：抽样 10 个技能，**宿主实际加载 == 我们的快照 == Vibe 规范 `skills/` 版本**（10/10），
-且**不等于**镜像变体 → 我们吸收的就是宿主在跑的那份。
 
 ```
 技能集合   82/83     几乎全量（差 1 个翻译维护技能）
 文件内容   全量       能力性文件无缺失（Vibe tools 145/145、hooks 10/10、codex-hooks 22/22）
 功能裁决   11/11 簇   已完成（evidence/20260910-overlap-arbitration.md）
-交付runtime 4/82     只启用经证据+导入的技能（Sliver + 3 个 Matt 原语）
+交付runtime 8/82      Sliver + 3 Matt 原语 + 4 Vibe 检查器（本批）
+许可证策略 8 族全显式 4 族 runtimeEligible=true、5 族 false（不可用族见第 1 节）
 路由绑定   0 条       ← Sliver 的 22 路由不引用这 82 个技能（更深层缺口，未开工）
 ```
 
-## 5. 历史踩坑（照抄省时间）
+## 6. 历史踩坑（照抄省时间）
 
 1. **heredoc 会吞反斜杠**（shell 层）→ 用 `chr(92)`、`DirectorySeparatorChar`，或改用 write/edit 工具写文件。
-2. **`@()` 经 if 表达式赋值会解包成 `$null`** → 先 `$x = @()` 再条件赋值；函数别返回裸集合。
+2. **`@()` 经 if/函数返回值会解包成标量** → 函数别返回裸集合，调用处统一 `@(...)` 包裹。
+   （本轮实测：`Get-RelativeFilePathList` 返回单元素时 `.Count` 在 StrictMode 下直接抛错。）
 3. **`[ordered]@{}` 没有 `ContainsKey`** → 用普通 `@{}`。
 4. **`Sort-Object` 是 culture 排序**（PS 5.1 vs 7 对 `-` 权重不同）→ 用 `[System.StringComparer]::Ordinal`。
 5. **含中文的 .ps1 必须 UTF-8 BOM**，否则 Windows PowerShell 5.1 按 GBK 解码直接语法报错。
-6. **调 Sliver 自带 Python 工具必须带 `-B`**，否则生成 `__pycache__` 被自家 provenance 门禁拦下（实测 220→224）。
+   注意：`write` 工具写出的新 .ps1 **不带 BOM**，必须事后补（本轮 `import-vibe-skills.ps1` 已补）。
+6. **调 Sliver 自带 Python 工具必须带 `-B`**，否则生成 `__pycache__` 被 provenance 门禁拦下。
 7. **`Join-Path $a 'x/' + $b` 会把 `+` 当字面参数** → 写 `Join-Path $a ('x/' + $b)`。
-8. **投影禁止 `sources` 段** → 提升必须先物理导入（见第 2 节）。
-9. **NOTICE 门禁硬编码 Vibe `runtimeEligible=false`** → 不能单独翻 flag。
-10. **`core.autocrlf=true`**：提交可能改写工作树换行 → **每次提交后都要重跑 `verify.ps1`**。
+8. **投影禁止 `sources` 段** → 提升必须先物理导入（第 1 节）。
+9. **NOTICE 门禁不再硬编码 Vibe flag**（本轮起读 `vibePerSkill.families[].runtimeEligible`）；
+   新增/修改许可证族时**必须**声明该字段，缺字段即 fail-closed。
+10. **`core.autocrlf=true`**：提交会警告换行将被改写 → **每次提交后都要重跑 `verify.ps1`**；
+    更要紧的是它导致 fresh clone 字节不同（见第 2 节）。
 11. **宿主布局**：`~/.claude/skills` 与 `F:/skiils工具/_adapters/shared/skills` 是**同一目录**（junction）；
-    `~/.codex/skills` 原有 157 个 junction 已清空（现 Codex 的 r0 即共享根）。
-    删 junction 只能用 `os.rmdir`（`shutil.rmtree` 拒绝）；`os.path.islink` 对 junction 返回 False。
+    `~/.codex/skills` 原有 157 个 junction 已清空。删 junction 只能用 `os.rmdir`。
 12. **`codex debug prompt-input` 的 JSON 里换行是转义的两字符**（反斜杠+n）→ 解析前先替换成真换行。
-13. **`disable-model-invocation: true` 的技能不会出现在模型可见清单里** → 证据必须分类，不能只看清单命中。
-14. **存在并行写入者**：`docs/HANDOFF.md` 曾被另一写入者插入"当前接手快照"块（已保留意图并刷新为准确状态）。
-    动手前先 `git status`，不要静默丢弃他人改动。
+13. **`disable-model-invocation: true` 的技能不会出现在模型可见清单里** → 证据必须分类。
+    **补充实测**：Codex 似乎不认这个 Claude 侧的 frontmatter 字段，所以带该标记的 Vibe 技能在 Codex 上仍是 `model-visible`。
+14. **存在并行写入者**：`docs/HANDOFF.md` 曾被另一写入者插入块（已保留意图并刷新）。动手前先 `git status`。
 15. **generated 文件的删除逻辑**：`ConvertFrom-Json` 读含单元素数组的 JSON 时可能解包成标量；遍历统一 `@()` 包裹。
+16. **新增 `accepted` 的 Vibe 技能的正确顺序**：改 `SKILL-CLASSIFICATION.json`（含 `sourceDir`、`writeAuthority`）
+    → 跑 `scripts/import-vibe-skills.ps1`（它按分类驱动导入，目标已存在则拒绝）→ 重生成 catalog/index → 跑门禁。
+    顺序反了会被门禁拒绝（这正是设计意图）。
 
-## 6. 入口速查
+## 7. 入口速查
 
 ```
 真源（唯一写入点）
-  provenance/SKILL-CLASSIFICATION.json    ← 分类 + 裁决（domain/readiness/duplicateGroups/policy）
-  provenance/LICENSE-MAP.json             ← 许可证台账（entries + vibePerSkill）
-  provenance/LOCAL-PATCHES.json           ← 本地补丁登记（未登记偏差即漂移）
-  provenance/OWNER-LEDGER.json            ← owner 机器可读记录（duplicateGroups owner 必须在其中）
-  provenance/HOST-DISCOVERY-EVIDENCE.json ← 逐技能宿主证据
+  provenance/SKILL-CLASSIFICATION.json     ← 分类 + 裁决（domain/readiness/writeAuthority/sourceDir/duplicateGroups/policy）
+  provenance/LICENSE-MAP.json              ← 许可证台账（entries + vibePerSkill.families[].runtimeEligible 逐族 runtime 策略）
+  provenance/LOCAL-PATCHES.json            ← 本地补丁登记（未登记偏差即漂移）
+  provenance/OWNER-LEDGER.json             ← owner 机器可读记录
+  provenance/HOST-DISCOVERY-EVIDENCE.json  ← 逐技能宿主证据
+  provenance/VIBE-IMPORTS.json             ← Vibe 物理导入派生来源台账（逐文件 sha，脚本生成）
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                      ← 单入口（7 项；-IncludePackage 共 8 项）
-  scripts/runtime-projection-guard.ps1    ← 共享投影门禁（唯一实现）
-  scripts/validate-release-notices.ps1    ← NOTICE 门禁
-  scripts/build-canonical-catalog.ps1     ← 含 duplicateGroups owner/成员 fail-closed 校验
+  scripts/verify.ps1                       ← 单入口（10 项；含 runtime 内容完整性 + 导入一致性）
+  scripts/runtime-projection-guard.ps1     ← 共享投影门禁（唯一实现）
+  scripts/validate-release-notices.ps1     ← NOTICE 门禁（逐族策略驱动）
+  scripts/build-canonical-catalog.ps1      ← duplicateGroups owner/成员 + sourceDir fail-closed 校验
+导入
+  scripts/import-vibe-skills.ps1           ← Vibe 技能物理导入（唯一路径，数据驱动）
+  scripts/import-matt-source.ps1 / import-sliver-core.ps1 / import-vibe-source.ps1 ← 来源快照导入
 宿主 smoke（消耗真实额度，不接入 verify）
-  scripts/smoke-host-skill-discovery.ps1  ← -TargetHost Claude|Codex|Both -Install/-Uninstall/-Probe
-  scripts/collect-host-skill-evidence.ps1 ← 采集逐技能发现性证据
+  scripts/smoke-host-skill-discovery.ps1   ← -TargetHost Claude|Codex|Both -Install/-Uninstall/-Probe
+  scripts/collect-host-skill-evidence.ps1  ← 采集逐技能发现性证据
 ```
 
 常用命令：
 
 ```powershell
-# 一键全套门禁 + 生成物新鲜度
+# 一键全套门禁 + 生成物新鲜度（提交后必须重跑）
 pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludePackage
 
-# 改分类/裁决后重生成（顺序不能反）
+# 新增 accepted 的 Vibe 技能（顺序不能反）
+# 1. 改 SKILL-CLASSIFICATION.json（readiness=accepted + sourceDir + writeAuthority + reason）
+pwsh -NoProfile -File 'scripts/import-vibe-skills.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
 pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils工具\feisheng-vibe-coding'
 pwsh -NoProfile -File 'scripts/build-capability-index.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
+
+# 换行可复现性验收（唯一可信的验收方式）
+git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/verify.ps1' -IncludePackage
 ```
 
-## 7. 仍未验证（不要越界声明）
+## 8. 仍未验证（不要越界声明）
 
 - 宿主 **trust**、技能**真实行为正确性**、**Hook 强制** —— 三者均 `UNVERIFIED`。
-- 发布 CI 未在真实 GitHub runner 跑过（工作流已接入，仅本地校验 YAML）。
-- 我们自己的 **Codex 投影**尚未做其自身的 discovery smoke（已实测的是 Sliver 控制面 bundle 在 Codex 上的发现机制）。
-- 宿主证据只证明"被识别"，**不证明行为正确**。
+- 发布 CI **从未在真实 GitHub runner 跑过**（工作流已接入，仅本地校验 YAML）；
+  且按第 2 节推断，跑起来大概率因换行缺陷失败。
+- **fresh clone 可复现性**：当前 8/10（第 2 节）；本机工作树 10/10。
+- 我们自己的 Codex 投影**尚未**做其自身的 discovery smoke（已实测的是 Sliver 控制面 bundle）。
+- 宿主证据只证明「被识别」，**不证明行为正确**；本轮也未重采。
 
-## 8. 不可突破的边界
+## 9. 不可突破的边界
 
 - 不修改三个来源项目（只读）；`git fetch` 之类只写来源 `.git`，需 owner 授权。
 - **本仓库自持，不依靠任何上游**：不产出上游问题报告、不等上游确认；上游差异只作事实记录 + 周期复核。
 - 不手工编辑生成物；改分类/裁决只改 `SKILL-CLASSIFICATION.json`。
 - 不把 Vibe 的 `.claude/`/`.agents/`/`.codex/` 镜像当源码或运行时内容。
 - 不把混合第三方许可证并成根许可证；不手工复制许可证文件。
+- **不改许可证族策略去迁就某个技能**：`runtimeEligible` 的取值必须由许可证/来源证据决定；
+  改它等于改法律判断，必须留 reason + 证据。
 - 修改 vendored 内容必须先登记 `LOCAL-PATCHES.json`（含 `originalSha256`）。
 - 测试脚手架只放 `<repo>/_smoke/`；不覆盖宿主既有技能；不把 static smoke 写成真实宿主可用。
 - `duplicateGroups[].owner` 必须是 `OWNER-LEDGER.json` 中登记的 owner；新增 owner 先登记再引用。
+- 新增 accepted 的 Vibe 技能必须声明 `sourceDir` 且等于上游目录名（生成器 fail-closed 强制）。
