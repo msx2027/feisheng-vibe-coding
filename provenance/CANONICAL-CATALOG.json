@@ -1,0 +1,79 @@
+{
+  "schema": "feisheng-canonical-skill-catalog/v1",
+  "status": "partial-migration; runtime-disabled",
+  "owner": "skill-catalog",
+  "projectEntry": "SKILL.md",
+  "routeOwner": "governance/sliver-core/references/routes-index.md",
+  "records": [
+    {
+      "id": "sliver-vibe-coding",
+      "source": "sliver-vibe-coding",
+      "path": "governance/sliver-core/SKILL.md",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "control-plane",
+      "writeAuthority": ["route-catalog", "target-truth", "runtime-projection"]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "source": "mattpocock-skills",
+      "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "accepted-primitive",
+      "writeAuthority": []
+    },
+    {
+      "id": "codebase-design",
+      "source": "mattpocock-skills",
+      "path": "skills/engineering/codebase-design/SKILL.md",
+      "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "accepted-primitive",
+      "writeAuthority": []
+    },
+    {
+      "id": "domain-modeling",
+      "source": "mattpocock-skills",
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "accepted-primitive",
+      "writeAuthority": ["target-truth"]
+    },
+    {
+      "id": "code-review",
+      "source": "mattpocock-skills",
+      "path": "sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "blocked-unclassified-working-tree",
+      "writeAuthority": []
+    },
+    {
+      "id": "tdd",
+      "source": "mattpocock-skills",
+      "path": "sources/mattpocock-skills/skills/engineering/tdd/SKILL.md",
+      "invocation": "model-invoked-or-user-invoked",
+      "status": "blocked-unclassified-working-tree",
+      "writeAuthority": []
+    }
+  ],
+  "duplicateGroups": [
+    {
+      "id": "project-entry",
+      "owner": "sliver-vibe-coding",
+      "aliases": ["vibe-coding-skills", "ask-matt"],
+      "rule": "aliases may select or activate but cannot own project routing"
+    },
+    {
+      "id": "review-and-test",
+      "owner": "sliver-validation-gate",
+      "members": ["code-review", "tdd"],
+      "rule": "Matt implementations remain primitives; activation is blocked until source naming is resolved"
+    }
+  ],
+  "notYetCatalogued": {
+    "vibe": 46,
+    "matt": 30,
+    "reason": "source snapshot exists, but runtime/write-target/license review is not complete"
+  }
+}

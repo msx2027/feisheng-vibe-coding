@@ -28,12 +28,19 @@
       "path": "F:\\skiils工具\\mattpocock-skills",
       "role": "engineering-primitives-candidate",
       "license": "MIT plus localized/source notices",
-      "migration": "blocked-pending-working-tree-classification-confirmation",
+      "migration": "clean-head-snapshot-accepted; runtime-migration-blocked-pending-dirty-file-decision",
       "workingTreeAudit": {
         "status": "accepted",
         "evidence": "evidence/20260910-matt-dirty-classification.md",
         "unclassifiedFiles": 4,
         "migrationAllowed": false
+      },
+      "snapshot": {
+        "path": "sources/mattpocock-skills",
+        "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+        "files": 132,
+        "excludedDirtyFiles": 4,
+        "provenance": "provenance/MATT-IMPORT.json"
       }
     }
   ],

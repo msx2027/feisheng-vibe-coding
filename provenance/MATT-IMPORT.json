@@ -1,0 +1,18 @@
+{
+  "schema": "feisheng-import-record/v1",
+  "source": "mattpocock-skills",
+  "sourceRoot": "F:\\skiils工具\\mattpocock-skills",
+  "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+  "sourceWorkingTree": "modified",
+  "sourceStatusCount": 4,
+  "snapshotRoot": "sources/mattpocock-skills",
+  "snapshotFiles": 132,
+  "excludedDirtyFiles": [
+    "skills/engineering/ask-matt/SKILL.md",
+    "skills/engineering/code-review/SKILL.md",
+    "skills/engineering/implement/SKILL.md",
+    "skills/engineering/tdd/SKILL.md"
+  ],
+  "migration": "source-snapshot-only; dirty-files-excluded; runtime-not-enabled",
+  "generatedAt": "2026-09-10T03:05:15.1972113Z"
+}

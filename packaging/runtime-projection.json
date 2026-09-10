@@ -1,12 +1,17 @@
 {
   "schema": "feisheng-runtime-projection/v1",
   "owner": "runtime-projection",
-  "status": "contract-only; runtime-not-enabled",
+  "status": "minimal-codex-candidate; runtime-not-enabled",
   "sourceOwners": ["route-catalog", "skill-catalog", "target-truth"],
   "hosts": {
     "codex": {
-      "status": "unverified",
-      "include": [],
+      "status": "candidate-unverified",
+      "include": [
+        "SKILL.md",
+        "skills/engineering/diagnosing-bugs",
+        "skills/engineering/codebase-design",
+        "skills/engineering/domain-modeling"
+      ],
       "exclude": ["generated-mirrors", "unowned-hooks", "unlicensed-third-party"],
       "freshSessionSmoke": "UNVERIFIED"
     },
@@ -18,7 +23,7 @@
     }
   },
   "buildContract": {
-    "inputs": ["provenance/SKILL-INVENTORY.json", "governance/sliver-core/references/routes-index.md", "docs/target-truth-schema.json"],
+    "inputs": ["provenance/CANONICAL-CATALOG.json", "governance/sliver-core/references/routes-index.md", "docs/target-truth-schema.json"],
     "generatedOutputsOnly": true,
     "manualMirrorEdits": false,
     "requiresSourceRevision": true,
