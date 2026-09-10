@@ -91,3 +91,22 @@ PS 5.1: `4831d9ac…`）。
 - CI 工作流未在真实 GitHub runner 上执行过（本地仅校验 YAML 合法、8 个 step）。
 - 真实宿主 discovery / trust / fresh-session smoke。
 - zip 的跨平台解包行为（仅在本机 Windows 验证）。
+
+## 附：提交后复验（2026-09-10，HEAD `b58946f`）
+
+第二轮成果已提交（`5f7d60d`、`399adc8`、`c257ac0`、`50aca5b`、`b58946f`）。提交后复跑全套门禁：
+
+| 门禁 | 结果 |
+|---|---|
+| 发布 NOTICE 门禁 | PASS，5 个 runtime 项 |
+| Vibe Hook 适配器测试 | PASS（进程退出码 0；被拒绝执行返回 3 为预期） |
+| Codex 静态投影 | PASS，`manifestSha256=eb0d35dc…` |
+| Claude 静态投影 | PASS，`manifestSha256=d13867f8…` |
+| 发布包装配（Both） | BUILT，19 文件，0 违规，`zipSha256=93a9de0e…` |
+
+说明：上表 manifest/zip SHA 与本文前面的记录不同，原因是投影 manifest 会记录构建时的 git revision；
+提交后 HEAD 由 `7a76866` 变为 `b58946f`，因此 manifest 字节与 zip 哈希随之变化。这是预期行为，不是漂移。
+
+提交后完整性核对：catalog 82 条记录中 78 条可寻址且 SHA-256 与 `sourceSha256` 全部一致；
+4 条 Matt 记录（`ask-matt`、`code-review`、`implement`、`tdd`）的 SKILL.md 按
+`tasks/20260910-matt-clean-snapshot.md` 的既有策略未进入快照（4 个未提交文件不导入）。
