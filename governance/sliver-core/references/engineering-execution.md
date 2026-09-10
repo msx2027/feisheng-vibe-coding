@@ -268,6 +268,33 @@ through this delegation; the condition below, not a user keyword, is its trigger
 | `skills/engineering/domain-modeling/SKILL.md` | project terminology, the ubiquitous language, or an architecture decision record must be clarified or maintained, with writes staying under `target-truth` |
 | `skills/engineering/tdd/SKILL.md` | a change needs test-first discipline, a strict red-green-refactor loop, or test double / mocking guidance |
 | `skills/engineering/code-review/SKILL.md` | a bounded diff or completed change needs a specialist review of correctness, coupling, and maintainability before acceptance |
+| `skills/product/product-spec-builder/SKILL.md` | the user wants to build a product, app, or tool, or asks to add or change features, and a complete development-ready product specification does not yet exist |
+| `skills/product/design-brief-builder/SKILL.md` | the visual direction is undecided and the user describes it vaguely (高级感, 简洁, 现代); run the designer-interview and produce the design brief |
+| `skills/product/architecture-foundation/SKILL.md` | a new project is about to enter development, or an existing one faces cross-module, data, interface, permission, deployment, stack, or architecture change; scope and boundary decisions must land in target truth and reach PASS before coding |
+| `skills/product/dev-planner/SKILL.md` | the target project requirement documents are complete and a phased development plan with dependency order is needed |
+| `skills/product/requirements-test-designer/SKILL.md` | a PRD, requirement document, user story, acceptance criteria, interface spec, or design spec must be turned into production-grade test design assets |
+| `skills/product/bug-fixer/SKILL.md` | the user reports a breakage in plain language (功能坏了, 报错了, 白屏, 转圈) and the defect needs a graded fix flow with an acceptance-scope check |
+| `skills/product/test-automation/SKILL.md` | the project needs automated tests designed, wired in, or run: E2E, regression, or a Playwright/Vitest harness with fresh evidence |
+| `skills/product/release-builder/SKILL.md` | the user asks to package, deploy, release, or ship; the build-package-test-release flow must produce an installable, privacy-safe, vulnerability-checked artifact |
+| `skills/product/rule-harvester/SKILL.md` | rules need gold-panning: misplaced rules corrected, generic rules folded into skill packages, stale rules or constitutions retired |
+| `skills/product/doc-sync-guardian/SKILL.md` | code, skill, hook, script, command, directory, or workflow changes require syncing the affected documents and blocking doc drift |
+| `skills/product/hotspot-governor/SKILL.md` | core hotspots, oversized files or components, or hard-to-maintain modules need diagnosis, a split route, and follow-up control |
+| `skills/ui/impeccable/SKILL.md` | frontend interface work needs the production-grade craft workflow |
+| `skills/ui/adapt/SKILL.md` | a design must adapt across screen sizes, devices, or contexts |
+| `skills/ui/animate/SKILL.md` | animation, micro-interaction, transition, or motion work is requested |
+| `skills/ui/bolder/SKILL.md` | the design looks bland, generic, or too safe and needs a bolder direction |
+| `skills/ui/colorize/SKILL.md` | the interface is gray, dull, or lacks warmth and needs color work |
+| `skills/ui/delight/SKILL.md` | the user asks for surprise, playfulness, or a more personable experience |
+| `skills/ui/distill/SKILL.md` | the user asks to simplify, reduce noise, or declutter the interface |
+| `skills/ui/layout/SKILL.md` | layout, spacing, or visual rhythm is the dominant UI problem |
+| `skills/ui/overdrive/SKILL.md` | the user asks for a stunning, impress-level visual or motion pass |
+| `skills/ui/polish/SKILL.md` | a final quality pass for alignment, spacing, and consistency is due |
+| `skills/ui/quieter/SKILL.md` | the design is too bold or loud and needs a quieter, restrained pass |
+| `skills/ui/typeset/SKILL.md` | fonts, typography, or text readability is the question |
+| `skills/ui/design-system/SKILL.md` | token architecture, component specifications, or CSS systemization is the design question |
+| `skills/ui/ui-styling/SKILL.md` | the user explicitly asks for a page-level style system or a component styling framework |
+| `skills/ui/brand/SKILL.md` | brand voice, visual identity, messaging frameworks, or UI brand tokens need creating or reviewing |
+| `skills/ui/ui-ux-pro-max/SKILL.md` | an explicit design enhancement request needs UI/UX intelligence across visual direction, color, typography, tokens, accessibility, layout, or charts |
 
 A specialist finding enters this backbone's normal flow: it is evidence for the failing layer, it never
 authorizes remediation, and the active route with `代码审计` or `验收` still owns the verdict and gate.

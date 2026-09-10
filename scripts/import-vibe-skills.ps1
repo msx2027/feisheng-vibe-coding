@@ -79,7 +79,28 @@ if ($revisions.Count -ne 1) {
 }
 $sourceRevision = @($revisions.Keys)[0]
 
+# 目录约定按 domain 分组（与 scripts/build-canonical-catalog.ps1 的 Get-RecordPath 保持一致）：
+#   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/
+function Get-DestinationGroup {
+    param([Parameter(Mandatory = $true)][string]$Domain)
+    switch ($Domain) {
+        'checker' { return 'checker' }
+        'product-or-checker' { return 'product' }
+        'ui' { return 'ui' }
+        default { throw "vibe accepted 记录的 domain '$Domain' 未定义导入目录分组（fail-closed）。" }
+    }
+}
+
 # 已接受且需要物理导入的 Vibe 记录（数据驱动，无第二份清单）
+$recordPath = Join-Path $repoRoot 'provenance/VIBE-IMPORTS.json'
+$alreadyImportedIds = @{}
+if (Test-Path -LiteralPath $recordPath -PathType Leaf) {
+    $existingRecord = Get-Content -Raw -Encoding UTF8 -LiteralPath $recordPath | ConvertFrom-Json
+    foreach ($entry in @($existingRecord.imports)) {
+        $alreadyImportedIds[[string]$entry.id] = $true
+    }
+}
+
 $pending = @()
 foreach ($property in @($classification.skills.PSObject.Properties)) {
     $entry = $property.Value
@@ -93,10 +114,12 @@ foreach ($property in @($classification.skills.PSObject.Properties)) {
     if ([string]::IsNullOrWhiteSpace($sourceDir)) {
         throw "accepted 的 Vibe 记录必须声明 sourceDir: $id"
     }
-    if ([string]$entry.domain -ne 'checker') {
-        throw "本导入器的目标约定是 skills/checker/<id>；记录 '$id' 的 domain 为 '$($entry.domain)'，需要先扩展导入约定。"
+    $group = Get-DestinationGroup -Domain ([string]$entry.domain)
+    if ($alreadyImportedIds.ContainsKey($id)) {
+        # 幂等：已在台账里的记录不再重复导入（支持分批晋升）
+        continue
     }
-    $pending += [pscustomobject]@{ id = $id; sourceDir = $sourceDir }
+    $pending += [pscustomobject]@{ id = $id; sourceDir = $sourceDir; group = $group }
 }
 if ($pending.Count -eq 0) {
     throw '没有 readiness=accepted 的 Vibe 记录；拒绝空运行（导入必须有明确的接受决策背书）。'
@@ -138,7 +161,7 @@ foreach ($item in $pending) {
         throw "快照 SKILL.md 与 SKILL-INVENTORY.json 记录不一致: $($item.sourceDir) 库存=$($inventoryRow.sha256) 实际=$sourceSkillSha"
     }
 
-    $destinationRelative = 'skills/checker/' + $item.id
+    $destinationRelative = 'skills/' + $item.group + '/' + $item.id
     $destinationPath = Join-Path $repoRoot ($destinationRelative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
     if (Test-Path -LiteralPath $destinationPath) {
         throw "目标位置已存在，拒绝覆盖: $destinationRelative"
@@ -205,7 +228,6 @@ foreach ($item in $plan) {
 }
 
 # 阶段三：登记派生来源（累加，保留历史批次）
-$recordPath = Join-Path $repoRoot 'provenance/VIBE-IMPORTS.json'
 $existingImports = @()
 if (Test-Path -LiteralPath $recordPath -PathType Leaf) {
     $existing = Get-Content -Raw -Encoding UTF8 -LiteralPath $recordPath | ConvertFrom-Json

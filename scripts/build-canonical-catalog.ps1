@@ -99,14 +99,23 @@ function Get-RecordPath {
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Candidate,
         [Parameter(Mandatory = $true)][string]$Relative,
-        [Parameter(Mandatory = $true)][string]$Readiness
+        [Parameter(Mandatory = $true)][string]$Readiness,
+        [Parameter(Mandatory = $true)][string]$Domain
     )
     if ($Source -eq 'sliver-vibe-coding') {
         return 'governance/sliver-core/SKILL.md'
     }
     if ($Source -eq 'vibe-coding-skills') {
         if ($Readiness -eq 'accepted') {
-            return 'skills/checker/' + $Id + '/SKILL.md'
+            # 目录约定按 domain 分组（与 scripts/import-vibe-skills.ps1 的落点保持一致）：
+            #   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/
+            $group = switch ($Domain) {
+                'checker' { 'checker' }
+                'product-or-checker' { 'product' }
+                'ui' { 'ui' }
+                default { throw "vibe accepted 记录的 domain '$Domain' 未定义导入目录分组（fail-closed）: $Id" }
+            }
+            return 'skills/' + $group + '/' + $Id + '/SKILL.md'
         }
         return 'sources/vibe-coding-skills/' + $Relative
     }
@@ -405,7 +414,7 @@ foreach ($row in @($inventory.skills)) {
         throw "分类 source 不一致: skill '$id' 分类记录 source=$entrySource，实际=$source"
     }
 
-    $path = Get-RecordPath -Id $id -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness
+    $path = Get-RecordPath -Id $id -Source $source -Candidate $candidate -Relative $relative -Readiness $readiness -Domain $domain
     $status = Get-DerivedStatus -Id $id -Domain $domain -Readiness $readiness
 
     # bundle 白名单：只对进入 runtime 投影的记录生成（bundle 是 runtime 概念）。

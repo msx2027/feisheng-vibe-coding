@@ -121,8 +121,8 @@
           "test-automation",
           "ui-system-guardian"
         ],
-        "runtimeEligible": false,
-        "reason": "upstream is a private distribution (package.json private:true, version 0.0.0-private) that grants no per-skill license text; the repo-local SOURCE-DECLARATION is a source record, not an upstream grant, so it is not a redistributable notice. Blocked in data rather than in code so the judgment is reviewable. Lifting this needs an upstream per-skill license statement or an independent legal review, recorded here as a new decision"
+        "runtimeEligible": true,
+        "reason": "owner 2026-09-11 明确豁免：仅本机自用、不对再分发，vibe 私有分发包的许可证文本缺失不构成自用阻碍；再分发前仍需上游逐技能许可证声明或独立法律审查"
       },
       "vibe-original-checker": {
         "license": "vibe distribution (private); see upstream package.json + README license section",

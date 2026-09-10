@@ -8,7 +8,9 @@
     "acceptedStatuses": [
       "control-plane",
       "accepted-primitive",
-      "accepted-checker"
+      "accepted-checker",
+      "accepted-product",
+      "accepted-ui"
     ],
     "note": "只有 acceptedStatuses 可进入 runtime 投影；其余一律 runtime-excluded（fail-closed）"
   },
@@ -35,7 +37,9 @@
     "unreviewed|candidate": "adapter-candidate",
     "unreviewed|source-only": "source-only-unreviewed",
     "user-tool|candidate": "adapter-candidate",
-    "user-tool|source-only": "source-only-user-tool"
+    "user-tool|source-only": "source-only-user-tool",
+    "product-or-checker|accepted": "accepted-product",
+    "ui|accepted": "accepted-ui"
   },
   "reasonsByStatus": {
     "accepted-primitive": "已验收工程原语；进入 runtime 静态投影",
@@ -51,7 +55,9 @@
     "source-only-product-or-checker": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
     "source-only-ui": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
     "source-only-unreviewed": "尚未完成语义审查",
-    "source-only-user-tool": "用户显式工具；未做宿主行为 smoke"
+    "source-only-user-tool": "用户显式工具；未做宿主行为 smoke",
+    "accepted-product": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
+    "accepted-ui": "已验收 UI 设计实现能力；进入 runtime 静态投影"
   },
   "reasonsById": {
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
@@ -200,18 +206,30 @@
   "skills": {
     "adapt": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "adapt",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "animate": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "animate",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "architecture-foundation": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "architecture-foundation",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "ask-matt": {
       "domain": "selector",
@@ -234,18 +252,30 @@
     },
     "bolder": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "bolder",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "brand": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "brand",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "bug-fixer": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "bug-fixer",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "clarify": {
       "domain": "unreviewed",
@@ -280,8 +310,12 @@
     },
     "colorize": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "colorize",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "critique": {
       "domain": "checker",
@@ -294,13 +328,21 @@
     },
     "delight": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "delight",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "design-brief-builder": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "design-brief-builder",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "design-maker": {
       "domain": "product-or-checker",
@@ -309,8 +351,12 @@
     },
     "design-system": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "design-system",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "dev-builder": {
       "domain": "product-or-checker",
@@ -319,8 +365,12 @@
     },
     "dev-planner": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "dev-planner",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "diagnosing-bugs": {
       "domain": "primitive",
@@ -332,13 +382,21 @@
     },
     "distill": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "distill",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "doc-sync-guardian": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "doc-sync-guardian",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "domain-modeling": {
       "domain": "primitive",
@@ -399,13 +457,21 @@
     },
     "hotspot-governor": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "hotspot-governor",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "impeccable": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "impeccable",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "implement": {
       "domain": "adapter",
@@ -419,8 +485,12 @@
     },
     "layout": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "layout",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "loop-me": {
       "domain": "in-progress",
@@ -443,18 +513,30 @@
     },
     "overdrive": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "overdrive",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "polish": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "polish",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "product-spec-builder": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "product-spec-builder",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "prototype": {
       "domain": "primitive",
@@ -463,18 +545,30 @@
     },
     "quieter": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "quieter",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "release-builder": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "release-builder",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "requirements-test-designer": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "requirements-test-designer",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "research": {
       "domain": "primitive",
@@ -488,8 +582,12 @@
     },
     "rule-harvester": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "rule-harvester",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "scaffold-exercises": {
       "domain": "primitive",
@@ -565,8 +663,12 @@
     },
     "test-automation": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "test-automation",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "to-questionnaire": {
       "domain": "user-tool",
@@ -590,13 +692,21 @@
     },
     "typeset": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "typeset",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "ui-styling": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "ui-styling",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "ui-system-guardian": {
       "domain": "product-or-checker",
@@ -605,8 +715,12 @@
     },
     "ui-ux-pro-max": {
       "domain": "ui",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "ui-ux-pro-max",
+      "writeAuthority": [
+        "none"
+      ]
     },
     "vibe-code-review": {
       "domain": "checker",

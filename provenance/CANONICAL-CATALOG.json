@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T18:33:11.5711597Z",
+  "generatedAt": "2026-09-10T19:07:47.5390878Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -10,44 +10,84 @@
     {
       "id": "adapt",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/adapt/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/adapt/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/adapt",
+        "files": [
+          {
+            "path": "skills/ui/adapt/SKILL.md",
+            "sha256": "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "animate",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/animate/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/animate/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/animate",
+        "files": [
+          {
+            "path": "skills/ui/animate/SKILL.md",
+            "sha256": "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "architecture-foundation",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/architecture-foundation/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/architecture-foundation/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/architecture-foundation",
+        "files": [
+          {
+            "path": "skills/product/architecture-foundation/SKILL.md",
+            "sha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8"
+          },
+          {
+            "path": "skills/product/architecture-foundation/references/foundation-dimensions.md",
+            "sha256": "dec0b438b2658df84ec422c3bcde632de937c432b5a0b1be171860210164349a"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "ask-matt",
@@ -106,44 +146,144 @@
     {
       "id": "bolder",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/bolder/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/bolder/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/bolder",
+        "files": [
+          {
+            "path": "skills/ui/bolder/SKILL.md",
+            "sha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "brand",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/brand/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/brand/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/brand",
+        "files": [
+          {
+            "path": "skills/ui/brand/SKILL.md",
+            "sha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561"
+          },
+          {
+            "path": "skills/ui/brand/references/approval-checklist.md",
+            "sha256": "1bc2887f2f6956a3008f2c1168e0844d3862af903e9f5ea341c107c24e47c319"
+          },
+          {
+            "path": "skills/ui/brand/references/asset-organization.md",
+            "sha256": "f9eaa9a9e2c9b7dc366aa934e7f17f51f0f254a47f0f311218e5ea2ef4bbba2f"
+          },
+          {
+            "path": "skills/ui/brand/references/brand-guideline-template.md",
+            "sha256": "392db8cf10fef492221c15a86e68590074bf5716de1f2982f41c01fbe30567cc"
+          },
+          {
+            "path": "skills/ui/brand/references/color-palette-management.md",
+            "sha256": "c429298ffe3955edb8b22c9f51426fef75e83d02848cd4300e89c0d3fc34b44a"
+          },
+          {
+            "path": "skills/ui/brand/references/consistency-checklist.md",
+            "sha256": "f8b521471f979a91cf9fbb8d623499045164fbca913d87872fdd5862f56f93ca"
+          },
+          {
+            "path": "skills/ui/brand/references/logo-usage-rules.md",
+            "sha256": "2cb525047bd623c31e8101e462d6d873a2b56dd118154f8ae56f8359292afd4b"
+          },
+          {
+            "path": "skills/ui/brand/references/messaging-framework.md",
+            "sha256": "24b2500a72867b55dd10f4bf359178b0eb347fddd852659ce47b69d9f597d4e6"
+          },
+          {
+            "path": "skills/ui/brand/references/typography-specifications.md",
+            "sha256": "921c3d9e6ddfde2677b9a3e32eee94c7922f54f22c1f380c5ed2eb25a7d5bfa9"
+          },
+          {
+            "path": "skills/ui/brand/references/update.md",
+            "sha256": "dc413ceb7e112a182a19bede81d8dca3c4ae601619428ab9d5bbfcec47b61f08"
+          },
+          {
+            "path": "skills/ui/brand/references/visual-identity.md",
+            "sha256": "63f0cfc5d95403d8e12aca4d839cc28471515574d9a431334bfbb96c15407c31"
+          },
+          {
+            "path": "skills/ui/brand/references/voice-framework.md",
+            "sha256": "08c15ac79f81cd964c5efbe593131b61a093c7e1b060d5dd28b17f3cc5b331fb"
+          },
+          {
+            "path": "skills/ui/brand/scripts/extract-colors.cjs",
+            "sha256": "591dd2f9f6193bae35efcedfbce71b60b81c4c70de2138bcc7f4831c9ad98df8"
+          },
+          {
+            "path": "skills/ui/brand/scripts/inject-brand-context.cjs",
+            "sha256": "5b98abdeb5c636f247102cd235f1d3421db7a4de53fd853360feaa0c471b5c96"
+          },
+          {
+            "path": "skills/ui/brand/scripts/sync-brand-to-tokens.cjs",
+            "sha256": "a44d0c2ef448b653e5ed992a5476114b9e458ff0bcb69df235598bb2b4a1726c"
+          },
+          {
+            "path": "skills/ui/brand/scripts/validate-asset.cjs",
+            "sha256": "8db716b4beee754897dfa1513ad9206c38d56f995c13cb567f95c446a39fa82a"
+          },
+          {
+            "path": "skills/ui/brand/templates/brand-guidelines-starter.md",
+            "sha256": "d157a57b15f0b458c79636d11de42f3c89f03d8c0bbea1bdd3cf1c3542b2140d"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "bug-fixer",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/bug-fixer/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/bug-fixer/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/bug-fixer",
+        "files": [
+          {
+            "path": "skills/product/bug-fixer/SKILL.md",
+            "sha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "clarify",
@@ -260,16 +400,28 @@
     {
       "id": "colorize",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/colorize/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/colorize/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/colorize",
+        "files": [
+          {
+            "path": "skills/ui/colorize/SKILL.md",
+            "sha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "critique",
@@ -312,30 +464,58 @@
     {
       "id": "delight",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/delight/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/delight/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/delight",
+        "files": [
+          {
+            "path": "skills/ui/delight/SKILL.md",
+            "sha256": "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "design-brief-builder",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/design-brief-builder/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/design-brief-builder/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/design-brief-builder",
+        "files": [
+          {
+            "path": "skills/product/design-brief-builder/SKILL.md",
+            "sha256": "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181"
+          },
+          {
+            "path": "skills/product/design-brief-builder/templates/design-brief-template.md",
+            "sha256": "a949c0e38ca8e15b55032dc95b8763c7fc80d8ac2a7cd63bbd79c9d39fd9a31e"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "design-maker",
@@ -354,16 +534,72 @@
     {
       "id": "design-system",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/design-system/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/design-system/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/design-system",
+        "files": [
+          {
+            "path": "skills/ui/design-system/SKILL.md",
+            "sha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a"
+          },
+          {
+            "path": "skills/ui/design-system/references/component-specs.md",
+            "sha256": "b265d979a741dd748d4e595e6898ae430faeef4f6d13d7a634fa6241b91d2da4"
+          },
+          {
+            "path": "skills/ui/design-system/references/component-tokens.md",
+            "sha256": "e27f8f5999badee425c98235eabbd2cb3ebe2a1a364766d5c7a6b3134ceaaec8"
+          },
+          {
+            "path": "skills/ui/design-system/references/primitive-tokens.md",
+            "sha256": "91e6caa12646c08c8aadf8e09399aed65760a25c8d80595936d81a9131118fc3"
+          },
+          {
+            "path": "skills/ui/design-system/references/semantic-tokens.md",
+            "sha256": "97e16d8061bbc22e82b51966a7015e3fc990932902e4647843506669a1cdebcc"
+          },
+          {
+            "path": "skills/ui/design-system/references/states-and-variants.md",
+            "sha256": "8dacb95d57d4bb37d8a99cc55515ff26da272056f837d29abc74aedcaa3ba104"
+          },
+          {
+            "path": "skills/ui/design-system/references/tailwind-integration.md",
+            "sha256": "0409f1335bcb8dfc76735d65469e9417944fc3a2d9b001db60c15683cc1090c0"
+          },
+          {
+            "path": "skills/ui/design-system/references/token-architecture.md",
+            "sha256": "925f4049c4c4313d9fd5df98cdfd52004112aca49fba1664ad85e76bc9dce4d3"
+          },
+          {
+            "path": "skills/ui/design-system/scripts/embed-tokens.cjs",
+            "sha256": "8e69196dc2bbbe3caaa78ebf4484add71813a66b117fd2ff499bafc88ea8e342"
+          },
+          {
+            "path": "skills/ui/design-system/scripts/generate-tokens.cjs",
+            "sha256": "aac8a0f4ec4dccf0d371f9ee5a9111e44977bb0cad7e40a3754aba5571aa1231"
+          },
+          {
+            "path": "skills/ui/design-system/scripts/validate-tokens.cjs",
+            "sha256": "f68a6d9a58e36f0df83aa3f21ec7fb55f1fe981a351e78fa285af072f1cdc043"
+          },
+          {
+            "path": "skills/ui/design-system/templates/design-tokens-starter.json",
+            "sha256": "5444f477b06bab9c72e2cc289d4a9104efef653391c9639972bcb712d5f2d81e"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "dev-builder",
@@ -382,16 +618,60 @@
     {
       "id": "dev-planner",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/dev-planner/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/dev-planner/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/dev-planner",
+        "files": [
+          {
+            "path": "skills/product/dev-planner/SKILL.md",
+            "sha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12"
+          },
+          {
+            "path": "skills/product/dev-planner/references/analysis-dimensions.md",
+            "sha256": "e2507ca2a46b37459d9ed551ecf9cc66f67e0faf91e87ebe9a42cda203d33d73"
+          },
+          {
+            "path": "skills/product/dev-planner/references/analysis-strategy.md",
+            "sha256": "b0f67fadd3a16759bda6fd7b5eff2242edd3b18468389ed73d27b20815420207"
+          },
+          {
+            "path": "skills/product/dev-planner/references/sufficiency-check.md",
+            "sha256": "ad2b8fab8aeb4d027494b487618700aeb6bd90cd960d812c171653b86b984ff6"
+          },
+          {
+            "path": "skills/product/dev-planner/references/workflow-generation.md",
+            "sha256": "a3cb07be7a563ef870c933e99496e9497fcd5cba85aa10310db25e0b5adc6473"
+          },
+          {
+            "path": "skills/product/dev-planner/references/workflow-iteration.md",
+            "sha256": "0015c696a2fde6627dfcb905ce293d48f59fbeea096456dc1ff1f06b63e95ed3"
+          },
+          {
+            "path": "skills/product/dev-planner/templates/current-execution-template.md",
+            "sha256": "305454fe74efe896586463af550f1e4e8dca19aed580f70396e1864056a6e8e1"
+          },
+          {
+            "path": "skills/product/dev-planner/templates/dev-plan-template.md",
+            "sha256": "4523458e0fbfbb2ca802e387339467b76b9aea1e22c94a0bd40c1996914cc7ec"
+          },
+          {
+            "path": "skills/product/dev-planner/templates/phase-detail-template.md",
+            "sha256": "d2eebbe9f39e254e93481fc1db3d2f0805cab3018c6c249570c1dc7c95bd74fd"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "diagnosing-bugs",
@@ -431,30 +711,62 @@
     {
       "id": "distill",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/distill/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/distill/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/distill",
+        "files": [
+          {
+            "path": "skills/ui/distill/SKILL.md",
+            "sha256": "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "doc-sync-guardian",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/doc-sync-guardian/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/doc-sync-guardian/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/doc-sync-guardian",
+        "files": [
+          {
+            "path": "skills/product/doc-sync-guardian/SKILL.md",
+            "sha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c"
+          },
+          {
+            "path": "skills/product/doc-sync-guardian/references/document-surfaces.md",
+            "sha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e"
+          },
+          {
+            "path": "skills/product/doc-sync-guardian/references/markdown-governance.md",
+            "sha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "domain-modeling",
@@ -636,30 +948,102 @@
     {
       "id": "hotspot-governor",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/hotspot-governor/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/hotspot-governor/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/hotspot-governor",
+        "files": [
+          {
+            "path": "skills/product/hotspot-governor/SKILL.md",
+            "sha256": "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "impeccable",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/impeccable/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/impeccable/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/impeccable",
+        "files": [
+          {
+            "path": "skills/ui/impeccable/LICENSE",
+            "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812"
+          },
+          {
+            "path": "skills/ui/impeccable/NOTICE.md",
+            "sha256": "62567465cc0c0ff7cee09091263d413f67be4707910191f92fea3c86008d3623"
+          },
+          {
+            "path": "skills/ui/impeccable/SKILL.md",
+            "sha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/color-and-contrast.md",
+            "sha256": "3113174f4b0047027338a904e2b0c0084b353f0d5a0e2a94e21d8bf0c3e7e05f"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/craft.md",
+            "sha256": "0306588fdc1328ffcc363cd3000582c13d9b1d1032f5c74bfdda3e983d1b4a4e"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/extract.md",
+            "sha256": "373b01edad793cf1a9c65d3af756195eb02d3c75a39893431a2761e267c5cf40"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/interaction-design.md",
+            "sha256": "7f545df683b1897460cdc8d94adfa1410c4c4a23fdb1545fbe95dc6e9af1b486"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/motion-design.md",
+            "sha256": "c35a59b5f795721c914cfccf9b470e89a5010c563cd85ab46a67031531678f3f"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/responsive-design.md",
+            "sha256": "5add44195a42cf7fa82aecadaad79b8875446b930e06d087d73f3722533fd95a"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/spatial-design.md",
+            "sha256": "10c743ee8245fc1be9e8af2b79dd08b0dae19fcde33d46c9730c000d7e13b7cd"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/typography.md",
+            "sha256": "e7f1479d6ee2baea38fd28850395c6baf8799dd44f07fac287f75573c367f167"
+          },
+          {
+            "path": "skills/ui/impeccable/reference/ux-writing.md",
+            "sha256": "0cd5e958d92be6e2331cb199d6ed5d98597aa20ec4922d4c3df56e7753cfc00c"
+          },
+          {
+            "path": "skills/ui/impeccable/scripts/cleanup-deprecated.mjs",
+            "sha256": "b37ab725f73b376b7d2a9c0b0dd976f5d4a4ad76b578d1110eb0c28e908b35a4"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "implement",
@@ -692,16 +1076,28 @@
     {
       "id": "layout",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/layout/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/layout/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/layout",
+        "files": [
+          {
+            "path": "skills/ui/layout/SKILL.md",
+            "sha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "loop-me",
@@ -760,44 +1156,124 @@
     {
       "id": "overdrive",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/overdrive/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/overdrive/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/overdrive",
+        "files": [
+          {
+            "path": "skills/ui/overdrive/SKILL.md",
+            "sha256": "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "polish",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/polish/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/polish/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/polish",
+        "files": [
+          {
+            "path": "skills/ui/polish/SKILL.md",
+            "sha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "product-spec-builder",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/product-spec-builder/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/product-spec-builder/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/product-spec-builder",
+        "files": [
+          {
+            "path": "skills/product/product-spec-builder/SKILL.md",
+            "sha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/conversation-strategy.md",
+            "sha256": "980c3e851e11fbbaf9a107711ca0db051ac348c238c44ee110533dd79046602b"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/output-style.md",
+            "sha256": "d06c5bf14eaf2b6eaf9df268b11370bd79464f55f7769a33abccb2b96c132552"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/requirement-dimensions.md",
+            "sha256": "6c49e3bfb24d84a8f62635ec9a72d199043804c2ca6d835c5fbc9b21499bd04b"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/skill-scope.md",
+            "sha256": "ee2182d6449c9b7002974781a4d41741cd964a767f5676ef57d396f8d3ce90f0"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/startup-check.md",
+            "sha256": "2ab6cec5d8f4f7779aba460663407175c599bbabd8d6888054d4d8a5406dfa35"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/sufficiency-check.md",
+            "sha256": "24ad2316959892a0eff480714ed05f405f496c2072bd907204844b072ff9a945"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/workflow-iteration.md",
+            "sha256": "b875bc2c22a06050152917db129cc0cb9afb6c314bcd1f4f74eee739129edbe2"
+          },
+          {
+            "path": "skills/product/product-spec-builder/references/workflow-zero-to-one.md",
+            "sha256": "370a5d3ce5277cf318450154989d1f49fffa4b1ac29a357766901c5d97ef4be8"
+          },
+          {
+            "path": "skills/product/product-spec-builder/templates/changelog-template.md",
+            "sha256": "d1ce7b849977dec7658f0310973ee4fe42ff2f13900a0984153d91060f5ca8ff"
+          },
+          {
+            "path": "skills/product/product-spec-builder/templates/manual-acceptance-template.md",
+            "sha256": "d26630d81d6541d85bc703c224eadba3a0c6320643d86496f774ad92d44658d7"
+          },
+          {
+            "path": "skills/product/product-spec-builder/templates/product-spec-template.md",
+            "sha256": "6fc5e37f136b69674658f9c4920be0c254b93374ac8d0a937e2d5c9f783a48e8"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "prototype",
@@ -816,44 +1292,144 @@
     {
       "id": "quieter",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/quieter/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/quieter/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/quieter",
+        "files": [
+          {
+            "path": "skills/ui/quieter/SKILL.md",
+            "sha256": "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "release-builder",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/release-builder/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/release-builder/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/release-builder",
+        "files": [
+          {
+            "path": "skills/product/release-builder/SKILL.md",
+            "sha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "requirements-test-designer",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/requirements-test-designer/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/requirements-test-designer/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/requirements-test-designer",
+        "files": [
+          {
+            "path": "skills/product/requirements-test-designer/SKILL.md",
+            "sha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/api-contract-checklist.md",
+            "sha256": "1db9a0f79adc56dbbb1d1de1df0c9f8bfe15758ffa85ff812fe19fedd3154615"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/automation-handoff.md",
+            "sha256": "b64edd38376a5b78054ca4351ad1c3c46521f9880af67cccb62037dfd117740b"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/clarifying-questions.md",
+            "sha256": "839188c33be2c50576e40c0f50902c288f81c806ff9efbe8563bdb0a3fc1b867"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/domain-risk-catalog.md",
+            "sha256": "07a560c7fff6b0254115ac0f73256fe2e0931703eb8a3cc5dcd63834d92e1d2e"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/id-and-traceability.md",
+            "sha256": "abd58d732335831818f171b2f0423ba4a598f45e393d842d05dbb2a74a78e879"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/large-prd-slicing.md",
+            "sha256": "0d8a8da01ac948986e6bdc0e056b7bafdd87764a8d5552febffcf0440b9ecfad"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/output-formats.md",
+            "sha256": "138ce80c0384c076b04ce0b84911b85ebb988457052cb8aeea700295a803be6e"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/production-simulation.md",
+            "sha256": "92de58d39be3479819027dd8372061dec56df9c49b4a9c243d877147a41eabee"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/quality-gate.md",
+            "sha256": "1fb77ee09388cf5fcb0390bc31193ece8d6c2dae2287407f33dd93be0a55bd67"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/test-design-taxonomy.md",
+            "sha256": "eadde96a7232b543cd5dd7e65ff2677d1c1568a30480decd99da4d5644deed6b"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/references/workflow.md",
+            "sha256": "a9e7ec7c9be78a4dde577b9731898911f90f0a97f63ed55c1ef359cfcf240814"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/scripts/simulate-production-suite.mjs",
+            "sha256": "fda1ae8280cf1e3168ca5504810248d3310d60918ca2621ec93944fbbfeee3df"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/scripts/validate-test-suite.mjs",
+            "sha256": "f2ee5652b8642655071961e1ef211a834ce24136611fd8a06cabc054cb1244eb"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/templates/test-case-export-template.csv",
+            "sha256": "1df6952986cb15a716f8f3d2a8ac0fbe2a2039d07016fd32f05ac490f44bdd96"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/templates/test-suite-template.md",
+            "sha256": "dd72545e77f0ede1c633e56d6c61845f7661197b1f71e7322dd9e54d0eb2c4de"
+          },
+          {
+            "path": "skills/product/requirements-test-designer/templates/traceability-matrix-template.csv",
+            "sha256": "a5972c8f61f2352d09020161e8ef7e5729a82a6e8f49a74427c51478decadaae"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "research",
@@ -886,16 +1462,28 @@
     {
       "id": "rule-harvester",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/rule-harvester/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/rule-harvester/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/rule-harvester",
+        "files": [
+          {
+            "path": "skills/product/rule-harvester/SKILL.md",
+            "sha256": "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "scaffold-exercises",
@@ -1135,7 +1723,7 @@
           },
           {
             "path": "governance/sliver-core/references/engineering-execution.md",
-            "sha256": "423b99216f6032f58f22c0e74e2a15f11ce188993a5dd4c82d7492f469989324"
+            "sha256": "0fd2abfae3cfb5995bf3db00a6300f19bac5153a0b49d9aa2bfd28889f22d050"
           },
           {
             "path": "governance/sliver-core/references/execution-liveness.md",
@@ -1389,16 +1977,40 @@
     {
       "id": "test-automation",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/test-automation/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/test-automation/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/test-automation",
+        "files": [
+          {
+            "path": "skills/product/test-automation/SKILL.md",
+            "sha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488"
+          },
+          {
+            "path": "skills/product/test-automation/references/framework-selection.md",
+            "sha256": "fcea2eff7a35ba33dc778bbb9c756414ec687b2adc3bf3fa9fde13e813e1198b"
+          },
+          {
+            "path": "skills/product/test-automation/references/ui-acceptance-harness.md",
+            "sha256": "7ac1607343a51ad714479229edb51a426c76e9461384f331d879f1e27d1e5e97"
+          },
+          {
+            "path": "skills/product/test-automation/references/workflow.md",
+            "sha256": "c6d7ea023cda9befe3d646198b4b91334e50378ae2967bd93d4acc49da306c63"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "to-questionnaire",
@@ -1459,30 +2071,422 @@
     {
       "id": "typeset",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/typeset/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/typeset/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/typeset",
+        "files": [
+          {
+            "path": "skills/ui/typeset/SKILL.md",
+            "sha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "ui-styling",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/ui-styling/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/ui-styling/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/ui-styling",
+        "files": [
+          {
+            "path": "skills/ui/ui-styling/LICENSE.txt",
+            "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+          },
+          {
+            "path": "skills/ui/ui-styling/SKILL.md",
+            "sha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/ArsenalSC-OFL.txt",
+            "sha256": "8ddd61b18ba2c0d0dbe4a691cf5f1a0673f473d02fa0546e67ee88c006aeff6e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/ArsenalSC-Regular.ttf",
+            "sha256": "65e6f89df58f68fd905b3add34a79dd6106aa3b3044df0dad9676fff53d504b9"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BigShoulders-Bold.ttf",
+            "sha256": "b43bcd198b9fdf717dd42aa61a34dba32e01aceaeae659d689afd0ca52c37ea2"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BigShoulders-OFL.txt",
+            "sha256": "fbc746aabf0eb1847dfd92e2efc4596d79fa897d60b8e64062a22f585508fb3f"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BigShoulders-Regular.ttf",
+            "sha256": "18a879fc71978a4447150705caf880a9da3860083c259fd29e6dc03057b6842a"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Boldonse-OFL.txt",
+            "sha256": "45cc82ab4032273c0924025ffcf8f0665a68e1a5955e3f7247e5daf1deeb1326"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Boldonse-Regular.ttf",
+            "sha256": "cc2e540604565c0f90a7d8d46194a2f42fc9c45512cd2e39bf03b50eb68c35a4"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BricolageGrotesque-Bold.ttf",
+            "sha256": "a737b146fe0d77ffe8a86e3cd16700dd431d3b1e420d4fd80e142cd68a1cb50d"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BricolageGrotesque-OFL.txt",
+            "sha256": "0e4f4eb8534bc66a76aca13dd19c1f9731b2008866b29ccff182b764649df9b4"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/BricolageGrotesque-Regular.ttf",
+            "sha256": "972a6d098c9867ae131d0ea99e221e63976b11a19d4b931c2c7ace525674e4f6"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/CrimsonPro-Bold.ttf",
+            "sha256": "48f191e38355c8db100eb3ce157c20f9302a3b9a37b44a660f77ecfce3986609"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/CrimsonPro-Italic.ttf",
+            "sha256": "52318db3526b644e6efa60be0b3ca5a50e40fbe8bd026c261e0aa206f0772267"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/CrimsonPro-OFL.txt",
+            "sha256": "35680d14547b6748b6f362a052a46d22764ce5eccf96e18b74f567bb2ee58114"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/CrimsonPro-Regular.ttf",
+            "sha256": "48fad08cb1917a7b2f2c6fe5135d6c07743a6663cf7631ec4481108aaf081422"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/DMMono-OFL.txt",
+            "sha256": "bfe7842fcb88323e2981e24710c25202677385a8c75fb6a87217b275a0247ae3"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/DMMono-Regular.ttf",
+            "sha256": "f98ada968dc3b6b2c08d3f5caaf266977df0bfe0929372b93df5a06cf2ace450"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/EricaOne-OFL.txt",
+            "sha256": "e0de629968b52255548d5fafcf30b24ff9edae0eda362380755a75816404d0fa"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/EricaOne-Regular.ttf",
+            "sha256": "db1d89e80e33a8a01beaaac7a85df582857d24a43f1e181461aa7ff5d701476a"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/GeistMono-Bold.ttf",
+            "sha256": "75c0828d5c1ee44b9ef9f4df577bf41595ec362e2ea3f1e558590c9e92c7949d"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/GeistMono-OFL.txt",
+            "sha256": "6a873c900f584109b13ae0aaf81d6e3cf0a68751a216b03f7b6c68d547057bb4"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/GeistMono-Regular.ttf",
+            "sha256": "a55c1b51cda4afeab9e471e7947b85a20f7c8831d7e6b1470c1b7fbdc0f0f15e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Gloock-OFL.txt",
+            "sha256": "c0a3f3125ac491ef3d1f09f401be4834c646562f647e44f2bcbc49f0466c656d"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Gloock-Regular.ttf",
+            "sha256": "e86b4ce66dbd3f1f83eee8db99ec96e0da1128c3f53df0e9b3b7472025dfe960"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexMono-Bold.ttf",
+            "sha256": "dbd2a2fb024579438d6400a84e57579bfd2dbe67c306c8fd9fde92a61e4f2eea"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexMono-OFL.txt",
+            "sha256": "5294ce778857e1eb02e830b6ab06435537d38f43055327e73d03a2d4d57d5123"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexMono-Regular.ttf",
+            "sha256": "ab08018ccd276b79fb2c636bb95b9c543598f9d50505fe92506fcb4dae7810cd"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexSerif-Bold.ttf",
+            "sha256": "b8d294e9b5c5a0940f167c3ced0f7ef2e3f57082ca3ff096ef30e86e26c1c159"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexSerif-BoldItalic.ttf",
+            "sha256": "da64b75f4284f53e7b5c71fa190a35b8bf3494fe19f1804c81c3a53340bca570"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexSerif-Italic.ttf",
+            "sha256": "b11f1048745e715a55c9d837b3f10226ca3d78867b7db7251ddad8f98dcf0f38"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/IBMPlexSerif-Regular.ttf",
+            "sha256": "77cd233a2af8dc6b1022faea3bb3b01f3c75af68bcf530cb6aeb15982ff3dbb7"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSans-Bold.ttf",
+            "sha256": "444f85bf1c4b0e1ce1ca624f6be54bcd832207714ccaf4ea99ee531341683bdf"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSans-BoldItalic.ttf",
+            "sha256": "3762f6cef95d6039489ad5ba5787d4c30f17a1ad01e9ac3c816ed69692722a68"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSans-Italic.ttf",
+            "sha256": "78e85858e371b2cb4e18f617c10f0f937c0e12a0887ffee98555b24ed305b3a7"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSans-OFL.txt",
+            "sha256": "bf4dc6d13a8cccd4807133c77a1ee9619a16b92cb23322258725ab6731c2f6e5"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSans-Regular.ttf",
+            "sha256": "a22cb26e48fd79bcb01bf2fc92d36785474dce36d9c544ab0a8868c2657c4a87"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSerif-Italic.ttf",
+            "sha256": "9c86e4d5a47b50224a2463a9eca8535835257c8e85c470c2c6b454b1af6f046e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/InstrumentSerif-Regular.ttf",
+            "sha256": "56ac3be03ac3ba283196b3e77850ab2ffcf56cfb6fd3212c5620109a972f8c99"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Italiana-OFL.txt",
+            "sha256": "8373b11312ace78c4cec2e8f9f6aa9f2330601107dac7bcf899c6f2dbd40c5a5"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Italiana-Regular.ttf",
+            "sha256": "15c4dd6ab8cf4a29ba8826f65edcbe2f6c266c557d34d081f25072dfd5605fd2"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/JetBrainsMono-Bold.ttf",
+            "sha256": "a2349098b9e45419e7bf0e2958d6c4937a049dded37387b08be725be4c7615f3"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/JetBrainsMono-OFL.txt",
+            "sha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/JetBrainsMono-Regular.ttf",
+            "sha256": "b6b1ff4ddefe36d7f2a6174e1d001cab374e594519ee9049af028d577b64c5f5"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Jura-Light.ttf",
+            "sha256": "c891a381df056b2c4dfe85841e911bf45da0890fa21a7b2692cbe5ea1f505e1e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Jura-Medium.ttf",
+            "sha256": "c72965cb732a92872643819fd1734128238583cc36b116313859137a51d3368a"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Jura-OFL.txt",
+            "sha256": "eaf9bdb675f6d87e5feb88199ab3ea581d3bd2082f426e384fa9c394576d7260"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/LibreBaskerville-OFL.txt",
+            "sha256": "55959eef5b0c3b2e3c1c7631b8ff0f9447d75de20f29cfa7db5bcfb026763343"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/LibreBaskerville-Regular.ttf",
+            "sha256": "2101302538d9e88adb679031c04623e4578b5745e89566284fd2c508d79acae0"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Lora-Bold.ttf",
+            "sha256": "7d74015e950c2fb66519c7295b8155621d22200ae2ca2a4c6b43ce3c490cac87"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Lora-BoldItalic.ttf",
+            "sha256": "152f87e71f5ddb60d5c57ecd9132807c947e65c42977193c9164e7c5a6690081"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Lora-Italic.ttf",
+            "sha256": "be627e595184e8afe521f08da0607eee613f1997d423bc8dadc5798995581377"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Lora-OFL.txt",
+            "sha256": "62e37a82d3f1ef2a70712885fa8b3144b65fd144d8e748d6196b690a354d792c"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Lora-Regular.ttf",
+            "sha256": "7ed00e7c9cdf16ab7e2fd2361fe45d4f0b61263cd60aae398b27b7ee08108827"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/NationalPark-Bold.ttf",
+            "sha256": "69ac4c301c4a7233c6e602d12a92c54d7967b575f4449951c45ce773f7acff53"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/NationalPark-OFL.txt",
+            "sha256": "81c6c71d83b5b45d7344f96df12bb4a2477a5b092a9144757ee1d0f50f855175"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/NationalPark-Regular.ttf",
+            "sha256": "a477338b7e18308d476650dfe31235ef86a883572665e56ffb5fb80f82009b58"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/NothingYouCouldDo-OFL.txt",
+            "sha256": "7c2a6970584ddad04919816163746f83b378078015899b18468b40f05e9ce128"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/NothingYouCouldDo-Regular.ttf",
+            "sha256": "d866f985896d3280f4fce72db7e17302c24a0c1fdb0699b6b5ed3af14f944d57"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Outfit-Bold.ttf",
+            "sha256": "6654b93d21301ec61887d3cedd6c11d9df1b1dfb63f9cf45ac7995f6e2235ab1"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Outfit-OFL.txt",
+            "sha256": "1945b62cd76da9a3051a1660dde72afaa64ffc2666d30e7a78356d651653ba2f"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Outfit-Regular.ttf",
+            "sha256": "f24945365147c9e783e91d8649959b59be6b00c9ee4ecd2f6b33afbb2dd871fe"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/PixelifySans-Medium.ttf",
+            "sha256": "38397504f71c122b03d234ea6f55118e3d5bdbddffd82bedddbd7755d3b3be82"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/PixelifySans-OFL.txt",
+            "sha256": "7f54d1d9f1ae1ba9f2722f978145f90324fea34ca3c2304b3a29cfa96ac6037e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/PoiretOne-OFL.txt",
+            "sha256": "2eaf541f7eb8b512e4c757a5212060abf5b6edfef230e9d7640bf736b315c33a"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/PoiretOne-Regular.ttf",
+            "sha256": "9cf265b139648b36b6c0afdfeb0bf27f7e66db9a16094bc40f644d8da05bc318"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/RedHatMono-Bold.ttf",
+            "sha256": "7ef48353f4be5ddb90f000f6fad48f2b62b3e8c27d9818d8d45ff46c201065e0"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/RedHatMono-OFL.txt",
+            "sha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/RedHatMono-Regular.ttf",
+            "sha256": "452fe826871b37539f5212b20c87cf30f82f58dd2741f1c96edd1dcbdc0db6b4"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Silkscreen-OFL.txt",
+            "sha256": "6b849745119bbe85ec01fd080c9cd50234da9f52ac6e48b55d1a424a0c4d7ca9"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Silkscreen-Regular.ttf",
+            "sha256": "49567408600809e25147e9225ac4f37f410e2df45a750696c45027531fb65f1b"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/SmoochSans-Medium.ttf",
+            "sha256": "dd76e6e77cce82f827a8654cd906e9ce58f3aaf78adda63c4a7f655b8ecb41f0"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/SmoochSans-OFL.txt",
+            "sha256": "74c9c4eb88e891483e1b7bc54780b452cbf4f4df66d4e71881d7569aa2130749"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Tektur-Medium.ttf",
+            "sha256": "52bbe8c9b057b3d2da4eeace31a524b1ea26a1375ae34319cf6900ccc57a4c82"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Tektur-OFL.txt",
+            "sha256": "3f1466cb5438f31782eeb6e895f3a655bc4d090e24263e331f555357d1cb734e"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/Tektur-Regular.ttf",
+            "sha256": "162e1b36c4718c5b051b36c971ad7e50d341944f35618f480422ebbe72988f98"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/WorkSans-Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/WorkSans-BoldItalic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/WorkSans-Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/WorkSans-OFL.txt",
+            "sha256": "ace8c22a3326318b54e67c3691857929634205533f454a70ef5a3473ddb2e2ba"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/WorkSans-Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/YoungSerif-OFL.txt",
+            "sha256": "cdcb8039606b40a027a6d24586ec62d5fe29c701343d82a048c829cb28a3dd28"
+          },
+          {
+            "path": "skills/ui/ui-styling/canvas-fonts/YoungSerif-Regular.ttf",
+            "sha256": "f8dc08f77abad753a00670af70756a8ace938e5c3f0b770f4f4c2071c4bd8fc6"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/canvas-design-system.md",
+            "sha256": "2d436f68537a045de77edac427143cd13f706d3466f34f4fd57f78011bb9644e"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/shadcn-accessibility.md",
+            "sha256": "7ee019437f4a75d4a748e2d5cef6b95fb57b450bfb16a79a49e3c2e8e9664cc9"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/shadcn-components.md",
+            "sha256": "9361c3ce6f34837f790619d3cb3b7b0bc7a8839c94fa3eb9d27630cf19134c49"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/shadcn-theming.md",
+            "sha256": "2790b19da95cc36035d3c7e33d16eed3cb1c16a15b639d9f9122d15089917307"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/tailwind-customization.md",
+            "sha256": "95861c24650f1356e24c46f8d451be84a958daf09908a5d89d1fe81933a8d7b5"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/tailwind-responsive.md",
+            "sha256": "8d00ae620df26daea4623c7bf996d6e612e09d359305fcfa2b40cab757ed840c"
+          },
+          {
+            "path": "skills/ui/ui-styling/references/tailwind-utilities.md",
+            "sha256": "aba1c40ef84f43beea142ae310371e332541f39d973df90a71f1854823effda1"
+          },
+          {
+            "path": "skills/ui/ui-styling/scripts/requirements.txt",
+            "sha256": "b62ef815fabeca1bb7920f3b9f3bb7354c8142cb9ce622cf8c79a213d17bd824"
+          },
+          {
+            "path": "skills/ui/ui-styling/scripts/shadcn_add.py",
+            "sha256": "4f84e9c097948d4619fc0eeff597cfac529d0f3c8b4e22cae07016070253e33b"
+          },
+          {
+            "path": "skills/ui/ui-styling/scripts/tailwind_config_gen.py",
+            "sha256": "fd0e7b96fdb0d24b9ac85e87aed1dae6a2399b6c508809b3db71a32696584511"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "reason": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
       "sourceSha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "ui-system-guardian",
@@ -1501,16 +2505,176 @@
     {
       "id": "ui-ux-pro-max",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/ui-ux-pro-max/SKILL.md",
-      "bundle": null,
+      "path": "skills/ui/ui-ux-pro-max/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/ui/ui-ux-pro-max",
+        "files": [
+          {
+            "path": "skills/ui/ui-ux-pro-max/SKILL.md",
+            "sha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/_sync_all.py",
+            "sha256": "b540b3a4f87598ae29048b3cceae1fc17b39b629aee2cbe5c802ffc7b48abf6d"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/app-interface.csv",
+            "sha256": "2a17ef810dab715ce1f339861817a8fbe3ccc38142b70517301e874803e838ac"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/charts.csv",
+            "sha256": "ebb565308115f955791b0431797a89d9b3587c25d5babb9428d10712c4924817"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/colors.csv",
+            "sha256": "69ee8c1147b269599d20ca418bdd6f32563a9aa2d962fb9a9b8dec66bf7b1ba4"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/design.csv",
+            "sha256": "6f0ae42f16b3cbfa3f07050268387557859ff666e2651b1b82763f099d724b3f"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/draft.csv",
+            "sha256": "e190c796b707858a5436dc4c27f9ee9bb6618014ca73f533e423abe5ce9e4d06"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/google-fonts.csv",
+            "sha256": "2c03a3cd134d126bd9d6a7dc2a6360dc5272219ad6df3eb9315b031f806e1487"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/icons.csv",
+            "sha256": "f376c29fb4df37b4bdb366a5aa70cb211ba3dd8b435390aaa03152a64b07d2e8"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/landing.csv",
+            "sha256": "080cedbcd61ff8ec9520f33929baa76bee9589e783f83b2f8d824a466b6a46d7"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/products.csv",
+            "sha256": "9fd9e776ba847cf44c1ea78f95fe5e33b2c56bb7e186e3cfff9c49bc7fcb691b"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/react-performance.csv",
+            "sha256": "904c8afcda229629545912dde0e8ac37503757131f0169f80b016f1f58c4fd3f"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/angular.csv",
+            "sha256": "dd7cc2a2b34cd8f0508bd05b067545e7a44f7724440c432d491d92a61a8fb6c1"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/astro.csv",
+            "sha256": "ad18dae3ab6d148d37d144592df80dc1825b6c9e86d9d2d68fdda77434206a37"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/flutter.csv",
+            "sha256": "fe36d404c799781e8ba6e9a8179b45799ed5126a545528550cd2eb0f2346e8c5"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/html-tailwind.csv",
+            "sha256": "7aef38e75c53559470afcfa91580a9917ca8b7dbf8b92110389e23e93703ac52"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/jetpack-compose.csv",
+            "sha256": "6c8fd4b0391c342c12b0af15610cd5becbeccaef0bbe8dcfc01d928c3195d93e"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/laravel.csv",
+            "sha256": "50e11e60a64b30f329af25ae71f4b8bbdb43bafc1865451b74f9f540a88964d5"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/nextjs.csv",
+            "sha256": "e828ccc04843742f52f545a068e8a9ab0d2b97c0e771f7e93bf0cef74da05554"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/nuxt-ui.csv",
+            "sha256": "05d6e74501b2b6a636faed32450622759f49a5bcafad971f5f4e7eba0eb7be71"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/nuxtjs.csv",
+            "sha256": "f7a3f2d9542856d00199f85c6c023b7c284cc698e2e6e12d61afce2edacb24d6"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/react-native.csv",
+            "sha256": "a08ca77fcf6b6d9531982dce465366296013bfcf12d2938ac72ad57cf0c4f085"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/react.csv",
+            "sha256": "e5624ab41d33427d88e41d07581ce4eca59b37b36ab72a6ad43a9c8e2d0a1c72"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/shadcn.csv",
+            "sha256": "395c2e415ef6f48a474acccdc8eb2c7258a6ed751a5037ba171a2d8823e02ded"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/svelte.csv",
+            "sha256": "71af52d64f266c88070b91dbbaa900c2f8074b6baae9f35eaea6ba9cec6fd803"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/swiftui.csv",
+            "sha256": "c9c2d2510f8e66281a2514e8dd0125a6b653b9ef53a71281b5e7dfe003d5b569"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/threejs.csv",
+            "sha256": "f1c05f8f269fc4784170c837f4ff43b50042f00bbd6ba7dbef2896081a052544"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/stacks/vue.csv",
+            "sha256": "c2724915d3c11cd67263f25896cff721f787a0fdd8326002d31e9f5806dfd8f8"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/styles.csv",
+            "sha256": "9b5089dcde8999333b36878252a255cc3bacbb2fe7b836c76cc7f7aa2abb643d"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/typography.csv",
+            "sha256": "dbea262a54e3bfa2e6c3b15989a365d5ef4c43349316aff46635e82ca825adce"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/ui-reasoning.csv",
+            "sha256": "41976082ecae1100da937c949215dc6694393e03f3c2a7444dd92a9edb43cb11"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/data/ux-guidelines.csv",
+            "sha256": "1870ee048f2a2bdd60709f8f7adf7f3b6dcad560bc005c8b2915a8ac8639820d"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/references/cli-usage.md",
+            "sha256": "f653f4d25579d435e7514aef5bcd7a7b0d7a3214d83b854fedb15b33523bffeb"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/references/professional-ui-checklist.md",
+            "sha256": "81dff7776c700ac5857fd60dc778ed9276b9737e899b7a02321a50fc92be29be"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/references/quick-reference.md",
+            "sha256": "5f9989ea39d0aac0802e28b4f42fb002869dbf36bac1c27f0238cc2a26595788"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/scripts/core.py",
+            "sha256": "772b4d567c7a948c5d4a10343473b4123fec04238d250c9ffce31d0733f752c0"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/scripts/design_system.py",
+            "sha256": "1ec8ccf7b5bb2ea3613979bb579116f89cd967d6a660ae2e254f23dcc79098b8"
+          },
+          {
+            "path": "skills/ui/ui-ux-pro-max/scripts/search.py",
+            "sha256": "f5cd217ae49290446ba727231df4d6086e9c1fc0c0a0a0ed08a0c6456b533ae6"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "ui",
-      "readiness": "source-only",
-      "status": "source-only-ui",
-      "reason": "UI 来源专用；许可证台账已合并，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-ui",
+      "reason": "已验收 UI 设计实现能力；进入 runtime 静态投影",
       "sourceSha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "vibe-code-review",
@@ -1795,7 +2959,9 @@
     "acceptedStatuses": [
       "control-plane",
       "accepted-primitive",
-      "accepted-checker"
+      "accepted-checker",
+      "accepted-product",
+      "accepted-ui"
     ],
     "runtimeExcludedStatuses": [
       "adapter-candidate",

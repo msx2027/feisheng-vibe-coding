@@ -4,24 +4,51 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 10、待启用 7、来源专用 57、阻塞 0、兼容/排除 8。
+统计：共 **82** 项来源技能 —— 可用 37、待启用 7、来源专用 30、阻塞 0、兼容/排除 8。
 
 ## 现在可用（进入 runtime 静态投影）
 
-仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker` 可进入 runtime；其余一律排除。
+仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker`, `accepted-product`, `accepted-ui` 可进入 runtime；其余一律排除。
 
 | id | 来源 | 域 | 状态 | 可写（writeAuthority） | runtime 单位 | 文件 |
 |---|---|---|---|---|---|---|
+| `adapt` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `animate` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `architecture-foundation` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
 | `audit` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `bolder` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `brand` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 17 |
+| `bug-fixer` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
 | `code-review` | mattpocock-skills | checker | accepted-checker | none | `directory` | 1 |
 | `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
+| `colorize` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `critique` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 4 |
+| `delight` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `design-brief-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
+| `design-system` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 12 |
+| `dev-planner` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 9 |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
+| `distill` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `doc-sync-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
 | `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `directory` | 3 |
 | `harden` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `hotspot-governor` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
+| `impeccable` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 13 |
+| `layout` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `optimize` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
+| `overdrive` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `polish` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `product-spec-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 12 |
+| `quieter` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `release-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
+| `requirements-test-designer` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 17 |
+| `rule-harvester` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
 | `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `explicit` | 75 |
 | `tdd` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
+| `test-automation` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 4 |
+| `typeset` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `ui-styling` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 93 |
+| `ui-ux-pro-max` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 38 |
 
 runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
 
@@ -54,10 +81,8 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
   - 原因：仅限结构化事件调用；需宿主事件契约与独立审查
 - **primitive**（10）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`wizard`、`writing-for-agents`
   - 原因：来源专用工程原语；未验收
-- **product-or-checker**（18）：`architecture-foundation`、`bug-fixer`、`codebase-memory-scout`、`design-brief-builder`、`design-maker`、`dev-builder`、`dev-planner`、`doc-sync-guardian`、`hotspot-governor`、`product-spec-builder`、`release-builder`、`requirements-test-designer`、`rule-harvester`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`test-automation`、`ui-system-guardian`
+- **product-or-checker**（7）：`codebase-memory-scout`、`design-maker`、`dev-builder`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`、`ui-system-guardian`
   - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke
-- **ui**（16）：`adapt`、`animate`、`bolder`、`brand`、`colorize`、`delight`、`design-system`、`distill`、`impeccable`、`layout`、`overdrive`、`polish`、`quieter`、`typeset`、`ui-styling`、`ui-ux-pro-max`
-  - 原因：UI 来源专用；许可证台账已合并，待宿主行为 smoke
 - **unreviewed**（3）：`beginner-flow-guide`、`clarify`、`shape`
   - 原因：尚未完成语义审查
 - **user-tool**（6）：`grill-me`、`grill-with-docs`、`handoff`、`teach`、`to-questionnaire`、`wait-what`

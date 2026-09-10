@@ -1,0 +1,21 @@
+# UI Styling Skill Dependencies
+# Python 3.10+ required
+
+# No Python package dependencies - uses only standard library
+
+# Testing dependency (dev)
+# pytest 9.0.3 fixes GHSA-6w46-j5rx-g56g / PYSEC-2026-1845.
+# The suite does not use pytest-cov or pytest-mock, so they are intentionally
+# omitted to keep the CI supply chain minimal.
+pytest==9.0.3
+
+# Note: This skill works with shadcn/ui and Tailwind CSS
+# Requires Node.js and package managers:
+#   - Node.js 18+: https://nodejs.org/
+#   - npm (comes with Node.js)
+#
+# The shadcn/ui CLI must be pinned and installed per project. Replace X.Y.Z with
+# an approved exact version, commit package.json plus the lock file, then install:
+#   npm install --save-dev --save-exact shadcn@X.Y.Z
+# This skill resolves node_modules/shadcn/package.json and executes its contained
+# JavaScript bin entry with Node; it never invokes npx or a .cmd shim.

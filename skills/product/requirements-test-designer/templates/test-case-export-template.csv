@@ -1,0 +1,4 @@
+TC-ID,标题,关联需求,Scenario-ID,优先级,测试类型,前置条件,测试数据,步骤,预期结果,是否可自动化,自动化建议,人工验收状态,覆盖状态,变更状态
+TC-001,有效用户提交订单后状态变为待审批,REQ-001,SCN-001,P1,happy path,订单处于 draft 且用户具备提交权限,orderId=ORD-1001; amount=99.99,"1. 以有效用户登录
+2. 打开订单 ORD-1001
+3. 点击提交","接口返回 200；订单状态变为 pending_approval；刷新详情页后状态仍为 pending_approval。",是,API contract + E2E smoke,不适用,covered,new
