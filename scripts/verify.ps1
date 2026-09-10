@@ -303,16 +303,15 @@ try {
         Add-Result -Step '发布 NOTICE 门禁' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 5) Vibe Hook 适配器保持禁用
-    #    该测试脚本在 Validate != 0 或 Invoke != 3 时会 throw，因此“不抛异常”即通过。
-    #    （不能用输出哨兵：测试内部用 [Console]::WriteLine，不进入 PowerShell 输出流。）
+    # 5) Vibe Hook 适配器安全契约（v2：仅经验沉淀两事件启用，治理门禁事件保持禁用）
+    #    测试覆盖：契约不变量、未启用事件 exit 3、SessionStart 只读、UserPromptSubmit 白名单追加 + 幂等、写入边界。
     try {
         $null = Invoke-Child -Script (Join-Path $repoRoot 'tests/test-vibe-hook-adapter.ps1') -Arguments @{
             RepositoryRoot = $repoRoot
         }
-        Add-Result -Step 'Vibe Hook 适配器保持禁用' -Passed $true
+        Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $true
     } catch {
-        Add-Result -Step 'Vibe Hook 适配器保持禁用' -Passed $false -Detail $_.Exception.Message
+        Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $false -Detail $_.Exception.Message
     }
 
     # 6) 静态投影 Build + Validate（两个宿主投影 + 宿主中性投影：共享根安装形态，决策 #4）

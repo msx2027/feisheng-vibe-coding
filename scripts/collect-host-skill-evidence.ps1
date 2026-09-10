@@ -85,6 +85,24 @@ foreach ($match in [regex]::Matches($text, '(?m)^- ([^\r\n]+?): .*?\(file: (r\d+
 $claudeDirs = Get-DirectoryNames -Root $ClaudeSkillsRoot
 $codexDirs = Get-DirectoryNames -Root $CodexSkillsRoot
 
+# 统一包内的嵌套技能（skills/<group>/<id>）：顶层目录查不到，用 bundle 相对路径判定
+$bundleRoot = Join-Path $ClaudeSkillsRoot 'feisheng-vibe-coding'
+$bundleIsInstalled = Test-Path -LiteralPath $bundleRoot -PathType Container
+
+function Test-InstalledInSharedBundle {
+    param(
+        [Parameter(Mandatory = $true)][string]$BundleRoot,
+        [Parameter(Mandatory = $true)][bool]$BundleInstalled,
+        [Parameter(Mandatory = $true)][string]$DirName
+    )
+    if (-not $BundleInstalled) { return $false }
+    foreach ($group in @('checker', 'product', 'ui', 'engineering')) {
+        $candidate = Join-Path $BundleRoot ('skills/' + $group + '/' + $DirName)
+        if (Test-Path -LiteralPath $candidate -PathType Container) { return $true }
+    }
+    return $false
+}
+
 # 3) 逐记录判定
 $records = @()
 $summary = @{ modelVisible = 0; installedUserInvokedOnly = 0; notInstalled = 0; unknown = 0 }
@@ -98,9 +116,13 @@ foreach ($record in @($catalog.records | Sort-Object id)) {
     $modelInvocable = ([string]$record.invocation -ne 'user-invoked')
 
     $evidence = 'unknown'
+    $inBundle = Test-InstalledInSharedBundle -BundleRoot $bundleRoot -BundleInstalled $bundleIsInstalled -DirName $dir
     if ($visible.Count -gt 0) {
         $evidence = 'model-visible'
         $summary.modelVisible++
+    } elseif ($inBundle) {
+        $evidence = 'installed-in-shared-bundle'
+        $summary.installedUserInvokedOnly++
     } elseif ($inClaude -or $inCodex) {
         $evidence = if ($modelInvocable) { 'installed-but-not-model-visible' } else { 'installed-user-invoked-only' }
         if ($evidence -eq 'installed-user-invoked-only') { $summary.installedUserInvokedOnly++ } else { $summary.unknown++ }
@@ -117,6 +139,7 @@ foreach ($record in @($catalog.records | Sort-Object id)) {
         readiness = [string]$record.readiness
         status = [string]$record.status
         installedInSharedRoot = $inClaude
+        installedInSharedBundle = $inBundle
         installedInCodexRoot = $inCodex
         modelVisibleInCodex = ($visible.Count -gt 0)
         visibleAs = @($visible | ForEach-Object { [ordered]@{ entryName = $_.entryName; root = $_.root; rootPath = $_.rootPath; path = $_.pathInRoot } })

@@ -1,26 +1,26 @@
 {
   "schema": "feisheng-host-discovery-evidence/v1",
   "owner": "provenance",
-  "capturedAt": "2026-09-10T11:39:40.8051406Z",
+  "capturedAt": "2026-09-10T19:32:55.0829002Z",
   "method": "codex debug prompt-input (model-visible skill list) + host skill directory presence",
   "caveat": "skills with disable-model-invocation are intentionally absent from the model-visible list; they are evidenced by installation instead",
   "codexSkillRoots": {
+    "r4": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/remotion/d416fd5a/skills",
+    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime",
+    "r0": "F:/skiils宸ュ叿/_adapters/shared/skills",
+    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
     "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills",
     "r2": "C:/Users/MSX/.codex/plugins/cache/basic-memory/codex/0.23.2/skills",
     "r7": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.903.11726/skills",
-    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
-    "r1": "C:/Users/MSX/.codex/skills/.system",
-    "r4": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/remotion/d416fd5a/skills",
-    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime",
-    "r0": "F:/skiils宸ュ叿/_adapters/shared/skills"
+    "r1": "C:/Users/MSX/.codex/skills/.system"
   },
   "counts": {
     "catalogRecords": 82,
-    "modelVisible": 62,
+    "modelVisible": 60,
     "installedUserInvokedOnly": 14,
-    "notInstalled": 6,
+    "notInstalled": 8,
     "otherOrUnknown": 0,
-    "parsedModelVisibleEntries": 203
+    "parsedModelVisibleEntries": 231
   },
   "records": [
     {
@@ -28,12 +28,19 @@
       "source": "vibe-coding-skills",
       "dirName": "adapt",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "adapt",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/adapt/SKILL.md"
+        },
         {
           "entryName": "adapt",
           "root": "r0",
@@ -48,12 +55,19 @@
       "source": "vibe-coding-skills",
       "dirName": "animate",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "animate",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/animate/SKILL.md"
+        },
         {
           "entryName": "animate",
           "root": "r0",
@@ -68,12 +82,19 @@
       "source": "vibe-coding-skills",
       "dirName": "architecture-foundation",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "architecture-foundation",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/architecture-foundation/SKILL.md"
+        },
         {
           "entryName": "architecture-foundation",
           "root": "r0",
@@ -91,6 +112,7 @@
       "readiness": "compatibility",
       "status": "compatibility-selector",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -101,9 +123,10 @@
       "source": "vibe-coding-skills",
       "dirName": "audit",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -111,7 +134,7 @@
           "entryName": "audit",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "audit/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/checker/audit/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -124,6 +147,7 @@
       "readiness": "source-only",
       "status": "source-only-unreviewed",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -141,12 +165,19 @@
       "source": "vibe-coding-skills",
       "dirName": "bolder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "bolder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/bolder/SKILL.md"
+        },
         {
           "entryName": "bolder",
           "root": "r0",
@@ -161,12 +192,19 @@
       "source": "vibe-coding-skills",
       "dirName": "brand",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "brand",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/brand/SKILL.md"
+        },
         {
           "entryName": "brand",
           "root": "r0",
@@ -181,12 +219,19 @@
       "source": "vibe-coding-skills",
       "dirName": "bug-fixer",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "bug-fixer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/bug-fixer/SKILL.md"
+        },
         {
           "entryName": "bug-fixer",
           "root": "r0",
@@ -204,6 +249,7 @@
       "readiness": "source-only",
       "status": "source-only-unreviewed",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -224,6 +270,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -234,9 +281,10 @@
       "source": "mattpocock-skills",
       "dirName": "code-review",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-checker",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -244,7 +292,7 @@
           "entryName": "code-review",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "code-review/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/code-review/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -256,15 +304,16 @@
       "invocation": "model-invoked-or-user-invoked",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
         {
-          "entryName": "mattpocock-skills:codebase-design",
+          "entryName": "codebase-design",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "codebase-design/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/codebase-design/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -277,6 +326,7 @@
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -294,12 +344,19 @@
       "source": "vibe-coding-skills",
       "dirName": "colorize",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "colorize",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/colorize/SKILL.md"
+        },
         {
           "entryName": "colorize",
           "root": "r0",
@@ -314,9 +371,10 @@
       "source": "vibe-coding-skills",
       "dirName": "critique",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -324,7 +382,7 @@
           "entryName": "critique",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "critique/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/checker/critique/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -334,12 +392,19 @@
       "source": "vibe-coding-skills",
       "dirName": "delight",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "delight",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/delight/SKILL.md"
+        },
         {
           "entryName": "delight",
           "root": "r0",
@@ -354,12 +419,19 @@
       "source": "vibe-coding-skills",
       "dirName": "design-brief-builder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "design-brief-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/design-brief-builder/SKILL.md"
+        },
         {
           "entryName": "design-brief-builder",
           "root": "r0",
@@ -377,6 +449,7 @@
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -394,12 +467,19 @@
       "source": "vibe-coding-skills",
       "dirName": "design-system",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "design-system",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/design-system/SKILL.md"
+        },
         {
           "entryName": "design-system",
           "root": "r0",
@@ -414,12 +494,19 @@
       "source": "vibe-coding-skills",
       "dirName": "dev-builder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "dev-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/dev-builder/SKILL.md"
+        },
         {
           "entryName": "dev-builder",
           "root": "r0",
@@ -434,12 +521,19 @@
       "source": "vibe-coding-skills",
       "dirName": "dev-planner",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "dev-planner",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/dev-planner/SKILL.md"
+        },
         {
           "entryName": "dev-planner",
           "root": "r0",
@@ -456,15 +550,16 @@
       "invocation": "model-invoked-or-user-invoked",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
         {
-          "entryName": "mattpocock-skills:diagnosing-bugs",
+          "entryName": "diagnosing-bugs",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "diagnosing-bugs/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/diagnosing-bugs/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -474,12 +569,19 @@
       "source": "vibe-coding-skills",
       "dirName": "distill",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "distill",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/distill/SKILL.md"
+        },
         {
           "entryName": "distill",
           "root": "r0",
@@ -494,12 +596,19 @@
       "source": "vibe-coding-skills",
       "dirName": "doc-sync-guardian",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "doc-sync-guardian",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/doc-sync-guardian/SKILL.md"
+        },
         {
           "entryName": "doc-sync-guardian",
           "root": "r0",
@@ -516,15 +625,16 @@
       "invocation": "model-invoked-or-user-invoked",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
         {
-          "entryName": "mattpocock-skills:domain-modeling",
+          "entryName": "domain-modeling",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "domain-modeling/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/domain-modeling/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -537,6 +647,7 @@
       "readiness": "source-only",
       "status": "event-only-source-only",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -557,6 +668,7 @@
       "readiness": "source-only",
       "status": "event-only-source-only",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -577,6 +689,7 @@
       "readiness": "source-only",
       "status": "event-only-source-only",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -597,6 +710,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -617,6 +731,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -630,6 +745,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -643,6 +759,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -663,6 +780,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -673,9 +791,10 @@
       "source": "vibe-coding-skills",
       "dirName": "harden",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -683,7 +802,7 @@
           "entryName": "harden",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "harden/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/checker/harden/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -693,12 +812,19 @@
       "source": "vibe-coding-skills",
       "dirName": "hotspot-governor",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "hotspot-governor",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/hotspot-governor/SKILL.md"
+        },
         {
           "entryName": "hotspot-governor",
           "root": "r0",
@@ -713,12 +839,19 @@
       "source": "vibe-coding-skills",
       "dirName": "impeccable",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "impeccable",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/impeccable/SKILL.md"
+        },
         {
           "entryName": "impeccable",
           "root": "r0",
@@ -736,6 +869,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -749,6 +883,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -759,12 +894,19 @@
       "source": "vibe-coding-skills",
       "dirName": "layout",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "layout",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/layout/SKILL.md"
+        },
         {
           "entryName": "layout",
           "root": "r0",
@@ -782,6 +924,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -795,6 +938,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -812,9 +956,10 @@
       "source": "vibe-coding-skills",
       "dirName": "optimize",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -822,7 +967,7 @@
           "entryName": "optimize",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "optimize/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/checker/optimize/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -832,12 +977,19 @@
       "source": "vibe-coding-skills",
       "dirName": "overdrive",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "overdrive",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/overdrive/SKILL.md"
+        },
         {
           "entryName": "overdrive",
           "root": "r0",
@@ -852,12 +1004,19 @@
       "source": "vibe-coding-skills",
       "dirName": "polish",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "polish",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/polish/SKILL.md"
+        },
         {
           "entryName": "polish",
           "root": "r0",
@@ -872,12 +1031,19 @@
       "source": "vibe-coding-skills",
       "dirName": "product-spec-builder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "product-spec-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/product-spec-builder/SKILL.md"
+        },
         {
           "entryName": "product-spec-builder",
           "root": "r0",
@@ -895,6 +1061,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -912,12 +1079,19 @@
       "source": "vibe-coding-skills",
       "dirName": "quieter",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "quieter",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/quieter/SKILL.md"
+        },
         {
           "entryName": "quieter",
           "root": "r0",
@@ -932,12 +1106,19 @@
       "source": "vibe-coding-skills",
       "dirName": "release-builder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "release-builder",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/release-builder/SKILL.md"
+        },
         {
           "entryName": "release-builder",
           "root": "r0",
@@ -952,12 +1133,19 @@
       "source": "vibe-coding-skills",
       "dirName": "requirements-test-designer",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "requirements-test-designer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/requirements-test-designer/SKILL.md"
+        },
         {
           "entryName": "requirements-test-designer",
           "root": "r0",
@@ -975,6 +1163,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -995,6 +1184,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1012,12 +1202,19 @@
       "source": "vibe-coding-skills",
       "dirName": "rule-harvester",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "rule-harvester",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/rule-harvester/SKILL.md"
+        },
         {
           "entryName": "rule-harvester",
           "root": "r0",
@@ -1035,6 +1232,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1055,6 +1253,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1068,6 +1267,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1088,6 +1288,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1101,6 +1302,7 @@
       "readiness": "source-only",
       "status": "source-only-unreviewed",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1121,6 +1323,7 @@
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1140,18 +1343,12 @@
       "invocation": "model-invoked-or-user-invoked",
       "readiness": "runtime",
       "status": "control-plane",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": true,
-      "visibleAs": [
-        {
-          "entryName": "sliver-vibe-coding",
-          "root": "r0",
-          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "sliver-vibe-coding/SKILL.md"
-        }
-      ],
-      "evidence": "model-visible"
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
     },
     {
       "id": "target-constitution-setup",
@@ -1161,6 +1358,7 @@
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1181,6 +1379,7 @@
       "readiness": "source-only",
       "status": "source-only-product-or-checker",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1198,17 +1397,18 @@
       "source": "mattpocock-skills",
       "dirName": "tdd",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
         {
-          "entryName": "mattpocock-skills:tdd",
+          "entryName": "tdd",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "tdd/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/tdd/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -1221,6 +1421,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1231,12 +1432,19 @@
       "source": "vibe-coding-skills",
       "dirName": "test-automation",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "test-automation",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/test-automation/SKILL.md"
+        },
         {
           "entryName": "test-automation",
           "root": "r0",
@@ -1254,6 +1462,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1267,6 +1476,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1280,6 +1490,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1293,6 +1504,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1303,12 +1515,19 @@
       "source": "vibe-coding-skills",
       "dirName": "typeset",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "typeset",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/typeset/SKILL.md"
+        },
         {
           "entryName": "typeset",
           "root": "r0",
@@ -1323,12 +1542,19 @@
       "source": "vibe-coding-skills",
       "dirName": "ui-styling",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "ui-styling",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/ui-styling/SKILL.md"
+        },
         {
           "entryName": "ui-styling",
           "root": "r0",
@@ -1343,12 +1569,19 @@
       "source": "vibe-coding-skills",
       "dirName": "ui-system-guardian",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
+      "readiness": "accepted",
+      "status": "accepted-product",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "ui-system-guardian",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/ui-system-guardian/SKILL.md"
+        },
         {
           "entryName": "ui-system-guardian",
           "root": "r0",
@@ -1363,12 +1596,19 @@
       "source": "vibe-coding-skills",
       "dirName": "ui-ux-pro-max",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-ui",
+      "readiness": "accepted",
+      "status": "accepted-ui",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
+        {
+          "entryName": "ui-ux-pro-max",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/ui/ui-ux-pro-max/SKILL.md"
+        },
         {
           "entryName": "ui-ux-pro-max",
           "root": "r0",
@@ -1385,7 +1625,8 @@
       "invocation": "user-invoked",
       "readiness": "source-only",
       "status": "source-only-checker",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1393,7 +1634,7 @@
           "entryName": "code-review",
           "root": "r0",
           "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "code-review/SKILL.md"
+          "path": "feisheng-vibe-coding/skills/engineering/code-review/SKILL.md"
         }
       ],
       "evidence": "model-visible"
@@ -1405,18 +1646,12 @@
       "invocation": "user-invoked",
       "readiness": "compatibility",
       "status": "compatibility-alias",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": true,
-      "visibleAs": [
-        {
-          "entryName": "vibe-coding-skills",
-          "root": "r0",
-          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
-          "path": "vibe-coding-skills/SKILL.md"
-        }
-      ],
-      "evidence": "model-visible"
+      "modelVisibleInCodex": false,
+      "visibleAs": [],
+      "evidence": "not-installed"
     },
     {
       "id": "wait-what",
@@ -1426,6 +1661,7 @@
       "readiness": "source-only",
       "status": "source-only-user-tool",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1439,6 +1675,7 @@
       "readiness": "candidate",
       "status": "adapter-candidate",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1452,6 +1689,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1472,6 +1710,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1485,6 +1724,7 @@
       "readiness": "source-only",
       "status": "source-only-primitive",
       "installedInSharedRoot": true,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": true,
       "visibleAs": [
@@ -1505,6 +1745,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
@@ -1518,6 +1759,7 @@
       "readiness": "excluded",
       "status": "excluded-in-progress",
       "installedInSharedRoot": false,
+      "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleAs": [],
