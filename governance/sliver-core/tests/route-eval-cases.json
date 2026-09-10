@@ -1,0 +1,1150 @@
+{
+  "evaluation_scope": "route_contract_corpus_only",
+  "requires_live_model_validation": true,
+  "route_projection_contract": {
+    "owner_file": "references/routes-index.md",
+    "catalog_schema": "sliver-route-catalog/v1",
+    "projection_schema": "sliver-route-projection/v1",
+    "lens_catalog_schema": "sliver-lens-catalog/v1",
+    "lens_projection_schema": "sliver-lens-projection/v1",
+    "exact_purpose_cell": true,
+    "exact_load_cell": true,
+    "measure_actual_json_bytes": true,
+    "independent_oracle_required": true
+  },
+  "question_contract": {
+    "owner_file": "references/question-bank.md",
+    "required_terms": [
+      "Ask at most 1-3 blocking questions at a time",
+      "Never ask a question whose answer is already discoverable",
+      "The AI decides whether durable truth, design tokens, architecture documentation, official-document research, and a validation method are required",
+      "ask exactly one unresolved blocking product fact at a time"
+    ],
+    "forbidden_patterns": [
+      "Ask 3-5 blocking questions",
+      "是否需要我先起草实施真源",
+      "是否允许我先定义一套最小 design tokens",
+      "是否允许我查官方 API 文档",
+      "你希望我用截图.*运行命令来证明"
+    ]
+  },
+  "required_skill_contract_terms": [
+    "This skill is the single top-level owner for AI-assisted software-project advancement",
+    "smallest useful current truth",
+    "Select exactly one primary route",
+    "zero or more evidence-backed conditional lenses",
+    "Collect fresh verification",
+    "does not force every task through the full lifecycle",
+    "not a substring classifier",
+    "Any request to add, remove, modify, fix, refactor, connect, configure, or continue project behavior",
+    "A clear first-time error, compiler/test failure, or local bug uses `开发执行`",
+    "keep `开发执行` primary and load the relevant conditional lenses",
+    "A product action described as \"用户提交资料\" is normal `开发执行`, not Git work",
+    "Route names are stable internal identifiers, not commands, user-facing syntax, or literal trigger terms",
+    "They are not user routes, alternate entry points, or keyword triggers"
+  ],
+  "forbidden_primary_route_labels": [
+    "任务风险分级",
+    "功能开工评估",
+    "收费权益设计",
+    "第三方接入",
+    "接口安全",
+    "配置安全",
+    "执行子阶段"
+  ],
+  "expected_lens_impacts": {
+    "frontend-design": "Analysis, audit, explanation, recommendation, design, implementation, or validation of a user-visible interaction, journey, layout, navigation, responsive state, accessibility, design-system owner, UI prototype, or design-to-code result.",
+    "data-model": "Stored objects, fields, relationships, status, migration, transaction, audit, or retention rules change.",
+    "backend-api": "Business rules, service ownership, API contracts, jobs, callbacks, or server-side enforcement change.",
+    "identity-permission": "Login, roles, visibility, ownership, admin behavior, cross-user access, or allowed actions change.",
+    "monetization-entitlement": "Money, paid value, plan, order, subscription, entitlement, paid quota, refund, cancel, expiry, invoice, or paid access changes.",
+    "third-party-provider": "The chosen design depends on an external API, SDK, OAuth flow, webhook, payment provider, map, AI, storage, messaging, analytics, app store, or cloud capability.",
+    "security-impact": "Identity, permission, ownership, untrusted input, sensitive data, writes, secrets, uploads, public exposure, resource limits, or release settings may change.",
+    "deployment-release": "Runtime topology, environment, jobs, domain, public/private exposure, migration, rollback, monitoring, quota, or production cost may change."
+  },
+  "forbidden_lens_impact_patterns": [
+    "\\b(apply|run|load|use)\\b.{0,40}\\b(each|every|all|any)\\b.{0,30}\\b(change|task|request|development)\\b",
+    "\\b(each|every|all|any)\\b.{0,30}\\b(change|task|request|development)\\b.{0,40}\\b(apply|run|load|use)\\b",
+    "(每次|每个|任何|所有|全部).{0,20}(改动|任务|请求|开发).{0,20}(执行|应用|加载|使用)",
+    "mandatory by default|default mandatory|always mandatory|默认(必须|强制|执行|加载|应用)"
+  ],
+  "forbidden_competing_entry_patterns": [
+    "(separate|independent|alternate|parallel|competing).{0,60}(user )?(route|entry|workflow)",
+    "(单独|独立|并列|平行|竞争).{0,30}(用户)?(入口|路由|流程)",
+    "(use|run|enter|start).{0,100}(first|before).{0,100}(then|continue).{0,100}(normal development|开发执行|development)",
+    "(先|优先).{0,80}(再|然后).{0,80}(开发执行|正常开发|继续开发)"
+  ],
+  "cases": [
+    {
+      "name": "ordinary-typescript-error",
+      "user": "修这个 TypeScript 报错，只改相关文件",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "D1",
+        "targeted verification"
+      ]
+    },
+    {
+      "name": "ordinary-local-ui-tweak",
+      "user": "把这个按钮颜色和间距调一下",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/task-risk-gates.md"
+      ],
+      "expected_lenses": [
+        "frontend-design"
+      ],
+      "required_reference_terms": [
+        "semantic owner"
+      ]
+    },
+    {
+      "name": "read-only-ux-audit-loads-judgment-owner",
+      "user": "只读审计当前图书馆房间预约页为什么难用，先分析访客完成一次预约的完整流程，不改文件也不做原型",
+      "expected_entry": "项目体检",
+      "expected_files": [
+        "references/routes-intake.md",
+        "references/project-flow.md"
+      ],
+      "expected_lenses": [
+        "frontend-design"
+      ],
+      "required_reference_terms": [
+        "UX Judgment Contract",
+        "user-recognized objects",
+        "journey boundaries"
+      ]
+    },
+    {
+      "name": "ux-explanation-loads-mature-pattern-owner",
+      "user": "解释这个照片冲印订单完成后的交互为什么反人类，只分析，不修改",
+      "expected_entry": "项目体检",
+      "expected_files": [
+        "references/routes-intake.md",
+        "references/project-flow.md"
+      ],
+      "expected_lenses": [
+        "frontend-design"
+      ],
+      "required_reference_terms": [
+        "mature same-class pattern",
+        "System-owned complexity",
+        "observed"
+      ]
+    },
+    {
+      "name": "project-aware-ui-prototype-generation",
+      "user": "参考当前项目给我设计一张新的设置页原型并归档",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md"
+      ],
+      "expected_lenses": [
+        "frontend-design"
+      ],
+      "required_reference_terms": [
+        "Project UI Context Gate",
+        "Prototype Truth Gate"
+      ]
+    },
+    {
+      "name": "approved-design-to-code-implementation",
+      "user": "把已确认的页面设计图一比一还原成项目代码",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md"
+      ],
+      "expected_lenses": [
+        "frontend-design"
+      ],
+      "required_reference_terms": [
+        "Design Decomposition Gate",
+        "Design Fidelity Check"
+      ]
+    },
+    {
+      "name": "ordinary-single-file-bug",
+      "user": "这个函数有 bug，只改这个文件",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "one bounded result"
+      ]
+    },
+    {
+      "name": "ordinary-test-failure",
+      "user": "有一个单测失败，帮我修一下",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "targeted verification"
+      ]
+    },
+    {
+      "name": "readme-copy-is-lightweight",
+      "user": "帮我改 README 文案和海报位置",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "D0",
+        "Do not materialize stage truth for `D0`"
+      ]
+    },
+    {
+      "name": "new-project-intake",
+      "user": "我想从零做一个客户管理系统",
+      "expected_entry": "立项",
+      "expected_files": [
+        "references/routes-intake.md",
+        "references/question-bank.md"
+      ],
+      "required_reference_terms": [
+        "Project summary",
+        "MVP core flow"
+      ]
+    },
+    {
+      "name": "existing-project-takeover",
+      "user": "我接手了一个 AI 写了一半的项目，帮我看看现在该先做什么",
+      "expected_entry": "接管项目",
+      "expected_files": [
+        "references/project-intake.md"
+      ]
+    },
+    {
+      "name": "beginner-plain-takeover",
+      "user": "帮我接管一下这个项目，先别乱改",
+      "expected_entry": "接管项目",
+      "expected_files": [
+        "references/project-intake.md"
+      ]
+    },
+    {
+      "name": "startup-rescue",
+      "user": "项目本地跑不起来，不知道怎么启动",
+      "expected_entry": "环境启动",
+      "expected_files": [
+        "references/routes-rescue.md"
+      ],
+      "required_reference_terms": [
+        "first-run baseline"
+      ]
+    },
+    {
+      "name": "repeated-ai-fix-loop",
+      "user": "AI 改来改去还是不行，同一个错误反复出现",
+      "expected_entry": "报错救援",
+      "expected_files": [
+        "references/routes-rescue.md"
+      ],
+      "required_reference_terms": [
+        "first failing boundary"
+      ]
+    },
+    {
+      "name": "ai-debt-audit",
+      "user": "项目越来越乱，好多重复文件，都是 mock 假数据",
+      "expected_entry": "AI债务体检",
+      "expected_files": [
+        "references/routes-rescue.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Mock/fake data"
+      ]
+    },
+    {
+      "name": "messy-dev-docs",
+      "user": "dev-docs 没有，开发资料不知道放哪",
+      "expected_entry": "整理开发资料",
+      "expected_files": [
+        "references/project-intake.md",
+        "references/project-flow.md"
+      ]
+    },
+    {
+      "name": "tech-stack-with-missing-intake",
+      "user": "帮我选技术栈，但我还没写立项资料",
+      "expected_entry": "技术选型",
+      "expected_files": [
+        "references/tech-stack.md"
+      ],
+      "required_reference_terms": [
+        "intake"
+      ]
+    },
+    {
+      "name": "tech-stack-platform-capability-gate",
+      "user": "我要做一个网页，但后面还要操作本机软件和系统自动化",
+      "expected_entry": "技术选型",
+      "expected_files": [
+        "references/tech-stack.md"
+      ],
+      "required_reference_terms": [
+        "Capability Platform Gate",
+        "Do not finalize a browser-only web stack"
+      ]
+    },
+    {
+      "name": "tech-stack-frontend-design-system-gate",
+      "user": "前端想用低约束样式工具和零散组件片段快速搭页面",
+      "expected_entry": "技术选型",
+      "expected_files": [
+        "references/tech-stack.md"
+      ],
+      "required_reference_terms": [
+        "Frontend Design-System Gate",
+        "not a complete design system"
+      ]
+    },
+    {
+      "name": "tech-stack-single-runtime-default",
+      "user": "这个后端一种语言就能做完，要不要拆成两个语言服务",
+      "expected_entry": "技术选型",
+      "expected_files": [
+        "references/tech-stack.md"
+      ],
+      "required_reference_terms": [
+        "Default to one main backend runtime",
+        "single-runtime route"
+      ]
+    },
+    {
+      "name": "tech-stack-cross-language-truth-required",
+      "user": "如果必须跨语言接一个本地自动化服务，技术栈怎么定",
+      "expected_entry": "技术选型",
+      "expected_files": [
+        "references/tech-stack.md"
+      ],
+      "required_reference_terms": [
+        "Cross-Language Architecture Truth",
+        "contract tests"
+      ]
+    },
+    {
+      "name": "feature-entry-standard",
+      "user": "我要开始做会员资料编辑功能",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/task-risk-gates.md"
+      ],
+      "expected_lenses": [
+        "frontend-design",
+        "data-model",
+        "backend-api",
+        "identity-permission",
+        "security-impact"
+      ],
+      "required_reference_terms": [
+        "Activate only evidence-backed protected lanes"
+      ]
+    },
+    {
+      "name": "beginner-generic-feature-addition",
+      "user": "我要加一个功能",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "Activate only evidence-backed protected lanes"
+      ]
+    },
+    {
+      "name": "beginner-named-feature-addition",
+      "user": "我要加一个项目报名功能",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/task-risk-gates.md"
+      ],
+      "expected_lenses": [
+        "frontend-design",
+        "data-model",
+        "backend-api",
+        "security-impact"
+      ],
+      "required_reference_terms": [
+        "Activate only evidence-backed protected lanes"
+      ]
+    },
+    {
+      "name": "beginner-feature-with-plain-verb",
+      "user": "我想做个功能，让用户能编辑资料",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/task-risk-gates.md"
+      ],
+      "expected_lenses": [
+        "frontend-design",
+        "data-model",
+        "backend-api",
+        "identity-permission",
+        "security-impact"
+      ],
+      "required_reference_terms": [
+        "Activate only evidence-backed protected lanes"
+      ]
+    },
+    {
+      "name": "payment-entitlement",
+      "user": "我要加会员付费和订阅",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "data-model",
+        "backend-api",
+        "identity-permission",
+        "monetization-entitlement",
+        "third-party-provider",
+        "security-impact",
+        "deployment-release"
+      ],
+      "required_reference_terms": [
+        "business state machine",
+        "official provider documentation"
+      ]
+    },
+    {
+      "name": "third-party-api",
+      "user": "我要接入微信支付 webhook",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "data-model",
+        "backend-api",
+        "monetization-entitlement",
+        "third-party-provider",
+        "security-impact",
+        "deployment-release"
+      ],
+      "required_reference_terms": [
+        "official"
+      ]
+    },
+    {
+      "name": "role-change-stays-in-development",
+      "user": "给用户增加一个管理员角色",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/engineering-execution.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "data-model",
+        "backend-api",
+        "identity-permission",
+        "security-impact"
+      ],
+      "required_reference_terms": [
+        "Professionally complete the design",
+        "data ownership"
+      ]
+    },
+    {
+      "name": "visibility-rule-stays-in-development",
+      "user": "改成只有作者本人才能看到这些内容",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "backend-api",
+        "identity-permission",
+        "security-impact"
+      ],
+      "required_reference_terms": [
+        "cross-user"
+      ]
+    },
+    {
+      "name": "avatar-upload-stays-in-development",
+      "user": "让用户可以上传自己的头像",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "frontend-design",
+        "data-model",
+        "backend-api",
+        "security-impact"
+      ],
+      "conditional_lenses": [
+        "third-party-provider"
+      ],
+      "forbidden_unconditional_lenses": [
+        "third-party-provider"
+      ],
+      "required_reference_terms": [
+        "uploads"
+      ]
+    },
+    {
+      "name": "notification-change-stays-in-development",
+      "user": "用户提交以后自动通知管理员",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "backend-api",
+        "security-impact"
+      ],
+      "conditional_lenses": [
+        "third-party-provider",
+        "deployment-release"
+      ],
+      "forbidden_unconditional_lenses": [
+        "third-party-provider"
+      ],
+      "required_reference_terms": [
+        "jobs"
+      ]
+    },
+    {
+      "name": "ambiguous-points-do-not-force-monetization",
+      "user": "我要给项目加一个积分功能",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/engineering-execution.md"
+      ],
+      "expected_lenses": [
+        "data-model",
+        "backend-api",
+        "security-impact"
+      ],
+      "conditional_lenses": [
+        "monetization-entitlement"
+      ],
+      "forbidden_unconditional_lenses": [
+        "monetization-entitlement",
+        "third-party-provider"
+      ],
+      "required_reference_terms": [
+        "Intent Confirmation Gate",
+        "plain-language options"
+      ]
+    },
+    {
+      "name": "refund-rule-stays-in-development",
+      "user": "把退款规则改成审核通过后再退",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "expected_lenses": [
+        "data-model",
+        "backend-api",
+        "identity-permission",
+        "monetization-entitlement",
+        "security-impact"
+      ],
+      "conditional_lenses": [
+        "third-party-provider",
+        "deployment-release"
+      ],
+      "required_reference_terms": [
+        "refund"
+      ]
+    },
+    {
+      "name": "git-privacy",
+      "user": "这个项目没有 git，内部资料不能推送",
+      "expected_entry": "git保护",
+      "expected_files": [
+        "references/routes-git.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "dual-repo"
+      ]
+    },
+    {
+      "name": "git-remote-config-not-push",
+      "user": "这是远程仓库地址，先配置远程地址，只配置不要推送",
+      "expected_entry": "git保护",
+      "expected_files": [
+        "references/routes-git.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "Configuring a remote is not the same as pushing"
+      ]
+    },
+    {
+      "name": "git-rollback-audit-before-destructive-action",
+      "user": "这个功能跑偏了，先帮我看看能不能回滚，恢复到旧版本",
+      "expected_entry": "git保护",
+      "expected_files": [
+        "references/routes-git.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "Rollback Audit Before Destructive Git"
+      ]
+    },
+    {
+      "name": "git-mixed-commit-revert-intent-classification",
+      "user": "我要删掉批量导入功能，但它好像和几个页面在同一个 commit 里，能不能 revert 这个 commit",
+      "expected_entry": "git保护",
+      "expected_files": [
+        "references/routes-git.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "Mixed Commit Revert Gate",
+        "revert intent classification"
+      ]
+    },
+    {
+      "name": "constitution-audit",
+      "user": "帮我看看 AGENTS.md 这份宪法有没有用",
+      "expected_entry": "项目宪法",
+      "expected_operation": "audit",
+      "expected_files": [
+        "references/routes-constitution.md",
+        "references/agent-constitution.md"
+      ],
+      "required_reference_terms": [
+        "shallow template"
+      ]
+    },
+    {
+      "name": "release-readiness",
+      "user": "上线前帮我检查能不能发布",
+      "expected_entry": "发布准备",
+      "expected_files": [
+        "references/routes-release.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "rollback"
+      ]
+    },
+    {
+      "name": "bootstrap-template-materialization",
+      "user": "我想从零开始一个新项目，先帮我把项目真源搭起来",
+      "expected_entry": "立项",
+      "expected_files": [
+        "references/routes-intake.md",
+        "references/project-templates.md"
+      ],
+      "required_reference_terms": [
+        "assets/project-bootstrap"
+      ]
+    },
+    {
+      "name": "adoption-template-materialization",
+      "user": "项目已经写了一半，没有可靠 dev-docs，先接管并搭真源",
+      "expected_entry": "接管项目",
+      "expected_files": [
+        "references/project-intake.md",
+        "references/project-templates.md"
+      ],
+      "required_reference_terms": [
+        "assets/project-adoption"
+      ]
+    },
+    {
+      "name": "nontrivial-bug-evidence-ladder",
+      "user": "这个依赖相关错误同一个错误反复出现，别再乱猜了",
+      "expected_entry": "报错救援",
+      "expected_files": [
+        "references/routes-rescue.md"
+      ],
+      "required_reference_terms": [
+        "Git introduction truth",
+        "hypothesis table"
+      ]
+    },
+    {
+      "name": "session-derived-api-address-owner-chaos",
+      "user": "为什么会打到5173？api接口一定是只有一个真源，接口请求也是封装好的吧？为啥会出现接口地址一下这个一下那个的情况？",
+      "expected_entry": "报错救援",
+      "expected_files": [
+        "references/routes-rescue.md"
+      ],
+      "required_reference_terms": [
+        "first failing boundary",
+        "API/network/CORS"
+      ]
+    },
+    {
+      "name": "stage-truth-guardrail",
+      "user": "没有实施真源，先生成阶段计划并检查 guardrail",
+      "expected_entry": "开发执行",
+      "expected_operation": "阶段计划",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/project-flow.md"
+      ],
+      "required_reference_terms": [
+        "check_project_guardrails.py"
+      ]
+    },
+    {
+      "name": "project-health-audit",
+      "user": "项目整体看看，告诉我现在该先做什么",
+      "expected_entry": "项目体检",
+      "expected_operation": "audit",
+      "expected_delivery_kind": "audit",
+      "expected_files": [
+        "references/project-intake.md",
+        "references/project-flow.md",
+        "references/routes-intake.md"
+      ],
+      "required_reference_terms": [
+        "Risk lane table"
+      ]
+    },
+    {
+      "name": "beginner-next-step-uncertainty",
+      "user": "这个项目下一步干啥，我现在要干嘛",
+      "expected_entry": "项目体检",
+      "expected_files": [
+        "references/project-intake.md",
+        "references/project-flow.md",
+        "references/routes-intake.md"
+      ],
+      "required_reference_terms": [
+        "Risk lane table"
+      ]
+    },
+    {
+      "name": "project-decomposition",
+      "user": "功能拆分一下，帮我拆大阶段",
+      "expected_entry": "拆分",
+      "expected_files": [
+        "references/routes-intake.md",
+        "references/project-flow.md"
+      ],
+      "required_reference_terms": [
+        "Function list",
+        "large stages"
+      ]
+    },
+    {
+      "name": "constitution-generation",
+      "user": "生成 AGENTS.md，帮我写项目宪法",
+      "expected_entry": "项目宪法",
+      "expected_operation": "create",
+      "expected_files": [
+        "references/routes-constitution.md",
+        "references/agent-constitution.md",
+        "references/agent-constitution-template.md"
+      ],
+      "required_reference_terms": [
+        "owner map"
+      ]
+    },
+    {
+      "name": "session-derived-design-docs-agent-constitution",
+      "user": "撰写设计文档和agent宪法",
+      "expected_entry": "项目宪法",
+      "expected_operation": "create",
+      "expected_files": [
+        "references/routes-constitution.md",
+        "references/agent-constitution.md",
+        "references/agent-constitution-template.md"
+      ],
+      "required_reference_terms": [
+        "Project evidence pack",
+        "template-clause mapping"
+      ]
+    },
+    {
+      "name": "frontend-skeleton",
+      "user": "前端骨架怎么搭，UI 不统一",
+      "expected_entry": "前端骨架",
+      "expected_files": [
+        "references/frontend-skeleton.md"
+      ],
+      "required_reference_terms": [
+        "Token-first"
+      ]
+    },
+    {
+      "name": "database-design",
+      "user": "数据库怎么设计，字段怎么定",
+      "expected_entry": "数据库设计",
+      "expected_files": [
+        "references/database-design.md"
+      ],
+      "required_reference_terms": [
+        "schema or migration"
+      ]
+    },
+    {
+      "name": "backend-boundary",
+      "user": "后端要不要做，业务规则放哪",
+      "expected_entry": "后端工程",
+      "expected_operation": "boundary",
+      "expected_files": [
+        "references/backend-boundary.md"
+      ],
+      "required_reference_terms": [
+        "Whether backend is needed"
+      ]
+    },
+    {
+      "name": "backend-architecture",
+      "user": "后端架构怎么设计，后端怎么分层",
+      "expected_entry": "后端工程",
+      "expected_operation": "architecture",
+      "expected_files": [
+        "references/routes-backend.md",
+        "references/backend-boundary.md",
+        "references/backend-skeleton.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Framework-first rules"
+      ]
+    },
+    {
+      "name": "backend-skeleton",
+      "user": "后端骨架怎么搭，先做最小后端骨架",
+      "expected_entry": "后端工程",
+      "expected_operation": "skeleton",
+      "expected_files": [
+        "references/backend-skeleton.md"
+      ],
+      "required_reference_terms": [
+        "Do not write backend skeleton code until backend architecture truth exists"
+      ]
+    },
+    {
+      "name": "backend-skeleton-validation",
+      "user": "验收一下后端骨架，接口返回不统一",
+      "expected_entry": "后端工程",
+      "expected_operation": "acceptance",
+      "expected_files": [
+        "references/routes-backend.md",
+        "references/backend-skeleton.md"
+      ],
+      "required_reference_terms": [
+        "runtime evidence"
+      ]
+    },
+    {
+      "name": "interface-security",
+      "user": "接口安不安全，权限会不会乱",
+      "expected_entry": "安全审计",
+      "expected_files": [
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "security boundary table"
+      ]
+    },
+    {
+      "name": "config-security",
+      "user": "配置安全检查一下，密钥会不会泄露",
+      "expected_entry": "安全审计",
+      "expected_files": [
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Secrets hard-coded"
+      ]
+    },
+    {
+      "name": "full-project-security-audit",
+      "user": "帮我全面检查一下这个项目的安全问题，先不要改代码",
+      "expected_entry": "安全审计",
+      "expected_files": [
+        "references/security.md",
+        "references/engineering-execution.md",
+        "references/routes-validation.md",
+        "references/routes-release.md"
+      ],
+      "required_reference_terms": [
+        "Full Security Audit",
+        "Read-only Audit Boundary",
+        "audit does not authorize remediation"
+      ]
+    },
+    {
+      "name": "execute-substage",
+      "user": "开始写代码，执行当前子阶段",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/engineering-execution.md",
+        "references/git-and-delivery.md",
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "Only implement the named sub-stage",
+        "Reasoning Gate"
+      ]
+    },
+    {
+      "name": "beginner-continue-work",
+      "user": "这个项目继续做下去",
+      "expected_entry": "开发执行",
+      "expected_files": [
+        "references/routes-feature.md",
+        "references/project-flow.md",
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "Requested product result",
+        "named sub-stage"
+      ]
+    },
+    {
+      "name": "stage-validation",
+      "user": "验收一下，看看这个阶段做完了吗",
+      "expected_entry": "验收",
+      "expected_operation": "stage",
+      "expected_files": [
+        "references/routes-validation.md",
+        "references/project-flow.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "Stage operation",
+        "structural closeout only"
+      ]
+    },
+    {
+      "name": "user-acceptance-walkthrough",
+      "user": "我怎么确认这个功能对不对，给我验收步骤",
+      "expected_entry": "用户验收陪跑",
+      "expected_files": [
+        "references/beginner-failure-modes.md",
+        "references/routes-validation.md"
+      ],
+      "required_reference_terms": [
+        "plain product checks"
+      ]
+    },
+    {
+      "name": "beginner-acceptance-question",
+      "user": "我怎么知道这个功能对不对",
+      "expected_entry": "用户验收陪跑",
+      "expected_files": [
+        "references/beginner-failure-modes.md",
+        "references/routes-validation.md"
+      ],
+      "required_reference_terms": [
+        "plain product checks"
+      ]
+    },
+    {
+      "name": "beginner-does-not-know-how-to-accept",
+      "user": "我不会验收，你告诉我点哪里看",
+      "expected_entry": "用户验收陪跑",
+      "expected_files": [
+        "references/beginner-failure-modes.md",
+        "references/routes-validation.md"
+      ],
+      "required_reference_terms": [
+        "plain product checks"
+      ]
+    },
+    {
+      "name": "quality-validation",
+      "user": "质量过了吗，帮我验收一下",
+      "expected_entry": "验收",
+      "expected_operation": "quality",
+      "expected_files": [
+        "references/routes-validation.md",
+        "references/engineering-execution.md",
+        "references/security.md",
+        "references/git-and-delivery.md",
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "Validation is invalid",
+        "Verification Matrix"
+      ]
+    },
+    {
+      "name": "deployment-route",
+      "user": "部署到哪里，用什么平台上线",
+      "expected_entry": "部署路线",
+      "expected_files": [
+        "references/beginner-failure-modes.md",
+        "references/routes-release.md",
+        "references/tech-stack.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "deployment-route decisions"
+      ]
+    },
+    {
+      "name": "beginner-real-use-without-deployment-truth",
+      "user": "还没确定部署平台，也没有上线方案，这个项目现在能不能给用户用",
+      "expected_entry": "部署路线",
+      "expected_files": [
+        "references/beginner-failure-modes.md",
+        "references/routes-release.md",
+        "references/tech-stack.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "deployment-route decisions"
+      ]
+    },
+    {
+      "name": "beginner-real-use-with-accepted-deployment-route",
+      "user": "部署路线已经确认，现在准备正式上线，这个项目能不能给用户用",
+      "expected_entry": "发布准备",
+      "expected_files": [
+        "references/routes-release.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Pre-release checklist"
+      ]
+    },
+    {
+      "name": "beginner-real-use-quality-only",
+      "user": "这次不涉及部署或上线，只想确认当前功能质量能不能给用户用",
+      "expected_entry": "验收",
+      "expected_operation": "quality",
+      "expected_files": [
+        "references/routes-validation.md",
+        "references/engineering-execution.md",
+        "references/security.md",
+        "references/git-and-delivery.md",
+        "references/task-risk-gates.md"
+      ],
+      "required_reference_terms": [
+        "reliable enough for real use"
+      ]
+    },
+    {
+      "name": "beginner-privacy-risk",
+      "user": "我怕把隐私传上去了，会不会泄露",
+      "expected_entry": "安全审计",
+      "expected_files": [
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Secrets hard-coded"
+      ]
+    },
+    {
+      "name": "drift-control",
+      "user": "感觉跑偏了，和文档不一致",
+      "expected_entry": "开发执行",
+      "expected_operation": "防漂移",
+      "expected_files": [
+        "references/project-flow.md",
+        "references/engineering-execution.md"
+      ],
+      "required_reference_terms": [
+        "Drift Control",
+        "Drift Lock Hard Stops"
+      ]
+    },
+    {
+      "name": "context-handoff-new-window",
+      "user": "上下文太长，给我一份新窗口继续的交接",
+      "expected_entry": "上下文交接",
+      "expected_files": [
+        "references/context-handoff.md",
+        "references/git-and-delivery.md"
+      ],
+      "required_reference_terms": [
+        "copy-paste-ready",
+        "Drift warnings"
+      ]
+    },
+    {
+      "name": "context-handoff-another-agent",
+      "user": "我要交给另一个 AI 继续，给我一份交接",
+      "expected_entry": "上下文交接",
+      "expected_files": [
+        "references/context-handoff.md"
+      ],
+      "required_reference_terms": [
+        "Git status",
+        "Validation evidence"
+      ]
+    },
+    {
+      "name": "whole-project-code-review",
+      "user": "帮我把整个项目的代码 review 一遍，看看哪里写得有问题，先别改",
+      "expected_entry": "代码审计",
+      "expected_files": [
+        "references/audit-artifact.md",
+        "references/engineering-execution.md"
+      ],
+      "required_reference_terms": [
+        "Three-Pass Audit",
+        "Finding Schema",
+        "never remediation authorization"
+      ]
+    },
+    {
+      "name": "module-maintainability-audit",
+      "user": "订单模块越来越难改了，审一下它的可维护性和 owner 放得对不对",
+      "expected_entry": "代码审计",
+      "expected_files": [
+        "references/audit-artifact.md",
+        "references/engineering-execution.md"
+      ],
+      "required_reference_terms": [
+        "根因",
+        "最佳方案与理由",
+        "修复涉及代码点"
+      ]
+    },
+    {
+      "name": "code-audit-touching-permission-boundary",
+      "user": "审一下评论模块的代码，我担心里面权限判断写得不对",
+      "expected_entry": "代码审计",
+      "expected_files": [
+        "references/audit-artifact.md",
+        "references/security.md"
+      ],
+      "required_reference_terms": [
+        "Finding Schema",
+        "security boundary table"
+      ]
+    },
+    {
+      "name": "code-audit-against-design-truth",
+      "user": "对照设计文档审一遍支付模块的实现，看看跟需求和设计有没有对不上的地方",
+      "expected_entry": "代码审计",
+      "expected_files": [
+        "references/audit-artifact.md",
+        "references/engineering-execution.md"
+      ],
+      "required_reference_terms": [
+        "requirement and design truth",
+        "Deep audit"
+      ]
+    }
+  ]
+}

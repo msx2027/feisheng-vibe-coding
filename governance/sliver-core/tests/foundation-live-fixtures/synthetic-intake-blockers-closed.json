@@ -1,0 +1,20 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_intake_blockers_closed",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["notes/idea-a.md", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "empty_directory",
+    "initial_blocking_product_facts": ["primary user", "first complete workflow"],
+    "answers_are_supplied_one_turn_at_a_time": true,
+    "remaining_nonblocking_unknowns": ["optional report format", "future integrations"],
+    "materialization_authorization": "not yet supplied"
+  }
+}

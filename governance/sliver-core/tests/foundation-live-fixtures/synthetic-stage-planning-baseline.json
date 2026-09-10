@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_stage_planning_baseline",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["src/core/record-owner.mjs", "src/adapters/record-adapter.mjs", "tests/record-owner.test.mjs", "dev-docs/stages/stage-01.md", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "existing",
+    "current_code_owners": ["src/core/record-owner.mjs", "src/adapters/record-adapter.mjs"],
+    "current_tests": ["tests/record-owner.test.mjs"],
+    "previous_stage_closeout": "dev-docs/stages/stage-01.md",
+    "previous_stage_status": "completed_with_evidence",
+    "fresh_baseline_command": "python3 verify_workspace.py",
+    "future_stage_plan_present": false
+  }
+}

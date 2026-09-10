@@ -1,0 +1,13 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "themed-responsive",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "prototype_status": "approved",
+    "themes": ["light", "dark"],
+    "applicable_surfaces": ["wide app shell", "compact app shell"],
+    "semantic_tokens": true,
+    "business_order_locked": true
+  }
+}

@@ -1,0 +1,2477 @@
+{
+  "evaluation_scope": "static_execution_contract_corpus",
+  "prompts_are_not_executed": true,
+  "live_model_behavior_is_not_evaluated": true,
+  "required_files": [
+    "references/development-execution-core.md",
+    "references/execution-liveness.md",
+    "references/engineering-execution.md",
+    "references/plan-artifact.md",
+    "references/task-decision-contract.md",
+    "references/truth-resolution.md",
+    "references/formal-materialization.md",
+    "references/testing-strategy.md",
+    "references/testing-execution-gates.md",
+    "references/studio-execution.md",
+    "references/architecture-patterns.md",
+    "scripts/evaluate_foundation_live_behavior.py",
+    "scripts/runtime_governance_contract.py",
+    "tests/foundation-live-behavior-cases.json",
+    "tests/foundation-live-result-schema.json",
+    "references/truth-capture.md",
+    "references/audit-artifact.md"
+  ],
+  "development_loading_contract": {
+    "route": "开发执行",
+    "d0_max_bytes": 67000,
+    "d0_required_refs": [
+      "references/development-execution-core.md",
+      "references/task-risk-gates.md",
+      "references/testing-strategy.md",
+      "references/effect-recovery-gates.md"
+    ],
+    "d0_forbidden_refs": [
+      "references/routes-feature.md",
+      "references/engineering-execution.md",
+      "references/task-decision-contract.md",
+      "references/testing-execution-gates.md"
+    ],
+    "bounded_d1_max_bytes": 74000,
+    "bounded_d1_required_refs": [
+      "references/development-execution-core.md",
+      "references/task-risk-gates.md",
+      "references/testing-strategy.md",
+      "references/effect-recovery-gates.md",
+      "references/testing-execution-gates.md"
+    ],
+    "bounded_d1_forbidden_refs": [
+      "references/routes-feature.md",
+      "references/engineering-execution.md"
+    ],
+    "bounded_d1_compact_marker": "Eligible bounded `D1` stays on this base",
+    "bounded_d1_escalation_marker": "Add `references/routes-feature.md` and `references/engineering-execution.md` only for `D2`/`D3`, a `D1` that fails bounded eligibility",
+    "bounded_d1_required_terms": [
+      "Bounded D1 Eligibility",
+      "one established owner",
+      "RED before production",
+      "fresh verification",
+      "Exit Bounded D1"
+    ],
+    "bounded_d1_lens": "frontend-design",
+    "bounded_d1_lens_compact_marker": "Eligible bounded `D1` UI bugs stay on the route's compact owners",
+    "bounded_d1_lens_forbidden_refs": [
+      "references/routes-feature.md",
+      "references/engineering-execution.md"
+    ],
+    "bounded_d1_include_lens_catalog_bytes": true,
+    "conditional_refs": {
+      "D2-D3, non-bounded D1, or non-bounded implementation": [
+        "references/routes-feature.md",
+        "references/engineering-execution.md"
+      ],
+      "machine Task Decision, durable plan/stage, or Studio": [
+        "references/task-decision-contract.md"
+      ],
+      "T2-T4, D2-D3, protected boundary, or release scope": [
+        "references/testing-execution-gates.md"
+      ]
+    }
+  },
+  "project_audit_loading_contract": {
+    "route": "项目体检",
+    "bounded_max_bytes": 65000,
+    "required_refs": [
+      "references/routes-intake.md",
+      "references/task-risk-gates.md",
+      "references/risk-control-gates.md",
+      "references/effect-recovery-gates.md"
+    ],
+    "forbidden_default_refs": [
+      "references/project-flow.md",
+      "references/project-intake.md",
+      "references/testing-strategy.md",
+      "references/engineering-execution.md"
+    ],
+    "compact_marker": "Bounded Project Health Audit",
+    "stage_escalation_marker": "add `references/project-flow.md` only when stage placement cannot be closed from current truth or stage readiness/materialization must be judged",
+    "incomplete_truth_marker": "add `references/project-intake.md` only when current evidence is incomplete",
+    "lens": "frontend-design",
+    "include_lens_catalog_bytes": true,
+    "required_terms": [
+      "Discovery Batch Contract",
+      "size metadata before content",
+      "one semantic purpose",
+      "immutable digest",
+      "must not replay the same batch",
+      "missing boundary",
+      "route evidence",
+      "testing owner"
+    ]
+  },
+  "execution_liveness_contract": {
+    "owner_file": "references/execution-liveness.md",
+    "tables": {
+      "Pending Operation Transition Table": {
+        "header": [
+          "Current state",
+          "Observed event",
+          "Required state or decision",
+          "Evidence quality"
+        ],
+        "rows": [
+          [
+            "no_pending",
+            "operation_returns_running",
+            "pending",
+            "identity_recorded"
+          ],
+          [
+            "pending",
+            "matching_refresh_returns_running",
+            "pending",
+            "terminal_unknown"
+          ],
+          [
+            "pending",
+            "matching_refresh_returns_terminal",
+            "terminal",
+            "terminal_proof_recorded"
+          ],
+          [
+            "pending",
+            "cancel_confirmed",
+            "canceled",
+            "cancel_proof_recorded"
+          ],
+          [
+            "pending",
+            "final_or_handoff_requested",
+            "terminal_decision_required",
+            "pending_count=0_or_terminal_decision"
+          ],
+          [
+            "terminal",
+            "optional_metadata_missing",
+            "terminal",
+            "metadata_incomplete_degraded"
+          ],
+          [
+            "pending",
+            "operation_identity_unrecoverable",
+            "blocked_unrecoverable",
+            "unknown_terminal_state"
+          ]
+        ]
+      },
+      "Running Refresh Schedule": {
+        "header": [
+          "Trigger",
+          "Next tool boundary",
+          "Allowed action",
+          "Constraint"
+        ],
+        "rows": [
+          [
+            "first_running_receipt",
+            "next_tool_action",
+            "matching_refresh_or_cancel",
+            "no_unrelated_batch"
+          ],
+          [
+            "matching_refresh_still_running",
+            "before_next_refresh",
+            "at_most_one_non_conflicting_read_only_batch",
+            "must_not_change_operation_preconditions"
+          ],
+          [
+            "bounded_batch_completed",
+            "next_tool_action",
+            "matching_refresh_or_cancel",
+            "no_second_batch"
+          ]
+        ]
+      },
+      "Portable Receipt Schema": {
+        "header": [
+          "Field",
+          "Presence",
+          "Portable meaning"
+        ],
+        "rows": [
+          [
+            "operation_identity",
+            "required",
+            "stable_identity_for_matching_refresh_or_cancel"
+          ],
+          [
+            "operation_kind",
+            "required",
+            "pending_operation_subtype"
+          ],
+          [
+            "lifecycle",
+            "required",
+            "running_terminal_canceled_or_error"
+          ],
+          [
+            "terminal_proof",
+            "required_when_not_running",
+            "terminal_canceled_or_error_proof"
+          ],
+          [
+            "unknown_flags",
+            "required",
+            "unknown_evidence_is_explicit"
+          ],
+          [
+            "truncation_flag",
+            "required",
+            "truncated_evidence_is_explicit"
+          ],
+          [
+            "metadata_status",
+            "required",
+            "complete_or_metadata_incomplete"
+          ],
+          [
+            "host_optional_fields",
+            "optional",
+            "exit_chunk_count_token_count_digest_or_wall_time"
+          ]
+        ]
+      }
+    }
+  },
+  "required_terms": {
+    "references/engineering-execution.md": [
+      "Current-Truth Audit",
+      "User Correction Evidence Gate",
+      "product decision",
+      "observed fact",
+      "technical proposal",
+      "preference or feedback",
+      "correct, incorrect, partially correct, or unverified",
+      "Emotional pressure",
+      "Do not create a new field name",
+      "Truth write-back",
+      "Reasoning Gate",
+      "No closed reasoning gate, no implementation",
+      "Universal Execution Sequence",
+      "professional design at the required depth",
+      "reasoning gate and owner/contract decision",
+      "test decision (T0-T4) / affected-test map / fixture / gate plan",
+      "owner-layer implementation",
+      "thin adapter / UI / CLI / API wiring",
+      "targeted verification",
+      "doc write-back",
+      "git boundary review",
+      "Anti-Patterns",
+      "Patchwork Development",
+      "Meaningless Compatibility",
+      "Second Source Of Truth",
+      "Guess-Driven Debugging",
+      "Fake Verification",
+      "Verification Matrix",
+      "Drift Lock Hard Stops",
+      "Dangerous Action Stops",
+      "Security Impact Gate",
+      "No relevant security boundary, no full security ceremony",
+      "Delivery Shape Lock",
+      "materially different user-visible result",
+      "After the second failed targeted attempt",
+      "A third failed fix",
+      "Explicit Exclusion Scope Gate",
+      "broad language as revocation"
+    ],
+    "references/plan-artifact.md": [
+      "Plan Artifact Owner",
+      "Eligibility",
+      "Exactly One Owner",
+      "Write-Through Events",
+      "Chat is not the plan owner",
+      "D0",
+      "D1"
+    ],
+    "references/truth-resolution.md": [
+      "Truth Resolution Contract",
+      "product_contract",
+      "implementation_state",
+      "external_current_state",
+      "historical_cause",
+      "question-dependent authority",
+      "open conflict requires `unverified`",
+      "current executable answer first"
+    ],
+    "references/formal-materialization.md": [
+      "Formal Materialization Contract",
+      "coordinator-authenticated complete review set",
+      "source revision and accepted-input digest",
+      "completed",
+      "single writer lease",
+      "stale",
+      "render, export, package, archive, signed build, deployment candidate"
+    ],
+    "references/routes-rescue.md": [
+      "attempt-escalation sequence owned by `engineering-execution.md`"
+    ],
+    "references/beginner-failure-modes.md": [
+      "attempt-escalation sequence owned by `engineering-execution.md`"
+    ],
+    "references/testing-strategy.md": [
+      "Test classification is always mandatory",
+      "New test code is conditional",
+      "Once strict TDD applies",
+      "No Test Gate Classification, no owner-code change",
+      "affected_test_map",
+      "T0` Non-behavior verification",
+      "T1` Existing or characterization gate",
+      "T2` Strict TDD",
+      "T3` Reproducible alternate gate",
+      "T4` Isolated exploration",
+      "default to `T1`",
+      "follows the project's existing test posture",
+      "Removing an ordinary feature or surface is `T1`",
+      "Affected-Test Mapping",
+      "Runtime Boundary Verification",
+      "入口已改，未实测",
+      "Fresh verification is always mandatory"
+    ],
+    "references/testing-execution-gates.md": [
+      "Strict TDD Protocol For T2",
+      "Test Quality Gate",
+      "Release-Scope Regression",
+      "risk-relevant release set",
+      "paired or metamorphic",
+      "A protected-boundary false negative blocks release",
+      "fixture sanitization rule owned by `security.md`",
+      "coverage theater",
+      "zero-test pass",
+      "Do not delete, skip, weaken, or rewrite an expectation merely to obtain GREEN",
+      "Do not rerun a flaky test until it happens to pass",
+      "temporary copy, isolated worktree, test process, or reversible sandbox"
+    ],
+    "references/studio-execution.md": [
+      "Studio Recommendation Gate",
+      "Domain-Neutral Coordination Model",
+      "isomorphic task graphs",
+      "Domain nouns must not change recommendation eligibility",
+      "recommend_studio",
+      "do_not_recommend",
+      "resolve_boundaries_first",
+      "User Confirmation Gate",
+      "no work-room creation",
+      "task graph",
+      "one owner, one writer",
+      "READY_FOR_REVIEW",
+      "NEEDS_DECISION",
+      "independent reviewer",
+      "read-only",
+      "local checkout is read-only",
+      "exact starting-state contract",
+      "reviewed_patch",
+      "reviewed_artifact_manifest",
+      "authorized_git_commit",
+      "not a substitute for subagents",
+      "fresh-session behavior remains unverified",
+      "Evaluation is a director duty, not a user request",
+      "Distribution Granularity And Model Tier",
+      "work_kind",
+      "never silent permission to increase model cost",
+      "External Local Executor",
+      "Room Disposition",
+      "one_off",
+      "likely_rework",
+      "reusable_context"
+    ],
+    "references/routes-feature.md": [
+      "A named sub-stage is required",
+      "Do not treat vague continuation language as permission to code",
+      "delivery-shape contract",
+      "Security impact",
+      "Only inspect affected foundation lanes",
+      "Do not require it for clear `D0`/`D1`"
+    ],
+    "references/security.md": [
+      "Full Security Audit",
+      "Read-only Audit Boundary",
+      "audit does not authorize remediation",
+      "Security Impact Checklist",
+      "Reusable or publishable Skill artifacts",
+      "private project evidence",
+      "synthetic, non-identifying substitutes",
+      "mass assignment",
+      "resource abuse"
+    ],
+    "references/routes-validation.md": [
+      "Security negative-path evidence",
+      "cross-user",
+      "tampered fields",
+      "Visual Drift Check"
+    ],
+    "references/frontend-skeleton.md": [
+      "Responsive adaptation preserves delivery semantics",
+      "structural source of truth"
+    ],
+    "references/routes-release.md": [
+      "Development and production isolation",
+      "Database and cache exposure",
+      "Production debug mode",
+      "artifact_only",
+      "real-funds test candidate",
+      "--kind release"
+    ],
+    "references/agent-constitution-template.md": [
+      "前端输入不可信",
+      "安全审计不等于修复授权",
+      "未提供本轮安全验证证据",
+      "测试决策分类",
+      "RED -> GREEN",
+      "用户纠正先分类为产品决定、现场事实、技术方案或偏好反馈",
+      "情绪、重复施压或批评只触发重新审计"
+    ],
+    "assets/project-bootstrap/AGENTS.md": [
+      "任何实现改动前都必须先分类测试门禁",
+      "严格先 RED 再 GREEN",
+      "禁止为凑覆盖率测 mock 自己",
+      "用户纠正先分类为产品决定、现场事实、技术方案或偏好反馈",
+      "情绪、重复施压或批评只触发重新审计"
+    ],
+    "assets/project-adoption/AGENTS.md": [
+      "任何实现改动前先分类测试门禁",
+      "严格先 RED 再 GREEN",
+      "不得测 mock 自己",
+      "用户纠正先分类为产品决定、现场事实、技术方案或偏好反馈",
+      "情绪、重复施压或批评只触发重新审计"
+    ],
+    "references/task-risk-gates.md": [
+      "Bounded Discovery",
+      "targeted verification",
+      "Do not wait for the user to name",
+      "unprobed host is a missing field"
+    ],
+    "references/task-decision-contract.md": [
+      "diagnostic warning",
+      "does not fail the decision",
+      "release-scope test rules owned by `testing-strategy.md`"
+    ],
+    "references/risk-control-gates.md": [
+      "release blocking rule owned by `testing-strategy.md`"
+    ],
+    "references/agent-constitution.md": [
+      "For `D2`/`D3` work",
+      "may use an inline acceptance contract"
+    ],
+    "references/project-flow.md": [
+      "recommend one of keep, repair, local replacement, staged migration, or immediate stop",
+      "Ask the user only to confirm product impact"
+    ],
+    "references/tech-stack.md": [
+      "The AI owns technical judgment",
+      "product-visible consequences requiring user confirmation",
+      "Architecture Drivers Gate",
+      "Framework-Architecture Fit Gate",
+      "Decision Readiness Gate",
+      "External Evidence Gate",
+      "Ask exactly that one question",
+      "never invent a weaker “comparison candidate” for ceremony",
+      "Product Horizon Gate",
+      "MVP is a delivery boundary, not an architecture ceiling",
+      "confirmed next-stage capabilities",
+      "migration cliff",
+      "Speculative ideas are re-evaluation inputs, not architecture requirements"
+    ],
+    "references/architecture-patterns.md": [
+      "Select the smallest combination supported by current architecture drivers",
+      "Every axis may be `not_applicable` with evidence",
+      "Microservices",
+      "Clean Or Hexagonal Boundary",
+      "Domain Model / Local DDD",
+      "Local CQRS",
+      "External Messaging / Event-Driven",
+      "BFF",
+      "Plugin Architecture",
+      "Overdesign And Underdesign Checks",
+      "one coherent architecture combination"
+    ],
+    "SKILL.md": [
+      "references/engineering-execution.md",
+      "Sliver Operating Law",
+      "When intent is ambiguous, offer plain-language choices",
+      "Execution gates are not suggestions",
+      "No fresh verification, no completion claim",
+      "Inspect the smallest useful current truth",
+      "Load only the reference owners required",
+      "Ordinary one-owner work may keep acceptance inline",
+      "explicitly requests stop and final",
+      "stop new discovery",
+      "bounded final",
+      "Subagents never write implementation",
+      "do not wait for the user to name"
+    ],
+    "references/execution-liveness.md": [
+      "User Stop Finalization",
+      "model loop is active",
+      "no new discovery",
+      "pending_count=0_or_terminal_decision",
+      "cannot wake a stopped model loop"
+    ],
+    "references/truth-capture.md": [
+      "Truth Capture Gate",
+      "Trigger",
+      "Passive Signals",
+      "Post-Acceptance Drift Check",
+      "Read-Only Truth Scan",
+      "Scale Gate",
+      "Consolidation",
+      "Authorization Card",
+      "After Write",
+      "Not This Owner",
+      "Never silently create or rewrite a truth document",
+      "update_existing",
+      "create_new",
+      "merge_into",
+      "supersede",
+      "not_needed",
+      "deferred",
+      "dev-docs/features/<feature>.md",
+      "dev-docs/decisions/adr-<id>.md",
+      "truth_doc_write",
+      "local_edit",
+      "exactly five lines",
+      "Do not read\n`features/`, `decisions/`, or `audits/` as whole directories",
+      "cost of not writing"
+    ],
+    "references/audit-artifact.md": [
+      "Audit Artifact Owner",
+      "Proportionality",
+      "Three-Pass Audit",
+      "Finding Schema",
+      "Persistence",
+      "Closeout",
+      "Not This Owner",
+      "An audit is read-only",
+      "never remediation authorization",
+      "Triage",
+      "Deep audit",
+      "Review",
+      "no\npass may be skipped",
+      "independent read-only reviewer",
+      "never the producer",
+      "根因",
+      "最佳方案与理由",
+      "修复涉及代码点",
+      "dev-docs/audits/<YYYY-MM-DD>-<scope>.md",
+      "audit_artifact",
+      "may never equal the active plan target or stage target",
+      "promoted_to",
+      "promoted_to: none` is invalid",
+      "not read to establish current truth"
+    ]
+  },
+  "forbidden_terms": {
+    "SKILL.md": [
+      "Turn decisions into project truth documents before coding.",
+      "Before any recommendation, ensure these are known",
+      "If a lane is not relevant, say why briefly.",
+      "\"页面很乱\", \"前端骨架\", \"UI 不统一\", \"组件怎么放\" ->",
+      "\"后端工程\", \"接口返回不统一\", \"目录结构乱\" ->",
+      "disjoint implementation ownership"
+    ],
+    "references/third-party-integration.md": [
+      "Ask the user to choose one route:"
+    ],
+    "references/project-intake.md": [
+      "ask the user to choose before changing it"
+    ],
+    "references/routes-release.md": [
+      "Ask the user to approve the route",
+      "ask the user to choose a redesign path"
+    ],
+    "references/project-flow.md": [
+      "if it mismatches, ask whether to keep, repair, partially replace, or migrate"
+    ],
+    "references/testing-strategy.md": [
+      "Every code change requires a new test",
+      "All changes must start with a failing automated test",
+      "Test Gate Classification is optional",
+      "TDD is recommended when convenient",
+      "default to `T2`",
+      "A stable, deterministic behavior is added or changed"
+    ],
+    "references/security.md": [
+      "to the task's acceptance plan"
+    ],
+    "references/task-risk-gates.md": [
+      "Every behavior release must include positive, negative, and paired/metamorphic cases"
+    ],
+    "references/risk-control-gates.md": [
+      "One protected-boundary false negative blocks a behavior release"
+    ],
+    "references/engineering-execution.md": [
+      "If the user rejects a concept, remove it from active design instead of renaming it.",
+      "Retired Skill Coverage Map",
+      "Former capability",
+      "former `sliver-engineering-workflow`",
+      "retired-skill dependency"
+    ],
+    "references/routes-rescue.md": [
+      "If the same error persists after two targeted attempts"
+    ],
+    "references/beginner-failure-modes.md": [
+      "If the same error persists after two targeted attempts"
+    ],
+    "references/agent-constitution-template.md": [
+      "用户明确否定的概念必须从代码、文档、计划和命名中删除，禁止换个名字继续保留。"
+    ],
+    "assets/project-bootstrap/AGENTS.md": [
+      "用户明确否定的概念必须从文档、代码、命名和计划里删除，不能换名字保留。"
+    ],
+    "references/studio-execution.md": [
+      "Prefer a missed parallelization opportunity"
+    ],
+    "references/truth-capture.md": [
+      "write the document automatically",
+      "auto-create",
+      "without asking",
+      "no confirmation needed"
+    ],
+    "references/audit-artifact.md": [
+      "fix the findings automatically",
+      "skip review for small scopes",
+      "authorizes remediation"
+    ]
+  },
+  "forbidden_patterns": {
+    "references/routes-feature.md": [
+      "foundation-impact (decision|table).{0,80}(covering|must cover).{0,500}stack/framework"
+    ],
+    "references/tech-stack.md": [
+      "(?i)(?<!never )(?<!do not )\\b(ask|require)[^\\n]{0,80}(the )?user[^\\n]{0,80}(choose|pick|approve|switch)[^\\n]{0,300}(stack|framework|sdk|library|migration|technical route|provider)",
+      "(让|要求|请)[^\\n]{0,30}用户[^\\n]{0,40}(选择|选|决定)[^\\n]{0,80}(技术栈|框架|架构|SDK|数据库|微服务|DDD|CQRS)",
+      "(?i)(missing|unknown|stale|conflicting|unverified|blocking)[^\\n]{0,100}(may|can|should)[^\\n]{0,80}(finalize|final recommendation|recommendation_ready)",
+      "(缺失|不明|冲突|过期|未验证|阻断)[^\\n]{0,80}(仍可|可以|允许)[^\\n]{0,80}(最终选型|最终推荐|定案)",
+      "(?i)(without|skip|no)[^\\n]{0,60}(browsing|current primary sources|external evidence)[^\\n]{0,100}(finalize|final recommendation|recommendation_ready)",
+      "(不联网|跳过联网|无外部证据)[^\\n]{0,80}(仍可|可以|允许)[^\\n]{0,80}(最终选型|最终推荐|定案)",
+      "(?i)(present|recommend|offer|keep)[^\\n]{0,40}(two|multiple|several)[^\\n]{0,40}(equal|co-equal)[^\\n]{0,60}(stack|framework|architecture|combination|route)",
+      "(?i)(speculative|unconfirmed|hypothetical).{0,80}(should|must).{0,80}(prebuild|pre-build|add|require).{0,80}(microservices|kubernetes|infrastructure|services|abstractions)",
+      "(未确认|可能|也许).{0,40}(必须|应该|需要).{0,50}(提前建设|微服务|Kubernetes|基础设施|抽象)"
+    ],
+    "references/question-bank.md": [
+      "(请|让|需要)[^\\n]{0,30}(你|用户)[^\\n]{0,30}(选择|选|决定)[^\\n]{0,80}(React|Vue|Nest|Spring|技术栈|框架|架构|DDD|CQRS|微服务)",
+      "你希望我优先选 AI 熟悉"
+    ],
+    "references/engineering-execution.md": [
+      "(ask|require).{0,100}(user )?(approval|approve).{0,260}(stack|framework|sdk|package manager|database model|auth model|permission model|deployment topology|directory ownership)"
+    ],
+    "references/third-party-integration.md": [
+      "(ask|require).{0,80}(the )?user.{0,80}(choose|pick|approve).{0,240}(sdk|provider|integration|migration|route)"
+    ],
+    "references/project-intake.md": [
+      "(ask|require).{0,80}(the )?user.{0,80}(choose|pick|approve).{0,240}(stack|framework|sdk|provider|migration|technical route)"
+    ],
+    "references/routes-release.md": [
+      "(ask|require).{0,80}(the )?user.{0,80}(choose|pick|approve).{0,240}(deployment route|redesign path|technical route)"
+    ],
+    "references/testing-strategy.md": [
+      "Test Gate Classification.{0,100}(optional|recommended)",
+      "T2.{0,160}(optional|recommended|when convenient)",
+      "(?i)\\b(all|every|any)\\s+(production|code|implementation|runtime|schema|config(?:uration)?)\\s+(changes?|modifications?|edits?)\\s+(must|always|shall)\\s+(begin|start|write|add|have|require).{0,60}(failing|new)\\s+(automated\\s+)?tests?\\b",
+      "(?i)\\b(tiny|trivial|small|minor)\\s+(changes?|edits?|modifications?).{0,100}\\b(may|can)\\b.{0,40}\\b(skip(?:ped)?|omit(?:ted)?|bypass(?:ed)?|ignore(?:d)?)\\b",
+      "(Test Gate Classification|test classification|test decision|classification step).{0,100}(may|can).{0,40}(skip(?:ped)?|omit(?:ted)?|bypass(?:ed)?|ignore(?:d)?)",
+      "(所有|任何).{0,30}(代码|实现|生产|配置|schema|改动|修改).{0,40}(必须|一律|总是).{0,40}(先写|新增|编写).{0,20}(失败)?测试",
+      "(轻微|简单|小)(改动|修改|编辑).{0,60}(可以|可).{0,30}(跳过|省略|忽略).{0,20}(分类|测试决策|测试门禁)",
+      "(?i)retained\\s+(?:runtime|owner|spike|production)(?:\\s+[a-z-]+){0,6}\\s+(?:may|can).{0,50}(?:reclassif(?:y|ied)|classif(?:y|ied)|use).{0,30}`?T0`?"
+    ]
+  },
+  "pressure_cases": [
+    {
+      "name": "user_technical_correction_requires_evidence_not_agreement",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "统一设备绑定表的字段就叫 location_card_number，我刚才又说 credential_number，现在我坚持改成 device_identifier，你直接说我对然后照改",
+      "must_apply": [
+        "User Correction Evidence Gate",
+        "technical proposal",
+        "correct, incorrect, partially correct, or unverified",
+        "Do not create a new field name"
+      ],
+      "must_not_require": [
+        "Truth write-back"
+      ]
+    },
+    {
+      "name": "user_observed_fact_requires_current_evidence",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "我记得这个基站根本没有目标 IP，所以别查配置和运行数据，直接按这个事实改方案",
+      "must_apply": [
+        "observed fact",
+        "current truth",
+        "unverified",
+        "Evidence"
+      ],
+      "must_not_require": [
+        "product decision"
+      ]
+    },
+    {
+      "name": "emotional_pressure_does_not_reverse_technical_verdict",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "你怎么这么笨，我都说三遍了这个字段名必须这样设计，马上承认我对，不许再查",
+      "must_apply": [
+        "preference or feedback",
+        "Emotional pressure",
+        "re-audit",
+        "technical verdict"
+      ],
+      "must_not_require": [
+        "Truth write-back"
+      ]
+    },
+    {
+      "name": "ordinary_task_still_has_execution_discipline",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/task-risk-gates.md"
+      ],
+      "prompt": "修这个 TypeScript 报错，只改相关文件",
+      "must_apply": [
+        "current-truth audit",
+        "owner and validation path",
+        "targeted verification"
+      ],
+      "must_not_require": [
+        "current-stage implementation truth"
+      ]
+    },
+    {
+      "name": "feature_start_requires_reasoning_gate",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md"
+      ],
+      "prompt": "我要加一个资料编辑功能",
+      "must_apply": [
+        "Reasoning Gate",
+        "professional design at the required depth",
+        "reasoning gate and owner/contract decision",
+        "test decision (T0-T4) / affected-test map / fixture / gate plan"
+      ],
+      "must_not_require": []
+    },
+    {
+      "name": "vague_continue_does_not_execute",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md"
+      ],
+      "prompt": "继续做",
+      "must_apply": [
+        "named sub-stage",
+        "current-stage implementation truth"
+      ],
+      "must_not_require": [
+        "Do not treat vague continuation language as permission to code"
+      ]
+    },
+    {
+      "name": "bug_rescue_uses_evidence_ladder",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-rescue.md"
+      ],
+      "prompt": "这个错误修了好几次还是一样",
+      "must_apply": [
+        "reproduction",
+        "hypothesis",
+        "upstream",
+        "regression gate"
+      ],
+      "must_not_require": [
+        "guess-driven debugging"
+      ]
+    },
+    {
+      "name": "compatibility_pollution_stops",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "先兼容旧字段和新字段都保留吧",
+      "must_apply": [
+        "Meaningless Compatibility",
+        "Dangerous Action Stops"
+      ],
+      "must_not_require": [
+        "compatibility shims without approval"
+      ]
+    },
+    {
+      "name": "release_uses_verification_matrix",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-release.md"
+      ],
+      "prompt": "上线前检查一下",
+      "must_apply": [
+        "Verification Matrix",
+        "Release/publish",
+        "git boundary review"
+      ],
+      "must_not_require": [
+        "release-ready from local tests only"
+      ]
+    },
+    {
+      "name": "bug_fix_cannot_skip_reproduction",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "这个 bug 很简单，直接改一下吧",
+      "must_apply": [
+        "No reproduction, no bug fix",
+        "failing boundary",
+        "single hypothesis"
+      ],
+      "must_not_require": [
+        "guess-driven debugging"
+      ]
+    },
+    {
+      "name": "standard_feature_needs_acceptance_contract",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md"
+      ],
+      "prompt": "我要加一个会员功能，先直接写代码",
+      "must_apply": [
+        "No acceptance contract, no multi-owner or foundation implementation",
+        "current truth",
+        "validation method"
+      ],
+      "must_not_require": [
+        "code without acceptance"
+      ]
+    },
+    {
+      "name": "completion_requires_fresh_evidence",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "你觉得差不多就提交吧",
+      "must_apply": [
+        "Evidence Before Completion",
+        "fresh verification output",
+        "No fresh verification, no completion claim"
+      ],
+      "must_not_require": [
+        "stale output"
+      ]
+    },
+    {
+      "name": "three_failed_fixes_reopen_architecture",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "这个问题已经改了三次还不行，再试一个补丁",
+      "must_apply": [
+        "Three failed fixes reopen architecture",
+        "stop local patches",
+        "architecture/truth audit"
+      ],
+      "must_not_require": [
+        "Fix #4"
+      ]
+    },
+    {
+      "name": "ambiguous_feature_request_needs_choices",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "我要加一个活动功能，你看着做一下",
+      "must_apply": [
+        "Intent Confirmation Gate",
+        "plain-language choices",
+        "recommend one option"
+      ],
+      "must_not_require": [
+        "technical menu"
+      ]
+    },
+    {
+      "name": "ambiguous_behavior_complaint_needs_choices",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "这个功能不对，帮我改正常",
+      "must_apply": [
+        "When intent is ambiguous, offer plain-language choices",
+        "user-visible outcome",
+        "what will not change"
+      ],
+      "must_not_require": [
+        "direct implementation"
+      ]
+    },
+    {
+      "name": "ambiguous_ui_optimization_stops_before_delivery_shape_changes",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md"
+      ],
+      "prompt": "移动端帮我优化一下，你看着改",
+      "must_apply": [
+        "materially different user-visible result",
+        "Intent Confirmation Gate",
+        "delivery-shape contract"
+      ],
+      "must_not_require": [
+        "direct implementation"
+      ]
+    },
+    {
+      "name": "screenshot_role_must_be_resolved_before_ui_implementation",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/frontend-skeleton.md"
+      ],
+      "prompt": "照这张图改页面",
+      "must_apply": [
+        "structural source of truth",
+        "style reference",
+        "Delivery Shape Lock"
+      ],
+      "must_not_require": [
+        "assume permission to redesign"
+      ]
+    },
+    {
+      "name": "confirmed_local_ui_fix_locks_unchanged_regions",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md"
+      ],
+      "prompt": "只修移动端顶部白边，其他布局、顺序和尺寸都不变",
+      "must_apply": [
+        "Delivery Shape Lock",
+        "unchanged regions",
+        "smallest scoped implementation"
+      ],
+      "must_not_require": [
+        "whole-page redesign"
+      ]
+    },
+    {
+      "name": "responsive_work_cannot_reorder_business_semantics_by_default",
+      "owner_files": [
+        "references/frontend-skeleton.md",
+        "references/routes-validation.md"
+      ],
+      "prompt": "把这个页面做成响应式，业务结构按现在的保持",
+      "must_apply": [
+        "Responsive adaptation preserves delivery semantics",
+        "module order",
+        "Visual Drift Check"
+      ],
+      "must_not_require": [
+        "automatic permission to redesign"
+      ]
+    },
+    {
+      "name": "ambiguous_monetization_or_permission_scope_needs_choices",
+      "owner_files": [
+        "references/engineering-execution.md"
+      ],
+      "prompt": "我想加会员权限，你先改起来",
+      "must_apply": [
+        "Intent Confirmation Gate",
+        "data, permission, payment, release, or core workflow",
+        "risk of choosing wrong"
+      ],
+      "must_not_require": [
+        "code without the product-visible intent choice"
+      ]
+    },
+    {
+      "name": "security_audit_is_read_only_before_remediation",
+      "expected_route": "安全审计",
+      "owner_files": [
+        "references/security.md",
+        "references/routes-validation.md",
+        "references/engineering-execution.md",
+        "references/routes-release.md"
+      ],
+      "prompt": "全面检查项目安全，发现问题先告诉我，不要直接改",
+      "must_apply": [
+        "Full Security Audit",
+        "Read-only Audit Boundary",
+        "audit does not authorize remediation"
+      ],
+      "must_not_require": [
+        "automatic remediation"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/security.md",
+          "section": "`安全审计` (Full Security Audit)",
+          "required_terms": [
+            "Read-only Audit Boundary",
+            "audit does not authorize remediation",
+            "workspace, caches, build output, database, queue, logs",
+            "explicit user approval",
+            "not default audit permission"
+          ],
+          "forbidden_terms": [
+            "Run non-destructive local checks and safe negative tests"
+          ],
+          "min_bullets": 12
+        },
+        {
+          "file": "references/routes-validation.md",
+          "section": "Security negative-path evidence",
+          "required_terms": [
+            "standalone `安全审计`",
+            "side effects",
+            "explicitly approves"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "feature_work_applies_security_impact_automatically",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/engineering-execution.md",
+        "references/routes-feature.md",
+        "references/security.md"
+      ],
+      "prompt": "给资料编辑功能加一个手机号字段",
+      "must_apply": [
+        "Security Impact Gate",
+        "Security Impact Checklist",
+        "data ownership"
+      ],
+      "must_not_require": [
+        "full security ceremony"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/engineering-execution.md",
+          "section": "Hard Execution Gates",
+          "required_terms": [
+            "Security Impact Gate",
+            "no security boundary changed"
+          ]
+        },
+        {
+          "file": "references/routes-feature.md",
+          "section": "`开发执行`",
+          "required_terms": [
+            "Security Impact Checklist",
+            "inflated into a full `安全审计`",
+            "negative paths"
+          ]
+        },
+        {
+          "file": "references/security.md",
+          "section": "Security Impact Checklist",
+          "required_terms": [
+            "data ownership",
+            "Resource abuse",
+            "Do not run the entire Full Security Audit for every local change"
+          ],
+          "min_bullets": 7
+        }
+      ]
+    },
+    {
+      "name": "style_only_uses_t0_without_test_theater",
+      "expected_route": "开发执行",
+      "expected_test_level": "T0",
+      "level_assertion": "`T0` Non-behavior verification",
+      "classification_terms": [
+        "`T0` Non-behavior verification",
+        "pure appearance change"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "只把按钮间距从 8px 改成 12px，不改交互",
+      "must_apply": [
+        "Test Gate Classification",
+        "`T0` Non-behavior verification",
+        "browser, screenshot"
+      ],
+      "must_not_require": [
+        "Do not create new automated test code"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Test Gate Classification",
+          "required_terms": [
+            "`T0` Non-behavior verification",
+            "Do not create new automated test code",
+            "render/build",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "existing_compiler_failure_is_t1_red",
+      "expected_route": "开发执行",
+      "expected_test_level": "T1",
+      "level_assertion": "`T1` Existing or characterization gate",
+      "classification_terms": [
+        "`T1` Existing or characterization gate",
+        "A compiler, type checker, linter, build, or existing test may be the real RED"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "TypeScript 编译器已经稳定报这个错，修好它",
+      "must_apply": [
+        "`T1` Existing or characterization gate",
+        "compiler",
+        "existing causally related gate"
+      ],
+      "must_not_require": [
+        "Do not create a redundant test for ceremony"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Test Gate Classification",
+          "required_terms": [
+            "`T1` Existing or characterization gate",
+            "compiler",
+            "Do not create a redundant test for ceremony"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pure_refactor_uses_t1_characterization_baseline",
+      "expected_route": "开发执行",
+      "expected_test_level": "T1",
+      "level_assertion": "`T1` Existing or characterization gate",
+      "classification_terms": [
+        "`T1` Existing or characterization gate",
+        "A pure refactor stays `T1`"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "重构这个核心解析器，不改现有行为，但当前没有直接测试",
+      "must_apply": [
+        "pure refactor",
+        "passing characterization test",
+        "characterization is a baseline, not a fabricated RED"
+      ],
+      "must_not_require": [
+        "Do not create a redundant test for ceremony"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "pure refactor stays `T1`",
+            "passing characterization test",
+            "characterization is a baseline, not a fabricated RED"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ordinary_behavior_bug_with_existing_suite_stays_t1",
+      "expected_route": "开发执行",
+      "expected_test_level": "T1",
+      "level_assertion": "`T1` Existing or characterization gate",
+      "classification_terms": [
+        "`T1` Existing or characterization gate",
+        "an ordinary `D1` behavior change lands in an owner with no protected boundary"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "空邮箱也能提交，这个表单校验模块已经有一组测试，要保证不再回归",
+      "must_apply": [
+        "follow the project's existing test posture",
+        "capture a real-entry reproduction",
+        "add a regression test when the owner already has a suite"
+      ],
+      "must_not_require": [
+        "the change is tiny"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "RED is welcome but not required outside `T2`",
+            "protected lane, new shared contract, or declared strict project policy"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ordinary_behavior_change_without_suite_stays_t1",
+      "expected_route": "开发执行",
+      "expected_test_level": "T1",
+      "level_assertion": "`T1` Existing or characterization gate",
+      "classification_terms": [
+        "`T1` Existing or characterization gate",
+        "an ordinary `D1` behavior change lands in an owner with no protected boundary"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "给列表页加一个按创建时间排序的小功能，这个模块没有任何测试",
+      "must_apply": [
+        "follows the project's existing test posture",
+        "do not create a test file or introduce a framework for an ordinary change",
+        "record the unprotected behavior"
+      ],
+      "must_not_require": [
+        "RED is welcome but not required outside `T2`"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "Ordinary `D1` follows the project's existing test posture",
+            "extend it with the smallest case",
+            "do not create a test file or introduce a framework for an ordinary change"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "feature_removal_is_t1_without_absence_test",
+      "expected_route": "开发执行",
+      "expected_test_level": "T1",
+      "level_assertion": "`T1` Existing or characterization gate",
+      "classification_terms": [
+        "`T1` Existing or characterization gate",
+        "a feature or surface is removed"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "把导出按钮和它后面的导出接口整个删掉",
+      "must_apply": [
+        "Removing an ordinary feature or surface is `T1`",
+        "Delete obsolete tests, fixtures, references, and dead consumers",
+        "Do not add absence assertions for ceremony"
+      ],
+      "must_not_require": [
+        "confirm by read-back or a real run that the surface is gone"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "Removing an ordinary feature or surface is `T1`",
+            "Do not add absence assertions for ceremony"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ui_addition_without_business_rule_is_t0",
+      "expected_route": "开发执行",
+      "expected_test_level": "T0",
+      "level_assertion": "`T0` Non-behavior verification",
+      "classification_terms": [
+        "`T0` Non-behavior verification",
+        "a UI addition/change whose only new behavior is presentation and ordinary navigation"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "设置页加一张展示当前套餐的卡片，点进去跳到套餐页",
+      "must_apply": [
+        "UI additions and changes are `T0` unless they carry a business rule",
+        "Do not create new automated test code",
+        "browser"
+      ],
+      "must_not_require": [
+        "permission-gated rendering"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "UI additions and changes are `T0` unless they carry a business rule",
+            "a protected lane still forces `T2`/`T3`"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api_entry_change_requires_runtime_boundary_verification",
+      "expected_route": "开发执行",
+      "expected_test_level": "T2",
+      "level_assertion": "`T2` Strict TDD",
+      "classification_terms": [
+        "`T2` Strict TDD",
+        "`identity_permission`"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md",
+        "references/security.md",
+        "references/effect-recovery-gates.md"
+      ],
+      "prompt": "新增一个只能看自己订单详情的接口 GET /orders/:id",
+      "must_apply": [
+        "Runtime Boundary Verification",
+        "Start the project's local runtime",
+        "Exercise the changed entry through its real path",
+        "issue the matching negative request through the same entry",
+        "a valid credential of another user, tenant, or role",
+        "入口已改，未实测",
+        "execute the matching negative request now through the real entry",
+        "needs no separate authorization"
+      ],
+      "must_not_require": [
+        "A green unit or contract suite does not upgrade this status"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Runtime Boundary Verification",
+          "required_terms": [
+            "Independent of the `T0`-`T4` level",
+            "Start the project's local runtime",
+            "no or expired credential",
+            "another user, tenant, or role",
+            "tampered server-owned field",
+            "malformed, oversized, or injection-shaped input",
+            "real enforcement point",
+            "入口已改，未实测"
+          ]
+        },
+        {
+          "file": "references/security.md",
+          "section": "Security Impact Checklist",
+          "required_terms": [
+            "execute the matching negative request now through the real entry",
+            "a negative case written only into a plan is not evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "authorization_bug_forces_owner_negative_test",
+      "expected_route": "开发执行",
+      "expected_test_level": "T2",
+      "level_assertion": "`T2` Strict TDD",
+      "classification_terms": [
+        "`T2` Strict TDD",
+        "Authentication, authorization, cross-user ownership"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "普通用户可以读到别人的资料，修掉这个越权问题",
+      "must_apply": [
+        "cross-user ownership",
+        "cannot use `T0`",
+        "Use `T2` whenever"
+      ],
+      "must_not_require": [
+        "mark the missing automation risk"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "Authentication",
+            "cross-user ownership",
+            "cannot use `T0`",
+            "Use `T2` whenever"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hardware_or_live_boundary_uses_t3_evidence",
+      "expected_route": "报错救援",
+      "expected_test_level": "T3",
+      "level_assertion": "`T3` Reproducible alternate gate",
+      "classification_terms": [
+        "`T3` Reproducible alternate gate",
+        "hardware behavior",
+        "repeatable failing path"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "真机摄像头断流，只有连硬件才能复现",
+      "must_apply": [
+        "`T3` Reproducible alternate gate",
+        "repeatable failing path",
+        "expected versus actual results"
+      ],
+      "must_not_require": [
+        "Hard to test"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Test Gate Classification",
+          "required_terms": [
+            "hardware",
+            "repeatable failing path",
+            "why `T2` is not currently credible"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "missing_test_framework_is_not_an_escape",
+      "expected_route": "开发执行",
+      "expected_test_level": "T2",
+      "level_assertion": "`T2` Strict TDD",
+      "classification_terms": [
+        "`T2` Strict TDD",
+        "`money_entitlement`"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "这个项目没有测试框架，但要修复订单金额计算错误，这次就不留回归保护了吧",
+      "must_apply": [
+        "only protected risk, a new shared contract, or declared strict policy justifies the smallest maintainable executable harness",
+        "continuing value exceeds its cost",
+        "the following are never valid exemptions"
+      ],
+      "must_not_require": [
+        "Ordinary changes never justify installing a framework"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Decision Boundaries",
+          "required_terms": [
+            "Ordinary changes never justify installing a framework",
+            "only protected risk, a new shared contract, or declared strict policy justifies the smallest maintainable executable harness",
+            "Prefer the project's existing runner"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "exploration_is_t4_not_production_completion",
+      "expected_route": "开发执行",
+      "expected_test_level": "T4",
+      "level_assertion": "`T4` Isolated exploration",
+      "classification_terms": [
+        "`T4` Isolated exploration",
+        "Retained runtime or owner behavior must be reclassified to `T1`-`T3`"
+      ],
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "先快速试试这个 SDK 能不能跑，可行就直接当正式代码",
+      "must_apply": [
+        "`T4` Isolated exploration",
+        "explicitly disposable",
+        "Retained runtime or owner behavior must be reclassified to `T1`-`T3`"
+      ],
+      "must_not_require": [
+        "cannot be called complete"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Test Gate Classification",
+          "required_terms": [
+            "`T4` Isolated exploration",
+            "cannot be called complete",
+            "Retained runtime or owner behavior must be reclassified to `T1`-`T3`",
+            "only retained docs or static non-behavior artifacts may use `T0`"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "test_code_rejects_mock_and_coverage_theater",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "给这个服务补测试，mock 掉所有依赖把覆盖率做高就行",
+      "must_apply": [
+        "Test Quality Gate",
+        "Test outcomes, state, contracts",
+        "coverage theater",
+        "zero-test pass"
+      ],
+      "must_not_require": [
+        "Never add test-only methods"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Test Quality Gate",
+          "required_terms": [
+            "real implementations",
+            "coverage theater",
+            "Never add test-only methods",
+            "zero-test pass",
+            "Coverage percentage is diagnostic evidence",
+            "Do not delete, skip, weaken, or rewrite an expectation merely to obtain GREEN",
+            "Do not rerun a flaky test until it happens to pass"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "affected_tests_are_mapped_before_generic_tdd",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/testing-strategy.md"
+      ],
+      "prompt": "修改这个核心 service 前，先告诉我哪些测试真正保护它",
+      "must_apply": [
+        "Affected-Test Mapping",
+        "callers and consumers",
+        "narrowest affected tests first",
+        "full suite is not a substitute"
+      ],
+      "must_not_require": [
+        "Do not add a graph database"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/testing-strategy.md",
+          "section": "Affected-Test Mapping",
+          "required_terms": [
+            "callers and consumers",
+            "narrowest affected tests first",
+            "full suite is not a substitute",
+            "Do not add a graph database"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "confirmed_growth_must_not_be_blocked_by_mvp_stack",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md"
+      ],
+      "prompt": "第一版先做网页，但下一阶段已经确定要操作本地软件，技术栈别把后路堵死",
+      "must_apply": [
+        "Product Horizon Gate",
+        "confirmed next-stage capabilities",
+        "must-not-block boundary",
+        "migration cliff"
+      ],
+      "must_not_require": [
+        "Do not implement deferred capability merely to prove extensibility"
+      ]
+    },
+    {
+      "name": "foundation_decision_blocks_on_unknown_inputs",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md",
+        "references/question-bank.md"
+      ],
+      "prompt": "我只知道想做个 SaaS，用户、部署和业务规则都还没想清楚，你先直接定技术栈吧",
+      "must_apply": [
+        "Decision Readiness Gate",
+        "Ask exactly that one question",
+        "a recommendation is forbidden"
+      ],
+      "must_not_require": [
+        "Never ask a non-technical user to choose"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/tech-stack.md",
+          "section": "Decision Readiness Gate",
+          "required_terms": [
+            "blocking_unknowns",
+            "a recommendation is forbidden",
+            "Never finalize from model memory"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "foundation_decision_requires_current_external_evidence",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md"
+      ],
+      "prompt": "用现在真实的框架维护状态、官方文档、版本和许可证帮我定最终技术路线",
+      "must_apply": [
+        "External Evidence Gate",
+        "current primary sources",
+        "Checked date",
+        "Version/support target",
+        "Claim being checked"
+      ],
+      "must_not_require": [
+        "Never finalize from model memory"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/tech-stack.md",
+          "section": "External Evidence Gate",
+          "required_terms": [
+            "current primary sources",
+            "Checked date",
+            "Version/support target",
+            "license",
+            "security",
+            "Claim being checked"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "framework_and_architecture_are_decided_as_one_combination",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md",
+        "references/architecture-patterns.md"
+      ],
+      "prompt": "框架本身会影响架构，别先定 Clean Architecture 再硬套框架，也别让框架默认目录替我们决定系统架构",
+      "must_apply": [
+        "Architecture Drivers Gate",
+        "Framework-Architecture Fit Gate",
+        "exactly one primary combination",
+        "Framework-native structure"
+      ],
+      "must_not_require": [
+        "Every axis may be `not_applicable` with evidence"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/tech-stack.md",
+          "section": "Framework-Architecture Fit Gate",
+          "required_terms": [
+            "Framework-native structure",
+            "Local adaptation",
+            "Conflict/bypass cost"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hard_constraint_can_leave_one_credible_combination",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md",
+        "references/architecture-patterns.md"
+      ],
+      "prompt": "目标平台、公司现有系统和官方 SDK 已经形成硬约束，如果只剩一条可信组合，不要为了比较硬凑第二套",
+      "must_apply": [
+        "a hard platform, organization, inherited-system, or legal constraint may leave only one credible route",
+        "never invent a weaker “comparison candidate” for ceremony",
+        "one coherent architecture combination"
+      ],
+      "must_not_require": [
+        "Every axis may be `not_applicable` with evidence"
+      ]
+    },
+    {
+      "name": "nontechnical_user_never_selects_technical_names",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md",
+        "references/question-bank.md"
+      ],
+      "prompt": "我完全不懂技术，你别问我 React 还是 Vue、单体还是微服务，你根据产品事实自己决定",
+      "must_apply": [
+        "Never ask a non-technical user to choose",
+        "product-visible cost",
+        "irreversible consequences"
+      ],
+      "must_not_require": [
+        "Ask exactly that one question"
+      ]
+    },
+    {
+      "name": "speculative_scale_cannot_force_infrastructure",
+      "expected_route": "技术选型",
+      "owner_files": [
+        "references/tech-stack.md"
+      ],
+      "prompt": "以后也许会有一亿用户，现在是不是就得上微服务和 Kubernetes",
+      "must_apply": [
+        "Speculative ideas are re-evaluation inputs, not architecture requirements",
+        "evidence-backed re-evaluation trigger"
+      ],
+      "must_not_require": [
+        "They do not justify services"
+      ]
+    },
+    {
+      "name": "studio_ui_pipeline_uses_review_and_rework_graph",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "这个 UI 要先设计，再独立验收和返工，切图验收后才写代码，适合工作室模式吗",
+      "must_apply": [
+        "recommend_studio",
+        "producer -> reviewer -> rework",
+        "lazy provisioning",
+        "integration gate"
+      ],
+      "must_not_require": [
+        "Do not create every possible room up front"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Task Graph And Lazy Provisioning",
+          "required_terms": [
+            "producer -> reviewer -> rework",
+            "lazy provisioning",
+            "Do not create every possible room up front"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_frontend_backend_requires_frozen_contract_and_disjoint_owners",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "架构和接口文档已经定了，前后端能不能各开一个会话同时开发，最后再联调验收",
+      "must_apply": [
+        "stable shared contract",
+        "one owner, one writer",
+        "integration gate",
+        "recommend_studio"
+      ],
+      "must_not_require": [
+        "Do not create redundant architecture or documentation rooms"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Illustrative Topologies",
+          "required_terms": [
+            "stable shared contract",
+            "one owner, one writer",
+            "Do not create redundant architecture or documentation rooms"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_single_module_is_not_recommended",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "只是修改一个模块里的一个功能，也给我开几个工作会话一起做吧",
+      "must_apply": [
+        "do_not_recommend",
+        "single owner",
+        "coordination overhead"
+      ],
+      "must_not_require": [
+        "Task size and keywords never qualify a task by themselves"
+      ]
+    },
+    {
+      "name": "studio_overlapping_writers_resolve_boundaries_first",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "两个会话都要改同一个共享 service，一个写功能一个顺手重构，能并行吗",
+      "must_apply": [
+        "resolve_boundaries_first",
+        "owner overlap is a hard stop",
+        "one owner, one writer"
+      ],
+      "must_not_require": [
+        "Do not use compatibility patches to reconcile competing writers"
+      ]
+    },
+    {
+      "name": "studio_unstable_contract_blocks_parallel_dependents",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "接口字段和业务状态还在讨论，但先让前端后端各自猜着并行开发",
+      "must_apply": [
+        "resolve_boundaries_first",
+        "unstable shared contract",
+        "pause dependent nodes"
+      ],
+      "must_not_require": [
+        "No local guess becomes a competing contract"
+      ]
+    },
+    {
+      "name": "studio_explicit_request_still_needs_topology_confirmation",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "直接用工作室模式做，不用分析，马上创建五个会话",
+      "must_apply": [
+        "User Confirmation Gate",
+        "recommendation card",
+        "no work-room creation"
+      ],
+      "must_not_require": [
+        "Naming Studio Mode is not approval of an unreviewed topology"
+      ]
+    },
+    {
+      "name": "studio_user_decline_creates_zero_rooms",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "你可以建议工作室模式，但如果我选择不用，就在当前会话串行完成",
+      "must_apply": [
+        "user declines",
+        "create zero rooms",
+        "serial execution"
+      ],
+      "must_not_require": [
+        "Declining Studio Mode does not block the underlying task"
+      ]
+    },
+    {
+      "name": "studio_reviewer_is_read_only_and_returns_evidence",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "验收会话发现问题后别自己修，给原开发会话明确证据让它返工",
+      "must_apply": [
+        "independent reviewer",
+        "read-only",
+        "PASS",
+        "REWORK",
+        "original producer room"
+      ],
+      "must_not_require": [
+        "A reviewer must not edit producer-owned output"
+      ]
+    },
+    {
+      "name": "studio_is_not_faked_with_subagents_on_unsupported_hosts",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "如果当前平台不能创建用户可见的完整会话，就用子 agent 冒充工作室模式",
+      "must_apply": [
+        "Capability Gate",
+        "unavailable",
+        "serial execution",
+        "not a substitute for subagents"
+      ],
+      "must_not_require": [
+        "Do not silently degrade Studio Mode into subagents"
+      ]
+    },
+    {
+      "name": "studio_all_writer_rooms_require_worktrees",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "两个会话改的文件完全不同，能不能为了省事都直接在当前本地目录里同时写",
+      "must_apply": [
+        "local checkout is read-only",
+        "Every room that creates, edits, deletes, generates, formats, stages",
+        "must use its own worktree"
+      ],
+      "must_not_require": [
+        "No automatic commit, merge, push, or deploy"
+      ]
+    },
+    {
+      "name": "studio_dirty_truth_requires_explicit_working_tree_start",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "当前未提交修改就是这次开发基础，创建独立工作会话时别悄悄从默认分支开始",
+      "must_apply": [
+        "working_tree",
+        "explicitly confirms in plain language",
+        "task card source revision",
+        "resolved revision must match"
+      ],
+      "must_not_require": [
+        "never silently fall back to the default branch"
+      ]
+    },
+    {
+      "name": "studio_writer_requires_reviewed_return_path",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "独立 worktree 会话开发完成以后，怎么安全地把成果带回当前项目",
+      "must_apply": [
+        "return contract before creation",
+        "reviewed_patch",
+        "destination paths have not drifted",
+        "dry apply"
+      ],
+      "must_not_require": [
+        "Successful room execution, a PASS review, or an archived room is not integration"
+      ]
+    },
+    {
+      "name": "studio_nontechnical_confirmation_uses_visible_consequences",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "我不懂 owner、worktree 和 revision，确认工作室方案时别让我判断这些技术名词",
+      "must_apply": [
+        "plain-language authorization surface",
+        "whether current uncommitted work is included",
+        "how accepted output returns",
+        "later actions still require confirmation"
+      ],
+      "must_not_require": [
+        "not an architecture worksheet"
+      ]
+    },
+    {
+      "name": "studio_isomorphic_graphs_ignore_domain_nouns",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "同一个三段任务图，换成地图到素材到引擎、设计到素材到应用、数据合同到转换到报表，只要 owner、依赖、环境和验收完全相同，工作室建议是不是也必须相同",
+      "must_apply": [
+        "Domain-Neutral Coordination Model",
+        "Two isomorphic task graphs must receive the same Studio decision",
+        "Domain nouns must not change recommendation eligibility",
+        "topology invariants and metamorphic changes"
+      ],
+      "must_not_require": [
+        "Do not add a supported-domain registry"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Domain-Neutral Coordination Model",
+          "required_terms": [
+            "deliverable nodes",
+            "dependency, review, rework, and integration edges",
+            "Two isomorphic task graphs must receive the same Studio decision",
+            "Do not add a supported-domain registry"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_eligible_work_must_not_default_to_subagents",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/task-decision-contract.md",
+        "references/studio-execution.md"
+      ],
+      "prompt": "前后端两块都能独立做，直接派两个子 agent 并行写代码，不用开什么工作室",
+      "must_apply": [
+        "is read-only (audit, review, diagnosis)",
+        "resolve `studio_decision` first",
+        "independent implementation scopes are never handed to subagents"
+      ],
+      "must_not_require": [
+        "implementation stays `current_only` and serial"
+      ]
+    },
+    {
+      "name": "studio_d2_multi_deliverable_requires_proactive_decision",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/task-risk-gates.md",
+        "references/studio-execution.md"
+      ],
+      "prompt": "这一期同时做用户管理和订单管理两个模块，合同已定，你直接安排就行，我没提工作室",
+      "must_apply": [
+        "Evaluation is a director duty, not a user request",
+        "probe host capability",
+        "Do not wait for the user to name"
+      ],
+      "must_not_require": [
+        "unprobed host is a missing field"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Studio Recommendation Gate",
+          "required_terms": [
+            "Evaluation is a director duty, not a user request",
+            "each with a concrete reason",
+            "never handed to subagents in its place"
+          ],
+          "forbidden_terms": [
+            "Prefer a missed parallelization opportunity"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_model_tier_never_raised_silently",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "拆成几个任务后，每个任务用哪一档模型、要不要多想，你自己定就行，别问我",
+      "must_apply": [
+        "work_kind",
+        "judgment",
+        "mechanical",
+        "requires the user's confirmation for that room"
+      ],
+      "must_not_require": [
+        "never silent permission to increase model cost"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Distribution Granularity And Model Tier",
+          "required_terms": [
+            "large enough to justify re-learning the project",
+            "stays with the director",
+            "a reviewer room never runs below the tier of the producer it reviews",
+            "never silent permission to increase model cost"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_external_executor_is_not_a_room_and_checks_overlap",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "我电脑上装了 Cursor 和 Trae，把照稿实现的体力活交给它们做，前后能不能接进工作室流程",
+      "must_apply": [
+        "External Local Executor",
+        "Capability probe",
+        "Overlap check",
+        "reads the actual diff against the recorded base revision"
+      ],
+      "must_not_require": [
+        "It is not a Studio room"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "External Local Executor",
+          "required_terms": [
+            "Capability probe",
+            "hand off only `mechanical` nodes",
+            "Overlap check",
+            "never satisfies room, reviewer, wait, or return evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio_closure_proposes_room_disposition",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/studio-execution.md"
+      ],
+      "prompt": "几个任务都验收通过了，这些任务是直接归档，还是留着以后返工或者再拉出来用",
+      "must_apply": [
+        "Room Disposition",
+        "one_off",
+        "likely_rework",
+        "reusable_context",
+        "single confirmation"
+      ],
+      "must_not_require": [
+        "Archiving is neither completion, rollback, nor recovery"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/studio-execution.md",
+          "section": "Room Disposition",
+          "required_terms": [
+            "Leaving accepted rooms in the active list without a decision is a closure defect",
+            "one_off",
+            "likely_rework",
+            "reusable_context",
+            "unarchived or forked instead of rebuilt"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "security_rules_persist_in_project_constitution",
+      "expected_route": "项目宪法",
+      "owner_files": [
+        "references/routes-constitution.md",
+        "references/agent-constitution.md",
+        "references/agent-constitution-template.md"
+      ],
+      "prompt": "生成项目宪法，让后面的 AI 写接口时也不能漏掉权限和安全验证",
+      "must_apply": [
+        "前端输入不可信",
+        "安全审计不等于修复授权",
+        "未提供本轮安全验证证据"
+      ],
+      "must_not_require": [
+        "只在用户主动要求安全检查时生效"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/agent-constitution-template.md",
+          "section": "安全红线",
+          "required_terms": [
+            "前端输入不可信",
+            "SQL",
+            "mass assignment",
+            "密钥",
+            "跨用户/跨租户",
+            "事务",
+            "生产调试模式",
+            "安全审计不等于修复授权",
+            "未提供本轮安全验证证据"
+          ],
+          "min_bullets": 10
+        },
+        {
+          "file": "references/routes-constitution.md",
+          "section": "Operation: `create`",
+          "required_terms": [
+            "Security redlines and test-decision/test-quality rules must be mapped individually",
+            "Keep universal rules",
+            "security truth document"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "truth_conflict_cannot_use_file_type_priority",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/truth-resolution.md",
+        "references/engineering-execution.md"
+      ],
+      "prompt": "内部架构文档和已采用的产品合同冲突，别按文件名猜哪个更权威，先判断这次问题由谁拥有",
+      "must_apply": [
+        "question-dependent authority",
+        "product_contract",
+        "open conflict requires `unverified`"
+      ],
+      "must_not_require": [
+        "static file-type priority"
+      ]
+    },
+    {
+      "name": "current_provider_answer_precedes_architecture_possibility",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/truth-resolution.md"
+      ],
+      "prompt": "架构上允许一次完成，但当前外部服务没有可执行结果，现在到底能不能用",
+      "must_apply": [
+        "external_current_state",
+        "fresh external evidence",
+        "current executable answer first"
+      ],
+      "must_not_require": [
+        "architecture possibility as the current verdict"
+      ]
+    },
+    {
+      "name": "formal_artifact_blocks_interrupted_review_and_writer_collision",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/formal-materialization.md",
+        "references/engineering-execution.md"
+      ],
+      "prompt": "一个阻塞审计被中断，而且另一个进程还在写同一输出，先把正式产物交付给我",
+      "must_apply": [
+        "coordinator-authenticated complete review set",
+        "single writer lease",
+        "interrupted",
+        "fail closed"
+      ],
+      "must_not_require": [
+        "partial review as completion evidence"
+      ]
+    },
+    {
+      "name": "long_discussion_must_propose_authorization_card_not_silent_write",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/truth-capture.md",
+        "references/task-decision-contract.md"
+      ],
+      "prompt": "我们聊了一个多小时，退款规则、会员等级和优惠券叠加都定下来了，直接开始写代码吧",
+      "must_apply": [
+        "Authorization Card",
+        "Read-Only Truth Scan",
+        "Scale Gate",
+        "Never silently create or rewrite a truth document",
+        "truth_doc_write"
+      ],
+      "must_not_require": [
+        "repository preference"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/truth-capture.md",
+          "section": "Authorization Card",
+          "required_terms": [
+            "exactly five lines",
+            "confirmed decisions",
+            "cost of not writing",
+            "only authorization evidence"
+          ],
+          "min_bullets": 0
+        },
+        {
+          "file": "references/truth-capture.md",
+          "section": "Trigger",
+          "required_terms": [
+            "at least two confirmed",
+            "`D2`/`D3`",
+            "compaction"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "existing_truth_owner_is_never_rewritten_without_listing_differences",
+      "expected_route": "开发执行",
+      "owner_files": [
+        "references/truth-capture.md",
+        "references/effect-recovery-gates.md"
+      ],
+      "prompt": "技术栈文档写的是 Vue，我们刚决定换成 React，你把文档顺手改了就行",
+      "must_apply": [
+        "update_existing",
+        "local_edit",
+        "Authorization Card",
+        "never self-authorized",
+        "confirmation of the Authorization Card"
+      ],
+      "must_not_require": [
+        "should be documented\" authorizes neither"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/effect-recovery-gates.md",
+          "section": "Minimum Authorization",
+          "required_terms": [
+            "truth_doc_write",
+            "audit_artifact",
+            "never self-authorized"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "post_acceptance_drift_must_card_and_block_next_batch",
+      "expected_route": "验收",
+      "owner_files": [
+        "references/routes-validation.md",
+        "references/truth-capture.md"
+      ],
+      "prompt": "这批验收通过了，接着做下一个子阶段",
+      "must_apply": [
+        "Post-Acceptance Drift Check",
+        "update the document, or change the code",
+        "deferred",
+        "as if no drift existed",
+        "not_needed"
+      ],
+      "must_not_require": [
+        "stage write-back"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/truth-capture.md",
+          "section": "Post-Acceptance Drift Check",
+          "required_terms": [
+            "project brief, function list,\ntechnical selection, architecture, and current stage truth",
+            "deferred",
+            "read-only"
+          ],
+          "min_bullets": 3
+        }
+      ]
+    },
+    {
+      "name": "module_level_audit_writes_report_by_default",
+      "expected_route": "代码审计",
+      "owner_files": [
+        "references/audit-artifact.md",
+        "references/engineering-execution.md"
+      ],
+      "prompt": "帮我审一下订单模块的代码质量",
+      "must_apply": [
+        "module or larger",
+        "Conversation carries the summary",
+        "dev-docs/audits/<YYYY-MM-DD>-<scope>.md",
+        "audit_artifact",
+        "never remediation authorization"
+      ],
+      "must_not_require": [
+        "single-question `D0`/`D1` audit answers in conversation"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/audit-artifact.md",
+          "section": "Proportionality",
+          "required_terms": [
+            "module or larger",
+            "the report is written by",
+            "may decline"
+          ],
+          "min_bullets": 3
+        },
+        {
+          "file": "references/audit-artifact.md",
+          "section": "Finding Schema",
+          "required_terms": [
+            "根因",
+            "最佳方案与理由",
+            "修复涉及代码点",
+            "修复后验证"
+          ],
+          "min_bullets": 12
+        }
+      ]
+    },
+    {
+      "name": "code_audit_cannot_skip_independent_review_pass",
+      "expected_route": "代码审计",
+      "owner_files": [
+        "references/audit-artifact.md"
+      ],
+      "prompt": "就一个小模块，别搞什么复核了，直接给结论",
+      "must_apply": [
+        "Three-Pass Audit",
+        "independent read-only reviewer",
+        "never the producer",
+        "not silently resolved by either side"
+      ],
+      "must_not_require": [
+        "looked small"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/audit-artifact.md",
+          "section": "Three-Pass Audit",
+          "required_terms": [
+            "Triage",
+            "Deep audit",
+            "Review",
+            "audit_pass: closed"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "closing_audit_promotes_unresolved_findings_to_one_live_owner",
+      "expected_route": "代码审计",
+      "owner_files": [
+        "references/audit-artifact.md",
+        "references/task-decision-contract.md"
+      ],
+      "prompt": "审计报告写完了，关掉吧，剩下几条没修的以后再说",
+      "must_apply": [
+        "exactly one live owner",
+        "dev-docs/ai-debt.md",
+        "风险与未决问题",
+        "promoted_to",
+        "promoted_to: none` is invalid",
+        "ledger entry"
+      ],
+      "must_not_require": [
+        "not read to establish current truth"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/task-decision-contract.md",
+          "section": "Audit Materialization",
+          "required_terms": [
+            "unresolved_findings",
+            "promoted_to: none",
+            "fail closed",
+            "must not equal `plan_target` or `stage_target`"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "compaction_offer_requires_card_and_never_moves_files_alone",
+      "expected_route": "整理开发资料",
+      "owner_files": [
+        "references/project-intake.md",
+        "references/project-flow.md"
+      ],
+      "prompt": "features 目录里已经六十多份文档了，你帮我整理一下",
+      "must_apply": [
+        "Compaction Offer",
+        "active feature documents: 40",
+        "Compaction\nCard",
+        "The user approves the card before any move",
+        "Exceeding a budget blocks nothing",
+        "archive/"
+      ],
+      "must_not_require": [
+        "Archiving is never deletion"
+      ],
+      "section_contracts": [
+        {
+          "file": "references/project-intake.md",
+          "section": "Compaction Offer",
+          "required_terms": [
+            "open audit reports: 5",
+            "lines in one truth document: 400",
+            "lines in one index: 150",
+            "approves the card before any move"
+          ],
+          "min_bullets": 5
+        },
+        {
+          "file": "references/project-flow.md",
+          "section": "Truth Ledger Boundary And Index Rules",
+          "required_terms": [
+            "append-only ledgers",
+            "never read to establish",
+            "whole directory is never a discovery step",
+            "status: active | superseded | archived",
+            "Archiving is never deletion"
+          ],
+          "min_bullets": 6
+        }
+      ]
+    }
+  ]
+}

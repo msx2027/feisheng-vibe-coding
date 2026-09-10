@@ -1,0 +1,164 @@
+{
+  "schema": "sliver-capability-registry/v1",
+  "baseline_manifest": "tests/governance/baseline-1.0.0.json",
+  "sources": [
+    {
+      "id": "route-contracts",
+      "path": "tests/route-eval-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "name",
+      "release_blocking": true
+    },
+    {
+      "id": "route-operation-delivery-projection",
+      "path": "references/routes-index.md",
+      "kind": "route_projection",
+      "release_blocking": true
+    },
+    {
+      "id": "selector-families",
+      "path": "tests/selector-pressure-cases.json",
+      "kind": "json_records",
+      "collection": "families",
+      "id_field": "name",
+      "release_blocking": true
+    },
+    {
+      "id": "execution-contracts",
+      "path": "tests/execution-backbone-cases.json",
+      "kind": "json_records",
+      "collection": "pressure_cases",
+      "id_field": "name",
+      "release_blocking": true
+    },
+    {
+      "id": "task-decision-contracts",
+      "path": "tests/task-decision-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "task-decision-live",
+      "path": "tests/task-decision-live-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "ui-lifecycle-contracts",
+      "path": "tests/ui-design-lifecycle-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "name",
+      "release_blocking": true
+    },
+    {
+      "id": "ui-live-contracts",
+      "path": "tests/ui-design-live-behavior-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "foundation-live-contracts",
+      "path": "tests/foundation-live-behavior-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "studio-live-contracts",
+      "path": "tests/studio-live-behavior-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "stage-v2-contracts",
+      "path": "scripts/test_stage_v2_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "governance-semantic-projection-contracts",
+      "path": "scripts/test_governance_semantic_projection_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "validation-contracts",
+      "path": "scripts/test_validation_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "private-risk-scan-contracts",
+      "path": "scripts/test_private_risk_scan_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "runtime-governance-contracts",
+      "path": "scripts/test_runtime_governance_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "governance-static-mutations",
+      "path": "tests/governance/static-mutation-cases-v1.json",
+      "kind": "json_records",
+      "collection": "mutations",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "governance-meta-mutations",
+      "path": "tests/governance/collusion-mutation-cases-v1.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "governance-mutation-contracts",
+      "path": "scripts/test_governance_mutation_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "runtime-safety-contracts",
+      "path": "scripts/test_runtime_bundle_safety.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "release-isolation-contracts",
+      "path": "scripts/test_release_candidate_contracts.py",
+      "kind": "python_unittest",
+      "release_blocking": true
+    },
+    {
+      "id": "known-live-gap-contracts",
+      "path": "tests/governance/known-live-gaps-v1.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    },
+    {
+      "id": "execution-liveness-live-contracts",
+      "path": "tests/execution-liveness-live-cases.json",
+      "kind": "json_records",
+      "collection": "cases",
+      "id_field": "id",
+      "release_blocking": true
+    }
+  ]
+}

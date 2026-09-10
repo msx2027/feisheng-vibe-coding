@@ -1,0 +1,14 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "draft-pending",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "prototype_status": "draft",
+    "approved_version": "pending",
+    "active_version": "v001",
+    "implementation_version": "pending",
+    "implementation_status": "not_started",
+    "worktree_state": "clean_fixture"
+  }
+}

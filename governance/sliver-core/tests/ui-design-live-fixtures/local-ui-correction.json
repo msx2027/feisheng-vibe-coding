@@ -1,0 +1,15 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "local-ui-correction",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "project_kind": "existing",
+    "requested_change": "save button brand color and vertical spacing only",
+    "interaction_change": false,
+    "new_design_artifact_requested": false,
+    "current_component_owner": "src/components/ui/Button.tsx",
+    "current_token_owner": "src/styles/tokens.css",
+    "expected_execution_depth": "lightweight"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "fields": [
+    "endpoint",
+    "credential_ref",
+    "retry_limit",
+    "revision",
+    "internal_health",
+    "last_persisted_at"
+  ],
+  "user_decisions": ["endpoint", "credential_ref"],
+  "internal_only": ["revision", "internal_health", "last_persisted_at"]
+}

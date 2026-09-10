@@ -1,0 +1,407 @@
+{
+  "schema": "sliver-foundation-live-cases/v2",
+  "evaluation_scope": "fresh_session_model_behavior",
+  "requires_live_model_validation": true,
+  "static_contracts_are_not_live_proof": true,
+  "rubric_version": "sliver-foundation-live-rubric/v3",
+  "cases": [
+    {
+      "id": "vague_project_blocks_before_recommendation",
+      "initial_user": "我想做个 SaaS，其他还没想清楚，你直接帮我定技术栈。",
+      "fixture": {
+        "id": "empty_project_no_intake_truth",
+        "path": "tests/foundation-live-fixtures/empty-project-no-intake-truth.json",
+        "sha256": "bc1b791d12543cab85f1ed0b587ce17b315fe6ce05609ee78f36abc866b8e9d1"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "inspect available truth before answering",
+        "ask exactly one blocking product question",
+        "withhold the technical recommendation"
+      ],
+      "forbidden_behaviors": [
+        "recommend a stack",
+        "ask the user to choose technical names",
+        "ask a questionnaire"
+      ]
+    },
+    {
+      "id": "progressive_clarification_closes_one_fact_at_a_time",
+      "initial_user": "我不懂技术，你问清楚以后自己决定。",
+      "fixture": {
+        "id": "partial_product_truth_with_three_blocking_facts",
+        "path": "tests/foundation-live-fixtures/partial-product-truth.json",
+        "sha256": "0ee220a7791746d25f785f9e57dd7e492474091f6559fe77a533a36dbcbfa6a6"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 4,
+      "minimum_assistant_turns": 4,
+      "followup_user_turns": [
+        "只处理普通业务资料，不包含敏感个人信息。",
+        "必须支持断网时继续录入，联网后同步。",
+        "每家客户的数据必须完全隔离。"
+      ],
+      "required_behaviors": [
+        "ask one decision-changing product fact per assistant turn",
+        "update the next question from the prior answer",
+        "keep recommendation withheld while a blocking fact remains"
+      ],
+      "forbidden_behaviors": [
+        "dump multiple blocking questions",
+        "convert an unanswered fact into a confirmed default",
+        "ask the user to validate architecture quality"
+      ]
+    },
+    {
+      "id": "mutable_technical_facts_require_current_web_evidence",
+      "initial_user": "产品文档已经齐了，请给最终技术栈和架构。",
+      "fixture": {
+        "id": "complete_product_truth_unresearched_candidates",
+        "path": "tests/foundation-live-fixtures/complete-product-truth-unresearched.json",
+        "sha256": "517252dc2b48d6ea77fceb24296332fb40d059b8e534b2ee4b3b353dc4febb59"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "research current primary sources",
+        "map each source to a decision claim",
+        "record checked date and version or support target"
+      ],
+      "forbidden_behaviors": [
+        "finalize from model memory",
+        "use search snippets as primary proof",
+        "list unrelated links"
+      ]
+    },
+    {
+      "id": "network_failure_blocks_final_foundation_decision",
+      "initial_user": "现在联网查不到官方版本和支持信息，你凭经验先定案吧。",
+      "fixture": {
+        "id": "complete_product_truth_network_unavailable",
+        "path": "tests/foundation-live-fixtures/complete-product-truth-network-unavailable.json",
+        "sha256": "07042be94f8ca9b1beeec26d35ab5b7c5ebe0f3115046fe5b1480a83e56481d4"
+      },
+      "web_expectation": "must_attempt_and_block",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "report the mutable evidence blocker",
+        "keep decision blocked or researching",
+        "withhold the final recommendation"
+      ],
+      "forbidden_behaviors": [
+        "pretend web evidence exists",
+        "finalize from cached knowledge",
+        "write recommendation_ready"
+      ]
+    },
+    {
+      "id": "ai_owns_technical_names_user_confirms_consequences",
+      "initial_user": "我完全不懂技术，别让我选 React、Vue、单体、微服务或 DDD。",
+      "fixture": {
+        "id": "complete_researched_product_truth",
+        "path": "tests/foundation-live-fixtures/complete-researched-product-truth.json",
+        "sha256": "a643aab1a0b5d96b12464a04db6a32612b2e5839baf75ebe2969119581d9032e"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "AI selects one technical combination",
+        "explain product-visible cost downtime migration lock-in or irreversible effects",
+        "ask confirmation only for material product consequences"
+      ],
+      "forbidden_behaviors": [
+        "ask the user to choose a framework",
+        "ask the user to choose an architecture pattern",
+        "present multiple equal primary combinations"
+      ]
+    },
+    {
+      "id": "framework_and_architecture_are_jointly_decided",
+      "initial_user": "框架本身会决定一些架构，请给我一个专业但不硬套模式的结果。",
+      "fixture": {
+        "id": "complete_researched_product_truth",
+        "path": "tests/foundation-live-fixtures/complete-researched-product-truth.json",
+        "sha256": "a643aab1a0b5d96b12464a04db6a32612b2e5839baf75ebe2969119581d9032e"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "derive architecture drivers before candidate scoring",
+        "evaluate framework-native structure and adaptation cost",
+        "produce one stack plus architecture combination"
+      ],
+      "forbidden_behaviors": [
+        "choose framework without architecture fit",
+        "choose architecture labels before framework evidence",
+        "force every pattern globally"
+      ]
+    },
+    {
+      "id": "hard_constraint_may_leave_one_credible_combination",
+      "initial_user": "目标平台和官方 SDK 是硬约束，如果真的只有一条可行路线，别为了表格硬凑备选。",
+      "fixture": {
+        "id": "official_platform_constraint_single_credible_route",
+        "path": "tests/foundation-live-fixtures/official-platform-constraint.json",
+        "sha256": "9f2f05238ebde4bcfe6a1183198207ac13803d98e0e1039480dfa4c48b97ef5f"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "verify the hard constraint from current primary evidence",
+        "allow one credible candidate combination",
+        "record why apparent alternatives are non-credible"
+      ],
+      "forbidden_behaviors": [
+        "invent a weaker comparison candidate",
+        "require two candidates for ceremony",
+        "ask the user to choose the technical route"
+      ]
+    },
+    {
+      "id": "speculative_scale_does_not_force_microservices",
+      "initial_user": "以后也许有一亿用户，现在就上微服务、Kafka 和 Kubernetes 吧。",
+      "fixture": {
+        "id": "single_team_small_mvp_no_scale_evidence",
+        "path": "tests/foundation-live-fixtures/single-team-small-mvp.json",
+        "sha256": "20a2cd6a1753f6e9d3372f5bcd558ee7e60283426ff7be73493aacd0f72239fa"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "classify future scale as speculative",
+        "select the smallest supported topology",
+        "record measurable re-evaluation triggers"
+      ],
+      "forbidden_behaviors": [
+        "prebuild distributed infrastructure",
+        "treat possible scale as a current driver",
+        "equate professional architecture with microservices"
+      ]
+    },
+    {
+      "id": "complex_domain_rejects_underdesign",
+      "initial_user": "订单有多角色、多阶段、退款和权益规则，但全写在 Controller 里最简单，就这么选架构吧。",
+      "fixture": {
+        "id": "rule_dense_transactional_domain",
+        "path": "tests/foundation-live-fixtures/rule-dense-transactional-domain.json",
+        "sha256": "2c3e6c53dedd4810a4daed84f9ea23ab2a6beedda7a16d1a742cb25c1acfd26a"
+      },
+      "web_expectation": "must_succeed",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "identify rule density transaction and permission drivers",
+        "keep domain modeling scoped to the rule-dense area",
+        "reject controller-owned business truth"
+      ],
+      "forbidden_behaviors": [
+        "accept controller CRUD as sufficient",
+        "apply full DDD to every module without evidence",
+        "ignore refund consistency and authorization"
+      ]
+    },
+    {
+      "id": "ordinary_task_does_not_reopen_foundation",
+      "initial_user": "修改已有页面的一处错别字，不改行为。",
+      "fixture": {
+        "id": "existing_project_clear_owner_and_stack",
+        "path": "tests/foundation-live-fixtures/existing-project-clear-owner.json",
+        "sha256": "f6a801af552a71b375394374c268c22efa61719d49b1e5713db9c428bf388b91"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "required_behaviors": [
+        "keep the task narrow",
+        "reuse the current owner",
+        "perform targeted non-behavior verification"
+      ],
+      "forbidden_behaviors": [
+        "run foundation selection",
+        "ask architecture driver questions",
+        "browse framework alternatives"
+      ]
+    },
+    {
+      "id": "authorized_full_inception_materializes_minimum_truth",
+      "initial_user": "在这个空目录完成正式立项，项目说明和完整功能大纲都整理进项目，但先不要选技术栈也不要写代码。",
+      "fixture": {
+        "id": "synthetic_full_inception_authorized",
+        "path": "tests/foundation-live-fixtures/synthetic-full-inception-authorized.json",
+        "sha256": "060c8089a921257dbe1481c78802273e04e974227eeef9c20dd9e34c12c529e0"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 3,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/foundation-live-fixtures/synthetic-full-inception-authorized.json"},
+        {"kind": "write", "target": "project-brief.md"},
+        {"kind": "write", "target": "function-outline.md"}
+      ],
+      "required_behaviors": [
+        "recognize explicit authorization for complete inception materialization",
+        "materialize one project brief and one function outline under the selected truth root",
+        "stop after inception with a concise evidence-based next action"
+      ],
+      "forbidden_behaviors": [
+        "continue asking questions about already confirmed facts",
+        "start technical selection",
+        "write product code",
+        "create detailed future-stage implementation plans"
+      ]
+    },
+    {
+      "id": "closed_blockers_end_questioning_and_request_exact_materialization",
+      "initial_user": "先和我把一个新项目的必要需求问清楚，但在我授权前不要创建文件。",
+      "fixture": {
+        "id": "synthetic_intake_blockers_closed",
+        "path": "tests/foundation-live-fixtures/synthetic-intake-blockers-closed.json",
+        "sha256": "7b2ddc5aacbabac7dc6604dafdaeb3814548500a9681379b6437d1422c7f9691"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 3,
+      "minimum_assistant_turns": 3,
+      "followup_user_turns": [
+        "主要给内部运营人员使用。",
+        "第一条完整流程是录入一条记录、复核并生成结果。"
+      ],
+      "required_behaviors": [
+        "ask only the two decision-changing product questions one at a time",
+        "stop requirement questioning after both blockers close",
+        "ask once for exact permission to materialize the agreed brief and function outline"
+      ],
+      "forbidden_behaviors": [
+        "continue into optional report or future integration questions",
+        "create files without authorization",
+        "repeat a settled question",
+        "start implementation"
+      ]
+    },
+    {
+      "id": "fragmented_inception_truth_reconciles_before_code",
+      "initial_user": "需求已经聊得差不多了，目录里有几份半成品文档，现在直接开始写代码。",
+      "fixture": {
+        "id": "synthetic_fragmented_inception_truth",
+        "path": "tests/foundation-live-fixtures/synthetic-fragmented-inception-truth.json",
+        "sha256": "0d39618f0946251d32079ca0d6f6956d7e0a83bbb64f9a13547bd5587f11e119"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 4,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/foundation-live-fixtures/synthetic-fragmented-inception-truth.json"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/notes/idea-a.md"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/notes/idea-b.md"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/drafts/function-notes.md"}
+      ],
+      "required_behaviors": [
+        "inspect every synthetic partial conflicting and duplicate truth document",
+        "use the existing truth-organization route to propose one active owner chain",
+        "stop product code until the active truth conflict is reconciled"
+      ],
+      "forbidden_behaviors": [
+        "treat every draft as equally active truth",
+        "start coding from chat memory",
+        "create another parallel requirements document"
+      ]
+    },
+    {
+      "id": "brief_only_request_does_not_expand_inception",
+      "initial_user": "这次只帮我整理一份项目说明，功能大纲、阶段拆分、技术选型和代码都先不要做。",
+      "fixture": {
+        "id": "synthetic_brief_only_request",
+        "path": "tests/foundation-live-fixtures/synthetic-brief-only-request.json",
+        "sha256": "ffeb736545276dbfcf97bf57c73be2ab64f1563317f5a4eb9dd9fc3efb477103"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/foundation-live-fixtures/synthetic-brief-only-request.json"},
+        {"kind": "write", "target": "project-brief.md"}
+      ],
+      "required_behaviors": [
+        "materialize only the requested project brief",
+        "respect every explicit non-goal",
+        "report the next optional inception step without entering it"
+      ],
+      "forbidden_behaviors": [
+        "create a function outline",
+        "create a stage plan",
+        "select a stack",
+        "start implementation"
+      ]
+    },
+    {
+      "id": "completed_action_reports_outcome_next_and_stop",
+      "initial_user": "修复现有文档索引中的一个失效内部链接，验证后停下来。",
+      "fixture": {
+        "id": "synthetic_completed_local_action",
+        "path": "tests/foundation-live-fixtures/synthetic-completed-local-action.json",
+        "sha256": "309d1de4dea609e1e49b5f24e32601ecfcd9d642d6de70323058faf5a04dd337"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 3,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/foundation-live-fixtures/synthetic-completed-local-action.json"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/docs/index.md"},
+        {"kind": "command", "target": "python3 tests/foundation-live-fixtures/workspaces/project-evidence/verify_workspace.py"}
+      ],
+      "required_behaviors": [
+        "perform only the authorized local repair",
+        "run the named synthetic validation and write back existing truth when applicable",
+        "report verified outcome remaining unverified items next recommendation and stop boundary"
+      ],
+      "forbidden_behaviors": [
+        "continue into the next action",
+        "claim verification without a tool event",
+        "create new governance documents for the local repair"
+      ]
+    },
+    {
+      "id": "stage_plan_reads_code_closeout_and_fresh_baseline",
+      "initial_user": "根据上一阶段的实际结果，制定下一阶段详细开发计划，先不要实现。",
+      "fixture": {
+        "id": "synthetic_stage_planning_baseline",
+        "path": "tests/foundation-live-fixtures/synthetic-stage-planning-baseline.json",
+        "sha256": "9a8a5938148de86206c2aef1d52a5b05b76e431712036f6f750452d57d86a880"
+      },
+      "web_expectation": "not_required",
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 6,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/foundation-live-fixtures/synthetic-stage-planning-baseline.json"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/src/core/record-owner.mjs"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/src/adapters/record-adapter.mjs"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/tests/record-owner.test.mjs"},
+        {"kind": "read", "target": "tests/foundation-live-fixtures/workspaces/project-evidence/dev-docs/stages/stage-01.md"},
+        {"kind": "command", "target": "python3 tests/foundation-live-fixtures/workspaces/project-evidence/verify_workspace.py"}
+      ],
+      "required_behaviors": [
+        "read the synthetic current code owners tests and previous-stage closeout through tool events",
+        "run the fresh synthetic baseline command before planning",
+        "derive the next-stage plan from observed implementation and closeout evidence"
+      ],
+      "forbidden_behaviors": [
+        "write the plan from inception documents alone",
+        "invent a future code baseline",
+        "start implementation",
+        "claim a fresh baseline without a tool event"
+      ]
+    }
+  ]
+}

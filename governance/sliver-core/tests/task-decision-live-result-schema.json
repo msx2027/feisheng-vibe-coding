@@ -1,0 +1,14 @@
+{
+  "schema": "sliver-task-decision-live-results/v2",
+  "required_top_level": ["schema", "run_id", "skill_version", "runtime_target", "runtime_digest", "host", "model", "generated_at", "fresh_session", "source_revision", "runner_isolation", "cases"],
+  "required_case_fields": ["id", "thread_id", "host_id", "started_at", "ended_at", "case_prompt", "initial_user", "raw_result_path", "decision"],
+  "notes": [
+    "Static contract validation is not fresh-session behavior proof.",
+    "Each case has a unique task identifier and preserves the exact contracted case prompt inside the actual initial user message.",
+    "raw_result_path must contain a JSON object exactly equal to decision; file existence alone is not evidence.",
+    "A task-owned plan requires host_validation_context outside decision; its identity equals thread_id and its absolute non-symlink root comes from the attested host producer.",
+    "Every materialized plan carries the coordinator-authenticated complete blocking-review ref set outside decision; explicit and internal plan paths also require externally authenticated exact-path provenance.",
+    "Candidate identity and the shared runner_isolation manifest bind the installed runtime, exact source, isolated producer workflow, exact readable input closure, privacy scan, and cleanup state.",
+    "A protected-boundary false negative blocks release and cannot be averaged away."
+  ]
+}

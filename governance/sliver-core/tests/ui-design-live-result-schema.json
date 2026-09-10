@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-ui-design-live-results/v4",
+  "rubric_version": "ui-design-lifecycle/v5",
+  "required_top_level": ["schema", "run_id", "skill_version", "runtime_target", "runtime_digest", "source_revision", "platform", "model", "generated_at", "fresh_session", "runner_isolation", "runner_provenance", "judge_provenance", "rubric_version", "cases"],
+  "required_runner_fields": ["name", "version", "invocation_id", "artifact_path", "artifact_sha256"],
+  "required_judge_provenance_fields": ["kind", "identity", "version", "independent_from_subject", "rubric_version", "judged_at"],
+  "required_case_fields": ["case_id", "fixture", "initial_user", "skill_selection", "session", "transcript", "tool_trace", "artifacts", "final_output", "judge"],
+  "required_fixture_fields": ["id", "path", "sha256"],
+  "required_skill_selection_fields": ["selected", "skill_name", "selected_at", "evidence_ref"],
+  "required_session_fields": ["session_id", "started_at", "ended_at"],
+  "required_transcript_event_fields": ["event_id", "role", "timestamp", "content"],
+  "required_tool_event_fields": ["tool_call_id", "tool_name", "status", "started_at", "completed_at", "request_summary", "response_summary", "evidence_kind", "evidence_target", "transcript_event_ref"],
+  "required_artifact_fields": ["artifact_id", "kind", "path", "sha256", "tool_call_id", "evidence_role", "pair_id", "viewport", "state", "theme"],
+  "required_judge_fields": ["status", "reason", "rubric_version", "required_behavior_results", "forbidden_behavior_results"],
+  "required_behavior_result_fields": ["passed", "evidence_refs"],
+  "forbidden_behavior_result_fields": ["observed", "evidence_refs"],
+  "allowed_judge_statuses": ["pass", "fail", "unverified"],
+  "allowed_judge_kinds": ["human", "model"],
+  "allowed_transcript_roles": ["system", "user", "assistant", "tool"],
+  "allowed_tool_statuses": ["success", "error"],
+  "notes": ["Static contract validation is not a live pass.", "Every case uses an immutable fixture hash.", "Candidate identity and runner_isolation bind target, source revision, isolated producer run, exact readable input closure, privacy scan, and cleanup state.", "Judged fields and runner_isolation must equal the hashed raw runner artifact.", "Prototype, transparent-asset, and every screenshot artifact kind must be a fully decodable non-interlaced 8-bit RGB or RGBA PNG, not an arbitrary hashed file.", "Reference and candidate screenshots share one pair id and the same viewport, state, and theme.", "Delivery-shape acceptance binds the normalized pre-lock digest; DOM/accessibility and interaction evidence remain distinct from screenshots.", "Behavior verdicts cite transcript event, tool call, artifact, or session references.", "Every required behavior must pass, every forbidden behavior must be absent, and every case judge status must be pass."]
+}

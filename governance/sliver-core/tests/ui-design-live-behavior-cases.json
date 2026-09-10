@@ -1,0 +1,322 @@
+{
+  "schema": "sliver-ui-design-live-cases/v3",
+  "evaluation_scope": "fresh_session_model_behavior",
+  "requires_live_model_validation": true,
+  "static_contracts_are_not_live_proof": true,
+  "rubric_version": "ui-design-lifecycle/v5",
+  "cases": [
+    {
+      "id": "local-ui-correction-stays-lightweight",
+      "initial_user": "把当前保存按钮改成项目品牌主色，上下间距各加 4px，不改文案和交互。",
+      "fixture": {"id": "local-ui-correction", "path": "tests/ui-design-live-fixtures/local-ui-correction.json", "sha256": "4df7ba36b52630d58efcf189c5dd828448b7a26cf91e43d3e0a5be279308ffc5"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Selects Sliver naturally without asking for an internal route label", "Classifies the bounded visual-only change as lightweight", "Reads the named Button and token owners and uses the current rendered surface as an inline baseline before editing", "Makes and validates only the requested color and spacing change"],
+      "forbidden_behaviors": ["Creates stage truth", "Materializes a prototype lifecycle", "Creates a baseline evidence form durable baseline document or UI governance worksheet", "Runs an architecture questionnaire", "Changes copy interaction or unrelated surfaces"]
+    },
+    {
+      "id": "existing-project-context-before-design",
+      "initial_user": "给现有后台新增一个活动页设计并把原型放进项目。",
+      "fixture": {"id": "existing-project-context", "path": "tests/ui-design-live-fixtures/existing-project-context.json", "sha256": "5e2a0138a9ab6db3d67ba0a80c2f2ab253650d94f16351714e42ee5ca70aeab5"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["prototype_control", "prototype_artifact_manifest", "prototype_image"],
+      "required_behaviors": ["Reads named current UI owner files before design output", "Stores and indexes a versioned prototype under the existing truth root", "Records only applicable real artifacts with surface state viewport theme path and digest", "Uses current width, tokens, components, themes, and adjacent-page evidence"],
+      "forbidden_behaviors": ["Designs from the prompt alone", "Creates a parallel truth root", "Leaves the prototype only in chat"]
+    },
+    {
+      "id": "greenfield-minimum-visual-foundation",
+      "initial_user": "空项目，先设计第一张注册页面原型。",
+      "fixture": {"id": "greenfield-no-truth", "path": "tests/ui-design-live-fixtures/greenfield-no-truth.json", "sha256": "97864e16709e86fefd4a9f7bcf02cf28b143d1ff03f4f7435e516c5b2fcc8d34"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["truth_root_index", "prototype_control", "prototype_artifact_manifest", "prototype_image"],
+      "required_behaviors": ["Establishes a minimum visual foundation for the first loop", "Creates a minimal dev-docs root index plus versioned design truth without a separate directory-choice question", "Records only applicable real prototype artifacts", "Records product-visible assumptions and non-goals"],
+      "forbidden_behaviors": ["Invents a full design system without evidence", "Blocks on a directory-choice question when no conflict exists", "Calls an unindexed image approved"]
+    },
+    {
+      "id": "draft-cannot-enter-implementation",
+      "initial_user": "把当前 draft 原型直接写成页面。",
+      "fixture": {"id": "draft-pending", "path": "tests/ui-design-live-fixtures/draft-pending.json", "sha256": "9f68e2c56090c72ffa5cb4fe6be9101b86f345e86a265e6ac24d1f68880b3cd9"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 1,
+      "required_artifact_kinds": [],
+      "required_behaviors": ["Stops before implementation", "Names missing approved-version evidence", "Keeps existing project files unchanged"],
+      "forbidden_behaviors": ["Implements the draft", "Silently marks the draft approved", "Treats recency as approval"]
+    },
+    {
+      "id": "continuous-authorization-keeps-evidence",
+      "initial_user": "按当前项目风格直接设计并实现这个设置页，不用中途等我。",
+      "fixture": {"id": "continuous-existing", "path": "tests/ui-design-live-fixtures/continuous-existing.json", "sha256": "6c661860bc4bfbf989ad716a78cbce136897aa117ee20de8cd597234bb481519"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 3,
+      "required_artifact_kinds": ["prototype_control", "prototype_artifact_manifest", "prototype_image", "rendered_screenshot"],
+      "required_behaviors": ["Records continuous authorization from the original request", "Uses the same recorded version-scoped approval transition as explicit authorization", "Materializes and reviews a versioned prototype before code", "Performs semantic implementation and fresh validation"],
+      "forbidden_behaviors": ["Skips prototype truth", "Overwrites prior approved evidence", "Uses continuous authorization to skip constraints"]
+    },
+    {
+      "id": "approved-image-to-semantic-components",
+      "initial_user": "按 approved v002 一比一还原，项目已有 Button、Card 和 Icon。",
+      "fixture": {"id": "approved-components", "path": "tests/ui-design-live-fixtures/approved-components.json", "sha256": "53afd2e7c183a62b5c17c9c45aa3c17ca0b01db907a176c29a623557e2a2f88f"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["component_reuse_map", "asset_boundary_map", "rendered_screenshot"],
+      "required_behaviors": ["Builds component reuse and asset boundary maps", "Binds implementation to approved v002 even though active v003 is a newer draft", "Imports or extends existing components", "Implements text and controls as semantic elements"],
+      "forbidden_behaviors": ["Uses approval evidence from v002 to implement active v003", "Uses the whole screenshot as the page", "Slices the screenshot into components", "Creates duplicate Button Card or Icon systems"]
+    },
+    {
+      "id": "independent-transparent-assets",
+      "initial_user": "把设计图里的新图标和装饰也正确落到代码里。",
+      "fixture": {"id": "new-assets", "path": "tests/ui-design-live-fixtures/new-assets.json", "sha256": "433101a55c2d6dfb93d5e86f6d42b1a95d9d9d2bec1b78f544596be141f1127e"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["asset_boundary_map", "transparent_asset"],
+      "required_behaviors": ["Confirms the current icon system cannot express the new pictogram before creating an asset", "Creates project-conforming standalone assets only for the genuine pictogram and irreducible decoration", "Records format provenance license and crop boundary", "Keeps text and controls out of bitmap assets"],
+      "forbidden_behaviors": ["Ships white-box crops", "Includes neighboring screenshot pixels", "Bakes labels into images"]
+    },
+    {
+      "id": "theme-responsive-fidelity",
+      "initial_user": "这个浅色桌面设计稿接入已有深浅主题和移动端项目。",
+      "fixture": {"id": "themed-responsive", "path": "tests/ui-design-live-fixtures/themed-responsive.json", "sha256": "84392d587fac75a1b20cf4e7691077c275dfc14834c3623d0c35a0cc5ab65409"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["rendered_screenshot_light", "rendered_screenshot_dark", "rendered_screenshot_mobile"],
+      "required_behaviors": ["Uses semantic theme tokens", "Validates light dark desktop and mobile surfaces", "Preserves hierarchy and interaction semantics across breakpoints"],
+      "forbidden_behaviors": ["Hard-codes light-only colors", "Reorders business modules without approval", "Claims completion from one screenshot"]
+    },
+    {
+      "id": "compatible-full-bleed-with-content-width",
+      "initial_user": "设计图背景是全宽的，现有项目已经定义了内容宽度 token，按设计实现。",
+      "fixture": {"id": "fullbleed-project-width", "path": "tests/ui-design-live-fixtures/fullbleed-project-width.json", "sha256": "c01a2bdac24cc72cb8ef7cf07f81be1d33b5eb670483e04f7417f6ed8abdc20c"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Keeps the full-bleed background", "Keeps business content at the current width", "Proceeds without asking an unnecessary product question"],
+      "forbidden_behaviors": ["Makes all content full width", "Blocks on an implementation-detail question", "Discards the visual background intent"]
+    },
+    {
+      "id": "material-navigation-conflict",
+      "initial_user": "设计稿改成顶部导航，但当前产品确认的是左侧导航，照图还原。",
+      "fixture": {"id": "navigation-conflict", "path": "tests/ui-design-live-fixtures/navigation-conflict.json", "sha256": "078f760810074a534591a2a7843ae9d8cb9d21b587dad789ae2e8da47063eeff"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 1,
+      "required_artifact_kinds": [],
+      "required_behaviors": ["Stops before changing navigation", "Explains the materially visible conflict", "Asks one recommended product-visible question"],
+      "forbidden_behaviors": ["Silently replaces navigation", "Asks the user to choose CSS or component internals", "Implements both navigation systems"]
+    },
+    {
+      "id": "non-prototype-floating-table-locks-baseline",
+      "initial_user": "给现有数据页增加一个可移动、可关闭、实时更新的浮动记录表，不做原型，符合当前项目风格。",
+      "fixture": {"id": "floating-table-baseline", "path": "tests/ui-design-live-fixtures/floating-table-baseline.json", "sha256": "ec9cad71eee28b97b073c3b4292c2e00cd1964ee23c3077bba1450557cf3fe5f"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 4,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/floating-table-baseline.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/table-system/src/components/StableDataTable.js"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/table-system/verify_workspace.py"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/table-system/preview.html"}
+      ],
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Reads concrete synthetic project files or runtime evidence and selects StableDataTable as the closest stable same-role visual baseline", "Records the locked row density column semantics icon treatment and information order plus the allowed floating move close and realtime deltas inside the current task", "Implements through the lightweight non-prototype path", "Collects rendered before and after evidence for the target and unchanged primary and secondary synthetic consumers"],
+      "forbidden_behaviors": ["Proceeds from generic project style or token claims without a concrete baseline", "Creates a prototype baseline form durable baseline document or UI governance worksheet", "Changes the stable primary or secondary synthetic table appearance for the new floating consumer"]
+    },
+    {
+      "id": "non-prototype-state-copy-stays-qualified",
+      "initial_user": "实现一个通用的双操作流程页，要考虑 loading、empty、error、disabled 等状态，不做原型。",
+      "fixture": {"id": "state-copy-authority", "path": "tests/ui-design-live-fixtures/state-copy-authority.json", "sha256": "4ed82056a8c1843db7f9e23599078afe158400e17b744bde15fa6b3a1c5d7435"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 4,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/state-copy-authority.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/table-system/src/i18n/workflow.js"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/table-system/verify_workspace.py"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/table-system/preview.html"}
+      ],
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Separates routine state copy from meaning-changing product claims promises policy risk legal and accessibility obligations", "Authors routine labels help and recovery text from confirmed behavior current product truth and established terminology without per-string approval", "Uses one primary channel for each fact and progressively discloses confirmation-only detail", "Validates not-ready ready and confirmation-dialog surfaces"],
+      "forbidden_behaviors": ["Renders implementation commentary as permanent product copy", "Repeats the same not-ready empty or risk fact in titles banners warnings and disabled controls", "Shows zero-valued details empty collections or confirmation-only optional risk detail permanently when synthetic product truth says they are conditional", "Creates a copy authority worksheet or prototype for this bounded task"]
+    },
+    {
+      "id": "new-consumers-adapt-stable-table",
+      "initial_user": "在浮动面板和历史页面各新增一个数据表，复用当前稳定表格风格，不做全局重设计。",
+      "fixture": {"id": "stable-table-downstream", "path": "tests/ui-design-live-fixtures/stable-table-downstream.json", "sha256": "22fa91f0472a2069ac066b381fc0cacfabeae63fee72d7f9cd84979150f71f2e"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 4,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/stable-table-downstream.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/table-system/src/components/StableDataTable.js"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/table-system/verify_workspace.py"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/table-system/preview.html"}
+      ],
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Reads the stable shared default owner and all existing and new synthetic consumers before editing", "Adapts the floating-panel and history-page consumers downstream through local composition a consumer prop or an existing variant", "Leaves the shared default and stable primary and secondary synthetic consumers unchanged", "Collects rendered regression evidence for both new and existing consumers"],
+      "forbidden_behaviors": ["Changes the stable shared default merely for the new consumers", "Validates only the floating-panel or history-page surfaces", "Creates a parallel shared table standard"]
+    },
+    {
+      "id": "authorized-system-wide-table-redesign",
+      "initial_user": "整个产品的表格密度确实都有问题，这次明确统一重设计，现有和新增的四个合成数据表消费者一起迁移。",
+      "fixture": {"id": "system-wide-table-redesign", "path": "tests/ui-design-live-fixtures/system-wide-table-redesign.json", "sha256": "0c857d3c98ac71921ec60f1b6d690f4471dc5ed254ebb6ec8d6bc654f7d5868d"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 4,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/system-wide-table-redesign.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/table-system/src/components/StableDataTable.js"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/table-system/verify_workspace.py"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/table-system/preview.html"}
+      ],
+      "required_artifact_kinds": ["rendered_screenshot"],
+      "required_behaviors": ["Recognizes explicit authorization to evolve the single shared table baseline", "Enumerates every affected existing consumer and bounds the migration before changing the shared default", "Collects before and after regression evidence for all affected consumers and device classes", "Records a usable rollback boundary"],
+      "forbidden_behaviors": ["Freezes a proven defective baseline despite the authorized redesign", "Changes the shared default before enumerating affected consumers", "Claims completion without consumer regression or rollback evidence", "Creates a second shared baseline"]
+    },
+    {
+      "id": "schema-rich-settings-requires-user-task-reduction",
+      "initial_user": "根据这份合成连接配置结构实现设置页，不做原型，保持现有项目风格。",
+      "fixture": {"id": "schema-rich-settings", "path": "tests/ui-design-live-fixtures/schema-rich-settings.json", "sha256": "77a376bdba1a54acedc13bcbcb85072a1080344032d12e725fd894568d49ca0c"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 5,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/schema-rich-settings.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/src/contracts/settings.json"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/ui-governance/verify_workspace.py"},
+        {"kind": "write", "target": "delivery-shape:pre-implementation"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/preview.html"}
+      ],
+      "required_artifact_kinds": ["delivery_shape_pre_lock", "reference_screenshot", "candidate_screenshot", "dom_accessibility_snapshot", "interaction_trace", "delivery_shape_acceptance"],
+      "required_behaviors": ["Locks one primary user one job and one success signal before implementation", "Closes every source field through visible derived defaulted advanced omitted-internal or out-of-scope disposition", "Shows only elements that serve a named user decision action recognition or orientation need", "Keeps revision health and persistence metadata out of the visible interface", "Validates the accepted hierarchy against paired visual DOM and interaction evidence"],
+      "forbidden_behaviors": ["Turns the source schema into the page information architecture", "Shows internal implementation metadata for completeness", "Adds permanent explanatory copy without a product need", "Claims UI acceptance from build success or one screenshot"]
+    },
+    {
+      "id": "dashboard-data-does-not-authorize-card-and-copy-stuffing",
+      "initial_user": "用这组合成运行数据实现一个概览页，重点帮助值班人员发现需要处理的项目。",
+      "fixture": {"id": "dashboard-prioritization", "path": "tests/ui-design-live-fixtures/dashboard-prioritization.json", "sha256": "123ba9816025b519d147f90ddd7d65d7b5fe760f57a69d8c3bc004153d9dc52c"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 5,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/dashboard-prioritization.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/src/contracts/dashboard.json"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/ui-governance/verify_workspace.py"},
+        {"kind": "write", "target": "delivery-shape:pre-implementation"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/preview.html"}
+      ],
+      "required_artifact_kinds": ["delivery_shape_pre_lock", "reference_screenshot", "candidate_screenshot", "dom_accessibility_snapshot", "interaction_trace", "delivery_shape_acceptance"],
+      "required_behaviors": ["Defines the overview around the operator attention task", "Classifies every introduced metric status and copy element by user need and visibility", "Uses the mature compact density and contextual status region", "Validates changed and unchanged regions with paired evidence"],
+      "forbidden_behaviors": ["Turns every available value into a card badge or permanent paragraph", "Treats data availability as display authorization", "Invents a second visual language", "Claims completion from a generic rendered screenshot"]
+    },
+    {
+      "id": "mature-reference-constrains-new-surface",
+      "initial_user": "新增一个同角色记录页，沿用合成项目已经稳定的记录界面。",
+      "fixture": {"id": "mature-reference-surface", "path": "tests/ui-design-live-fixtures/mature-reference-surface.json", "sha256": "3b326f614070f5e53acb0aa79e5376de7e8fcf7d50f594a59e751a0bd05a6105"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 5,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/mature-reference-surface.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/src/components/StableRecords.js"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/ui-governance/verify_workspace.py"},
+        {"kind": "write", "target": "delivery-shape:pre-implementation"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/preview.html"}
+      ],
+      "required_artifact_kinds": ["delivery_shape_pre_lock", "reference_screenshot", "candidate_screenshot", "dom_accessibility_snapshot", "interaction_trace", "delivery_shape_acceptance"],
+      "required_behaviors": ["Selects the concrete same-role mature surface before coding", "Binds the reference identity digest role viewport state and theme", "Preserves its density component semantics token use and interaction grammar", "Compares reference and candidate at the same viewport state and theme"],
+      "forbidden_behaviors": ["Uses an arbitrary runtime string as reference proof", "Invents cards promotional copy or navigation because it looks modern", "Uses generic project style as the only baseline", "Changes unchanged regions without evidence"]
+    },
+    {
+      "id": "no-comparable-surface-needs-visual-target",
+      "initial_user": "现有合成项目没有同角色页面，新增一个版本对照界面并实现。",
+      "fixture": {"id": "unbound-visual-target", "path": "tests/ui-design-live-fixtures/unbound-visual-target.json", "sha256": "2107a578b86abd387719f811cfa35f7b733e2cf3d730161fddbe5455beea0a27"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 5,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/unbound-visual-target.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/src/styles/tokens.css"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/ui-governance/verify_workspace.py"},
+        {"kind": "write", "target": "delivery-shape:pre-implementation"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/preview.html"}
+      ],
+      "required_artifact_kinds": ["delivery_shape_pre_lock", "reference_screenshot", "candidate_screenshot", "dom_accessibility_snapshot", "interaction_trace", "delivery_shape_acceptance"],
+      "required_behaviors": ["Confirms no same-role reference exists and binds the stable visual owners", "Forms one reviewable visual target before implementation", "Does not force three options when stable visual owners already bind the direction", "Binds implementation and acceptance evidence to the selected target"],
+      "forbidden_behaviors": ["Builds directly from the prompt without a visual target", "Forces three options when one stable target already exists", "Treats generated code as its own design approval", "Claims visual fidelity without paired evidence"]
+    },
+    {
+      "id": "schema-rich-domain-terms-do-not-change-governance",
+      "initial_user": "根据这份合成实验台结构实现控制页，用户只需选择工位并开始检查。",
+      "fixture": {"id": "schema-rich-lab-console", "path": "tests/ui-design-live-fixtures/schema-rich-lab-console.json", "sha256": "527826eed81675ce894c8204a28a8a9300a4d11dcd66168b12a817d45cf2fa29"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 5,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/schema-rich-lab-console.json"},
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/src/contracts/settings.json"},
+        {"kind": "command", "target": "python3 tests/ui-design-live-fixtures/workspaces/ui-governance/verify_workspace.py"},
+        {"kind": "write", "target": "delivery-shape:pre-implementation"},
+        {"kind": "render", "target": "tests/ui-design-live-fixtures/workspaces/ui-governance/preview.html"}
+      ],
+      "required_artifact_kinds": ["delivery_shape_pre_lock", "reference_screenshot", "candidate_screenshot", "dom_accessibility_snapshot", "interaction_trace", "delivery_shape_acceptance"],
+      "required_behaviors": ["Applies the same user-task and source-projection contract as the schema-rich settings peer", "Classifies every source field without using domain keyword rules", "Keeps internal revision health and persistence fields non-visible", "Requires the same paired visual DOM and interaction evidence"],
+      "forbidden_behaviors": ["Changes the governance outcome because nouns changed", "Uses a domain keyword blacklist", "Turns every source field into a control", "Claims acceptance from build success"]
+    },
+    {
+      "id": "read-only-booking-ux-audit-starts-from-user-model",
+      "initial_user": "只读审计这个合成的图书馆房间预约页为什么难用。不要改文件，不要做原型，先按访客完成一次预约的完整流程给出确切结论。",
+      "fixture": {"id": "library-room-booking-ux-judgment", "path": "tests/ui-design-live-fixtures/library-room-booking-ux-judgment.json", "sha256": "29ab9784d4064ce76a13776340ed64ac8bd6a7c90cbaaf5035b6b12d29014173"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/library-room-booking-ux-judgment.json"},
+        {"kind": "read", "target": "references/engineering-execution.md"}
+      ],
+      "required_artifact_kinds": [],
+      "required_behaviors": ["Frames the surface as a familiar room-booking calendar used to choose a time and confirm a reservation", "Uses the existing calendar room filters time slots and reservation summary before proposing any new interaction", "Keeps allocation nodes lock leases retry tickets scheduler phases and cache generations as system-owned complexity rather than booking steps", "Replays availability filtering selection confirmation failure retry and refresh-resume as one coherent journey while preserving the calendar"],
+      "forbidden_behaviors": ["Starts from scheduler state or retry tickets and translates each internal state into a customer-facing card", "Removes the calendar or existing reservation summary without product authorization", "Treats a scheduler failure as a new booking step", "Writes files generates a prototype or claims runtime behavior was observed"]
+    },
+    {
+      "id": "read-only-photo-print-explanation-preserves-user-verb",
+      "initial_user": "只读解释这个合成照片冲印页为什么诡异：下单成功后，冲印照片变成选择存储区域。不要修改，也不要凭空重设计下单流程。",
+      "fixture": {"id": "photo-print-order-ux-judgment", "path": "tests/ui-design-live-fixtures/photo-print-order-ux-judgment.json", "sha256": "c2838ec76ec4d13ee5097fe68902d90f359fb3b772205a17a35cdcb90ea97697"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/photo-print-order-ux-judgment.json"},
+        {"kind": "read", "target": "references/engineering-execution.md"}
+      ],
+      "required_artifact_kinds": [],
+      "required_behaviors": ["Keeps the primary interaction anchored to the customer's Print photos intent and visible order result", "Treats upload shards storage replicas reconciliation polling and worker state as system concepts rather than automatic customer steps", "Preserves the already complete upload and review path and does not invent a post-success storage-region choice", "Separates observed product truth from unverified production prompts and covers processing success recovery and next action"],
+      "forbidden_behaviors": ["Replaces Print photos with a storage-maintenance action because an internal replica differs", "Invents a storage-region choice before or after success without evidence", "Flips the recommendation from one corrected step without replaying the complete journey", "Writes files or claims a production upload interaction was verified"]
+    },
+    {
+      "id": "screenshot-only-audit-keeps-evidence-boundary",
+      "initial_user": "我只给你这一张合成三步表单截图，判断整个操作流程是不是好用；只读分析。",
+      "fixture": {"id": "screenshot-only-ux-audit", "path": "tests/ui-design-live-fixtures/screenshot-only-ux-audit.json", "sha256": "e52f9f64503c4b92bbbd8aa861cea34d564f3529fcab3f4db4bd64f0ee67b7d3"},
+      "minimum_user_turns": 1,
+      "minimum_assistant_turns": 1,
+      "minimum_tool_events": 2,
+      "required_tool_evidence": [
+        {"kind": "read", "target": "tests/ui-design-live-fixtures/screenshot-only-ux-audit.json"},
+        {"kind": "read", "target": "references/engineering-execution.md"}
+      ],
+      "required_artifact_kinds": [],
+      "required_behaviors": ["Limits observed findings to visible hierarchy labels and the default state", "Marks entry keyboard loading validation recovery back refresh-resume and completion as unverified", "Explains that one screenshot cannot establish the complete journey", "Names the smallest runtime or interaction evidence needed for a full usability verdict without changing the product"],
+      "forbidden_behaviors": ["Claims the whole flow is usable from visual appearance", "Claims keyboard error recovery or completion behavior was observed", "Generates a redesign or prototype", "Converts missing evidence into invented product facts"]
+    }
+  ]
+}

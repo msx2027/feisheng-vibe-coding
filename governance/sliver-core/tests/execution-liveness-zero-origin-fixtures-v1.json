@@ -1,0 +1,16 @@
+{
+  "schema": "sliver-execution-liveness-zero-origin-fixtures/v1",
+  "evidence_classification": "synthetic_non_identifying",
+  "origin": "zero_origin",
+  "fixtures": [
+    {"id": "bounded-d1-projection", "operation_kind": "deterministic_read_only_projection", "events": ["catalog", "exact_route_projection", "byte_measurement"]},
+    {"id": "observable-running-operation", "operation_kind": "synthetic_shell_handle", "events": ["running", "matching_refresh_running", "bounded_read_only_batch", "matching_refresh_terminal"]},
+    {"id": "terminal-before-first-refresh", "operation_kind": "synthetic_shell_handle", "events": ["running", "matching_refresh_terminal", "metadata_incomplete", "final_delivery"]},
+    {"id": "semantic-context-degradation", "operation_kind": "synthetic_context_signal", "events": ["degraded", "pending_zero_or_terminal_decision", "handoff", "drift_recheck"]},
+    {"id": "host-continuation-boundary", "operation_kind": "synthetic_host_boundary", "events": ["tool_result_emitted", "model_loop_observability_unknown"]},
+    {"id": "bounded-project-audit-projection", "operation_kind": "deterministic_read_only_projection", "events": ["route_catalog", "selected_route", "lens_catalog", "selected_lens", "byte_measurement", "next_route"]},
+    {"id": "truncated-discovery-batch", "operation_kind": "synthetic_read_batch", "events": ["size_preflight", "bounded_content_batch", "truncation_observed", "missing_boundary_query", "evidence_closed"]},
+    {"id": "user-stop-finalization", "operation_kind": "synthetic_user_control", "events": ["stop_requested", "new_discovery_stopped", "pending_terminal_decision", "bounded_final"]}
+  ],
+  "forbidden_content": ["absolute_home_path", "unix_home_path", "windows_home_path", "real_task_id", "command", "cwd", "stdout", "stderr", "env", "environment", "transcript_path", "raw_response", "raw_tool_output", "tool_response", "full_transcript", "credential", "provider_key"]
+}

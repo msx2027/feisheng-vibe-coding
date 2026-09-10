@@ -1,0 +1,302 @@
+{
+  "schema": "sliver-ui-design-lifecycle-cases/v1",
+  "evaluation_scope": "static_ui_design_lifecycle_contract",
+  "prompts_are_not_executed": true,
+  "live_model_behavior_is_not_evaluated": true,
+  "forbidden_case_literals": ["1200px"],
+  "forbidden_literals": {
+    "references/ui-design-lifecycle.md": ["1200px", "desktop.png", "mobile.png"],
+    "references/project-flow.md": ["desktop.png", "mobile.png"],
+    "references/project-templates.md": ["desktop.png", "mobile.png"],
+    "assets/project-design/dev-docs/design/README.md": ["desktop.png", "mobile.png"],
+    "assets/project-design/dev-docs/design/prototypes/_template/prototype.md": ["desktop.png", "mobile.png"],
+    "tests/ui-design-live-behavior-cases.json": ["1200px"],
+    "tests/ui-design-live-fixtures/existing-project-context.json": ["1200px"],
+    "tests/ui-design-live-fixtures/fullbleed-project-width.json": ["1200px"],
+    "references/engineering-execution.md": ["Every new visible string needs authority"]
+  },
+  "single_owner_forbidden_literals": {
+    "assets/project-design/dev-docs/design/README.md": ["`prototype_status`：`draft |", "`implementation_status`：`not_started |"],
+    "assets/project-design/dev-docs/design/prototypes/_template/prototype.md": ["Allowed values:"],
+    "references/project-flow.md": ["and the shared prototype template"],
+    "references/project-templates.md": ["and the shared prototype template own those exact values and transitions"],
+    "references/routes-feature.md": ["Every new visible string needs authority from", "Treat an already stable surface"],
+    "references/routes-validation.md": ["Every new visible string needs authority from", "Treat an already stable surface"],
+    "references/ui-design-lifecycle.md": ["Every new visible string needs authority from", "Treat an already stable surface"]
+  },
+  "required_files": [
+    "references/ui-design-lifecycle.md",
+    "assets/project-design/dev-docs/README.md",
+    "assets/project-design/dev-docs/design/README.md",
+    "assets/project-design/dev-docs/design/prototypes/_template/prototype.md"
+  ],
+  "required_terms": {
+    "references/routes-index.md": [
+      "references/ui-design-lifecycle.md"
+    ],
+    "references/ui-design-lifecycle.md": [
+      "Schema And Transition Owner",
+      "Project UI Context Gate",
+      "Prototype Truth Gate",
+      "Design Decomposition Gate",
+      "Design Fidelity Check",
+      "existing project UI truth",
+      "current content width",
+      "design tokens",
+      "shared components",
+      "theme and responsive",
+      "dev-docs/design/",
+      "draft | in_review | approved | rejected | superseded",
+      "approved version must not be overwritten",
+      "approval evidence is version-scoped",
+      "continuous authorization",
+      "continuous authorization must use the same recorded approval transition",
+      "artifact manifest",
+      "surface, state, viewport, theme, path, and SHA-256",
+      "component reuse map",
+      "asset boundary map",
+      "real DOM",
+      "whole screenshot",
+      "screenshot slicing",
+      "transparent",
+      "Do not turn every visible element into an independent transparent asset",
+      "genuinely an asset",
+      "full-bleed background",
+      "material conflict",
+      "materially different user-visible result",
+      "baseline decision and evidence owned by `engineering-execution.md`",
+      "dependency-direction decision owned by `engineering-execution.md`",
+      "visible-copy decision and source evidence owned by `engineering-execution.md`"
+    ],
+    "references/routes-feature.md": [
+      "even when no prototype is generated",
+      "meaning-changing visible copy"
+    ],
+    "references/routes-validation.md": [
+      "Design Fidelity Check",
+      "real semantics",
+      "asset boundaries",
+      "concrete stable reference surface",
+      "affected existing consumer",
+      "meaning-changing visible copy"
+    ],
+    "references/engineering-execution.md": [
+      "concrete stable reference surface",
+      "new UI consumer adapts downstream",
+      "affected existing consumers",
+      "Routine labels, concise help, and recovery text",
+      "without asking the user to approve each string",
+      "one primary channel",
+      "inline baseline",
+      "baseline form or durable document"
+    ],
+    "references/project-intake.md": [
+      "authorized UI prototype request",
+      "minimal `dev-docs/README.md`",
+      "does not authorize the adoption template set"
+    ],
+    "references/project-flow.md": [
+      "consumes that contract",
+      "artifact manifest"
+    ],
+    "references/project-templates.md": [
+      "does not redefine lifecycle enums",
+      "artifact manifest"
+    ],
+    "assets/project-design/dev-docs/design/README.md": [
+      "references/ui-design-lifecycle.md",
+      "artifact manifest"
+    ],
+    "assets/project-design/dev-docs/design/prototypes/_template/prototype.md": [
+      "Schema owner: `references/ui-design-lifecycle.md`",
+      "atomic approval transition",
+      "prototype_status: `approved`",
+      "approved_version: `<active_version>`",
+      "Reference role and authority",
+      "Unchanged surfaces",
+      "Asset convention and provenance",
+      "i18n and accessibility",
+      "Applicable surfaces and required states",
+      "Artifact Manifest"
+    ],
+    "assets/project-design/dev-docs/README.md": [
+      "最小内部真源索引",
+      "只合并"
+    ],
+    "references/agent-constitution-template.md": [
+      "已批准版本不得覆盖",
+      "整张设计图",
+      "真实语义元素"
+    ]
+  },
+  "cases": [
+    {
+      "name": "existing_project_design_reads_current_ui_truth",
+      "prompt": "给现有后台新增一个活动页设计图",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["Project UI Context Gate", "existing project UI truth", "shared components"],
+      "forbidden_outcome": "design in isolation"
+    },
+    {
+      "name": "greenfield_design_builds_minimum_foundation",
+      "prompt": "这是空项目，先设计第一张注册页面",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["Project UI Context Gate", "minimum visual foundation"],
+      "forbidden_outcome": "invent a complete design system from one screen"
+    },
+    {
+      "name": "prototype_must_enter_truth_root",
+      "prompt": "先给我做一张商品详情页原型",
+      "owner_files": ["references/ui-design-lifecycle.md", "references/project-flow.md"],
+      "must_apply": ["Prototype Truth Gate", "dev-docs/design/", "prototype.md"],
+      "forbidden_outcome": "chat-only prototype"
+    },
+    {
+      "name": "missing_truth_root_uses_standard_design_path_without_ceremony",
+      "prompt": "项目没有设计原型目录，给我设计页面并放到项目里",
+      "owner_files": ["references/ui-design-lifecycle.md", "references/project-flow.md"],
+      "must_apply": ["authorized UI prototype request", "dev-docs/design/", "privacy or Git"],
+      "forbidden_outcome": "unnecessary directory-choice question"
+    },
+    {
+      "name": "unapproved_prototype_blocks_implementation",
+      "prompt": "把刚才还是草稿的页面直接写进项目",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["Prototype Truth Gate", "draft | in_review | approved | rejected | superseded"],
+      "forbidden_outcome": "implement a draft"
+    },
+    {
+      "name": "approved_version_is_immutable",
+      "prompt": "在已经确认的v001图片上直接覆盖修改",
+      "owner_files": ["references/ui-design-lifecycle.md", "references/project-flow.md"],
+      "must_apply": ["approved version must not be overwritten", "next vNNN"],
+      "forbidden_outcome": "overwrite approved evidence"
+    },
+    {
+      "name": "continuous_design_and_implementation_keeps_truth",
+      "prompt": "直接设计并实现，不用中途等我确认",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["continuous authorization must use the same recorded approval transition", "versioned prototype", "atomic approval transition"],
+      "forbidden_outcome": "skip prototype truth"
+    },
+    {
+      "name": "approval_evidence_is_bound_to_one_version",
+      "prompt": "v001 批准过，现在 active 已经是 v002，直接用旧批准证据实现新图吧",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["approval evidence is version-scoped", "approved_version", "active_version"],
+      "forbidden_outcome": "reuse approval evidence across versions"
+    },
+    {
+      "name": "prototype_artifacts_are_manifest_driven",
+      "prompt": "这是单视口桌面应用弹窗，存好实际需要的原型证据",
+      "owner_files": ["references/ui-design-lifecycle.md", "references/project-templates.md"],
+      "must_apply": ["artifact manifest", "surface, state, viewport, theme, path, and SHA-256"],
+      "forbidden_outcome": "manufacture desktop and mobile placeholders"
+    },
+    {
+      "name": "image_to_code_reuses_project_components",
+      "prompt": "按这张设计图一比一还原，项目里已经有Button和Card",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["Design Decomposition Gate", "component reuse map", "shared components"],
+      "forbidden_outcome": "parallel component system"
+    },
+    {
+      "name": "whole_screenshot_is_not_ui",
+      "prompt": "最快把这张设计图铺成网页就行",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["real DOM", "whole screenshot", "screenshot slicing"],
+      "forbidden_outcome": "transparent hotspots"
+    },
+    {
+      "name": "genuine_assets_use_project_conforming_boundaries",
+      "prompt": "这个新品牌图形现有图标库表达不了，装饰也是独立插画，按项目规范落地",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["asset boundary map", "genuinely an asset", "project-conforming standalone SVG"],
+      "forbidden_outcome": "white-box crop"
+    },
+    {
+      "name": "theme_project_preserves_theme_semantics",
+      "prompt": "这个浅色设计稿接进已有深浅主题项目",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["theme and responsive", "semantic tokens"],
+      "forbidden_outcome": "light-only constants"
+    },
+    {
+      "name": "full_bleed_background_keeps_content_width",
+      "prompt": "设计图是全宽背景，项目内容宽度由现有布局 token 定义",
+      "owner_files": ["references/ui-design-lifecycle.md"],
+      "must_apply": ["full-bleed background", "current content width"],
+      "forbidden_outcome": "unnecessary user question"
+    },
+    {
+      "name": "material_visual_conflict_requires_one_question",
+      "prompt": "设计稿结构和项目导航完全冲突，按哪个做",
+      "owner_files": ["references/ui-design-lifecycle.md", "references/engineering-execution.md"],
+      "must_apply": ["material conflict", "materially different user-visible result", "Intent Confirmation Gate"],
+      "forbidden_outcome": "silent conflict resolution"
+    },
+    {
+      "name": "non_prototype_ui_change_locks_concrete_baseline",
+      "prompt": "给现有数据页增加一个可移动、可关闭、实时更新的浮动记录表，不做原型，保持项目现有风格",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["concrete stable reference surface", "generic project style or token reuse is insufficient"],
+      "forbidden_outcome": "implement from generic style claims without a concrete baseline"
+    },
+    {
+      "name": "new_ui_consumer_adapts_stable_baseline",
+      "prompt": "新增两个局部数据表消费者，为了让新表更宽顺便改共享表格默认值",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["new UI consumer adapts downstream", "affected existing consumers"],
+      "forbidden_outcome": "change stable shared defaults for a new consumer"
+    },
+    {
+      "name": "meaning_changing_copy_requires_authority_and_one_channel",
+      "prompt": "操作页把未就绪、空结果和风险状态都写成常驻提示、警告和禁用按钮文案",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["Routine labels, concise help, and recovery text", "one primary channel"],
+      "forbidden_outcome": "render implementation commentary or duplicate the same fact across channels"
+    },
+    {
+      "name": "system_wide_ui_redesign_can_evolve_baseline_with_evidence",
+      "prompt": "全站表格密度确实要统一重设计，旧表格也一起迁移",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["affected existing consumers", "system-wide redesign", "rollback boundary"],
+      "forbidden_outcome": "freeze a proven defective baseline or evolve it without consumer regression evidence"
+    },
+    {
+      "name": "schema_source_requires_task_and_projection_before_ui",
+      "prompt": "根据接口结构直接生成一个设置页，所有字段都支持编辑",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["sliver-delivery-shape-lock/v3", "single user job", "source schema projection", "omitted_internal"],
+      "forbidden_outcome": "treat the source schema as page information architecture"
+    },
+    {
+      "name": "available_dashboard_data_is_not_display_authority",
+      "prompt": "把所有能拿到的数据都做成卡片、徽章和常驻说明",
+      "owner_files": ["references/engineering-execution.md"],
+      "must_apply": ["introduced or materially changed elements", "named user need", "progressive disclosure"],
+      "forbidden_outcome": "treat data availability as display authority"
+    },
+    {
+      "name": "same_role_reference_beats_style_invention",
+      "prompt": "已有成熟同角色页面，新页面再做得更现代一些",
+      "owner_files": ["references/engineering-execution.md", "references/routes-feature.md"],
+      "must_apply": ["same-role mature surface", "candidate cannot self-authenticate", "same viewport, state, and theme"],
+      "forbidden_outcome": "invent a second visual language beside the mature reference"
+    },
+    {
+      "name": "new_page_without_prototype_still_needs_visual_target",
+      "prompt": "新增页面但不做原型，直接开始写代码",
+      "owner_files": ["references/routes-feature.md", "references/ui-design-lifecycle.md"],
+      "must_apply": ["does not bypass Delivery Shape Lock v3", "reviewable visual target"],
+      "forbidden_outcome": "build a new surface from the prompt alone"
+    },
+    {
+      "name": "acceptance_requires_visual_dom_and_interaction_evidence",
+      "prompt": "页面构建通过并截了一张图，可以算 UI 验收完成了",
+      "owner_files": ["references/routes-validation.md", "references/engineering-execution.md"],
+      "must_apply": ["reference and candidate evidence pair", "DOM or accessibility snapshot", "interaction trace", "unchanged-region evidence"],
+      "forbidden_outcome": "claim UI acceptance from build success or one screenshot"
+    }
+  ]
+}

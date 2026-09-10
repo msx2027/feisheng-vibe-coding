@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "schema-rich-settings",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/ui-governance",
+    "required_paths": ["preview.html", "src/styles/tokens.css", "src/contracts/settings.json", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "synthetic_existing",
+    "new_design_artifact_requested": false,
+    "target_surface": "generic connection settings",
+    "primary_user": "workspace operator",
+    "single_job": "connect one endpoint and confirm readiness",
+    "source_fields": ["endpoint", "credential_ref", "retry_limit", "revision", "internal_health", "last_persisted_at"],
+    "product_visible_decisions": ["endpoint", "credential_ref"],
+    "internal_fields": ["revision", "internal_health", "last_persisted_at"]
+  }
+}

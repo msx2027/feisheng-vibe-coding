@@ -1,0 +1,15 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "continuous-existing",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "project_kind": "existing",
+    "truth_root": "dev-docs",
+    "authorized_scope": "one settings page",
+    "authorization_mode": "continuous",
+    "required_approval_transition": "recorded_same_as_explicit",
+    "approval_evidence_scope": "exact_version",
+    "ui_system": "existing"
+  }
+}

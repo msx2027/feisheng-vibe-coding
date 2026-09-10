@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sliver Vibe Coding"
+  short_description: "用自然语言推进软件任务，按任务拓扑控制成本并验证交付"
+  default_prompt: "Use $sliver-vibe-coding to 推进当前软件项目任务。先确认目标与当前真相，选择一个主路由，按任务拓扑缩放治理，只对命中的风险与动作效果追加测试、安全、授权和恢复控制，在授权范围内推进到当前请求获得新鲜验证。任务为 D2/D3 且包含两个以上独立交付物时，不等用户点名，先加载 references/studio-execution.md 与 Codex 专属 references/studio-codex.md，探测宿主能力并主动给出工作室模式的建议与理由；实现类并行不得改派子 agent。完成推荐、边界和用户确认后才能创建其他用户可见任务。"

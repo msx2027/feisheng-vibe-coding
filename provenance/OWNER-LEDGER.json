@@ -4,7 +4,7 @@
   "owners": [
     {
       "id": "route-catalog",
-      "path": "governance/routes-index.md",
+      "path": "governance/sliver-core/references/routes-index.md",
       "writes": ["primary-route", "operation", "conditional-lens", "reference-loading"],
       "projections": ["runtime route JSON", "host route hints"]
     },
@@ -34,4 +34,3 @@
     "untracked hook writers"
   ]
 }
-

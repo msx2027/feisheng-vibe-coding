@@ -1,0 +1,13 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "existing_project_clear_owner_and_stack",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "not_required",
+  "context": {
+    "project_state": "existing_and_understood",
+    "owner": "docs/homepage-copy.md",
+    "requested_change": "single_typo",
+    "behavior_change": false
+  }
+}

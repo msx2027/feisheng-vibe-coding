@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "dashboard-prioritization",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/ui-governance",
+    "required_paths": ["preview.html", "src/styles/tokens.css", "src/contracts/dashboard.json", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "synthetic_existing",
+    "new_design_artifact_requested": false,
+    "target_surface": "generic operations overview",
+    "primary_user": "shift operator",
+    "single_job": "find the one item that needs attention",
+    "available_data": ["active_count", "queued_count", "recent_rate", "worker_revision", "cache_age", "scheduler_state"],
+    "decision_relevant_data": ["queued_count", "scheduler_state"],
+    "existing_density": "compact list with one contextual status region"
+  }
+}

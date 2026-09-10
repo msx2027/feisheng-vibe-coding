@@ -1,0 +1,13 @@
+{
+  "schema": "sliver-execution-liveness-live-results/v1",
+  "required_top_level": ["schema", "run_id", "skill_version", "runtime_target", "runtime_digest", "source_revision", "generated_at", "fresh_session", "runner_provenance", "judge_provenance", "cases"],
+  "required_case_fields": ["case_id", "fixture_id", "fixture_sha256", "operation_receipts", "final_delivery", "judge"],
+  "required_receipt_fields": ["operation_identity", "operation_kind", "lifecycle", "terminal_proof", "unknown_flags", "truncation_flag", "metadata_status"],
+  "allowed_judge_statuses": ["pass", "fail", "unverified"],
+  "forbidden_fields": ["command", "cwd", "stdout", "stderr", "env", "environment", "transcript_path", "raw_response", "raw_tool_output", "tool_response", "full_transcript", "provider_key", "credential"],
+  "notes": [
+    "Contract-only validation is not a fresh Host pass.",
+    "Optional Host counters are not portable receipt requirements.",
+    "The host_result_to_model_continuation boundary cannot pass from Skill evidence alone."
+  ]
+}

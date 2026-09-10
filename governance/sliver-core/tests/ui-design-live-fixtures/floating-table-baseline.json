@@ -1,0 +1,31 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "floating-table-baseline",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/table-system",
+    "required_paths": ["preview.html", "package.json", "src/components/StableDataTable.js", "src/components/ui/Card.js", "src/i18n/workflow.js", "src/pages/records.js", "tests/table-system.test.mjs", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "existing",
+    "new_design_artifact_requested": false,
+    "target_surface": "synthetic floating realtime record table",
+    "candidate_reference_surfaces": [
+      {
+        "path": "src/components/StableDataTable.js",
+        "role": "stable same-role table",
+        "consumers": ["synthetic primary record list", "synthetic secondary record list"]
+      },
+      {
+        "path": "src/components/ui/Card.js",
+        "role": "generic container only"
+      }
+    ],
+    "locked_invariants": ["row density", "column semantics", "icon treatment", "information order"],
+    "allowed_delta": ["floating placement", "drag", "close", "realtime scrolling"],
+    "unchanged_consumers": ["synthetic primary record list", "synthetic secondary record list"]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "library-room-booking-ux-judgment",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "operation": "read_only_audit",
+    "writes_authorized": false,
+    "product_surface": "an existing public-library study-room booking page",
+    "primary_user": "a visitor reserving one study room",
+    "single_job": "choose an available time and confirm the reservation",
+    "success_signal": "the selected room and time appear in a clear confirmation",
+    "existing_mature_surface": "the current calendar with room filters, available time slots, and a reservation summary",
+    "observed_problem": "the replacement page leads with allocation nodes, lock leases, retry tickets, and scheduler phases instead of the calendar and reservation",
+    "system_concepts": ["allocation node", "lock lease", "retry ticket", "scheduler phase", "cache generation"],
+    "product_truth": [
+      "the calendar and its existing entry remain",
+      "availability is shown as selectable time slots",
+      "a failed confirmation stays attached to the selected reservation and can retry in place",
+      "scheduler diagnostics are support information, not booking steps"
+    ],
+    "journey_boundaries": ["open availability", "filter rooms", "select time", "confirm", "confirmation failure and retry", "refresh and resume"]
+  }
+}

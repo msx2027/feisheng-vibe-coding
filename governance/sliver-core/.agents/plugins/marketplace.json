@@ -1,0 +1,20 @@
+{
+  "name": "sliver-local",
+  "interface": {
+    "displayName": "Sliver Local"
+  },
+  "plugins": [
+    {
+      "name": "sliver-session-continuity",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sliver-session-continuity"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

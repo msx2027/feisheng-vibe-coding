@@ -1,0 +1,149 @@
+OK: skill structure validated
+OK: route contract corpus validated (71 cases, 21 primary entries, 8 conditional lenses); live model routing not evaluated
+OK: Task Decision contract validated (47 cases, 30 negative, 4 metamorphic pairs, 3 canonical owner-load warnings); fresh-session behavior not evaluated
+OK: Task Decision live static contract validated (11 cases); fresh-session behavior not executed
+OK: selector owner corpus structure validated (27 scenario families, 11 lifecycle intents, 135 positive cases, 15 negative cases); live model routing not evaluated
+OK: static execution contract corpus validated (54 cases); prompts and live model behavior not evaluated
+OK: UI design lifecycle static contract passed (19 cases)
+OK: UI design live static contract validated (14 cases); live model behavior not executed
+OK: foundation live static contract validated (16 cases); static contract only, live model behavior not evaluated
+OK: Studio live static contract validated (11 cases); live task behavior not executed
+....................................................................................................
+----------------------------------------------------------------------
+Ran 100 tests in 72.451s
+
+OK
+.................
+----------------------------------------------------------------------
+Ran 17 tests in 0.962s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.269s
+
+OK
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 12.883s
+
+OK
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 159.266s
+
+OK
+.................................
+----------------------------------------------------------------------
+Ran 33 tests in 133.606s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 3.164s
+
+OK
+....................
+----------------------------------------------------------------------
+Ran 20 tests in 0.166s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 2.392s
+
+OK
+OK: /private/tmp/sliver-baseline-29695fe.eAepAU/source/assets/project-bootstrap
+mode: bootstrap
+truth_dir: dev-docs
+placeholder_markers: [{"file": "dev-docs/README.md", "marker": "待填写"}]
+private_risk_note: "informational only; inspect before staging or pushing"
+foundation_file: "dev-docs/technical-selection.md"
+foundation_required_gate: "contract"
+foundation_validation_scope: "structural_evidence_contract_only"
+foundation_external_implementation_authorized: false
+foundation_values: {"schema": "sliver-foundation/v1", "decision_status": "blocked", "source_coverage": "incomplete", "blocking_unknowns": "present", "source_conflicts": "none", "network_evidence": "missing", "poc_status": "pending", "user_confirmation_scope": "product_consequences_only", "product_consequence_confirmation": "pending: 尚未确认主推荐对产品、成本和运行的影响", "recommendation": "withheld", "decision_record": "pending: 等待阻塞信息、当前证据和必要技术验证闭合"}
+foundation_structural_contract_valid: true
+foundation_structural_recommendation_ready: false
+foundation_structural_implementation_ready: false
+foundation_required_gate_met: true
+foundation_gate_outcome: "contract_valid_decision_blocked"
+OK: /private/tmp/sliver-baseline-29695fe.eAepAU/source/assets/project-adoption
+mode: adoption
+truth_dir: dev-docs
+placeholder_markers: [{"file": "dev-docs/README.md", "marker": "待填写"}]
+private_risk_note: "informational only; inspect before staging or pushing"
+foundation_file: "dev-docs/technical-selection.md"
+foundation_required_gate: "contract"
+foundation_validation_scope: "structural_evidence_contract_only"
+foundation_external_implementation_authorized: false
+foundation_values: {"schema": "sliver-foundation/v1", "decision_status": "blocked", "source_coverage": "incomplete", "blocking_unknowns": "present", "source_conflicts": "none", "network_evidence": "missing", "poc_status": "pending", "user_confirmation_scope": "product_consequences_only", "product_consequence_confirmation": "pending: 尚未确认沿用、修正或迁移对产品和运行的影响", "recommendation": "withheld", "decision_record": "pending: 等待接管证据、冲突和关键技术未知闭合"}
+foundation_structural_contract_valid: true
+foundation_structural_recommendation_ready: false
+foundation_structural_implementation_ready: false
+foundation_required_gate_met: true
+foundation_gate_outcome: "contract_valid_decision_blocked"
+OK: /private/tmp/sliver-baseline-29695fe.eAepAU/source/assets/project-bootstrap
+mode: constitution
+truth_dir: dev-docs
+private_risk_note: "informational only; inspect before staging or pushing"
+foundation_file: "dev-docs/technical-selection.md"
+foundation_required_gate: "contract"
+foundation_validation_scope: "structural_evidence_contract_only"
+foundation_external_implementation_authorized: false
+foundation_values: {"schema": "sliver-foundation/v1", "decision_status": "blocked", "source_coverage": "incomplete", "blocking_unknowns": "present", "source_conflicts": "none", "network_evidence": "missing", "poc_status": "pending", "user_confirmation_scope": "product_consequences_only", "product_consequence_confirmation": "pending: 尚未确认主推荐对产品、成本和运行的影响", "recommendation": "withheld", "decision_record": "pending: 等待阻塞信息、当前证据和必要技术验证闭合"}
+foundation_structural_contract_valid: true
+foundation_structural_recommendation_ready: false
+foundation_structural_implementation_ready: false
+foundation_required_gate_met: true
+foundation_gate_outcome: "contract_valid_decision_blocked"
+OK: /private/tmp/sliver-baseline-29695fe.eAepAU/source/assets/project-adoption
+mode: constitution
+truth_dir: dev-docs
+private_risk_note: "informational only; inspect before staging or pushing"
+foundation_file: "dev-docs/technical-selection.md"
+foundation_required_gate: "contract"
+foundation_validation_scope: "structural_evidence_contract_only"
+foundation_external_implementation_authorized: false
+foundation_values: {"schema": "sliver-foundation/v1", "decision_status": "blocked", "source_coverage": "incomplete", "blocking_unknowns": "present", "source_conflicts": "none", "network_evidence": "missing", "poc_status": "pending", "user_confirmation_scope": "product_consequences_only", "product_consequence_confirmation": "pending: 尚未确认沿用、修正或迁移对产品和运行的影响", "recommendation": "withheld", "decision_record": "pending: 等待接管证据、冲突和关键技术未知闭合"}
+foundation_structural_contract_valid: true
+foundation_structural_recommendation_ready: false
+foundation_structural_implementation_ready: false
+foundation_required_gate_met: true
+foundation_gate_outcome: "contract_valid_decision_blocked"
+OK: built codex runtime bundle (61 files): /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/codex/sliver-vibe-coding
+OK: codex runtime bundle validated (61 files); static/package proof only, fresh-session behavior not evaluated
+OK: built claude-code runtime bundle (61 files): /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/claude-code/sliver-vibe-coding
+OK: claude-code runtime bundle validated (60 files); static/package proof only, fresh-session behavior not evaluated
+OK: built gemini-cli runtime bundle (59 files): /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/gemini-cli/sliver-vibe-coding
+OK: gemini-cli runtime bundle validated (59 files); static/package proof only, fresh-session behavior not evaluated
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/validate_skill.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_routes.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_task_decision_contract.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_task_decision_live_behavior.py --contract-only
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_selector_pressure.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_execution_backbone.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_ui_design_lifecycle.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_ui_design_live_behavior.py --contract-only
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_foundation_live_behavior.py --contract-only
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/evaluate_studio_live_behavior.py --contract-only
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_validation_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_stage_v2_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_foundation_guardrail_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_task_decision_live_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_ui_design_live_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_studio_live_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_runtime_bundle_safety.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_session_continuity.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/test_release_candidate_contracts.py
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/check_project_guardrails.py assets/project-bootstrap --mode bootstrap --foundation-gate contract --allow-template --skip-private-scan
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/check_project_guardrails.py assets/project-adoption --mode adoption --foundation-gate contract --allow-template --skip-private-scan
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/check_project_guardrails.py assets/project-bootstrap --mode constitution --foundation-gate contract --allow-template --skip-private-scan
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/check_project_guardrails.py assets/project-adoption --mode constitution --foundation-gate contract --allow-template --skip-private-scan
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/build_runtime_bundle.py --target codex --output /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/codex/sliver-vibe-coding
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/validate_runtime_bundle.py /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/codex/sliver-vibe-coding --target codex --source-root /private/tmp/sliver-baseline-29695fe.eAepAU/source
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/build_runtime_bundle.py --target claude-code --output /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/claude-code/sliver-vibe-coding
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/validate_runtime_bundle.py /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/claude-code/sliver-vibe-coding --target claude-code --source-root /private/tmp/sliver-baseline-29695fe.eAepAU/source
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/build_runtime_bundle.py --target gemini-cli --output /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/gemini-cli/sliver-vibe-coding
+RUN: /opt/homebrew/Caskroom/miniconda/base/bin/python3 scripts/validate_runtime_bundle.py /private/tmp/sliver-baseline-29695fe.eAepAU/tmp/sliver-release-znv03wsp/gemini-cli/sliver-vibe-coding --target gemini-cli --source-root /private/tmp/sliver-baseline-29695fe.eAepAU/source
+OK: package-release static contracts and all runtime bundles passed; fresh-session behavior remains UNVERIFIED

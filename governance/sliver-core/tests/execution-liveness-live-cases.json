@@ -1,0 +1,57 @@
+{
+  "schema": "sliver-execution-liveness-live-cases/v1",
+  "evaluation_scope": "fresh_session_host_behavior",
+  "requires_live_model_validation": true,
+  "static_contracts_are_not_live_proof": true,
+  "cases": [
+    {
+      "id": "bounded_d1_governance_burden",
+      "fixture_id": "bounded-d1-projection",
+      "required_behaviors": ["capability_baseline_preserved", "owner_tdd_safety_and_fresh_verification_preserved", "actual_projection_bytes_recorded"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "bounded_project_audit_governance_burden",
+      "fixture_id": "bounded-project-audit-projection",
+      "required_behaviors": ["route_and_lens_projection_are_complete", "detailed_stage_and_testing_owners_are_conditional", "actual_projection_bytes_recorded", "one_next_route_is_delivered"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery_batch_truncation_recovery",
+      "fixture_id": "truncated-discovery-batch",
+      "required_behaviors": ["size_preflight_precedes_content", "truncation_is_explicit", "same_batch_is_not_replayed", "only_missing_boundary_is_queried"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "async_handle_reaping",
+      "fixture_id": "observable-running-operation",
+      "required_behaviors": ["first_running_is_immediately_refreshed_or_canceled", "one_bounded_batch_maximum", "terminal_receipt_collected"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "background_command_finalization",
+      "fixture_id": "terminal-before-first-refresh",
+      "required_behaviors": ["terminal_state_is_retrieved", "metadata_incomplete_is_degraded_not_blocked", "final_is_delivered"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "context_budget_handoff",
+      "fixture_id": "semantic-context-degradation",
+      "required_behaviors": ["pending_operations_are_closed_or_decided", "handoff_owner_is_bound", "successor_rechecks_drift"],
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "host_result_to_model_continuation",
+      "fixture_id": "host-continuation-boundary",
+      "required_behaviors": ["host_or_service_telemetry_required", "portable_skill_does_not_claim_recovery"],
+      "host_service_boundary": true,
+      "expected_source_status": "UNVERIFIED"
+    },
+    {
+      "id": "user_stop_to_bounded_final",
+      "fixture_id": "user-stop-finalization",
+      "required_behaviors": ["new_discovery_stops", "pending_operations_receive_terminal_decision", "bounded_final_is_delivered_if_model_loop_is_active", "host_loop_loss_remains_separate"],
+      "expected_source_status": "UNVERIFIED"
+    }
+  ]
+}

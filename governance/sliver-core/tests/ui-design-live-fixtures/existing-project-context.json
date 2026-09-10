@@ -1,0 +1,12 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "existing-project-context",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "project_kind": "existing",
+    "truth_root": "dev-docs",
+    "ui_owners": ["src/layout/AppShell.tsx", "src/styles/tokens.css", "src/components/ui", "src/theme/index.ts"],
+    "constraints": ["content width owned by the current layout token", "shared Button Card Icon", "light and dark themes"]
+  }
+}

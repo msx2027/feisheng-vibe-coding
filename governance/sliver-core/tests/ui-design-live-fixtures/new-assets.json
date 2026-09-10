@@ -1,0 +1,13 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "new-assets",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "prototype_status": "approved",
+    "approved_version": "v001",
+    "missing_assets": ["new product pictogram not expressible by current icon system", "irreducible illustrated decoration"],
+    "project_asset_convention": "standalone SVG with recorded provenance",
+    "text_in_assets_allowed": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "system-wide-table-redesign",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/table-system",
+    "required_paths": ["preview.html", "package.json", "src/components/StableDataTable.js", "src/components/ui/Card.js", "src/i18n/workflow.js", "src/pages/records.js", "tests/table-system.test.mjs", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "existing",
+    "new_design_artifact_requested": false,
+    "explicit_user_authorization": "redesign table density across the whole product",
+    "shared_baseline_owner": "src/components/StableDataTable.js",
+    "affected_existing_consumers": ["synthetic primary record list", "synthetic secondary record list", "synthetic floating panel", "synthetic history page"],
+    "migration_scope": "all table-density consumers",
+    "regression_viewports": ["desktop", "mobile"],
+    "rollback_owner": "shared table density default and consumer migration commit"
+  }
+}

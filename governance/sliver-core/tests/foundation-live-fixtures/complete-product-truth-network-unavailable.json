@@ -1,0 +1,32 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "complete_product_truth_network_unavailable",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "unavailable",
+  "context": {
+    "product_truth_status": "complete",
+    "candidate_research_status": "blocked",
+    "network_failure": "official documentation cannot be reached in this session",
+    "product_facts": {
+      "product": "small-business inventory SaaS",
+      "users": ["owner", "warehouse_staff"],
+      "first_complete_flow": ["create_item", "adjust_stock", "view_low_stock_report"],
+      "platform": "browser",
+      "data_sensitivity": "ordinary business inventory data",
+      "deployment": "managed public web service",
+      "team_size": 1,
+      "expected_concurrency": "under_50"
+    },
+    "candidate_claims": [
+      {
+        "candidate": "Django and PostgreSQL modular monolith",
+        "mutable_claims": ["current_supported_release", "python_support", "license", "managed_deployment_support"]
+      },
+      {
+        "candidate": "Next.js and PostgreSQL modular monolith",
+        "mutable_claims": ["current_supported_release", "node_support", "license", "managed_deployment_support"]
+      }
+    ]
+  }
+}

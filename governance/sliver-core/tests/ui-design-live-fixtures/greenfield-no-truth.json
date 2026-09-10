@@ -1,0 +1,14 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "greenfield-no-truth",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "project_kind": "empty",
+    "truth_root": "missing",
+    "dev_docs_state": "absent_and_unoccupied",
+    "required_minimal_root_index": "dev-docs/README.md",
+    "privacy_git_conflict": false,
+    "product_loop": "registration"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "sliver-governance-collusion-mutations/v1",
+  "cases": [
+    {
+      "id": "capability_change_with_candidate_self_approval",
+      "mutator": "capability_self_approval",
+      "expected_diagnostic": "capability source 0 fields drifted"
+    },
+    {
+      "id": "runtime_manifest_and_oracle_shrink_together",
+      "mutator": "runtime_manifest_and_oracle_shrink",
+      "expected_diagnostic": "test_independent_oracle_rejects_manifest_omission"
+    },
+    {
+      "id": "baseline_gate_claim_forged_in_candidate",
+      "mutator": "forged_baseline_gate_claim",
+      "expected_diagnostic": "baseline contract gate must remain UNVERIFIED without bound evidence"
+    },
+    {
+      "id": "route_parser_and_negative_oracle_collude",
+      "mutator": "route_parser_and_negative_oracle_collusion",
+      "expected_diagnostic": "governance-semantic-projection-contracts retired baseline capabilities: GovernanceSemanticProjectionContractsTest.test_acceptance_route_parser_is_independent_from_runtime_parser, GovernanceSemanticProjectionContractsTest.test_route_delivery_change_fails"
+    },
+    {
+      "id": "runtime_governance_and_unit_oracle_collude",
+      "mutator": "runtime_governance_and_unit_oracle_collusion",
+      "expected_diagnostic": "runtime-governance-contracts retired baseline capabilities: TruthResolutionContractsTest.test_current_executable_answer_must_be_first"
+    },
+    {
+      "id": "delivery_shape_and_unit_oracle_collude",
+      "mutator": "delivery_shape_and_unit_oracle_collusion",
+      "expected_diagnostic": "runtime-governance-contracts retired baseline capabilities: DeliveryShapeContractsTest.test_record_without_user_task_and_information_architecture_must_fail"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "empty_project_no_intake_truth",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "not_required",
+  "context": {
+    "project_kind": "empty",
+    "available_truth": [],
+    "blocking_product_facts": ["target_users", "first_complete_flow", "deployment_boundary"]
+  }
+}

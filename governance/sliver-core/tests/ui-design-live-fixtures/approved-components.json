@@ -1,0 +1,17 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "approved-components",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "prototype_status": "draft",
+    "active_version": "v003",
+    "approved_version": "v002",
+    "implementation_version": "v002",
+    "approval_evidence_version": "v002",
+    "available_components": ["Button", "Card", "Icon"],
+    "prototype_artifact_manifest": [
+      {"surface": "campaign-page", "state": "default", "viewport": "wide", "theme": "light", "path": "v002/campaign-default-wide-light.png", "sha256": "f479b5ac982659060001f8002d2415415391a91cf4c15d423cff766831cad815"}
+    ]
+  }
+}

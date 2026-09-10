@@ -1,0 +1,36 @@
+{
+  "name": "sliver-session-continuity",
+  "version": "0.2.0",
+  "description": "Restore bounded local session evidence after Codex context compaction.",
+  "author": {
+    "name": "Sliver Ring",
+    "url": "https://openbeetles.com/"
+  },
+  "homepage": "https://openbeetles.com/",
+  "repository": "https://gitee.com/sliver-ring_admin/sliver-vibe-coding",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "compaction",
+    "session-continuity"
+  ],
+  "interface": {
+    "displayName": "Sliver Session Continuity",
+    "shortDescription": "Locally retain recent prompts for compaction recovery",
+    "longDescription": "Stores up to four best-effort-redacted recent prompts, the latest plan, and the last assistant checkpoint in Codex-managed PLUGIN_DATA. It makes no network request; cleanup after abnormal termination is lazy rather than scheduled.",
+    "developerName": "Sliver Ring",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Local lifecycle hooks",
+      "Best-effort-redacted local prompt retention",
+      "Bounded continuity-data purge"
+    ],
+    "websiteURL": "https://openbeetles.com/",
+    "privacyPolicyURL": "https://gitee.com/sliver-ring_admin/sliver-vibe-coding/blob/main/plugins/sliver-session-continuity/README.md",
+    "defaultPrompt": [
+      "Show whether session continuity protection is active.",
+      "Explain what local continuity data is stored and how it is cleaned."
+    ],
+    "brandColor": "#3B82F6"
+  }
+}

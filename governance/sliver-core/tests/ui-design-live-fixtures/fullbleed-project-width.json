@@ -1,0 +1,12 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "fullbleed-project-width",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "prototype_status": "approved",
+    "background": "full_bleed",
+    "content_width_owner": "var(--content-max-width)",
+    "compatibility": "both_constraints_can_be_satisfied"
+  }
+}

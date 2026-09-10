@@ -1,0 +1,299 @@
+{
+  "contract_gate": {
+    "reason": "no contract-run evidence is present in the bound Git object",
+    "source_commit": "fff62091f1ac19239af42739d18bc77276426c0a",
+    "status": "UNVERIFIED"
+  },
+  "contract_input_digest": "9c10e551eb61a860e8297d447650b1b03f56946ac4e0eefd917b4f81d6a2f73d",
+  "contract_inputs": [
+    {
+      "path": ".github/workflows/release-validate.yml",
+      "sha256": "c242c80ca9344561320968a09786b8d0fe81b41b0c5ed742732fb00ca463422b"
+    },
+    {
+      "path": ".github/workflows/validate.yml",
+      "sha256": "e43ccae6576e42243ba960dbc5ac90cdb0db0f13ebb068507bf197afde285a9d"
+    },
+    {
+      "path": "VERSION",
+      "sha256": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03"
+    },
+    {
+      "path": "packaging/runtime-manifest.json",
+      "sha256": "1f6a0f503b28e3d6f26589fa0c7658b65babd3fc5140fbeb626e21efacd2ffdb"
+    },
+    {
+      "path": "scripts/build_runtime_bundle.py",
+      "sha256": "b8970a74ce27822b430cc7d245362159289bff3b6c79974b519e64853a3822c7"
+    },
+    {
+      "path": "scripts/check_project_guardrails.py",
+      "sha256": "3fd2c3d45788325f45f69953c53fe2d7530b3e07a1e4ee5219f46c6493a9099e"
+    },
+    {
+      "path": "scripts/compare_capability_baseline.py",
+      "sha256": "5b82f0a987cde558155dd0e9772224d9195e168fd68a9b6f9f5d85c3daf408ba"
+    },
+    {
+      "path": "scripts/evaluate_execution_backbone.py",
+      "sha256": "e9d0b9a2a2c3f5c1062f5251d6eaec47bc1dc19086df94628bae248b1c0ab9ab"
+    },
+    {
+      "path": "scripts/evaluate_execution_liveness_live_behavior.py",
+      "sha256": "db2eeb3f15e38dd1e12615cb8608efae2d391a2f97d6d9b6c2baf8915bd37ed5"
+    },
+    {
+      "path": "scripts/evaluate_foundation_live_behavior.py",
+      "sha256": "1d6b2981b39e5abaf0d8154fd921ba18accb2af9b4e88102fc8875f4392fdbf9"
+    },
+    {
+      "path": "scripts/evaluate_governance_meta_mutations.py",
+      "sha256": "2a8c195aa002724d20bd54d9389d8cbc4fc6573ffece057b4d9ad615cb157d7a"
+    },
+    {
+      "path": "scripts/evaluate_governance_mutations.py",
+      "sha256": "dffb9aef12bbf40e8c51d71f2643df06c9e0b366fad28eca5ea7eb7ff778c109"
+    },
+    {
+      "path": "scripts/evaluate_routes.py",
+      "sha256": "ab8689a23315f404fe131ac9d3a448e3e081e5de754d8558e018be0cbd7f7a0f"
+    },
+    {
+      "path": "scripts/evaluate_selector_pressure.py",
+      "sha256": "3369c6932a20e642dfece67a64c9e39beab91665f18d253300b2b86f82f2d1f7"
+    },
+    {
+      "path": "scripts/evaluate_studio_live_behavior.py",
+      "sha256": "36bf5eaabe8cca3575df0ffbfa8c42303a1f93879a6a9b43524ecfb8e959d01c"
+    },
+    {
+      "path": "scripts/evaluate_task_decision_contract.py",
+      "sha256": "b31b77c650d902d162481a4b1fd024a40687072734418e2b85966092030f5239"
+    },
+    {
+      "path": "scripts/evaluate_task_decision_live_behavior.py",
+      "sha256": "0fb0f8528a6b1527187a1a8c85e3542702ff4ce41ca88dd9c72b130c879fc8bb"
+    },
+    {
+      "path": "scripts/evaluate_ui_design_lifecycle.py",
+      "sha256": "8692bb512bd2b28a80043ef3371eb510af6d42fed47c80d0e2a9d3f46f9c1340"
+    },
+    {
+      "path": "scripts/evaluate_ui_design_live_behavior.py",
+      "sha256": "300be96cae886703a252da6be9c390ceabb6b8f3a694b293fb5c106d0b69a16d"
+    },
+    {
+      "path": "scripts/git_revision.py",
+      "sha256": "43f2f672e3e6f9c351cdb4c7cb20f80d1b36b88b132144fce52593c6816d2ebb"
+    },
+    {
+      "path": "scripts/governance_baseline.py",
+      "sha256": "657c1c16c02951a2c2ce3e3d8c6d05f30aa341767e79ec43b08df545b6514aa5"
+    },
+    {
+      "path": "scripts/governance_route_projection.py",
+      "sha256": "67f544aa97b0c8ca7e6d1e1736809116fdccb603298445706f0a0f1c8a934435"
+    },
+    {
+      "path": "scripts/governance_semantic_projection.py",
+      "sha256": "78840016c39b774a58b22e06b7716569958d094dc7ec26c23e1f793d95211997"
+    },
+    {
+      "path": "scripts/live_evidence_isolation.py",
+      "sha256": "f4b15544f823623dbec98a1ee94670a7471a5d03fda6d4c4d08f1f34cae31727"
+    },
+    {
+      "path": "scripts/migrate_stage_contract.py",
+      "sha256": "8f303a2fd8741fc0d3fe61a5a7541a58ea9d8b966e4fbb932d96a901a4384e05"
+    },
+    {
+      "path": "scripts/release_live_contract.py",
+      "sha256": "28ace50f726d5efa7cf67aaa9a901a93332931d5a6d8ba28441db3c91de8f17c"
+    },
+    {
+      "path": "scripts/runtime_decision_contract.py",
+      "sha256": "cfb3ef25ae81c4654d231e4a58bb3918322c9dd2af1895c48b01497bf7970073"
+    },
+    {
+      "path": "scripts/runtime_file_set.py",
+      "sha256": "e29fea6821bd9605d6e4dc1484556caeed9d6476b30efeb60143c56b70f5be4e"
+    },
+    {
+      "path": "scripts/runtime_governance_contract.py",
+      "sha256": "500f6ba5b101f2c0c224b8496e3471f5133ecb0fc5adda0730c027159d0d8bca"
+    },
+    {
+      "path": "scripts/runtime_identity.py",
+      "sha256": "14c1a6e87c2979ae47023537e0a5461b15fe2157f54bf29ca92c200898f1e2f0"
+    },
+    {
+      "path": "scripts/runtime_manifest_contract.py",
+      "sha256": "4ba65dc68abf0e21deda1f2902099fffd2c7b8615c4b0861c86293ed764e819b"
+    },
+    {
+      "path": "scripts/runtime_required_assets.py",
+      "sha256": "4bff07164b5e7548da402818971edc4efa12b5f09e179e57c14089cb937b89a4"
+    },
+    {
+      "path": "scripts/stage_contract.py",
+      "sha256": "7d9060ffaa988b5e5900cba7fb719843a00e460aa4ce59565687ea790b5d51b5"
+    },
+    {
+      "path": "scripts/test_capability_baseline_contracts.py",
+      "sha256": "08488391b35bc4072bbb8f5ef547c7edeb3f8638ea78a9e615117adefe521a06"
+    },
+    {
+      "path": "scripts/test_foundation_guardrail_contracts.py",
+      "sha256": "7b124d1fa5d48a3bd8aa6e24c27a7238a5aff63b61fd9d39dfb3ed1a59607985"
+    },
+    {
+      "path": "scripts/test_governance_baseline_contracts.py",
+      "sha256": "87ac4344eb31c585172879e12db23a70ba87f76df2c4a3b53dd17a8a07081f4b"
+    },
+    {
+      "path": "scripts/test_governance_mutation_contracts.py",
+      "sha256": "c5e21d3c6763914ddecdcd59ae9e8f3c2086fdcbe879f2a4a50ff4e3e8ab2a86"
+    },
+    {
+      "path": "scripts/test_governance_semantic_projection_contracts.py",
+      "sha256": "8c4dcbbea1dbe5486c0cc103980a17ba44bce4840f5f7c5b21b28cbee048f9c6"
+    },
+    {
+      "path": "scripts/test_private_risk_scan_contracts.py",
+      "sha256": "690d3b462c22a10cd55f384e028b9d893b230400e160e7fda96de6dd6c3c162d"
+    },
+    {
+      "path": "scripts/test_release_candidate_contracts.py",
+      "sha256": "d181e918ba949d16362f8b17c51867eb35b073f688f3b64894c54aa5444934ca"
+    },
+    {
+      "path": "scripts/test_runtime_bundle_safety.py",
+      "sha256": "84d94ef4b364ef2c9a5175647a0a8a7bb5182916dc6bccbd583d9b6e56deda82"
+    },
+    {
+      "path": "scripts/test_runtime_governance_contracts.py",
+      "sha256": "6c4531937c404c5da316f2230c9e07d5f76425435c4b3e83ffc6f76fff12e74a"
+    },
+    {
+      "path": "scripts/test_session_continuity.py",
+      "sha256": "f291b5c165bca1457d5c8f62865a239c8a975137dcd7895f6e6cfb741b8e3fe1"
+    },
+    {
+      "path": "scripts/test_stage_v2_contracts.py",
+      "sha256": "8d487c53c74b85366e798835819327d9aeffcd20d215490f83ef7291cb43b796"
+    },
+    {
+      "path": "scripts/test_studio_live_contracts.py",
+      "sha256": "895754f4acc3baebf4dcfbfc3c6d7276c5dde0a27c5a3c6f4bb0ff190d80cfed"
+    },
+    {
+      "path": "scripts/test_task_decision_live_contracts.py",
+      "sha256": "1b01db78e5163442a27d0472f8126e54f9eace2a5eff0e8f86ad436d461f6cd2"
+    },
+    {
+      "path": "scripts/test_ui_design_live_contracts.py",
+      "sha256": "056d227ab2c2a5d82c0e563014afcd8ff7e90274977045c6422b4799ed49232e"
+    },
+    {
+      "path": "scripts/test_validation_contracts.py",
+      "sha256": "4b3a106a5d4aa05a2e468eb79573d1dae9093b0a9d33f63dec6966fe3c7d4e8a"
+    },
+    {
+      "path": "scripts/validate_release_candidate.py",
+      "sha256": "1939cff9021cca9f889dffb68b4ed0a74313f103bc0d3106dd283ee467d6dc24"
+    },
+    {
+      "path": "scripts/validate_runtime_bundle.py",
+      "sha256": "ca133c882b3a14eeb9cf92ad5ec02cda6c5dce3841c6f3df08cd84b026409a4d"
+    },
+    {
+      "path": "scripts/validate_skill.py",
+      "sha256": "db770d87c1bd333397ce3015a7ec262b040f8fd0b6a5621d9e8eef794dc984c8"
+    },
+    {
+      "path": "scripts/validation_support.py",
+      "sha256": "957d561694264ae67a25563126150c225dc7280c15eb9ccd574c53981005a24f"
+    },
+    {
+      "path": "tests/execution-backbone-cases.json",
+      "sha256": "a00d313f4caff1029ef42a4aefce673bc6dce8c6cf8f4901322a3a5d7f44b3f8"
+    },
+    {
+      "path": "tests/execution-liveness-live-cases.json",
+      "sha256": "5620042968248382bc79d6a0e314c7eeb4be4713cd671abbee5d2826c3fb7120"
+    },
+    {
+      "path": "tests/execution-liveness-live-result-schema.json",
+      "sha256": "ccb2d781a81be2f02d8cbf42f5ad6b704929805548995adbdcd451d505c69a91"
+    },
+    {
+      "path": "tests/execution-liveness-zero-origin-fixtures-v1.json",
+      "sha256": "0946b4a98a43f9d720f60d68f3438a8810672064b39fb7d825119fdec9ef2a79"
+    },
+    {
+      "path": "tests/foundation-live-behavior-cases.json",
+      "sha256": "76288e18c9886a168185e50eca77d4ca344f09a2ec83ee5ab59f8f087710b8dc"
+    },
+    {
+      "path": "tests/foundation-live-result-schema.json",
+      "sha256": "9fab9037190fad84097b66c73b8d75a1c53bf072acd61f6bd163eb2f4c8bdce7"
+    },
+    {
+      "path": "tests/route-eval-cases.json",
+      "sha256": "65ed2617600d9b317a7c113ba39faca695ef9a83cc26f3301d26d85a1b77b453"
+    },
+    {
+      "path": "tests/selector-pressure-cases.json",
+      "sha256": "666f228b546c01e39a6ad141847cd408f0b964a648d5f7fe98ae3a9dc8752e92"
+    },
+    {
+      "path": "tests/studio-live-behavior-cases.json",
+      "sha256": "bb194ad03de6647c5c7051a0fca6cddaf09cd3c785dd8eb70fa5a51b7171b6a2"
+    },
+    {
+      "path": "tests/studio-live-result-schema.json",
+      "sha256": "783d05c38969a38655982a2762890be071161dd6e9d9c0bfe5313ab33acf2210"
+    },
+    {
+      "path": "tests/task-decision-cases.json",
+      "sha256": "c297f3f2bbf7becbf55e54516245deb69f3b07498d9fb2f51fc467d37bcdd2e4"
+    },
+    {
+      "path": "tests/task-decision-live-cases.json",
+      "sha256": "0d50cb09af71434d2afe745885e71a685cd00ef66f247ce53228f6862cb76653"
+    },
+    {
+      "path": "tests/task-decision-live-result-schema.json",
+      "sha256": "fcac6e13b9dbb0cac4d93f7012842b7d7ea021590832355f5e8af8321a054bca"
+    },
+    {
+      "path": "tests/ui-design-lifecycle-cases.json",
+      "sha256": "a0e7ff8abc70034f80ffe5d7d8c3b4f14ca34c061acbdf52ace87a106f751ac2"
+    },
+    {
+      "path": "tests/ui-design-live-behavior-cases.json",
+      "sha256": "0b003186fb6284c3b7b3bd1cc87ce0c2a4af797f9b3486500acd66cf091cd4c0"
+    },
+    {
+      "path": "tests/ui-design-live-result-schema.json",
+      "sha256": "8eb9120cded82fdbbd8f47cb11850ab179f6222d6e36d2991876b93512ee81d0"
+    }
+  ],
+  "fixture_file_count": 68,
+  "fixture_tree_digest": "25fe1c6b770f180854356d428f5adfab712f386e13619df1a33a9b5710855170",
+  "fresh_session_status": "UNVERIFIED",
+  "runtime_digests": {
+    "claude-code": "b2f7825581745ee8476f65895424fa6f4f20823cba00c9154bdd34b8a27249f6",
+    "codex": "d4705316acf5191f11ffe73f5fb25b8e1e733b5d6f2953c8b55c0c9b2ec9a1b0",
+    "gemini-cli": "55da6513983fe1ddcc8106811ea6259bddc67fc301dcc52c04d04e8b4a0e7a8b"
+  },
+  "runtime_file_counts": {
+    "claude-code": 76,
+    "codex": 78,
+    "gemini-cli": 75
+  },
+  "runtime_manifest_sha256": "1f6a0f503b28e3d6f26589fa0c7658b65babd3fc5140fbeb626e21efacd2ffdb",
+  "schema": "sliver-governance-baseline/v1",
+  "source_commit": "fff62091f1ac19239af42739d18bc77276426c0a",
+  "source_state": "clean_git_object"
+}

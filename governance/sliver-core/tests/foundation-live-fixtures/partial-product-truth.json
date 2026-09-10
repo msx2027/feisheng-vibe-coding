@@ -1,0 +1,12 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "partial_product_truth_with_three_blocking_facts",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "not_required",
+  "context": {
+    "confirmed_truth": ["small_business_saas", "browser_first"],
+    "blocking_product_facts": ["data_sensitivity", "offline_requirement", "tenant_isolation"],
+    "answers_are_supplied_one_turn_at_a_time": true
+  }
+}

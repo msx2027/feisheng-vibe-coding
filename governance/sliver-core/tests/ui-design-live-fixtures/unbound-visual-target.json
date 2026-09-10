@@ -1,0 +1,22 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "unbound-visual-target",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/ui-governance",
+    "required_paths": ["preview.html", "src/styles/tokens.css", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "synthetic_existing",
+    "new_design_artifact_requested": false,
+    "target_surface": "new review surface",
+    "primary_user": "content reviewer",
+    "single_job": "compare one draft with its accepted version",
+    "same_role_reference": null,
+    "stable_visual_owners": ["src/styles/tokens.css"],
+    "required_before_code": "form and review one explicit visual target"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_brief_only_request",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["docs/index.md", "docs/guide.md"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "empty_directory",
+    "requested_artifact": "project brief only",
+    "confirmed_brief_facts": ["target user", "problem", "scope", "non-goals"],
+    "function_outline_requested": false,
+    "implementation_authorization": false
+  }
+}

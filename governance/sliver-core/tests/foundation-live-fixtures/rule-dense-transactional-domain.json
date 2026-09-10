@@ -1,0 +1,26 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "rule_dense_transactional_domain",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "available",
+  "context": {
+    "roles": ["buyer", "seller", "operator"],
+    "workflow": ["create_order", "pay", "fulfill", "refund", "restore_entitlement"],
+    "drivers": ["transaction_consistency", "authorization", "rule_density"],
+    "product_facts": {
+      "product": "digital-goods order and entitlement service",
+      "users": ["buyer", "seller", "operator"],
+      "first_complete_flow": ["create_order", "pay", "grant_entitlement", "refund", "revoke_entitlement"],
+      "platform": "browser and backend API",
+      "deployment": "managed web service",
+      "data_sensitivity": "orders, payment references, and access entitlements"
+    },
+    "candidate_claims": [
+      {
+        "candidate": "Spring Boot and PostgreSQL modular monolith with local domain modules",
+        "mutable_claims": ["current_supported_release", "java_support", "license", "transaction_support"]
+      }
+    ]
+  }
+}

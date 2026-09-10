@@ -1,0 +1,2016 @@
+{
+  "schema": "sliver-governance-static-mutations/v2",
+  "evaluation_scope": "deterministic_static_contract_only",
+  "critical_failure_policy": "every_mutant_must_be_killed",
+  "invariants": [
+    {
+      "id": "selector_semantic_families",
+      "path": "SKILL.md",
+      "required_all": [
+        "An idea with no implementation target starts at `立项`.",
+        "An inherited or half-built project with an unknown baseline uses `接管项目`",
+        "Any request to add, remove, modify, fix, refactor, connect, configure, or continue project behavior uses `开发执行`",
+        "A clear first-time error, compiler/test failure, or local bug uses `开发执行`",
+        "Foundation requests use the matching route",
+        "Validation of implementation uses `验收`",
+        "Security review uses `安全审计`",
+        "Drift is handled as an internal gate inside the current route"
+      ]
+    },
+    {
+      "id": "routes_registry_single_owner",
+      "path": "references/routes-index.md",
+      "required_all": [
+        "single runtime owner of primary route, operation, conditional-lens, and reference-loading mappings",
+        "| `开发执行` |",
+        "Select exactly one primary route"
+      ]
+    },
+    {
+      "id": "authorization_tiers",
+      "path": "references/effect-recovery-gates.md",
+      "required_all": [
+        "stage (`stage`) or commit (`commit`) exact Git changes | `git_history`",
+        "| push (`push`), ordinary third-party write (`third_party_write`), send message (`send_message`), create external resource (`create_external_resource`) | `external_write` |",
+        "| publish (`publish`), deploy (`deploy`)",
+        "Authorization covers only the exact target and effect the user approved."
+      ]
+    },
+    {
+      "id": "proportional_depth",
+      "path": "references/task-risk-gates.md",
+      "required_all": [
+        "`D2` does not automatically require Studio or a stage document."
+      ]
+    },
+    {
+      "id": "stage_materialization_proportional",
+      "path": "references/task-decision-contract.md",
+      "required_all": [
+        "Do not materialize stage truth for `D0`, ordinary `D1`"
+      ]
+    },
+    {
+      "id": "ui_stable_scope",
+      "path": "references/engineering-execution.md",
+      "required_all": [
+        "Delivery Shape Lock",
+        "closest concrete stable reference surface",
+        "A clear local request uses the smallest scoped implementation"
+      ]
+    },
+    {
+      "id": "evidence_planes",
+      "path": "references/engineering-execution.md",
+      "required_all": [
+        "No fresh verification, no completion claim",
+        "stale output is not evidence",
+        "Never claim release-ready from local tests only."
+      ]
+    },
+    {
+      "id": "handoff_fields",
+      "path": "references/context-handoff.md",
+      "required_all": [
+        "Git status for every relevant repo",
+        "Validation evidence: exact commands and pass/fail result.",
+        "Current source-truth documents.",
+        "Exact next safest commands or next action.",
+        "Active plan owner：",
+        "Plan phase：",
+        "Current plan step：",
+        "Plan terminal state：",
+        "host telemetry projected from execution state, not execution state itself"
+      ]
+    },
+    {
+      "id": "plan_artifact_write_through",
+      "path": "references/plan-artifact.md",
+      "required_all": [
+        "Use this owner when work produces a multi-stage executable plan",
+        "Exactly One Owner",
+        "Chat is not the plan owner."
+      ]
+    },
+    {
+      "id": "blocking_audit_join",
+      "path": "references/engineering-execution.md",
+      "required_all": [
+        "Blocking Review Join Gate",
+        "pre_materialization_input_review",
+        "post_materialization_acceptance",
+        "veto or require rework",
+        "before formal materialization begins",
+        "source or accepted input changes invalidate earlier downstream artifacts",
+        "one writer"
+      ]
+    },
+    {
+      "id": "plan_artifact_authorization",
+      "path": "references/plan-artifact.md",
+      "required_all": [
+        "A user request for a plan that will be executed, reviewed, resumed,",
+        "materialize_plan: true",
+        "loaded owner ID",
+        "`plan_artifact`",
+        "do not reinterpret that prohibition as"
+      ]
+    },
+    {
+      "id": "deterministic_temporary_plan_owner",
+      "path": "references/runtime-adapter.md",
+      "required_all": [
+        "<host-task-temp-root>/sliver-plan-<stable-task-id>.md",
+        "reuse the same path",
+        "never substitute a timestamp, random name"
+      ]
+    },
+    {
+      "id": "studio_board_projection_only",
+      "path": "references/studio-execution.md",
+      "required_all": [
+        "sole owner of deliverable, dependencies, status, acceptance evidence",
+        "before creating the first room",
+        "no exception"
+      ]
+    },
+    {
+      "id": "stage_route_operation_delivery",
+      "path": "scripts/stage_contract.py",
+      "required_all": [
+        "ROUTE_OPERATION_DELIVERY_MATRIX",
+        "route_operation_delivery",
+        "operation not in ROUTE_OPERATION_MATRIX"
+      ]
+    },
+    {
+      "id": "single_plan_stage_artifact_owner",
+      "path": "scripts/runtime_decision_contract.py",
+      "required_all": [
+        "plan_target to equal stage_target",
+        "task-owned plan_target must be derived from plan_task_identity",
+        "stage_target is only valid when plan and stage materialize together"
+      ]
+    },
+    {
+      "id": "constitution_audit_template_closure",
+      "path": "references/routes-index.md",
+      "required_all": [
+        "`references/agent-constitution-template.md`; every create or audit maps",
+        "including non-conformance audits"
+      ]
+    },
+    {
+      "id": "constitution_priority_envelope",
+      "path": "references/agent-constitution.md",
+      "required_all": [
+        "highest-level project-specific behavior rule file",
+        "cannot weaken or override Sliver's universal authorization, risk, testing, fresh-evidence, unique-owner, or release gates",
+        "stop and report the conflict"
+      ]
+    },
+    {
+      "id": "read_only_acceptance_writeback_boundary",
+      "path": "references/routes-validation.md",
+      "required_all": [
+        "first collect and return validation evidence without changing that owner",
+        "separate `local_edit` action bound to the exact stage path",
+        "leave the owner unchanged with `truth_writeback: pending`"
+      ]
+    },
+    {
+      "id": "temporary_plan_requires_host_identity",
+      "path": "references/plan-artifact.md",
+      "required_all": [
+        "no stable identity or stable task-scoped temporary root, stop before writing",
+        "Never derive identity from request text, a",
+        "timestamp, a random value"
+      ]
+    },
+    {
+      "id": "plan_review_separate_from_delivery_evidence",
+      "path": "references/task-decision-contract.md",
+      "required_all": [
+        "`evidence` always",
+        "never doubles as blocking-review proof",
+        "`plan_review` owns that proof",
+        "preserving the route's real delivery and evidence mode"
+      ]
+    },
+    {
+      "id": "plan_persistence_scope",
+      "path": "references/plan-artifact.md",
+      "required_all": [
+        "current-task temporary file never proves",
+        "cross-session durability",
+        "Never relabel a session temporary directory as durable"
+      ]
+    },
+    {
+      "id": "studio_exact_plan_authorization",
+      "path": "references/studio-execution.md",
+      "required_all": [
+        "唯一执行计划保存在哪里：",
+        "是否授权在该路径写入唯一计划：",
+        "Confirmation authorizes only the exact plan artifact path",
+        "create zero rooms"
+      ]
+    },
+    {
+      "id": "stage_writeback_separate_action",
+      "path": "references/routes-feature.md",
+      "required_all": [
+        "first return the collected evidence without changing stage truth",
+        "separate Task Decision",
+        "exact target is the active stage path",
+        "A pure audit or validation request never authorizes this write-back"
+      ]
+    },
+    {
+      "id": "executable_governance_semantic_projection",
+      "path": "scripts/governance_semantic_projection.py",
+      "required_all": [
+        "parse_governance_route_projection",
+        "ACTION_MINIMUM_TIERS",
+        "STAGE_CONTROL_FIELDS",
+        "runtime_governance_contract.py",
+        "base_decision",
+        "metamorphic_pairs",
+        "changed without trusted promotion"
+      ]
+    },
+    {
+      "id": "governance_route_oracle_independent",
+      "path": "scripts/governance_route_projection.py",
+      "required_all": [
+        "Runtime routing deliberately does not import this module",
+        "without using the runtime parser",
+        "row[\"route\"]: row[\"operations\"]",
+        "parse_governance_lens_rows",
+        "build_governance_lens_catalog",
+        "build_governance_lens_projection"
+      ]
+    },
+    {
+      "id": "external_plan_provenance_and_review_set",
+      "path": "scripts/runtime_decision_contract.py",
+      "required_all": [
+        "explicit plan_target must match the externally authorized path",
+        "active_internal_truth plan_target must match the externally established owner",
+        "collected plan_review.refs must exactly match all externally known blocking reviews"
+      ]
+    },
+    {
+      "id": "runtime_governance_contracts",
+      "path": "scripts/runtime_governance_contract.py",
+      "required_all": [
+        "open truth conflict requires unverified",
+        "current executable answer must be first",
+        "blocking review refs must match coordinator-authenticated complete review set",
+        "formal artifact writer collision",
+        "proposed change exceeds allowed regions"
+      ]
+    },
+    {
+      "id": "delivery_shape_v3_contract",
+      "path": "scripts/runtime_governance_contract.py",
+      "required_all": [
+        "sliver-delivery-shape-lock/v3",
+        "delivery shape validation requires --context",
+        "source schema projection does not match host context",
+        "stable reference does not match host context",
+        "reference/candidate viewport, state, and theme must match"
+      ]
+    }
+  ],
+  "mutations": [
+    {
+      "id": "selector_route_families_removed",
+      "critical": true,
+      "path": "SKILL.md",
+      "replacements": [
+        {
+          "old": "- An inherited or half-built project with an unknown baseline uses `接管项目`; an already understood project asking for state, risk, or next step uses `项目体检`.\n",
+          "new": ""
+        },
+        {
+          "old": "- Any request to add, remove, modify, fix, refactor, connect, configure, or continue project behavior uses `开发执行` unless the requested result is itself a foundation decision, audit, validation, release decision, or handoff.\n",
+          "new": ""
+        },
+        {
+          "old": "- Foundation requests use the matching route such as `技术选型`, `前端骨架`, `数据库设计`, `后端工程`, or `项目宪法`.\n",
+          "new": ""
+        },
+        {
+          "old": "- Validation of implementation uses `验收`; teaching the user how to personally verify behavior uses `用户验收陪跑`.\n",
+          "new": ""
+        },
+        {
+          "old": "- Security review uses `安全审计`; code quality, correctness, or design-consistency review uses `代码审计`; generated sprawl or fake-data review uses `AI债务体检`; deployment design uses `部署路线`; concrete release preparation uses `发布准备`.\n",
+          "new": ""
+        },
+        {
+          "old": "- Drift is handled as an internal gate inside the current route: update truth, revise the plan, request a product choice, or stop. It is not a competing route.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "selector_semantic_families"
+        ]
+      }
+    },
+    {
+      "id": "development_route_registry_removed",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "| `开发执行` |",
+          "new": "| `开发执行-破坏` |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_routes.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAIL"
+        ]
+      }
+    },
+    {
+      "id": "push_authorization_downgraded",
+      "critical": true,
+      "path": "references/effect-recovery-gates.md",
+      "replacements": [
+        {
+          "old": "| push (`push`), ordinary third-party write (`third_party_write`), send message (`send_message`), create external resource (`create_external_resource`) | `external_write` |",
+          "new": "| push (`push`), ordinary third-party write (`third_party_write`), send message (`send_message`), create external resource (`create_external_resource`) | `local_reversible` |"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "authorization_tiers"
+        ]
+      }
+    },
+    {
+      "id": "d0_d1_stage_ceremony_enabled",
+      "critical": true,
+      "path": "references/task-risk-gates.md",
+      "replacements": [
+        {
+          "old": "- `D2` does not automatically require Studio or a stage document.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "proportional_depth"
+        ]
+      }
+    },
+    {
+      "id": "stage_materialization_ceremony_enabled",
+      "critical": true,
+      "path": "references/task-decision-contract.md",
+      "replacements": [
+        {
+          "old": "Do not materialize stage truth for `D0`, ordinary `D1`, or a `D2`/`D3` whose\ncontract and acceptance fit safely in the task record.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "stage_materialization_proportional"
+        ]
+      }
+    },
+    {
+      "id": "ui_local_scope_lock_removed",
+      "critical": true,
+      "path": "references/engineering-execution.md",
+      "replacements": [
+        {
+          "old": "A clear local request uses the smallest scoped implementation",
+          "new": "A clear local request may redesign adjacent regions"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "ui_stable_scope"
+        ]
+      }
+    },
+    {
+      "id": "fresh_evidence_boundary_removed",
+      "critical": true,
+      "path": "references/engineering-execution.md",
+      "replacements": [
+        {
+          "old": "No fresh verification, no completion claim",
+          "new": "Static inspection may justify completion"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "evidence_planes"
+        ]
+      }
+    },
+    {
+      "id": "studio_writer_overlap_allowed",
+      "critical": true,
+      "path": "scripts/evaluate_studio_live_behavior.py",
+      "replacements": [
+        {
+          "old": "                            if (\n                                scope == existing_scope\n                                or scope.startswith(existing_scope + \"/\")\n                                or existing_scope.startswith(scope + \"/\")\n                            ):",
+          "new": "                            if False:"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_studio_live_contracts.py",
+        "args": [
+          "StudioLiveContractsTest.test_writer_rooms_cannot_overlap_allowed_paths"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAIL"
+        ]
+      }
+    },
+    {
+      "id": "isolation_extra_inputs_allowed",
+      "critical": true,
+      "path": "scripts/live_evidence_isolation.py",
+      "replacements": [
+        {
+          "old": "    if actual_paths != required_paths:\n",
+          "new": "    if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_validation_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAIL"
+        ]
+      }
+    },
+    {
+      "id": "handoff_git_state_removed",
+      "critical": true,
+      "path": "references/context-handoff.md",
+      "replacements": [
+        {
+          "old": "- Git status for every relevant repo, including nested internal-doc repos.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "handoff_fields"
+        ]
+      }
+    },
+    {
+      "id": "plan_write_through_removed",
+      "critical": true,
+      "path": "references/plan-artifact.md",
+      "replacements": [
+        {
+          "old": "Use this owner when work produces a multi-stage executable plan whose state must\nsurvive implementation, user corrections, review, or context compaction, and\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "plan_artifact_write_through"
+        ]
+      }
+    },
+    {
+      "id": "blocking_review_join_downgraded",
+      "critical": true,
+      "path": "references/engineering-execution.md",
+      "replacements": [
+        {
+          "old": "All known `pre_materialization_input_review` reviewers must start early enough to affect the work and must\njoin before formal materialization begins.",
+          "new": "Pre-materialization reviewers may join after formal materialization completes."
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "blocking_audit_join"
+        ]
+      }
+    },
+    {
+      "id": "plan_artifact_authorization_removed",
+      "critical": true,
+      "path": "references/plan-artifact.md",
+      "replacements": [
+        {
+          "old": "A user request for a plan that will be executed, reviewed, resumed,\nor handed off is not a chat-only read-only answer: it authorizes exactly one\nlocal-reversible plan artifact and no change to the audited/source owners.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "plan_artifact_authorization"
+        ]
+      }
+    },
+    {
+      "id": "deterministic_temporary_plan_owner_removed",
+      "critical": true,
+      "path": "references/runtime-adapter.md",
+      "replacements": [
+        {
+          "old": "`<host-task-temp-root>` means the host-owned temporary directory whose identity\nis stable for the current task/session and is writable without changing the\naudited project. Resolve it from the host task context, never from project\nconventions or from fields asserted by the model's decision. Pass the root and\nstable task identity to the decision validator as external host context; the\ndecision may record them but cannot authenticate them. The root must be an\nabsolute, non-symlink directory. A temporary plan path is exactly\n`<host-task-temp-root>/sliver-plan-<stable-task-id>.md`; reuse the same path\nafter compaction and handoff. If the host exposes no stable task identity or\ntask-scoped temporary root, stop before the write and request an explicit path;\nnever substitute a timestamp, random name, remembered path, or invented\n`dev-docs/` convention.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "deterministic_temporary_plan_owner"
+        ]
+      }
+    },
+    {
+      "id": "studio_board_projection_downgraded",
+      "critical": true,
+      "path": "references/studio-execution.md",
+      "replacements": [
+        {
+          "old": "active, every board node references exactly one plan node and the durable plan\nis the sole owner of deliverable, dependencies, status, acceptance evidence,\nblocker, decision owner, and next action.",
+          "new": "active, the board may independently own and update execution state."
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "studio_board_projection_only"
+        ]
+      }
+    },
+    {
+      "id": "stage_route_operation_delivery_disabled",
+      "critical": true,
+      "path": "scripts/stage_contract.py",
+      "replacements": [
+        {
+          "old": "    if not operation or operation not in ROUTE_OPERATION_MATRIX.get(route, ()):\n",
+          "new": "    if False:\n"
+        },
+        {
+          "old": "    elif operation and delivery_kind not in ROUTE_OPERATION_DELIVERY_MATRIX.get(\n        route, {}\n    ).get(operation, ()):\n",
+          "new": "    elif False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_stage_v2_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "plan_stage_second_owner_allowed",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        if plan_target != stage_target:\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-plan-stage-owner-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "constitution_audit_template_omitted",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": ", `references/agent-constitution-template.md`; every create or audit maps the current project file against the base template, including non-conformance audits",
+          "new": "; the base template may be skipped for ordinary audits"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "constitution_audit_template_closure"
+        ]
+      }
+    },
+    {
+      "id": "constitution_priority_envelope_removed",
+      "critical": true,
+      "path": "references/agent-constitution.md",
+      "replacements": [
+        {
+          "old": "It may specialize Sliver for the current repository, but it cannot weaken or override Sliver's universal authorization, risk, testing, fresh-evidence, unique-owner, or release gates. When a project clause conflicts with one of those gates, stop and report the conflict; do not silently choose the weaker rule. Project-specific product, architecture, command, path, and owner facts remain authoritative inside that protected envelope.\n",
+          "new": "A project constitution may override any Sliver rule.\n"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "constitution_priority_envelope"
+        ]
+      }
+    },
+    {
+      "id": "read_only_acceptance_auto_writeback",
+      "critical": true,
+      "path": "references/routes-validation.md",
+      "replacements": [
+        {
+          "old": "- For work governed by durable stage truth, first collect and return validation evidence without changing that owner. Writing results back is a separate `local_edit` action bound to the exact stage path. Only an original request or later confirmation that authorizes that exact write permits `truth_writeback: complete` and the `closeout` gate from `project-flow.md`. Without write authorization, leave the owner unchanged with `truth_writeback: pending`, report the evidence, and do not claim the sub-stage is complete.\n",
+          "new": "- For work governed by durable stage truth, acceptance may automatically write back and close the stage.\n"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "read_only_acceptance_writeback_boundary"
+        ]
+      }
+    },
+    {
+      "id": "temporary_plan_request_digest_fallback",
+      "critical": true,
+      "path": "references/plan-artifact.md",
+      "replacements": [
+        {
+          "old": "   no stable identity or stable task-scoped temporary root, stop before writing\n   and request an explicit path. Never derive identity from request text, a\n   timestamp, a random value, or an agent-invented repository convention;\n",
+          "new": "   no stable identity, derive one from a digest of the request text;\n"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "temporary_plan_requires_host_identity"
+        ]
+      }
+    },
+    {
+      "id": "handoff_plan_owner_state_removed",
+      "critical": true,
+      "path": "references/context-handoff.md",
+      "replacements": [
+        {
+          "old": "- Active plan owner：\n- Plan phase：\n- Current plan step：\n- Plan terminal state：\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "handoff_fields"
+        ]
+      }
+    },
+    {
+      "id": "route_delivery_projection_changed",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "`baseline` -> `implementation`, `behavior_verification`",
+          "new": "`baseline` -> `audit`"
+        }
+      ],
+      "gate": {
+        "script": "scripts/compare_capability_baseline.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "route-operation-delivery-projection capability change"
+        ]
+      }
+    },
+    {
+      "id": "plan_review_phase_boundary_disabled",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "            if review_status != \"pending\":\n",
+          "new": "            if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-pending-review-with-closed-plan-review"
+        ]
+      }
+    },
+    {
+      "id": "temporary_plan_cross_session_claim_allowed",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        if (\n            plan_target_kind == \"task_temporary\"\n            and plan_persistence_scope != \"current_task\"\n        ):\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-temporary-plan-claiming-cross-session-persistence"
+        ]
+      }
+    },
+    {
+      "id": "studio_plan_authorization_removed",
+      "critical": true,
+      "path": "references/studio-execution.md",
+      "replacements": [
+        {
+          "old": "Confirmation authorizes only the exact plan artifact path, listed rooms, scopes, model tiers, external-executor assignments, and execution shape shown on the card. If the plan path is absent, conflicts with current truth, or the user did not authorize that local-reversible write, create zero rooms.",
+          "new": "Confirmation authorizes rooms even when no plan path was shown."
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "studio_exact_plan_authorization"
+        ]
+      }
+    },
+    {
+      "id": "stage_writeback_implicitly_authorized",
+      "critical": true,
+      "path": "references/routes-feature.md",
+      "replacements": [
+        {
+          "old": "- After validation, first return the collected evidence without changing stage truth. Stage write-back is a separate Task Decision whose current action is `local_edit`, whose exact target is the active stage path, and whose authorization is satisfied by the original request only when that request explicitly entered the named active sub-stage and did not exclude documentation writes; otherwise obtain confirmation. Only then write `result_status`, `evidence_refs`, and `Implementation Write-Back`, set `truth_writeback: complete`, and pass the `closeout` gate. A pure audit or validation request never authorizes this write-back. A structural closeout never proves the referenced evidence and never authorizes the next sub-stage.\n",
+          "new": "- After validation, always write back and close the stage automatically.\n"
+        }
+      ],
+      "gate": {
+        "script": "self",
+        "args": [
+          "--validate-source"
+        ]
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "stage_writeback_separate_action"
+        ]
+      }
+    },
+    {
+      "id": "runtime_action_tier_downgraded",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "    \"publish\": \"critical_operation\",\n",
+          "new": "    \"publish\": \"external_write\",\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/governance_semantic_projection.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "executable governance semantics changed without trusted promotion"
+        ]
+      }
+    },
+    {
+      "id": "blocking_review_complete_set_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        if review_status == \"collected\" and set(review_refs) != expected_review_set:\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-collected-plan-review-omits-known-blocker"
+        ]
+      }
+    },
+    {
+      "id": "active_internal_plan_provenance_disabled",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "                established = _require_string(\n                    established_plan_target,\n                    \"established_plan_target\",\n                )\n",
+          "new": "                established = plan_target\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-active-internal-plan-without-established-owner-context"
+        ]
+      }
+    },
+    {
+      "id": "truth_external_first_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "        if answer_order[0] != \"external_current_state\":\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "formal_completed_review_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "        if status != \"completed\":\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "delivery_shape_allowlist_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "    if not proposed <= allowed:\n",
+          "new": "    if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "explicit_scope_exclusion_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "                if _scope_targets_overlap(proposed_target, excluded_target):\n",
+          "new": "                if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-broad-write-crosses-explicit-exclusion"
+        ]
+      }
+    },
+    {
+      "id": "d0_delegation_stop_disabled",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "    if depth == \"D0\" and delegation_decision != \"current_only\":\n",
+          "new": "    if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_task_decision_contract.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "invalid-d0-subagent-delegation"
+        ]
+      }
+    },
+    {
+      "id": "real_funds_protected_evidence_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "        if verdict in {\"sandbox_ready\", \"release_ready\"} and not (\n            money_complete and protected_complete\n        ):\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "delivery_shape_user_task_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "    \"proposed_changed_regions\",\n    \"user_task\",\n    \"interaction_model\",\n",
+          "new": "    \"proposed_changed_regions\",\n    \"interaction_model\",\n"
+        },
+        {
+          "old": "    user_task = _object(record[\"user_task\"], \"user_task\")\n",
+          "new": "    user_task = {\"primary_user\": \"bypass\", \"single_job\": \"bypass\", \"success_signal\": \"bypass\"}\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "delivery_shape_hidden_internal_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "        if visibility == \"hidden_internal\" and condition != \"never_visible\":\n",
+          "new": "        if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "delivery_shape_projection_closure_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "    elif not expected_source_ids or set(projected_ids) != set(\n        expected_source_ids\n    ):\n",
+          "new": "    elif False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "delivery_shape_visual_pair_context_check_disabled",
+      "critical": true,
+      "path": "scripts/runtime_governance_contract.py",
+      "replacements": [
+        {
+          "old": "    if visual_pairs != expected_visual_pairs:\n",
+          "new": "    if False:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_runtime_governance_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "first_refresh_can_be_skipped",
+      "critical": true,
+      "path": "references/execution-liveness.md",
+      "replacements": [
+        {
+          "old": "| first_running_receipt | next_tool_action | matching_refresh_or_cancel | no_unrelated_batch |",
+          "new": "| first_running_receipt | next_tool_action | arbitrary_tool_action | unrelated_batch_allowed |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "execution liveness table rows drifted: Running Refresh Schedule"
+        ]
+      }
+    },
+    {
+      "id": "running_batch_becomes_unbounded",
+      "critical": true,
+      "path": "references/execution-liveness.md",
+      "replacements": [
+        {
+          "old": "| matching_refresh_still_running | before_next_refresh | at_most_one_non_conflicting_read_only_batch | must_not_change_operation_preconditions |",
+          "new": "| matching_refresh_still_running | before_next_refresh | unlimited_local_batches | operation_preconditions_may_change |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "execution liveness table rows drifted: Running Refresh Schedule"
+        ]
+      }
+    },
+    {
+      "id": "pending_final_is_allowed",
+      "critical": true,
+      "path": "references/execution-liveness.md",
+      "replacements": [
+        {
+          "old": "| pending | final_or_handoff_requested | terminal_decision_required | pending_count=0_or_terminal_decision |",
+          "new": "| pending | final_or_handoff_requested | final_allowed | pending_may_be_abandoned |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "execution liveness table rows drifted: Pending Operation Transition Table"
+        ]
+      }
+    },
+    {
+      "id": "metadata_incomplete_becomes_unrecoverable",
+      "critical": true,
+      "path": "references/execution-liveness.md",
+      "replacements": [
+        {
+          "old": "| terminal | optional_metadata_missing | terminal | metadata_incomplete_degraded |",
+          "new": "| terminal | optional_metadata_missing | blocked_unrecoverable | terminal_evidence_rejected |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "execution liveness table rows drifted: Pending Operation Transition Table"
+        ]
+      }
+    },
+    {
+      "id": "route_catalog_purpose_is_summarized",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "                \"purpose\": row[\"purpose\"],\n                \"operations\": list(row[\"operations\"]),",
+          "new": "                \"purpose\": row[\"purpose\"][:32],\n                \"operations\": list(row[\"operations\"]),"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "route_projection_load_is_reinterpreted",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        \"operation_delivery\": {\n            operation: list(deliveries)\n            for operation, deliveries in row[\"operations\"].items()\n        },\n        \"load\": row[\"load\"],\n",
+          "new": "        \"operation_delivery\": {\n            operation: list(deliveries)\n            for operation, deliveries in row[\"operations\"].items()\n        },\n        \"load\": \"load owners chosen by the model\",\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "route_projection_source_digest_is_stale",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "hashlib.sha256(raw).hexdigest()",
+          "new": "\"0\" * 64"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "governance_route_oracle_imports_runtime_parser",
+      "critical": true,
+      "path": "scripts/governance_route_projection.py",
+      "replacements": [
+        {
+          "old": "import hashlib\n",
+          "new": "import hashlib\nimport runtime_decision_contract\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "frontend_design_bounded_load_regressed",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "Eligible bounded `D1` UI bugs stay on the route's compact owners; this lens adds no detailed owner by default. That compact path preserves one established semantic Owner, `T2` RED-before-production when selected, security-impact classification, and fresh verification.",
+          "new": "`references/engineering-execution.md`; add `references/routes-feature.md` for implementation."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "bounded D1 lens compact marker is missing"
+        ]
+      }
+    },
+    {
+      "id": "lens_projection_load_is_reinterpreted",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        \"impact\": row[\"impact\"],\n        \"load\": row[\"load\"],\n",
+          "new": "        \"impact\": row[\"impact\"],\n        \"load\": \"load owners chosen by the model\",\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "unknown_lens_projection_is_accepted",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "    if len(matches) != 1:\n        raise ContractError(f\"lens projection requires one canonical lens: {lens}\")\n",
+          "new": "    if len(matches) != 1:\n        matches = rows[:1]\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "liveness_forbidden_field_removed",
+      "critical": true,
+      "path": "scripts/evaluate_execution_liveness_live_behavior.py",
+      "replacements": [
+        {
+          "old": "    \"command\",\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_validation_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "liveness_home_path_pattern_narrowed",
+      "critical": true,
+      "path": "scripts/evaluate_execution_liveness_live_behavior.py",
+      "replacements": [
+        {
+          "old": "HOME_PATH_PATTERN = re.compile(r\"(?:/Users/|/home/|/root/|[A-Za-z]:\\\\Users\\\\)\", re.I)\n",
+          "new": "HOME_PATH_PATTERN = re.compile(r\"/Users/\")\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_validation_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "liveness_schema_forbidden_fields_drift_allowed",
+      "critical": true,
+      "path": "scripts/evaluate_execution_liveness_live_behavior.py",
+      "replacements": [
+        {
+          "old": "        or set(forbidden_fields) != FORBIDDEN_FIELDS\n",
+          "new": "        or not FORBIDDEN_FIELDS.issubset(set(forbidden_fields))\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_validation_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "skill_lens_catalog_call_removed",
+      "critical": true,
+      "path": "SKILL.md",
+      "replacements": [
+        {
+          "old": "run `lens-catalog --format json`",
+          "new": "skip exact lens discovery"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "lens_catalog_impact_is_summarized",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "            {\"lens\": row[\"lens\"], \"impact\": row[\"impact\"]}\n            for row in rows\n",
+          "new": "            {\"lens\": row[\"lens\"], \"impact\": row[\"impact\"][:32]}\n            for row in rows\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "duplicate_lens_catalog_is_accepted",
+      "critical": true,
+      "path": "scripts/runtime_decision_contract.py",
+      "replacements": [
+        {
+          "old": "        if \"/\" in lens or lens in lenses:\n",
+          "new": "        if \"/\" in lens:\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "bounded_d1_lens_catalog_bytes_omitted",
+      "critical": true,
+      "path": "scripts/evaluate_execution_backbone.py",
+      "replacements": [
+        {
+          "old": "    d0_bytes = route_projection_bytes + lens_catalog_bytes + lens_projection_bytes\n",
+          "new": "    d0_bytes = route_projection_bytes + lens_projection_bytes\n"
+        },
+        {
+          "old": "    bounded_d1_bytes = route_projection_bytes + lens_catalog_bytes + lens_projection_bytes\n",
+          "new": "    bounded_d1_bytes = route_projection_bytes + lens_projection_bytes\n"
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "project_audit_full_flow_becomes_default",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "Base: `references/routes-intake.md`. Use its Bounded Project Health Audit",
+          "new": "Base: `references/routes-intake.md`, `references/project-flow.md`. Use its Bounded Project Health Audit"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "bounded base contains conditional reference references/project-flow.md"
+        ]
+      }
+    },
+    {
+      "id": "project_audit_testing_owner_becomes_default",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "Base: `references/routes-intake.md`. Use its Bounded Project Health Audit",
+          "new": "Base: `references/routes-intake.md`, `references/testing-strategy.md`. Use its Bounded Project Health Audit"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "bounded base contains conditional reference references/testing-strategy.md"
+        ]
+      }
+    },
+    {
+      "id": "project_audit_truncated_batch_is_replayed",
+      "critical": true,
+      "path": "references/routes-intake.md",
+      "replacements": [
+        {
+          "old": "must not replay the same batch",
+          "new": "may replay the same batch until it completes"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "bounded project audit core missing required term: must not replay the same batch"
+        ]
+      }
+    },
+    {
+      "id": "project_audit_lens_bytes_are_omitted",
+      "critical": true,
+      "path": "scripts/evaluate_execution_backbone.py",
+      "replacements": [
+        {
+          "old": "            project_audit_lens_catalog_json,\n            project_audit_lens_projection_json,\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "scripts/test_governance_semantic_projection_contracts.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "FAILED"
+        ]
+      }
+    },
+    {
+      "id": "user_stop_finalization_is_removed",
+      "critical": true,
+      "path": "SKILL.md",
+      "replacements": [
+        {
+          "old": "- When the user explicitly requests stop and final, stop new discovery. Deliver a bounded final next when nothing is pending; otherwise load `references/execution-liveness.md` and close pending work before final. A Skill cannot wake a stopped Host model loop.\n",
+          "new": ""
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "missing required execution term: explicitly requests stop and final"
+        ]
+      }
+    },
+    {
+      "id": "subagent_implementation_backdoor_restored",
+      "critical": true,
+      "path": "SKILL.md",
+      "replacements": [
+        {
+          "old": "Use subagents only for independent read-only audits, reviews, or diagnoses when they materially improve speed or evidence. Subagents never write implementation:",
+          "new": "Use subagents only for independent read-only audits or disjoint implementation ownership when they materially improve speed or evidence. Subagents may write implementation:"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "missing required execution term: Subagents never write implementation"
+        ]
+      }
+    },
+    {
+      "id": "studio_proactive_evaluation_removed",
+      "critical": true,
+      "path": "references/studio-execution.md",
+      "replacements": [
+        {
+          "old": "Evaluation is a director duty, not a user request.",
+          "new": "Evaluation happens only when the user asks for Studio Mode."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "missing required execution term: Evaluation is a director duty, not a user request"
+        ]
+      }
+    },
+    {
+      "id": "truth_capture_silent_write_allowed",
+      "critical": true,
+      "path": "references/truth-capture.md",
+      "replacements": [
+        {
+          "old": "and wait for confirmation. Never silently create or rewrite a truth document.",
+          "new": "and write it. A confirmed discussion is enough authorization to create or rewrite a truth document."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "long_discussion_must_propose_authorization_card_not_silent_write: missing must-apply execution term: Never silently create or rewrite a truth document"
+        ]
+      }
+    },
+    {
+      "id": "post_acceptance_drift_check_removed",
+      "critical": true,
+      "path": "references/truth-capture.md",
+      "replacements": [
+        {
+          "old": "  `truth_capture.decision: deferred` with the open items in `reason`. Do not\n  start the next batch as if no drift existed.",
+          "new": "  `truth_capture.decision: deferred` with the open items in `reason`; the\n  next batch may start while the card is pending."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "post_acceptance_drift_must_card_and_block_next_batch: missing must-apply execution term: as if no drift existed"
+        ]
+      }
+    },
+    {
+      "id": "audit_artifact_default_removed",
+      "critical": true,
+      "path": "references/audit-artifact.md",
+      "replacements": [
+        {
+          "old": "  health-check, or \"看看\" the project or a subsystem, the report is written by\n  default. Conversation carries the summary, the verdict, and the report path;\n  it does not repeat the findings.",
+          "new": "  health-check, or \"看看\" the project or a subsystem, the findings are answered\n  in conversation; a report is written only when the user asks for one."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "module_level_audit_writes_report_by_default: missing must-apply execution term: Conversation carries the summary"
+        ]
+      }
+    },
+    {
+      "id": "code_audit_route_folded_into_health_audit",
+      "critical": true,
+      "path": "references/routes-index.md",
+      "replacements": [
+        {
+          "old": "| `代码审计` |",
+          "new": "| `项目体检（代码）` |"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "module_level_audit_writes_report_by_default: expected route missing: 代码审计"
+        ]
+      }
+    },
+    {
+      "id": "audit_review_pass_removed",
+      "critical": true,
+      "path": "references/audit-artifact.md",
+      "replacements": [
+        {
+          "old": "   (a subagent or a Studio reviewer room, never the producer) re-reads every",
+          "new": "   (the producing agent itself, when scope is small) re-reads every"
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "code_audit_cannot_skip_independent_review_pass: missing must-apply execution term: never the producer"
+        ]
+      }
+    },
+    {
+      "id": "growing_dirs_bulk_read_allowed",
+      "critical": true,
+      "path": "references/project-flow.md",
+      "replacements": [
+        {
+          "old": "  current owner closure. Reading `features/`, `decisions/`, or `audits/` as a\n  whole directory is never a discovery step, in any route.",
+          "new": "  current owner closure, or read `features/`, `decisions/`, and `audits/` as\n  whole directories when the index looks stale."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "compaction_offer_requires_card_and_never_moves_files_alone: references/project-flow.md section Truth Ledger Boundary And Index Rules missing term: whole directory is never a discovery step"
+        ]
+      }
+    },
+    {
+      "id": "audit_ledger_treated_as_truth",
+      "critical": true,
+      "path": "references/project-flow.md",
+      "replacements": [
+        {
+          "old": "  what was checked and found at one time, and they are never read to establish\n  what the project currently is.",
+          "new": "  what was checked and found at one time, and they are read alongside truth to\n  establish what the project currently is."
+        }
+      ],
+      "gate": {
+        "script": "scripts/evaluate_execution_backbone.py",
+        "args": []
+      },
+      "expected_failure": {
+        "exit_codes": [
+          1
+        ],
+        "output_contains": [
+          "compaction_offer_requires_card_and_never_moves_files_alone: references/project-flow.md section Truth Ledger Boundary And Index Rules missing term: never read to establish"
+        ]
+      }
+    }
+  ]
+}

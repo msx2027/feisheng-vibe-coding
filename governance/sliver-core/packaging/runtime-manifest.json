@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "core_files": [
+    "SKILL.md",
+    "LICENSE",
+    "VERSION",
+    "scripts/check_project_guardrails.py",
+    "scripts/runtime_decision_contract.py",
+    "scripts/runtime_governance_contract.py",
+    "scripts/stage_contract.py",
+    "scripts/migrate_stage_contract.py",
+    "scripts/validation_support.py"
+  ],
+  "core_trees": [
+    "references",
+    "assets/project-bootstrap",
+    "assets/project-adoption",
+    "assets/project-design",
+    "assets/project-stage",
+    "assets/project-feature",
+    "assets/project-decision",
+    "assets/project-audit"
+  ],
+  "targets": {
+    "codex": {
+      "install_hint": "~/.codex/skills/sliver-vibe-coding",
+      "overlay_files": {
+        "packaging/adapters/codex/agents/openai.yaml": "agents/openai.yaml",
+        "packaging/adapters/codex/references/studio-codex.md": "references/studio-codex.md",
+        "packaging/adapters/codex/references/execution-liveness-host.md": "references/execution-liveness-host.md"
+      }
+    },
+    "claude-code": {
+      "install_hint": "~/.claude/skills/sliver-vibe-coding",
+      "overlay_files": {
+        "packaging/adapters/claude/references/runtime-adapter.md": "references/runtime-adapter.md",
+        "packaging/adapters/claude/assets/project-claude/CLAUDE.md": "assets/project-claude/CLAUDE.md"
+      }
+    },
+    "gemini-cli": {
+      "install_hint": "~/.gemini/skills/sliver-vibe-coding",
+      "overlay_files": {}
+    }
+  },
+  "experimental_targets": {
+    "trae": "No runtime bundle is published until its official loading contract and fresh-session behavior are verified."
+  },
+  "forbidden_runtime_paths": [
+    ".git",
+    ".github",
+    "tests",
+    "packaging",
+    "README.md",
+    "CHANGELOG.md",
+    "COMPATIBILITY.md",
+    "assets/sliver-vibe-coding-poster.png",
+    "assets/wechat-group.jpg",
+    "assets/wechat-group-2.jpg",
+    "assets/wechat-group-3.jpg",
+    "assets/wechat-group-4.jpg"
+  ],
+  "forbidden_runtime_names": [
+    ".DS_Store",
+    "__pycache__"
+  ]
+}

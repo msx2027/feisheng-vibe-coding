@@ -1,0 +1,20 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_full_inception_authorized",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["docs/index.md", "docs/guide.md", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "empty_directory",
+    "request_scope": "complete project inception, not implementation",
+    "confirmed_product_facts": ["target users", "problem and boundary", "complete function outline", "non-goals", "acceptance direction"],
+    "materialization_authorization": "explicit for the minimum inception truth",
+    "implementation_authorization": false
+  }
+}

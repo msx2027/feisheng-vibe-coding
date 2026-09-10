@@ -1,0 +1,12 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "navigation-conflict",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "current_navigation": "left_sidebar_confirmed",
+    "prototype_navigation": "top_navigation",
+    "compatibility": "material_conflict",
+    "visible_workflow_change": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "state-copy-authority",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/ui-design-live-fixtures/workspaces/table-system",
+    "required_paths": ["preview.html", "package.json", "src/components/StableDataTable.js", "src/components/ui/Card.js", "src/i18n/workflow.js", "src/pages/records.js", "tests/table-system.test.mjs", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"],
+    "render_entry": "preview.html"
+  },
+  "context": {
+    "project_kind": "synthetic_existing",
+    "new_design_artifact_requested": false,
+    "target_surface": "generic two-action workflow page",
+    "product_truth": {
+      "not_ready": "show only the two real primary action entry points",
+      "ready": "show result details only when relevant",
+      "confirmation": "show optional amount and risk detail only in the confirmation dialog"
+    },
+    "existing_copy_owner": "src/i18n/workflow.js",
+    "required_states": ["loading", "empty", "error", "disabled"],
+    "persistent_legal_or_safety_copy_required": false
+  }
+}

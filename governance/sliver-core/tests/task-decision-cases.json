@@ -1,0 +1,2708 @@
+{
+  "schema": "sliver-task-decision-cases/v1",
+  "evaluation_scope": "static_contract_and_metamorphic",
+  "static_results_are_not_fresh_session_proof": true,
+  "base_decision": {
+    "schema": "sliver-task-decision/v1",
+    "decision_status": "resolved",
+    "primary_route": "开发执行",
+    "operation": "implement",
+    "delivery_kind": "implementation",
+    "result": "Change one established owner",
+    "non_goals": [],
+    "scope": {
+      "proposed_targets": [
+        "owner-a"
+      ],
+      "excluded_targets": []
+    },
+    "owner_topology": {
+      "semantic_owners": [
+        "owner-a"
+      ],
+      "owner_count": 1,
+      "joint_contract_required": false,
+      "shared_writable_surface": false,
+      "mechanical_execution": false,
+      "new_foundation_judgment": false,
+      "contracts_stable": true,
+      "ordered_dependencies": false,
+      "studio_capability_available": false,
+      "environment_isolation_credible": false,
+      "independent_acceptance": false,
+      "integration_gate_defined": false,
+      "coordination_benefit_positive": false
+    },
+    "delegation": {
+      "decision": "current_only",
+      "independent_scopes": [],
+      "join_point": null,
+      "reason": "One bounded owner is safer and faster in the current agent"
+    },
+    "task_depth": "D1",
+    "depth_rule": "single_owner_established_contract",
+    "risk_lanes": [],
+    "evidence": {
+      "mode": "test",
+      "test_level": "T2",
+      "route_evidence_kind": null,
+      "status": "planned"
+    },
+    "effect": {
+      "effect_class": "local_reversible",
+      "required_tier": "local_reversible",
+      "granted_tier": "local_reversible",
+      "authorization_evidence": "Current user request authorizes the bounded local edit",
+      "exact_target": "owner-a",
+      "recovery_known": true,
+      "health_and_stop_required": false,
+      "authorization_status": "satisfied",
+      "action": "local_edit"
+    },
+    "operational_mode": "planned",
+    "discovery": "resolved",
+    "loaded_owner_ids": [
+      "routes",
+      "task_depth",
+      "testing",
+      "effect_recovery"
+    ],
+    "materialize_plan": false,
+    "materialize_stage": false,
+    "reason": "One semantic owner and an established contract",
+    "studio_decision": "do_not_recommend"
+  },
+  "cases": [
+    {
+      "id": "button-spacing",
+      "expected": "valid",
+      "patch": {
+        "result": "Change one button spacing value",
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "evidence.test_level": "T0"
+      }
+    },
+    {
+      "id": "button-spacing-with-complex-nouns",
+      "expected": "valid",
+      "patch": {
+        "result": "Change one button spacing value on an admin API database SDK screen",
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "evidence.test_level": "T0"
+      }
+    },
+    {
+      "id": "ordinary-owner-bug",
+      "expected": "valid",
+      "patch": {
+        "result": "Fix one deterministic owner bug"
+      }
+    },
+    {
+      "id": "explicit-exclusion-preserved",
+      "expected": "valid",
+      "host_context": {
+        "expected_excluded_targets": [
+          "src/ui/**"
+        ]
+      },
+      "patch": {
+        "result": "Repair the authorized core owner while preserving the explicitly excluded UI owner",
+        "scope.proposed_targets": [
+          "src/core/**",
+          "src/api/**"
+        ],
+        "scope.excluded_targets": [
+          "src/ui/**"
+        ],
+        "effect.exact_target": "src/core/**"
+      }
+    },
+    {
+      "id": "invalid-broad-write-crosses-explicit-exclusion",
+      "expected": "invalid",
+      "error_contains": "proposed target intersects an explicitly excluded target",
+      "host_context": {
+        "expected_excluded_targets": [
+          "src/ui/**"
+        ]
+      },
+      "patch": {
+        "result": "Repair every worktree change",
+        "scope.proposed_targets": [
+          "**"
+        ],
+        "scope.excluded_targets": [
+          "src/ui/**"
+        ],
+        "effect.exact_target": "all worktree changes"
+      }
+    },
+    {
+      "id": "cross-user-authorization-bug",
+      "expected": "valid",
+      "patch": {
+        "result": "Fix one cross-user authorization bug",
+        "risk_lanes": [
+          "identity_permission",
+          "privacy_secret_data"
+        ],
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "risk_control"
+        ]
+      }
+    },
+    {
+      "id": "read-public-log",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "开发执行",
+        "operation": "implement",
+        "delivery_kind": "direct_artifact",
+        "result": "Mechanically format one public log excerpt",
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "verification",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.exact_target": "supplied public log excerpt",
+        "effect.action": "read"
+      }
+    },
+    {
+      "id": "read-sensitive-production-log",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "开发执行",
+        "operation": "implement",
+        "delivery_kind": "direct_artifact",
+        "result": "Mechanically format and redact one sensitive production log excerpt",
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "risk_lanes": [
+          "privacy_secret_data"
+        ],
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "risk_control"
+        ],
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "verification",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.exact_target": "supplied sensitive log excerpt",
+        "effect.action": "read"
+      }
+    },
+    {
+      "id": "publish-verified-artifact",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "发布准备",
+        "operation": "prepare",
+        "delivery_kind": "verification",
+        "result": "Assess whether an already verified artifact is ready to publish",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "verification",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.exact_target": "release readiness assessment for the verified artifact",
+        "effect.action": "stateless_verify"
+      }
+    },
+    {
+      "id": "actual-publish-verified-artifact",
+      "expected": "valid",
+      "patch": {
+        "delivery_kind": "direct_artifact",
+        "result": "Execute publication of an already verified artifact after a separate action decision",
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "effect.effect_class": "controlled",
+        "effect.required_tier": "critical_operation",
+        "effect.granted_tier": null,
+        "effect.authorization_evidence": null,
+        "effect.authorization_status": "insufficient",
+        "effect.exact_target": "already verified production artifact",
+        "effect.recovery_known": false,
+        "effect.health_and_stop_required": true,
+        "effect.action": "publish"
+      }
+    },
+    {
+      "id": "frontend-backend-studio",
+      "expected": "valid",
+      "patch": {
+        "result": "Implement stable frontend and backend contracts in isolated owners",
+        "owner_topology.semantic_owners": [
+          "frontend",
+          "backend"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "studio_execution"
+        ],
+        "materialize_stage": false,
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "d2-independent-read-only-delegation",
+      "expected": "valid",
+      "patch": {
+        "result": "Join two independent owner audits before one coordinator decision",
+        "owner_topology.semantic_owners": [
+          "owner-a",
+          "owner-b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "delegation.decision": "use_subagents",
+        "delegation.independent_scopes": [
+          "owner-a read-only audit",
+          "owner-b read-only audit"
+        ],
+        "delegation.join_point": "Coordinator joins both audits before implementation",
+        "delegation.reason": "Independent veto evidence is faster to collect in parallel"
+      }
+    },
+    {
+      "id": "game-assets-studio",
+      "expected": "valid",
+      "patch": {
+        "result": "Build stable map, asset, and engine deliverables in isolated owners",
+        "owner_topology.semantic_owners": [
+          "map",
+          "assets",
+          "engine"
+        ],
+        "owner_topology.owner_count": 3,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "studio_execution"
+        ],
+        "materialize_stage": false,
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "overlapping-writers-resolve-boundaries",
+      "expected": "valid",
+      "patch": {
+        "result": "Stop concurrent writers on one shared owner",
+        "owner_topology.shared_writable_surface": true,
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "studio_execution"
+        ],
+        "studio_decision": "resolve_boundaries_first"
+      }
+    },
+    {
+      "id": "foundation-change",
+      "expected": "valid",
+      "patch": {
+        "result": "Change the project foundation and ordered migration topology",
+        "owner_topology.semantic_owners": [
+          "foundation",
+          "migration"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.new_foundation_judgment": true,
+        "owner_topology.ordered_dependencies": true,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "cross-owner-drift-materializes",
+      "expected": "valid",
+      "patch": {
+        "result": "Stabilize a drifting frontend and backend acceptance contract",
+        "owner_topology.semantic_owners": [
+          "frontend",
+          "backend"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.contracts_stable": false,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "ordered-transition-materializes",
+      "expected": "valid",
+      "patch": {
+        "result": "Execute an ordered schema and consumer transition that cannot stay inline",
+        "owner_topology.semantic_owners": [
+          "schema",
+          "consumer"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.ordered_dependencies": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "durable-handoff-materializes",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "上下文交接",
+        "operation": "handoff",
+        "delivery_kind": "handoff",
+        "result": "Materialize a durable handoff for two coupled owners",
+        "owner_topology.semantic_owners": [
+          "runtime",
+          "consumer"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "handoff",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current request authorizes a local handoff artifact",
+        "effect.exact_target": "current task handoff truth",
+        "effect.action": "read",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "unresolved-product-stop-pairs-discovery",
+      "expected": "valid",
+      "patch": {
+        "decision_status": "unresolved_product_stop",
+        "discovery": "unresolved_product_stop",
+        "evidence.status": "unverified"
+      }
+    },
+    {
+      "id": "split-required-uses-resolved-discovery",
+      "expected": "valid",
+      "patch": {
+        "decision_status": "split_required"
+      }
+    },
+    {
+      "id": "invalid-audit-delivery-on-implement-operation",
+      "expected": "invalid",
+      "error_contains": "does not allow delivery_kind audit",
+      "patch": {
+        "delivery_kind": "audit"
+      }
+    },
+    {
+      "id": "invalid-d0-new-semantic-judgment",
+      "expected": "invalid",
+      "error_contains": "D0 requires one bounded owner and mechanical execution",
+      "patch": {
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract"
+      }
+    },
+    {
+      "id": "invalid-d0-subagent-delegation",
+      "expected": "invalid",
+      "error_contains": "D0 work must stay in the current agent",
+      "patch": {
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "delegation.decision": "use_subagents",
+        "delegation.independent_scopes": [
+          "read owner",
+          "read nearby test"
+        ],
+        "delegation.join_point": "Join before the mechanical edit",
+        "delegation.reason": "Repository preference requests parallel work"
+      }
+    },
+    {
+      "id": "invalid-d2-without-joint-contract",
+      "expected": "invalid",
+      "error_contains": "D2 requires several owners that share one joint contract",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract"
+      }
+    },
+    {
+      "id": "invalid-d3-ordinary-order",
+      "expected": "invalid",
+      "error_contains": "D3 requires foundation judgment or multi-owner ordered program topology",
+      "patch": {
+        "owner_topology.ordered_dependencies": true,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology"
+      }
+    },
+    {
+      "id": "invalid-protected-implementation-t0",
+      "expected": "invalid",
+      "error_contains": "protected-risk implementation requires T1/T2/T3",
+      "patch": {
+        "risk_lanes": [
+          "identity_permission"
+        ],
+        "evidence.test_level": "T0",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "risk_control"
+        ]
+      }
+    },
+    {
+      "id": "invalid-route-delivery-mismatch",
+      "expected": "invalid",
+      "error_contains": "发布准备/prepare does not allow delivery_kind direct_artifact",
+      "patch": {
+        "primary_route": "发布准备",
+        "operation": "prepare",
+        "delivery_kind": "direct_artifact"
+      }
+    },
+    {
+      "id": "invalid-satisfied-without-granted-tier",
+      "expected": "invalid",
+      "error_contains": "effect.granted_tier must be a non-empty string",
+      "patch": {
+        "effect.granted_tier": null
+      }
+    },
+    {
+      "id": "invalid-loaded-owner-id",
+      "expected": "invalid",
+      "error_contains": "loaded_owner_ids contain unsupported IDs",
+      "patch": {
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "all_governance"
+        ]
+      }
+    },
+    {
+      "id": "invalid-null-resolved-operation",
+      "expected": "invalid",
+      "error_contains": "operation must be a non-empty string",
+      "patch": {
+        "operation": null
+      }
+    },
+    {
+      "id": "invalid-unknown-risk-lane",
+      "expected": "invalid",
+      "error_contains": "unsupported IDs",
+      "patch": {
+        "risk_lanes": [
+          "security"
+        ]
+      }
+    },
+    {
+      "id": "invalid-evidence-union",
+      "expected": "invalid",
+      "error_contains": "route_evidence_kind: null",
+      "patch": {
+        "evidence.route_evidence_kind": "audit"
+      }
+    },
+    {
+      "id": "invalid-low-authorization",
+      "expected": "invalid",
+      "error_contains": "cannot use authorization below",
+      "patch": {
+        "effect.effect_class": "controlled",
+        "effect.required_tier": "read_only"
+      }
+    },
+    {
+      "id": "invalid-publish-underclaimed-as-external-write",
+      "expected": "invalid",
+      "error_contains": "required_tier must be derived from action: critical_operation",
+      "patch": {
+        "effect.effect_class": "controlled",
+        "effect.required_tier": "external_write",
+        "effect.action": "publish"
+      }
+    },
+    {
+      "id": "invalid-d1-two-owners",
+      "expected": "invalid",
+      "error_contains": "D1 requires one semantic owner",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2
+      }
+    },
+    {
+      "id": "invalid-resolved-d1-unstable-contract",
+      "expected": "invalid",
+      "error_contains": "requires a bounded or established stable contract",
+      "patch": {
+        "owner_topology.contracts_stable": false
+      }
+    },
+    {
+      "id": "invalid-shared-writer-hidden-as-no-recommendation",
+      "expected": "invalid",
+      "error_contains": "shared writable surface requires",
+      "patch": {
+        "owner_topology.shared_writable_surface": true,
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "invalid-studio-shared-writer",
+      "expected": "invalid",
+      "error_contains": "no shared writable surface",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.shared_writable_surface": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-studio-missing-host-capability",
+      "expected": "invalid",
+      "error_contains": "host capability",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-studio-missing-environment-isolation",
+      "expected": "invalid",
+      "error_contains": "environment isolation",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-studio-missing-independent-acceptance",
+      "expected": "invalid",
+      "error_contains": "independent acceptance",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.integration_gate_defined": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-studio-missing-integration-gate",
+      "expected": "invalid",
+      "error_contains": "integration gate",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.coordination_benefit_positive": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-studio-missing-coordination-benefit",
+      "expected": "invalid",
+      "error_contains": "coordination benefit",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "a",
+          "b"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.studio_capability_available": true,
+        "owner_topology.environment_isolation_credible": true,
+        "owner_topology.independent_acceptance": true,
+        "owner_topology.integration_gate_defined": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "invalid-small-task-stage",
+      "expected": "invalid",
+      "error_contains": "D0/D1 cannot materialize",
+      "patch": {
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "invalid-d2-stable-joint-stage-without-trigger",
+      "expected": "invalid",
+      "error_contains": "D2/D3 stage materialization requires cross_owner_drift, ordered_nonclosable_transition, or durable_handoff_requested",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "frontend",
+          "backend"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "invalid-d3-foundation-stage-without-trigger",
+      "expected": "invalid",
+      "error_contains": "D2/D3 stage materialization requires cross_owner_drift, ordered_nonclosable_transition, or durable_handoff_requested",
+      "patch": {
+        "result": "Make a bounded foundation judgment whose stable contract remains inline",
+        "owner_topology.new_foundation_judgment": true,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "invalid-d3-single-owner-unstable-stage",
+      "expected": "invalid",
+      "error_contains": "D2/D3 stage materialization requires cross_owner_drift, ordered_nonclosable_transition, or durable_handoff_requested",
+      "patch": {
+        "result": "Keep one unstable foundation owner inline until a real cross-owner contract exists",
+        "owner_topology.new_foundation_judgment": true,
+        "owner_topology.contracts_stable": false,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "invalid-d3-single-owner-durable-handoff-stage",
+      "expected": "invalid",
+      "error_contains": "D2/D3 stage materialization requires cross_owner_drift, ordered_nonclosable_transition, or durable_handoff_requested",
+      "patch": {
+        "primary_route": "上下文交接",
+        "operation": "handoff",
+        "delivery_kind": "handoff",
+        "result": "Keep a one-owner handoff inline because no affected-owner boundary exists",
+        "owner_topology.new_foundation_judgment": true,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "handoff",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current request authorizes a local handoff artifact",
+        "effect.exact_target": "one established owner",
+        "effect.action": "read",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "invalid-d3-multi-owner-handoff-without-joint-contract",
+      "expected": "invalid",
+      "error_contains": "D2/D3 stage materialization requires cross_owner_drift, ordered_nonclosable_transition, or durable_handoff_requested",
+      "patch": {
+        "primary_route": "上下文交接",
+        "operation": "handoff",
+        "delivery_kind": "handoff",
+        "result": "Reject a multi-owner handoff that has no joint contract",
+        "owner_topology.semantic_owners": [
+          "runtime",
+          "consumer"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.new_foundation_judgment": true,
+        "task_depth": "D3",
+        "depth_rule": "foundation_or_program_topology",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "handoff",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current request authorizes a local handoff artifact",
+        "effect.exact_target": "runtime and consumer owners",
+        "effect.action": "read",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "project_flow"
+        ],
+        "materialize_stage": true
+      }
+    },
+    {
+      "id": "executable-governance-plan-materializes",
+      "expected": "valid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "patch": {
+        "primary_route": "项目体检",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit governance and write one executable resumable plan",
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for an executable resumable governance plan",
+        "effect.exact_target": "SKILL.md and routed governance references",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "pending_review",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "task-decision-contract",
+        "plan_review": {
+          "status": "pending",
+          "refs": [],
+          "reason": "blocking governance reviews have not joined"
+        }
+      }
+    },
+    {
+      "id": "executable-governance-plan-ready-to-write",
+      "expected": "valid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "patch": {
+        "primary_route": "项目体检",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Write the reviewed executable governance plan",
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for an executable resumable governance plan",
+        "effect.exact_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "task-decision-contract",
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-governance-owners"
+          ],
+          "reason": "all blocking governance reviews joined"
+        }
+      }
+    },
+    {
+      "id": "executable-governance-plan-materialized-next-action",
+      "expected": "valid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "patch": {
+        "result": "Implement the first accepted governance owner change",
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.exact_target": "references/plan-artifact.md",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "materialized",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "task-decision-contract",
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-governance-owners"
+          ],
+          "reason": "all blocking governance reviews joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-ready-to-write-with-planned-evidence",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "error_contains": "ready_to_write plan phase requires closed plan_review",
+      "patch": {
+        "primary_route": "项目体检",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for an executable resumable governance plan",
+        "effect.exact_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "task-decision-contract",
+        "plan_review": {
+          "status": "pending",
+          "refs": [],
+          "reason": "blocking governance reviews have not joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-plan-artifact-read-only-action",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "error_contains": "ready_to_write plan phase requires effect.action plan_artifact",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "task-decision-contract",
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-governance-owners"
+          ],
+          "reason": "all blocking governance reviews joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-plan-artifact-owner-omitted",
+      "expected": "invalid",
+      "host_context": {
+        "established_plan_target": "dev-docs/sliver-governance-plan.md",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "error_contains": "loaded_owner_ids omit required owners: plan_artifact",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for an executable resumable governance plan",
+        "effect.exact_target": "dev-docs/sliver-governance-plan.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "dev-docs/sliver-governance-plan.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-governance-owners"
+          ],
+          "reason": "all blocking governance reviews joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-temporary-plan-without-stable-task-identity",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "task-decision-contract",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-governance-owners"
+        ]
+      },
+      "error_contains": "plan_task_identity must be a non-empty string",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "skill-rules",
+          "governance-gates"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-task-decision-contract.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-governance-owners"
+          ],
+          "reason": "all blocking governance reviews joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-plan-stage-owner-mismatch",
+      "expected": "invalid",
+      "host_context": {
+        "established_plan_target": "dev-docs/stages/one-owner.md",
+        "expected_blocking_review_refs": []
+      },
+      "error_contains": "plan_target to equal stage_target",
+      "patch": {
+        "owner_topology.semantic_owners": [
+          "frontend",
+          "backend"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "owner_topology.contracts_stable": false,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "project_flow",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "materialized",
+        "plan_target": "dev-docs/stages/one-owner.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "the existing joint contract needs no blocking pre-review"
+        },
+        "materialize_stage": true,
+        "stage_target": "dev-docs/stages/second-owner.md"
+      }
+    },
+    {
+      "id": "implementation-plan-pending-review-preserves-test-evidence",
+      "expected": "valid",
+      "host_context": {
+        "established_plan_target": "dev-docs/implementation-plan.md",
+        "expected_blocking_review_refs": [
+          "review-owner-contract"
+        ]
+      },
+      "patch": {
+        "result": "Review a multi-owner implementation plan before materialization",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.exact_target": "domain and adapter owner contracts",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "pending_review",
+        "plan_target": "dev-docs/implementation-plan.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "pending",
+          "refs": [],
+          "reason": "owner contract review has not joined"
+        }
+      }
+    },
+    {
+      "id": "implementation-plan-ready-with-no-blocking-review",
+      "expected": "valid",
+      "host_context": {
+        "established_plan_target": "dev-docs/implementation-plan.md",
+        "expected_blocking_review_refs": []
+      },
+      "patch": {
+        "result": "Write a multi-owner implementation plan with no blocking review",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "dev-docs/implementation-plan.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "dev-docs/implementation-plan.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking pre-materialization review applies"
+        }
+      }
+    },
+    {
+      "id": "cross-session-host-durable-plan",
+      "expected": "valid",
+      "host_context": {
+        "host_task_identity": "durable-task",
+        "host_task_durable_root": "/host/durable",
+        "expected_blocking_review_refs": []
+      },
+      "patch": {
+        "result": "Write a plan to a host-guaranteed cross-session task store",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/host/durable/sliver-plan-durable-task.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/host/durable/sliver-plan-durable-task.md",
+        "plan_target_kind": "task_durable",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": "durable-task",
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking pre-materialization review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-temporary-plan-claiming-cross-session-persistence",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "later-session",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": []
+      },
+      "error_contains": "task_temporary plan cannot claim cross_session persistence",
+      "patch": {
+        "result": "Reject a session temp file presented as a later-session owner",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/sliver-plan-later-session.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-later-session.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": "later-session",
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking pre-materialization review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-task-owned-plan-without-host-context",
+      "expected": "invalid",
+      "error_contains": "host_task_identity must be a non-empty string",
+      "patch": {
+        "result": "Reject a task-owned path that has no external host provenance",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/sliver-plan-no-host-context.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-no-host-context.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "no-host-context",
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking pre-materialization review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-task-owned-plan-outside-host-root",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "wrong-root",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": []
+      },
+      "error_contains": "plan_target must equal the host root",
+      "patch": {
+        "result": "Reject a task-owned path outside the trusted host root",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/nested/sliver-plan-wrong-root.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/nested/sliver-plan-wrong-root.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "wrong-root",
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking pre-materialization review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-pending-review-with-closed-plan-review",
+      "expected": "invalid",
+      "host_context": {
+        "established_plan_target": "dev-docs/implementation-plan.md",
+        "expected_blocking_review_refs": [
+          "review-owner-contract"
+        ]
+      },
+      "error_contains": "pending_review plan phase requires pending plan_review",
+      "patch": {
+        "result": "Reject a pending phase whose review is already closed",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.exact_target": "domain and adapter owner contracts",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "pending_review",
+        "plan_target": "dev-docs/implementation-plan.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-owner-contract"
+          ],
+          "reason": "the review already joined"
+        }
+      }
+    },
+    {
+      "id": "invalid-collected-plan-review-omits-known-blocker",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "review-omission",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-a",
+          "review-b"
+        ]
+      },
+      "error_contains": "must exactly match all externally known blocking reviews",
+      "patch": {
+        "result": "Reject a plan that omits one known blocking review",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/sliver-plan-review-omission.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-review-omission.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "review-omission",
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-a"
+          ],
+          "reason": "one review was omitted"
+        }
+      }
+    },
+    {
+      "id": "invalid-collected-plan-review-forges-review-ref",
+      "expected": "invalid",
+      "host_context": {
+        "host_task_identity": "review-forgery",
+        "host_task_temp_root": "/private/tmp",
+        "expected_blocking_review_refs": [
+          "review-a",
+          "review-b"
+        ]
+      },
+      "error_contains": "must exactly match all externally known blocking reviews",
+      "patch": {
+        "result": "Reject a plan that substitutes a forged review reference",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/sliver-plan-review-forgery.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/sliver-plan-review-forgery.md",
+        "plan_target_kind": "task_temporary",
+        "plan_persistence_scope": "current_task",
+        "plan_task_identity": "review-forgery",
+        "plan_review": {
+          "status": "collected",
+          "refs": [
+            "review-a",
+            "forged-review"
+          ],
+          "reason": "one review reference was forged"
+        }
+      }
+    },
+    {
+      "id": "invalid-active-internal-plan-without-established-owner-context",
+      "expected": "invalid",
+      "error_contains": "established_plan_target must be a non-empty string",
+      "patch": {
+        "result": "Reject a self-declared repository plan owner",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "dev-docs/invented-plan.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "dev-docs/invented-plan.md",
+        "plan_target_kind": "active_internal_truth",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-explicit-plan-without-external-path-authorization",
+      "expected": "invalid",
+      "error_contains": "authorized_explicit_plan_target must be a non-empty string",
+      "patch": {
+        "result": "Reject a self-declared explicit plan path",
+        "owner_topology.semantic_owners": [
+          "domain",
+          "adapter"
+        ],
+        "owner_topology.owner_count": 2,
+        "owner_topology.joint_contract_required": true,
+        "task_depth": "D2",
+        "depth_rule": "multi_owner_joint_contract",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.exact_target": "/private/tmp/user-plan.md",
+        "effect.action": "plan_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "plan_artifact"
+        ],
+        "materialize_plan": true,
+        "plan_phase": "ready_to_write",
+        "plan_target": "/private/tmp/user-plan.md",
+        "plan_target_kind": "explicit_path",
+        "plan_persistence_scope": "cross_session",
+        "plan_task_identity": null,
+        "plan_review": {
+          "status": "not_required",
+          "refs": [],
+          "reason": "no blocking review applies"
+        }
+      }
+    },
+    {
+      "id": "invalid-protected-direct-artifact-t0",
+      "expected": "invalid",
+      "error_contains": "protected-risk implementation requires T1/T2/T3 owner-bound evidence",
+      "patch": {
+        "delivery_kind": "direct_artifact",
+        "risk_lanes": [
+          "identity_permission"
+        ],
+        "evidence.test_level": "T0",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "risk_control"
+        ]
+      }
+    },
+    {
+      "id": "invalid-protected-direct-artifact-route-write",
+      "expected": "invalid",
+      "error_contains": "protected direct_artifact writes require owner-bound test evidence",
+      "patch": {
+        "delivery_kind": "direct_artifact",
+        "risk_lanes": [
+          "identity_permission"
+        ],
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "verification",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "risk_control"
+        ]
+      }
+    },
+    {
+      "id": "persistent-sample-write-requires-critical-operation",
+      "expected": "valid",
+      "patch": {
+        "result": "Write one reviewed sample row to the persistent test database",
+        "risk_lanes": [
+          "persistent_data_schema"
+        ],
+        "effect.effect_class": "controlled",
+        "effect.required_tier": "critical_operation",
+        "effect.granted_tier": "critical_operation",
+        "effect.authorization_evidence": "Current user confirmation authorizes this exact persistent sample write",
+        "effect.exact_target": "test database sample table",
+        "effect.recovery_known": true,
+        "effect.health_and_stop_required": true,
+        "effect.action": "persistent_sample_write",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "risk_control"
+        ]
+      }
+    },
+    {
+      "id": "invalid-persistent-sample-write-underclaimed",
+      "expected": "invalid",
+      "error_contains": "required_tier must be derived from action: critical_operation",
+      "patch": {
+        "effect.action": "persistent_sample_write"
+      }
+    },
+    {
+      "id": "invalid-missing-evidence-status",
+      "expected": "invalid",
+      "error_contains": "evidence.status must be a non-empty string",
+      "patch": {
+        "evidence.status": null
+      }
+    },
+    {
+      "id": "invalid-unresolved-product-discovery-mismatch",
+      "expected": "invalid",
+      "error_contains": "unresolved_product_stop decision requires matching discovery",
+      "patch": {
+        "decision_status": "unresolved_product_stop",
+        "discovery": "unresolved_safe",
+        "evidence.status": "unverified"
+      }
+    },
+    {
+      "id": "truth-capture-not-needed-stays-inline",
+      "expected": "valid",
+      "patch": {
+        "truth_capture": {
+          "decision": "not_needed",
+          "target": null,
+          "reason": "One confirmed micro-decision is already covered by the existing owner sentence",
+          "authorization_status": "not_applicable"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "truth-capture-create-new-waits-for-card",
+      "expected": "valid",
+      "patch": {
+        "result": "Present the Authorization Card for a new feature document before implementing",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Read-only truth scan before the card is answered",
+        "effect.exact_target": "existing truth index",
+        "effect.action": "read",
+        "truth_capture": {
+          "decision": "create_new",
+          "target": "dev-docs/features/order-export.md",
+          "reason": "Three confirmed decisions define an internal state machine no existing owner covers",
+          "authorization_status": "pending"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "truth-capture-confirmed-card-writes-feature-doc",
+      "expected": "valid",
+      "patch": {
+        "result": "Write the confirmed feature design document",
+        "effect.authorization_evidence": "User confirmed the Authorization Card for dev-docs/features/order-export.md",
+        "effect.exact_target": "dev-docs/features/order-export.md",
+        "effect.action": "truth_doc_write",
+        "truth_capture": {
+          "decision": "create_new",
+          "target": "dev-docs/features/order-export.md",
+          "reason": "Confirmed card: internal state machine with two dependents",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "truth-capture-confirmed-card-writes-adr",
+      "expected": "valid",
+      "patch": {
+        "result": "Record the confirmed database choice as a decision record",
+        "effect.authorization_evidence": "User confirmed the Authorization Card for dev-docs/decisions/adr-0003.md",
+        "effect.exact_target": "dev-docs/decisions/adr-0003.md",
+        "effect.action": "truth_doc_write",
+        "truth_capture": {
+          "decision": "create_new",
+          "target": "dev-docs/decisions/adr-0003.md",
+          "reason": "A costly choose-A-not-B decision with rejected alternatives",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "truth-capture-confirmed-update-edits-existing-owner",
+      "expected": "valid",
+      "patch": {
+        "result": "Append the confirmed rule to the existing tech-stack owner",
+        "effect.authorization_evidence": "User confirmed the Authorization Card listing the differences against dev-docs/tech-stack.md",
+        "effect.exact_target": "dev-docs/tech-stack.md",
+        "effect.action": "local_edit",
+        "truth_capture": {
+          "decision": "update_existing",
+          "target": "dev-docs/tech-stack.md",
+          "reason": "The owner exists; one sentence and a change-log line cover the decision",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "truth-capture-deferred-blocks-silent-next-batch",
+      "expected": "valid",
+      "patch": {
+        "result": "Hold the next batch until the drift card is answered",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Post-Acceptance Drift Check listed differences; card unanswered",
+        "effect.exact_target": "current stage truth",
+        "effect.action": "read",
+        "truth_capture": {
+          "decision": "deferred",
+          "target": null,
+          "reason": "Drift card unanswered: the export endpoint differs from the stage document",
+          "authorization_status": "not_applicable"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-truth-doc-write-without-confirmed-card",
+      "expected": "invalid",
+      "error_contains": "truth_doc_write requires a confirmed Authorization Card",
+      "patch": {
+        "effect.exact_target": "dev-docs/features/order-export.md",
+        "effect.action": "truth_doc_write",
+        "truth_capture": {
+          "decision": "create_new",
+          "target": "dev-docs/features/order-export.md",
+          "reason": "Card presented but not answered",
+          "authorization_status": "pending"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-truth-doc-write-without-capture-block",
+      "expected": "invalid",
+      "error_contains": "truth_doc_write requires a truth_capture block",
+      "patch": {
+        "effect.exact_target": "dev-docs/features/order-export.md",
+        "effect.action": "truth_doc_write"
+      }
+    },
+    {
+      "id": "invalid-existing-truth-edited-before-card",
+      "expected": "invalid",
+      "error_contains": "cannot be edited before the Authorization Card is confirmed",
+      "patch": {
+        "effect.exact_target": "dev-docs/tech-stack.md",
+        "effect.action": "local_edit",
+        "truth_capture": {
+          "decision": "update_existing",
+          "target": "dev-docs/tech-stack.md",
+          "reason": "Differences listed, awaiting answer",
+          "authorization_status": "pending"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-new-truth-doc-disguised-as-local-edit",
+      "expected": "invalid",
+      "error_contains": "creating a new truth document requires effect.action truth_doc_write",
+      "patch": {
+        "effect.exact_target": "dev-docs/features/order-export.md",
+        "effect.action": "local_edit",
+        "truth_capture": {
+          "decision": "create_new",
+          "target": "dev-docs/features/order-export.md",
+          "reason": "Confirmed card",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-truth-capture-on-d0",
+      "expected": "invalid",
+      "error_contains": "D0 never runs the Truth Capture Gate",
+      "patch": {
+        "task_depth": "D0",
+        "depth_rule": "direct_bounded_contract",
+        "owner_topology.mechanical_execution": true,
+        "truth_capture": {
+          "decision": "not_needed",
+          "target": null,
+          "reason": "n/a",
+          "authorization_status": "not_applicable"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-truth-capture-owner-omitted",
+      "expected": "invalid",
+      "error_contains": "truth_capture",
+      "patch": {
+        "truth_capture": {
+          "decision": "not_needed",
+          "target": null,
+          "reason": "Covered by existing owner",
+          "authorization_status": "not_applicable"
+        }
+      }
+    },
+    {
+      "id": "code-audit-triage-writes-report-by-default",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage"
+      }
+    },
+    {
+      "id": "code-audit-report-write-uses-audit-artifact",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Write the deep-audit findings into the report",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "deep"
+      }
+    },
+    {
+      "id": "code-audit-closed-promotes-unresolved-findings",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Close the audit and promote unresolved findings to the live owner",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "closed",
+        "unresolved_findings": 2,
+        "promoted_to": "dev-docs/ai-debt.md"
+      }
+    },
+    {
+      "id": "code-audit-closed-clean-needs-no-promotion",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Close a fully resolved audit",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "closed",
+        "unresolved_findings": 0,
+        "promoted_to": "none"
+      }
+    },
+    {
+      "id": "invalid-audit-artifact-without-materialize-audit",
+      "expected": "invalid",
+      "error_contains": "audit_artifact action requires materialize_audit true",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ]
+      }
+    },
+    {
+      "id": "invalid-materialize-audit-on-implementation",
+      "expected": "invalid",
+      "error_contains": "materialize_audit is only valid for audit delivery",
+      "patch": {
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "audit_artifact"
+        ]
+      }
+    },
+    {
+      "id": "invalid-audit-report-edits-source",
+      "expected": "invalid",
+      "error_contains": "cannot classify action local_edit",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "src/order/service.ts",
+        "effect.action": "local_edit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "deep"
+      }
+    },
+    {
+      "id": "invalid-closed-audit-drops-unresolved-findings",
+      "expected": "invalid",
+      "error_contains": "closed audit with unresolved findings must record promoted_to",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "closed",
+        "unresolved_findings": 3,
+        "promoted_to": "none"
+      }
+    },
+    {
+      "id": "invalid-audit-promoted-to-itself",
+      "expected": "invalid",
+      "error_contains": "promoted_to must be a live owner",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "closed",
+        "unresolved_findings": 1,
+        "promoted_to": "dev-docs/audits/2026-09-05-order-module.md"
+      }
+    },
+    {
+      "id": "invalid-audit-owner-omitted",
+      "expected": "invalid",
+      "error_contains": "audit_artifact",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage"
+      }
+    },
+    {
+      "id": "truth-capture-supersede-creates-new-adr",
+      "expected": "valid",
+      "patch": {
+        "result": "Record the confirmed database choice as a decision record",
+        "effect.authorization_evidence": "User confirmed the Authorization Card for dev-docs/decisions/adr-0003.md",
+        "effect.exact_target": "dev-docs/decisions/adr-0003.md",
+        "effect.action": "truth_doc_write",
+        "truth_capture": {
+          "decision": "supersede",
+          "target": "dev-docs/decisions/adr-0003.md",
+          "reason": "A costly choose-A-not-B decision with rejected alternatives",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      }
+    },
+    {
+      "id": "invalid-supersede-without-confirmed-card",
+      "expected": "invalid",
+      "patch": {
+        "result": "Record the confirmed database choice as a decision record",
+        "effect.authorization_evidence": "User confirmed the Authorization Card for dev-docs/decisions/adr-0003.md",
+        "effect.exact_target": "dev-docs/decisions/adr-0003.md",
+        "effect.action": "truth_doc_write",
+        "truth_capture": {
+          "decision": "supersede",
+          "target": "dev-docs/decisions/adr-0003.md",
+          "reason": "A costly choose-A-not-B decision with rejected alternatives",
+          "authorization_status": "pending"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      },
+      "error_contains": "confirmed Authorization Card"
+    },
+    {
+      "id": "code-audit-reviewed-pending-promotion",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Close a fully resolved audit",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "reviewed_pending_promotion",
+        "unresolved_findings": 2,
+        "promoted_to": "none"
+      }
+    },
+    {
+      "id": "invalid-pending-audit-claims-promotion",
+      "expected": "invalid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Close a fully resolved audit",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "local_reversible",
+        "effect.required_tier": "local_reversible",
+        "effect.granted_tier": "local_reversible",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "effect.action": "audit_artifact",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "reviewed_pending_promotion",
+        "unresolved_findings": 2,
+        "promoted_to": "dev-docs/ai-debt.md"
+      },
+      "error_contains": "pending promotion requires unresolved findings and promoted_to none"
+    },
+    {
+      "id": "code-audit-bounded-index-write",
+      "expected": "valid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage",
+        "audit_index_target": "dev-docs/audits/README.md",
+        "scope.proposed_targets": [
+          "dev-docs/audits/2026-09-05-order-module.md",
+          "dev-docs/audits/README.md"
+        ]
+      }
+    },
+    {
+      "id": "invalid-audit-index-target-outside-report-directory",
+      "expected": "invalid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage",
+        "audit_index_target": "dev-docs/architecture.md"
+      },
+      "error_contains": "audit_index_target must be the report directory README.md"
+    },
+    {
+      "id": "invalid-supersede-disguised-as-local-edit",
+      "expected": "invalid",
+      "patch": {
+        "result": "Record the confirmed database choice as a decision record",
+        "effect.authorization_evidence": "User confirmed the Authorization Card for dev-docs/decisions/adr-0003.md",
+        "effect.exact_target": "dev-docs/decisions/adr-0003.md",
+        "effect.action": "local_edit",
+        "truth_capture": {
+          "decision": "supersede",
+          "target": "dev-docs/decisions/adr-0003.md",
+          "reason": "A costly choose-A-not-B decision with rejected alternatives",
+          "authorization_status": "confirmed"
+        },
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "testing",
+          "effect_recovery",
+          "truth_capture"
+        ]
+      },
+      "error_contains": "creating a new truth document requires"
+    },
+    {
+      "id": "invalid-audit-index-omitted-from-scope",
+      "expected": "invalid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage",
+        "audit_index_target": "dev-docs/audits/README.md",
+        "scope.proposed_targets": [
+          "dev-docs/audits/2026-09-05-order-module.md"
+        ]
+      },
+      "error_contains": "audit_index_target must be recorded"
+    },
+    {
+      "id": "invalid-audit-index-excluded-by-user",
+      "expected": "invalid",
+      "patch": {
+        "primary_route": "代码审计",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "result": "Audit the order module for correctness and design consistency",
+        "evidence.mode": "route",
+        "evidence.test_level": null,
+        "evidence.route_evidence_kind": "audit",
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.granted_tier": "read_only",
+        "effect.authorization_evidence": "Current user request asks for a module-level code audit",
+        "effect.exact_target": "order module sources and design truth",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "audit_artifact"
+        ],
+        "materialize_audit": true,
+        "audit_target": "dev-docs/audits/2026-09-05-order-module.md",
+        "audit_pass": "triage",
+        "audit_index_target": "dev-docs/audits/README.md",
+        "scope.proposed_targets": [
+          "dev-docs/audits/2026-09-05-order-module.md",
+          "dev-docs/audits/README.md"
+        ],
+        "scope.excluded_targets": [
+          "dev-docs/audits/README.md"
+        ]
+      },
+      "error_contains": "intersects an explicitly excluded target"
+    }
+  ],
+  "metamorphic_pairs": [
+    {
+      "left": "button-spacing",
+      "right": "button-spacing-with-complex-nouns",
+      "same_fields": [
+        "task_depth",
+        "risk_lanes",
+        "materialize_stage",
+        "studio_decision"
+      ]
+    },
+    {
+      "left": "ordinary-owner-bug",
+      "right": "cross-user-authorization-bug",
+      "same_fields": [
+        "task_depth",
+        "materialize_stage",
+        "effect.required_tier"
+      ],
+      "different_fields": [
+        "risk_lanes"
+      ]
+    },
+    {
+      "left": "read-public-log",
+      "right": "read-sensitive-production-log",
+      "same_fields": [
+        "task_depth",
+        "effect.effect_class",
+        "materialize_stage"
+      ],
+      "different_fields": [
+        "risk_lanes"
+      ]
+    },
+    {
+      "left": "frontend-backend-studio",
+      "right": "game-assets-studio",
+      "same_fields": [
+        "task_depth",
+        "studio_decision",
+        "owner_topology.contracts_stable"
+      ]
+    },
+    {
+      "left": "truth-capture-confirmed-card-writes-feature-doc",
+      "right": "truth-capture-confirmed-card-writes-adr",
+      "same_fields": [
+        "task_depth",
+        "effect.action",
+        "effect.required_tier",
+        "truth_capture.decision",
+        "truth_capture.authorization_status"
+      ]
+    }
+  ]
+}

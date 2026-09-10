@@ -1,0 +1,26 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "official_platform_constraint_single_credible_route",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "available",
+  "context": {
+    "product_truth_status": "complete",
+    "hard_constraints": ["ios_only", "apple_roomplan_required", "lidar_device_required"],
+    "credible_candidate_count_before_research": 1,
+    "product_facts": {
+      "product": "indoor room measurement application",
+      "users": ["onsite_surveyor"],
+      "first_complete_flow": ["scan_room", "review_dimensions", "export_measurement"],
+      "platform": "supported LiDAR-equipped iPhone and iPad",
+      "deployment": "Apple App Store",
+      "offline_requirement": true
+    },
+    "candidate_claims": [
+      {
+        "candidate": "SwiftUI application using Apple RoomPlan",
+        "mutable_claims": ["supported_os_versions", "supported_devices", "official_sdk_status", "distribution_requirements"]
+      }
+    ]
+  }
+}

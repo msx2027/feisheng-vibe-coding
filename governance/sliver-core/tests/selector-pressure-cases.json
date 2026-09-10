@@ -1,0 +1,474 @@
+{
+  "evaluation_scope": "corpus_structure_only",
+  "requires_live_model_validation": true,
+  "required_scenario_tags": [
+    "ui-prototype",
+    "design-to-code"
+  ],
+  "minimum_positive_cases": 100,
+  "minimum_negative_cases": 15,
+  "description_max_chars": 500,
+  "max_literal_positive_cases_in_skill": 20,
+  "required_selector_section_terms": [
+    "description is the discovery surface",
+    "not an exact keyword list",
+    "intent families",
+    "top-level ownership",
+    "ownership problems",
+    "do not stuff every pressure case into SKILL.md"
+  ],
+  "families": [
+    {
+      "name": "project_advancement_any_user",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "audit",
+      "positive": [
+        "我会写代码，先按当前项目真源检查这次改动该落在哪",
+        "这是团队正在维护的项目，让 AI 继续推进当前工作",
+        "我不懂代码，先帮我判断这个项目现在靠不靠谱",
+        "只审查当前模块能不能继续维护，不要扩大范围",
+        "按现有架构判断下一步怎么推进，技术细节我可以一起审"
+      ]
+    },
+    {
+      "name": "new_project_intake",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "intake",
+      "positive": [
+        "我有个想法，想让 AI 帮我做成项目",
+        "从零开始做一个给客户用的小系统",
+        "我想做一个预约工具，不知道第一步是什么",
+        "我脑子里有个产品，先帮我捋清楚",
+        "新项目开始前你先帮我问清楚需求"
+      ]
+    },
+    {
+      "name": "takeover_existing_project",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "takeover",
+      "positive": [
+        "别人写了一半的项目我现在要接着做",
+        "帮我接管一下这个项目，先别乱动",
+        "这个项目已经写了一半，但我不知道现在状态",
+        "我接手了一个 AI 做出来的半成品",
+        "先帮我看看这个项目能不能继续做"
+      ]
+    },
+    {
+      "name": "startup_baseline",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "startup",
+      "positive": [
+        "项目打不开，你先帮我跑起来",
+        "我不知道这个东西怎么启动",
+        "本地页面打不开，不知道缺什么",
+        "启动命令到底是哪一个",
+        "安装完以后还是跑不起来"
+      ]
+    },
+    {
+      "name": "repeated_error_rescue",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "rescue",
+      "positive": [
+        "这个错误修了好几次还是一样",
+        "又报错了，别再猜了",
+        "AI 改了一堆还是不行",
+        "同一个报错一直反复出现",
+        "你先找清楚到底是哪一层坏了"
+      ]
+    },
+    {
+      "name": "ai_debt_audit",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "rescue",
+      "positive": [
+        "AI 好像把项目写乱了",
+        "文件越来越多，我不知道哪些有用",
+        "好多重复页面和重复组件",
+        "项目里全是假数据，我分不清真假",
+        "继续加功能前先看看有没有烂尾代码"
+      ]
+    },
+    {
+      "name": "generic_feature_addition",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "product-change"
+      ],
+      "positive": [
+        "我要加一个功能",
+        "我要加一个项目报名功能",
+        "我想做个资料编辑功能",
+        "帮我新增一个给用户填写信息的功能",
+        "这个项目要加个新能力，先判断怎么做"
+      ]
+    },
+    {
+      "name": "flow_or_page_change",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "product-change",
+        "frontend",
+        "workflow"
+      ],
+      "positive": [
+        "我想加一个后台页面",
+        "这个流程要改一下，别直接乱改",
+        "新增一个用户管理模块",
+        "把提交资料这条流程重新设计一下",
+        "页面上要多一个入口，先看会不会影响别的地方"
+      ]
+    },
+    {
+      "name": "scoped_project_work_competition",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "local-change",
+        "technical-user",
+        "owner"
+      ],
+      "positive": [
+        "这个单测失败了，只修相关实现",
+        "把这个配置项改成从环境变量读取",
+        "重构这个函数，保持对外接口不变",
+        "只调整这个组件的尺寸和间距",
+        "这个 API 返回值不对，查清 owner 后修复"
+      ]
+    },
+    {
+      "name": "natural_product_changes_without_process_words",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "roles",
+        "visibility",
+        "upload",
+        "notification",
+        "monetization"
+      ],
+      "positive": [
+        "给用户增加一个管理员角色",
+        "改成只有作者本人才能看到这些内容",
+        "让用户可以上传自己的头像",
+        "用户提交以后自动通知管理员",
+        "把退款规则改成审核通过后再退"
+      ]
+    },
+    {
+      "name": "monetization_entitlements",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "monetization",
+        "entitlement"
+      ],
+      "positive": [
+        "我要让用户付费后才能用",
+        "想做会员等级和订阅",
+        "这个功能是不是要按额度收费",
+        "用户买了以后权限怎么判断",
+        "付费报告下载怎么设计"
+      ]
+    },
+    {
+      "name": "third_party_integration",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "third-party",
+        "provider"
+      ],
+      "positive": [
+        "我要接一个第三方接口",
+        "微信登录要怎么接进来",
+        "支付成功回调要不要做 webhook",
+        "我要用地图服务但不知道怎么选",
+        "接 AI provider 前先帮我查清楚边界"
+      ]
+    },
+    {
+      "name": "technical_stack_choice",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "architecture",
+      "positive": [
+        "这个项目用什么框架最稳",
+        "前端后端到底怎么选",
+        "技术栈你给我一个主推荐",
+        "我不懂技术，别让我自己选框架",
+        "这个要操作本机软件，普通网页够不够"
+      ]
+    },
+    {
+      "name": "backend_api_boundary",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "architecture",
+      "scenario_tags": [
+        "backend",
+        "api",
+        "owner"
+      ],
+      "positive": [
+        "这个功能到底需不需要后端",
+        "接口怎么设计才不会乱",
+        "业务规则应该放前端还是后端",
+        "前端现在直接写死数据是不是不对",
+        "API owner 先帮我定清楚"
+      ]
+    },
+    {
+      "name": "database_schema",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "architecture",
+      "scenario_tags": [
+        "database",
+        "schema"
+      ],
+      "positive": [
+        "这个要不要新建表",
+        "字段应该怎么定才不会以后乱",
+        "数据库关系你先帮我设计清楚",
+        "用户提交的数据到底存哪里",
+        "这几个状态要不要放数据库"
+      ]
+    },
+    {
+      "name": "project_guidance_and_workflow",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "guidance",
+      "scenario_tags": [
+        "project-docs",
+        "frontend",
+        "prototype-flow"
+      ],
+      "positive": [
+        "前端设计规范和编码规范应该放在项目哪里",
+        "项目文档要不要像 Agent 宪法一样自动读取",
+        "技术栈和功能需求应该整理成哪些项目真源",
+        "先选组件库再做原型最后开发页面，这个流程合理吗",
+        "解释一下这个软件项目应该怎样组织规范和阶段文档"
+      ]
+    },
+    {
+      "name": "frontend_foundation",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "architecture",
+      "scenario_tags": [
+        "frontend",
+        "design-system"
+      ],
+      "positive": [
+        "页面风格不统一，先别继续堆",
+        "前端目录和组件怎么放",
+        "这个 UI 越改越乱",
+        "先把前端骨架搭稳",
+        "同一个按钮到处长得不一样"
+      ]
+    },
+    {
+      "name": "project_aware_ui_prototype",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "frontend",
+        "ui-prototype",
+        "existing-project"
+      ],
+      "positive": [
+        "参考当前项目的风格给我设计一张新页面原型",
+        "先看现有页面和组件，再出一版设置页设计图",
+        "给这个老项目补一张不跳风格的 UI 原型",
+        "按项目已有主题和布局设计一个新页面",
+        "原型别单独乱画，要能接进当前项目"
+      ]
+    },
+    {
+      "name": "design_reference_to_project_code",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "development",
+      "scenario_tags": [
+        "frontend",
+        "design-to-code",
+        "component-reuse"
+      ],
+      "positive": [
+        "把这张设计图按当前项目的组件规则还原成代码",
+        "照着原型做页面，图标和图片资产不要糊成整图",
+        "一比一实现这个 UI，但要复用现有组件和主题",
+        "把已确认的页面图落成响应式前端代码",
+        "按设计稿实现，同时遵守项目已有版心和设计约束"
+      ]
+    },
+    {
+      "name": "security_privacy",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "audit",
+      "scenario_tags": [
+        "security",
+        "privacy",
+        "secrets"
+      ],
+      "positive": [
+        "会不会把密钥传上去",
+        "我怕把隐私传到公开仓库",
+        "env 文件到底能不能提交",
+        "日志里会不会泄露用户信息",
+        "上线前帮我看看隐私有没有风险"
+      ]
+    },
+    {
+      "name": "full_security_audit",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "audit",
+      "scenario_tags": [
+        "security",
+        "full-audit"
+      ],
+      "positive": [
+        "帮我把整个项目的安全问题都查一遍",
+        "上线前做一次完整的安全体检",
+        "我不懂安全，你全面帮我检查一下",
+        "看看这个项目有没有容易被攻击的地方",
+        "先审计安全风险，发现问题先别直接改"
+      ]
+    },
+    {
+      "name": "git_delivery_protection",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "governance",
+      "positive": [
+        "这个项目还没有 git，你先保护起来",
+        "内部资料不能推到远程",
+        "我想撤掉这个功能但别误删别的",
+        "能不能回滚到旧版本",
+        "这个 commit 里混了好几个东西，别直接 revert"
+      ]
+    },
+    {
+      "name": "user_acceptance",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "validation",
+      "positive": [
+        "我怎么知道这个功能对不对",
+        "我不会验收，你告诉我点哪里",
+        "做完以后我应该看哪些页面",
+        "你给我一份小白能照着点的验收步骤",
+        "怎么判断这个功能真的能用"
+      ]
+    },
+    {
+      "name": "quality_gate",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "validation",
+      "positive": [
+        "质量过了吗",
+        "帮我验收一下有没有坑",
+        "测试一下这个阶段是不是真的完成",
+        "别只说完成，给我证据",
+        "这次改动会不会影响旧功能"
+      ]
+    },
+    {
+      "name": "release_readiness",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "release",
+      "positive": [
+        "这个项目现在能不能上线",
+        "能不能给用户用了",
+        "要发给客户之前你先检查",
+        "生产环境该怎么弄",
+        "上线前有哪些东西一定要确认"
+      ]
+    },
+    {
+      "name": "context_handoff",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "handoff",
+      "positive": [
+        "上下文太长了，给我换窗口交接",
+        "新窗口继续要给下一位 AI 什么",
+        "整理一份复制过去就能接着做的说明",
+        "把当前状态和下一步说清楚",
+        "我要交给另一个 AI 接着处理"
+      ]
+    },
+    {
+      "name": "drift_control",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "governance",
+      "positive": [
+        "感觉现在做跑偏了",
+        "这和原来文档写的不一样",
+        "需求变了但代码还按旧的做",
+        "先判断现在是不是偏离目标",
+        "别继续写了，先对一下方向"
+      ]
+    },
+    {
+      "name": "agent_constitution",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "governance",
+      "positive": [
+        "帮我写这个项目的 agent 宪法",
+        "生成 AGENTS.md 前先看项目证据",
+        "这个项目需要一份 AI 不能乱改的规矩",
+        "把设计文档和 agent 宪法整理出来",
+        "以后 AI 接手要遵守哪些规则"
+      ]
+    },
+    {
+      "name": "code_audit",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "audit",
+      "scenario_tags": [
+        "code-review",
+        "maintainability",
+        "design-consistency"
+      ],
+      "positive": [
+        "帮我 review 一下整个项目的代码质量",
+        "订单模块越来越难改了，审一下写法有没有问题",
+        "对照设计文档审一遍支付模块实现对不对",
+        "这个项目的代码到底靠不靠谱，出份审计报告",
+        "看看这几个 service 有没有放错层、重复实现"
+      ]
+    },
+    {
+      "name": "truth_capture",
+      "expected_owner": "sliver-vibe-coding",
+      "intent_family": "design",
+      "scenario_tags": [
+        "design-doc",
+        "decision-record",
+        "truth-capture"
+      ],
+      "positive": [
+        "我们刚聊定的这些规则要不要写成文档",
+        "这个方案定下来了，帮我落到设计文档里",
+        "为什么当初选这个数据库，谁能说清楚，要记下来",
+        "上一批做完了，看看跟文档有没有出入",
+        "换窗口之前把讨论结论沉淀一下"
+      ]
+    }
+  ],
+  "negative_cases": [
+    "帮我写一条小红书标题",
+    "生成一张海报图",
+    "翻译这段英文",
+    "今天北京天气怎么样",
+    "帮我写一个独立 SQL 查询，不涉及项目",
+    "把这段话改得更礼貌",
+    "做个 A/B test 方案",
+    "帮我分析这个 CSV",
+    "给我做一页 PPT",
+    "写一封冷邮件",
+    "算一下 123 乘以 456",
+    "找几家附近餐厅推荐",
+    "把图片变成卡通风格",
+    "整理会议纪要",
+    "解释一下 JavaScript 闭包"
+  ]
+}

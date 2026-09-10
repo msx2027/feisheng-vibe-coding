@@ -1,0 +1,11 @@
+{
+  "available_data": [
+    "active_count",
+    "queued_count",
+    "recent_rate",
+    "worker_revision",
+    "cache_age",
+    "scheduler_state"
+  ],
+  "decision_relevant": ["queued_count", "scheduler_state"]
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "screenshot-only-ux-audit",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "operation": "read_only_audit",
+    "writes_authorized": false,
+    "provided_evidence": "one static screenshot of a three-step form in its default state",
+    "visible_observations": ["three numbered steps", "one primary Continue button", "two secondary links", "no visible error"],
+    "missing_evidence": ["entry reachability", "keyboard order", "loading sequence", "validation behavior", "error recovery", "back behavior", "refresh and resume", "successful completion"],
+    "requested_result": "state what can and cannot be concluded about whether the whole flow is usable"
+  }
+}

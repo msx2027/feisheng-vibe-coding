@@ -1,0 +1,23 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_fragmented_inception_truth",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["notes/idea-a.md", "notes/idea-b.md", "drafts/function-notes.md", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "empty_directory_with_docs",
+    "truth_documents": [
+      {"path": "notes/idea-a.md", "status": "partial"},
+      {"path": "notes/idea-b.md", "status": "conflicting"},
+      {"path": "drafts/function-notes.md", "status": "duplicate"}
+    ],
+    "active_truth_owner": "unresolved",
+    "implementation_authorization": true
+  }
+}

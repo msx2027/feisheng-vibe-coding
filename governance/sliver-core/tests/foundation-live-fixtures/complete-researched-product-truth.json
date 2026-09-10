@@ -1,0 +1,33 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "complete_researched_product_truth",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "available",
+  "context": {
+    "product_truth_status": "complete",
+    "candidate_research_status": "current_primary_sources_required",
+    "user_technical_level": "nontechnical",
+    "confirmation_boundary": "product_consequences_only",
+    "product_facts": {
+      "product": "internal project and approval tracker",
+      "users": ["team_member", "approver"],
+      "first_complete_flow": ["submit_request", "review_request", "record_decision"],
+      "platform": "browser",
+      "data_sensitivity": "internal project metadata",
+      "deployment": "private managed web service",
+      "team_size": 2,
+      "expected_concurrency": "under_100"
+    },
+    "candidate_claims": [
+      {
+        "candidate": "Django and PostgreSQL modular monolith",
+        "mutable_claims": ["current_supported_release", "python_support", "license", "deployment_support"]
+      },
+      {
+        "candidate": "Next.js and PostgreSQL modular monolith",
+        "mutable_claims": ["current_supported_release", "node_support", "license", "deployment_support"]
+      }
+    ]
+  }
+}

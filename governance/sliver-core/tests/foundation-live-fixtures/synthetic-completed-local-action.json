@@ -1,0 +1,21 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "synthetic_completed_local_action",
+  "version": 1,
+  "network_mode": "not_required",
+  "evidence_classification": "synthetic_non_identifying",
+  "workspace": {
+    "root": "tests/foundation-live-fixtures/workspaces/project-evidence",
+    "required_paths": ["docs/index.md", "docs/guide.md", "verify_workspace.py"],
+    "verification_command": ["python3", "verify_workspace.py"]
+  },
+  "context": {
+    "evidence_classification": "synthetic_non_identifying",
+    "project_kind": "existing",
+    "requested_action": "repair one broken internal documentation link",
+    "owner_path": "docs/index.md",
+    "truth_owner_present": true,
+    "validation_command": "python3 verify_workspace.py",
+    "next_action_authorized": false
+  }
+}

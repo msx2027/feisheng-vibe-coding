@@ -1,0 +1,404 @@
+{
+  "schema": "sliver-task-decision-live-cases/v1",
+  "evaluation_scope": "fresh_session_model_behavior",
+  "requires_live_model_validation": true,
+  "static_contracts_are_not_live_proof": true,
+  "cases": [
+    {
+      "id": "button-spacing",
+      "prompt": "把设置页这个按钮的间距从 12px 调成 16px，只改这个组件。",
+      "context": {
+        "owner": "one component",
+        "contract": "established",
+        "effect": "local reversible"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "task_depth": "D0",
+        "owner_topology.mechanical_execution": true,
+        "risk_lanes": [],
+        "materialize_stage": false,
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "button-spacing-complex-nouns",
+      "prompt": "把管理后台 API 数据库 SDK 设置页这个按钮的间距从 12px 调成 16px，只改这个组件。",
+      "context": {
+        "owner": "same one component",
+        "contract": "established",
+        "effect": "local reversible"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "task_depth": "D0",
+        "owner_topology.mechanical_execution": true,
+        "risk_lanes": [],
+        "materialize_stage": false,
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "ordinary-bug",
+      "prompt": "这个已定位的格式化函数输出错了一位，修复同一个 owner 并跑现有测试。",
+      "context": {
+        "owner": "one function owner",
+        "contract": "established",
+        "effect": "local reversible"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "task_depth": "D1",
+        "owner_topology.mechanical_execution": false,
+        "risk_lanes": [],
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "explicit-exclusion-preserved",
+      "prompt": "本任务明确排除 src/ui/**，它由用户自己处理。现在审计所有其余变更，有问题就地修复；不要修改被排除区域。",
+      "context": {
+        "current_changed_targets": [
+          "src/core/**",
+          "src/api/**",
+          "src/ui/**"
+        ],
+        "expected_excluded_targets": [
+          "src/ui/**"
+        ]
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "scope.excluded_targets": [
+          "src/ui/**"
+        ],
+        "scope.proposed_targets": [
+          "src/core/**",
+          "src/api/**"
+        ],
+        "decision_status": "resolved",
+        "discovery": "resolved"
+      }
+    },
+    {
+      "id": "bounded-source-presence-check",
+      "prompt": "仓库规则偏好多 Agent，但这次只读确认当前仓库有没有一种工程入口；范围只有入口文件和构建配置，不改文件。",
+      "context": {
+        "owner": "one bounded repository-presence question",
+        "repo_preference": "prefer multi-agent",
+        "coordination_benefit": "absent"
+      },
+      "expected": {
+        "task_depth": "D1",
+        "delegation.decision": "current_only",
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "cross-user-auth-bug",
+      "prompt": "已定位到同一个权限 owner：现在普通用户能看到别人的记录。修这个边界，生产操作先停在授权前。",
+      "context": {
+        "owner": "one permission owner",
+        "protected_boundary": "cross-user access",
+        "next_action": "local implementation only"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "task_depth": "D1",
+        "owner_topology.mechanical_execution": false,
+        "risk_lanes": [
+          "identity_permission",
+          "privacy_secret_data"
+        ],
+        "evidence.test_level": "T2",
+        "effect.required_tier": "local_reversible",
+        "studio_decision": "do_not_recommend"
+      }
+    },
+    {
+      "id": "public-log-read",
+      "prompt": "只读取并按给定格式整理这一小段公开日志，不判断问题，不修改系统。",
+      "context": {
+        "delivery": "audit",
+        "data": "public log",
+        "transformation": "bounded mechanical",
+        "semantic_judgment": "none",
+        "effect": "none"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "operation": "implement",
+        "delivery_kind": "direct_artifact",
+        "task_depth": "D0",
+        "owner_topology.mechanical_execution": true,
+        "risk_lanes": [],
+        "evidence.mode": "route",
+        "effect.effect_class": "none"
+      }
+    },
+    {
+      "id": "sensitive-log-read",
+      "prompt": "只读取并按给定格式整理这一小段生产日志，按给定规则脱敏个人信息，不判断问题，不修改系统。",
+      "context": {
+        "delivery": "audit",
+        "data": "sensitive production log",
+        "transformation": "bounded mechanical with supplied redaction rule",
+        "semantic_judgment": "none",
+        "effect": "none"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "operation": "implement",
+        "delivery_kind": "direct_artifact",
+        "task_depth": "D0",
+        "owner_topology.mechanical_execution": true,
+        "risk_lanes": [
+          "privacy_secret_data"
+        ],
+        "evidence.mode": "route",
+        "effect.effect_class": "none"
+      }
+    },
+    {
+      "id": "publish-verified-artifact",
+      "prompt": "代码和制品已经验收，现在只讨论是否发布到生产；执行发布前必须单独停下来确认。",
+      "context": {
+        "delivery": "direct artifact",
+        "semantic_judgment": "none",
+        "action": "publish"
+      },
+      "expected": {
+        "primary_route": "发布准备",
+        "operation": "prepare",
+        "delivery_kind": "verification",
+        "task_depth": "D1",
+        "owner_topology.mechanical_execution": false,
+        "effect.effect_class": "none",
+        "effect.required_tier": "read_only",
+        "effect.authorization_status": "satisfied"
+      }
+    },
+    {
+      "id": "build-green-real-funds-unverified",
+      "prompt": "构建和普通 release gate 都通过了，但退款恢复、重复提交和链上重试还没审计。现在能部署并用真实资金测试吗？只判断，不执行部署。",
+      "context": {
+        "build": "green",
+        "funds_mode": "real",
+        "protected_controls": "unverified",
+        "effect": "none"
+      },
+      "expected": {
+        "primary_route": "发布准备",
+        "delivery_kind": "verification",
+        "decision_status": "unresolved_protected_stop",
+        "discovery": "unresolved_protected_stop",
+        "risk_lanes": [
+          "money_entitlement"
+        ],
+        "evidence.status": "unverified",
+        "effect.effect_class": "none"
+      }
+    },
+    {
+      "id": "executable-governance-plan",
+      "prompt": "全面审计当前 Skill，给出后续会执行和复核的最终治理方案；不要修改 Skill 正文，不要提交、不要推送。",
+      "context": {
+        "delivery": "audit plus executable plan artifact",
+        "owners": 2,
+        "source_write": "forbidden",
+        "plan_write": "requested local reversible"
+      },
+      "expected": {
+        "primary_route": "项目体检",
+        "operation": "audit",
+        "delivery_kind": "audit",
+        "task_depth": "D2",
+        "materialize_plan": true,
+        "plan_phase": "pending_review",
+        "effect.effect_class": "none",
+        "effect.action": "audit",
+        "loaded_owner_ids": [
+          "routes",
+          "task_depth",
+          "effect_recovery",
+          "plan_artifact"
+        ]
+      }
+    },
+    {
+      "id": "frontend-backend-studio",
+      "prompt": "接口、错误码和权限合同已经稳定，前端和后端 owner 与 worktree 完全隔离，各自有独立验收，最后当前任务联调。请判断是否建议工作室模式，不要直接创建任务。",
+      "context": {
+        "owners": 2,
+        "contract": "stable",
+        "host_capability": "available",
+        "environment_isolation": "credible",
+        "write_surfaces": "isolated",
+        "acceptance": "independent",
+        "integration_gate": "current-task real integration",
+        "coordination_benefit": "positive"
+      },
+      "expected": {
+        "task_depth": "D2",
+        "materialize_stage": false,
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "game-pipeline-studio",
+      "prompt": "游戏地图原型、素材切图和引擎集成边界稳定、写面隔离，各自能独立验收，最后统一集成。请判断是否建议工作室模式，不要直接创建任务。",
+      "context": {
+        "owners": 3,
+        "contract": "stable",
+        "host_capability": "available",
+        "environment_isolation": "credible",
+        "write_surfaces": "isolated",
+        "acceptance": "independent",
+        "integration_gate": "current-task real integration",
+        "coordination_benefit": "positive"
+      },
+      "expected": {
+        "task_depth": "D2",
+        "materialize_stage": false,
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "proactive-studio-without-naming",
+      "prompt": "这一期同时做用户管理和订单管理两个后台模块，接口和权限合同已经定稿，两块各自独立验收，最后当前任务统一集成。你直接安排怎么做，先别创建任何任务。",
+      "context": {
+        "owners": 2,
+        "contract": "stable",
+        "host_capability": "available",
+        "environment_isolation": "credible",
+        "write_surfaces": "isolated",
+        "acceptance": "independent",
+        "integration_gate": "current-task real integration",
+        "coordination_benefit": "positive",
+        "user_named_studio": false
+      },
+      "expected": {
+        "task_depth": "D2",
+        "materialize_stage": false,
+        "studio_decision": "recommend_studio"
+      }
+    },
+    {
+      "id": "single-module-no-studio",
+      "prompt": "只改一个模块里的一个组件，是否要开工作室模式？",
+      "context": {
+        "owners": 1,
+        "contract": "established",
+        "write_surface": "single"
+      },
+      "expected": {
+        "task_depth": "D1",
+        "studio_decision": "do_not_recommend",
+        "materialize_stage": false
+      }
+    },
+    {
+      "id": "overlapping-writers-stop",
+      "prompt": "两个会话都要同时修改同一个共享权限模块，能不能开工作室模式？",
+      "context": {
+        "owners": 1,
+        "writers": 2,
+        "shared_writable_surface": true
+      },
+      "expected": {
+        "studio_decision": "resolve_boundaries_first"
+      }
+    },
+    {
+      "id": "long-discussion-truth-capture-card",
+      "prompt": "我们刚聊定了订单导出的三条规则：只导自己的订单、超过一万行分批、失败要能重试。现在开始实现，先别写任何文档。",
+      "context": {
+        "confirmed_decisions": 3,
+        "existing_owner_for_rules": "none",
+        "feature_shape": "internal rules with dependents",
+        "task_depth": "D1",
+        "truth_write_authorization": "not yet answered"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "task_depth": "D1",
+        "truth_capture.decision": "create_new",
+        "truth_capture.authorization_status": "pending",
+        "truth_capture.target": "dev-docs/features/order-export.md",
+        "effect.action": "read",
+        "materialize_stage": false
+      }
+    },
+    {
+      "id": "selection-decision-goes-to-adr",
+      "prompt": "比完三种方案，数据库最终定 PostgreSQL 不用 MongoDB，主要因为事务和报表。这个结论我已经确认了，帮我记下来。",
+      "context": {
+        "decision_shape": "choose A over B with rejected alternatives",
+        "cost_to_reverse": "high",
+        "existing_owner": "tech-stack document lists the stack but not the rejected alternatives",
+        "truth_write_authorization": "card confirmed by user"
+      },
+      "expected": {
+        "primary_route": "开发执行",
+        "truth_capture.decision": "create_new",
+        "truth_capture.authorization_status": "confirmed",
+        "truth_capture.target": "dev-docs/decisions/adr-0003.md",
+        "effect.action": "truth_doc_write",
+        "effect.required_tier": "local_reversible"
+      }
+    }
+  ],
+  "metamorphic_pairs": [
+    {
+      "left": "button-spacing",
+      "right": "button-spacing-complex-nouns",
+      "same_fields": [
+        "task_depth",
+        "risk_lanes",
+        "materialize_stage",
+        "studio_decision"
+      ]
+    },
+    {
+      "left": "ordinary-bug",
+      "right": "cross-user-auth-bug",
+      "same_fields": [
+        "task_depth",
+        "studio_decision",
+        "effect.required_tier"
+      ]
+    },
+    {
+      "left": "public-log-read",
+      "right": "sensitive-log-read",
+      "same_fields": [
+        "task_depth",
+        "effect.effect_class"
+      ]
+    },
+    {
+      "left": "frontend-backend-studio",
+      "right": "game-pipeline-studio",
+      "same_fields": [
+        "task_depth",
+        "studio_decision"
+      ]
+    },
+    {
+      "left": "frontend-backend-studio",
+      "right": "proactive-studio-without-naming",
+      "same_fields": [
+        "task_depth",
+        "studio_decision"
+      ]
+    },
+    {
+      "left": "long-discussion-truth-capture-card",
+      "right": "selection-decision-goes-to-adr",
+      "same_fields": [
+        "primary_route",
+        "truth_capture.decision"
+      ]
+    }
+  ]
+}

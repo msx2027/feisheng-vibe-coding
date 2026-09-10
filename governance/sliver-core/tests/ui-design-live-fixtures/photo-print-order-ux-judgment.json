@@ -1,0 +1,24 @@
+{
+  "schema": "sliver-ui-design-live-fixture/v1",
+  "id": "photo-print-order-ux-judgment",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "context": {
+    "operation": "read_only_explanation",
+    "writes_authorized": false,
+    "product_surface": "an existing photo-print order form",
+    "primary_user": "a customer ordering prints from uploaded photos",
+    "single_job": "confirm one prepared print order and see its result",
+    "success_signal": "the print order is accepted and its confirmation is visible without an unrelated storage-maintenance step",
+    "familiar_pattern": "the primary action keeps the customer's order verb while upload processing and storage placement remain system responsibilities",
+    "observed_problem": "after an order succeeds the primary Print photos action is replaced by Select storage region because an internal replica is still reconciling",
+    "system_concepts": ["upload shard", "storage replica", "replica region", "reconciliation poll", "worker action"],
+    "product_truth": [
+      "the existing upload and order-review path is already complete",
+      "the current task does not authorize adding storage controls before or after ordering",
+      "a later customer action may request information that it actually needs inside that action",
+      "current production upload prompts are not provided and remain unverified"
+    ],
+    "journey_boundaries": ["review photos", "confirm print order", "upload completion when required", "processing", "success", "continue with the receipt"]
+  }
+}

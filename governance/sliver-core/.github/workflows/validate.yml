@@ -1,0 +1,49 @@
+name: Validate skill
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.x"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python3 -B scripts/validate_release_candidate.py --contract-only
+
+  runtime-bundles:
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [codex, claude-code, gemini-cli]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: >-
+          python3 -B scripts/build_runtime_bundle.py
+          --target "${{ matrix.target }}"
+          --output "dist/runtime/${{ matrix.target }}/sliver-vibe-coding"
+      - run: >-
+          python3 -B scripts/validate_runtime_bundle.py
+          "dist/runtime/${{ matrix.target }}/sliver-vibe-coding"
+          --target "${{ matrix.target }}"
+          --source-root .
+          --trusted-base-root .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sliver-runtime-${{ matrix.target }}
+          path: dist/runtime/${{ matrix.target }}/sliver-vibe-coding
+          if-no-files-found: error

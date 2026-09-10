@@ -1,0 +1,27 @@
+{
+  "schema": "sliver-foundation-live-fixture/v1",
+  "id": "single_team_small_mvp_no_scale_evidence",
+  "version": 1,
+  "evidence_classification": "synthetic_non_identifying",
+  "network_mode": "available",
+  "context": {
+    "team_size": 1,
+    "current_scale_evidence": "small_mvp",
+    "future_scale_claim": "speculative",
+    "distributed_system_requirement": false,
+    "product_facts": {
+      "product": "internal operations request tracker",
+      "users": ["employee", "approver"],
+      "first_complete_flow": ["submit_request", "approve_or_reject", "view_status"],
+      "platform": "browser",
+      "deployment": "single managed web service",
+      "expected_concurrency": "under_100"
+    },
+    "candidate_claims": [
+      {
+        "candidate": "Django and PostgreSQL modular monolith",
+        "mutable_claims": ["current_supported_release", "license", "deployment_support"]
+      }
+    ]
+  }
+}

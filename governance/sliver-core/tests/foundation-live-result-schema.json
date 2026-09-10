@@ -1,0 +1,150 @@
+{
+  "schema": "sliver-foundation-live-results/v4",
+  "rubric_version": "sliver-foundation-live-rubric/v3",
+  "required_top_level": [
+    "schema",
+    "run_id",
+    "skill_version",
+    "runtime_target",
+    "runtime_digest",
+    "source_revision",
+    "platform",
+    "model",
+    "generated_at",
+    "fresh_session",
+    "runner_isolation",
+    "runner_provenance",
+    "judge_provenance",
+    "rubric_version",
+    "cases"
+  ],
+  "required_runner_fields": [
+    "name",
+    "version",
+    "invocation_id",
+    "artifact_path",
+    "artifact_sha256"
+  ],
+  "required_judge_provenance_fields": [
+    "kind",
+    "identity",
+    "version",
+    "independent_from_subject",
+    "rubric_version",
+    "judged_at"
+  ],
+  "required_case_fields": [
+    "case_id",
+    "fixture",
+    "initial_user",
+    "skill_selection",
+    "session",
+    "transcript",
+    "tool_trace",
+    "web_evidence",
+    "final_output",
+    "judge"
+  ],
+  "required_fixture_fields": [
+    "id",
+    "path",
+    "sha256"
+  ],
+  "required_skill_selection_fields": [
+    "selected",
+    "skill_name",
+    "selected_at",
+    "evidence_ref"
+  ],
+  "required_session_fields": [
+    "session_id",
+    "started_at",
+    "ended_at"
+  ],
+  "required_transcript_event_fields": [
+    "event_id",
+    "role",
+    "timestamp",
+    "content"
+  ],
+  "required_tool_event_fields": [
+    "tool_call_id",
+    "tool_name",
+    "status",
+    "started_at",
+    "completed_at",
+    "request_summary",
+    "response_summary",
+    "evidence_kind",
+    "evidence_target",
+    "transcript_event_ref"
+  ],
+  "required_web_evidence_fields": [
+    "evidence_id",
+    "url",
+    "checked_at",
+    "source_type",
+    "claim",
+    "result",
+    "tool_call_id"
+  ],
+  "required_judge_fields": [
+    "status",
+    "reason",
+    "rubric_version",
+    "required_behavior_results",
+    "forbidden_behavior_results"
+  ],
+  "required_behavior_result_fields": [
+    "passed",
+    "evidence_refs"
+  ],
+  "forbidden_behavior_result_fields": [
+    "observed",
+    "evidence_refs"
+  ],
+  "allowed_judge_statuses": [
+    "pass",
+    "fail",
+    "unverified"
+  ],
+  "allowed_judge_kinds": [
+    "human",
+    "model"
+  ],
+  "allowed_transcript_roles": [
+    "system",
+    "user",
+    "assistant",
+    "tool"
+  ],
+  "allowed_tool_statuses": [
+    "success",
+    "error"
+  ],
+  "allowed_web_expectations": [
+    "not_required",
+    "must_succeed",
+    "must_attempt_and_block"
+  ],
+  "placeholder_hosts": [
+    "example.com",
+    "example.org",
+    "example.net",
+    "localhost",
+    "127.0.0.1"
+  ],
+  "notes": [
+    "A static corpus check is never a live pass.",
+    "Every case uses a versioned fixture whose SHA-256 is checked before result validation.",
+    "Every web-required fixture contains concrete product facts and named candidate claims; abstract completeness labels cannot substitute for decision inputs.",
+    "The first user transcript event must exactly match the case prompt and final_output must match the last assistant event.",
+    "Multi-turn cases pin every follow-up user answer so the same scenario is replayed in every fresh session.",
+    "Every case must use a unique session_id; one session cannot satisfy multiple cases.",
+    "Tool calls and web evidence are structured and cross-referenced; placeholder URLs are rejected.",
+    "Every behavior verdict cites transcript, tool, web-evidence, selection, or full-session evidence.",
+    "Judge provenance must use the declared rubric and be independent from the subject model.",
+    "Candidate identity and runner_isolation bind the exact runtime target, source revision, isolated producer run, exact readable input closure, privacy scan, and cleanup state.",
+    "No result file is bundled because no model run is being claimed."
+  ]
+}
