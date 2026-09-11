@@ -9,6 +9,10 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+# RepoRoot 归一为绝对路径：后续 bundle 枚举用「前缀长度」裁剪 FullName，
+# 相对路径会让裁剪错位、产生静默的坏路径（2026-09-11 能力定批评次实测踩坑）。
+$RepoRoot = [System.IO.Path]::GetFullPath($RepoRoot)
+
 # CANONICAL-CATALOG 生成器（数据驱动）
 #
 # 真源分工：
@@ -108,11 +112,13 @@ function Get-RecordPath {
     if ($Source -eq 'vibe-coding-skills') {
         if ($Readiness -eq 'accepted') {
             # 目录约定按 domain 分组（与 scripts/import-vibe-skills.ps1 的落点保持一致）：
-            #   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/
+            #   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/，
+            #   event → skills/event/<id>/（2026-09-11 能力定批评次：事件驱动技能）
             $group = switch ($Domain) {
                 'checker' { 'checker' }
                 'product-or-checker' { 'product' }
                 'ui' { 'ui' }
+                'event' { 'event' }
                 default { throw "vibe accepted 记录的 domain '$Domain' 未定义导入目录分组（fail-closed）: $Id" }
             }
             return 'skills/' + $group + '/' + $Id + '/SKILL.md'

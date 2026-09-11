@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-10T22:18:53.5477660Z",
+  "generatedAt": "2026-09-11T00:41:21.5601984Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -288,16 +288,28 @@
     {
       "id": "clarify",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/clarify/SKILL.md",
-      "bundle": null,
+      "path": "skills/checker/clarify/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/checker/clarify",
+        "files": [
+          {
+            "path": "skills/checker/clarify/SKILL.md",
+            "sha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
-      "domain": "unreviewed",
-      "readiness": "source-only",
-      "status": "source-only-unreviewed",
-      "reason": "尚未完成语义审查",
+      "domain": "checker",
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "reason": "语义审查于 2026-09-11 随能力定批评次完成（内容级逐技能评估）；domain 由 unreviewed 修正为 checker（impeccable 族 UX 文案专项）",
       "sourceSha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "claude-handoff",
@@ -520,16 +532,28 @@
     {
       "id": "design-maker",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/design-maker/SKILL.md",
-      "bundle": null,
+      "path": "skills/product/design-maker/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/product/design-maker",
+        "files": [
+          {
+            "path": "skills/product/design-maker/SKILL.md",
+            "sha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "reason": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "reason": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
       "sourceSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "design-system",
@@ -1078,44 +1102,96 @@
     {
       "id": "evolution-engine",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/evolution-engine/SKILL.md",
-      "bundle": null,
+      "path": "skills/event/evolution-engine/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/event/evolution-engine",
+        "files": [
+          {
+            "path": "skills/event/evolution-engine/RUNTIME-NOTES.md",
+            "sha256": "c4d6be57df01d2a5b426fac88307a8e07500791b4fc505419beb0fd94e0e06b4"
+          },
+          {
+            "path": "skills/event/evolution-engine/SKILL.md",
+            "sha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "reason": "仅限结构化事件调用；需宿主事件契约与独立审查",
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "reason": "事件驱动能力；经宿主事件契约裁决进入 runtime，仅显式/事件调用",
       "sourceSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "experience-elevator",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/experience-elevator/SKILL.md",
-      "bundle": null,
+      "path": "skills/event/experience-elevator/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/event/experience-elevator",
+        "files": [
+          {
+            "path": "skills/event/experience-elevator/RUNTIME-NOTES.md",
+            "sha256": "c4d6be57df01d2a5b426fac88307a8e07500791b4fc505419beb0fd94e0e06b4"
+          },
+          {
+            "path": "skills/event/experience-elevator/SKILL.md",
+            "sha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d"
+          },
+          {
+            "path": "skills/event/experience-elevator/references/ledger-and-elevation.md",
+            "sha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "reason": "仅限结构化事件调用；需宿主事件契约与独立审查",
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "reason": "事件驱动能力；经宿主事件契约裁决进入 runtime，仅显式/事件调用",
       "sourceSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "feedback-writer",
       "source": "vibe-coding-skills",
-      "path": "sources/vibe-coding-skills/skills/feedback-writer/SKILL.md",
-      "bundle": null,
+      "path": "skills/event/feedback-writer/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/event/feedback-writer",
+        "files": [
+          {
+            "path": "skills/event/feedback-writer/RUNTIME-NOTES.md",
+            "sha256": "c4d6be57df01d2a5b426fac88307a8e07500791b4fc505419beb0fd94e0e06b4"
+          },
+          {
+            "path": "skills/event/feedback-writer/SKILL.md",
+            "sha256": "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c"
+          }
+        ],
+        "excluded": []
+      },
       "sourceRevision": null,
       "invocation": "user-invoked",
       "domain": "event",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "reason": "仅限结构化事件调用；需宿主事件契约与独立审查",
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "reason": "事件驱动能力；经宿主事件契约裁决进入 runtime，仅显式/事件调用",
       "sourceSha256": "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "git-guardrails-claude-code",
@@ -1162,30 +1238,64 @@
     {
       "id": "grilling",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/productivity/grilling/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/grilling/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/grilling",
+        "files": [
+          {
+            "path": "skills/engineering/grilling/SKILL.md",
+            "sha256": "d32d56c99281ceea4e6e966dac7ed70d18fad038dfa025bf3bfdee2355ba3e14"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/grilling/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "d32d56c99281ceea4e6e966dac7ed70d18fad038dfa025bf3bfdee2355ba3e14",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "handoff",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/productivity/handoff/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/handoff/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/handoff",
+        "files": [
+          {
+            "path": "skills/engineering/handoff/SKILL.md",
+            "sha256": "285336265158b5c2e52303219dc7d89f74c0470251df75159abce486aeed35f3"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/handoff/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "user-invoked",
       "domain": "user-tool",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "reason": "用户显式工具；未做宿主行为 smoke",
+      "readiness": "accepted",
+      "status": "accepted-user-tool",
+      "reason": "用户显式工具；已验收并进入 runtime 静态投影",
       "sourceSha256": "285336265158b5c2e52303219dc7d89f74c0470251df75159abce486aeed35f3",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "harden",
@@ -1546,16 +1656,41 @@
     {
       "id": "prototype",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/prototype/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/prototype/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/prototype",
+        "files": [
+          {
+            "path": "skills/engineering/prototype/LOGIC.md",
+            "sha256": "601b190fec11b5d843f308c3b069dbc4d2e117c65318684e3bab9e87b166b5d1"
+          },
+          {
+            "path": "skills/engineering/prototype/SKILL.md",
+            "sha256": "8ab3de2954ce49d5cabb1581c3df49583df3143ea4d2b7075b26ba741c8f4bac"
+          },
+          {
+            "path": "skills/engineering/prototype/UI.md",
+            "sha256": "333a2ada102c121b83be8574ea8800ffba91e2838e8f2c7eb784eaa6012a6d6f"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/prototype/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "8ab3de2954ce49d5cabb1581c3df49583df3143ea4d2b7075b26ba741c8f4bac",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "quieter",
@@ -1702,30 +1837,64 @@
     {
       "id": "research",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/research/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/research/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/research",
+        "files": [
+          {
+            "path": "skills/engineering/research/SKILL.md",
+            "sha256": "0b8941dafc8d4d5ad03f1836f03304689daf2759c2b85b373cf376e6351a5b26"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/research/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "0b8941dafc8d4d5ad03f1836f03304689daf2759c2b85b373cf376e6351a5b26",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "resolving-merge-conflicts",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/resolving-merge-conflicts/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/resolving-merge-conflicts/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/resolving-merge-conflicts",
+        "files": [
+          {
+            "path": "skills/engineering/resolving-merge-conflicts/SKILL.md",
+            "sha256": "519dbbc6e85baed0ef1b79277ade3f739568389c6c86fe96dcca0a2cec6fea2d"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/resolving-merge-conflicts/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "519dbbc6e85baed0ef1b79277ade3f739568389c6c86fe96dcca0a2cec6fea2d",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "rule-harvester",
@@ -1784,16 +1953,33 @@
     {
       "id": "setup-pre-commit",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/misc/setup-pre-commit/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/setup-pre-commit/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/setup-pre-commit",
+        "files": [
+          {
+            "path": "skills/engineering/setup-pre-commit/SKILL.md",
+            "sha256": "65a5739b72e044554f96d684367d1be84533c19a309e925687e77571cdbd0bf9"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/setup-pre-commit/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "65a5739b72e044554f96d684367d1be84533c19a309e925687e77571cdbd0bf9",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "setup-ts-deep-modules",
@@ -1991,7 +2177,7 @@
           },
           {
             "path": "governance/sliver-core/references/engineering-execution.md",
-            "sha256": "f18b94792d26e9166654daf156b354a91216c8c6af5fe76cd05d2458a05daee9"
+            "sha256": "5255fe09e91b26d41aaacc4aae119ad4014f7b86aa96d59ff78861df26d384e5"
           },
           {
             "path": "governance/sliver-core/references/execution-liveness.md",
@@ -3023,16 +3209,37 @@
     {
       "id": "wizard",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/engineering/wizard/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/wizard/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/wizard",
+        "files": [
+          {
+            "path": "skills/engineering/wizard/SKILL.md",
+            "sha256": "83c4393bd617f986bee4db69410a49b98f3709e56b88537440ac27a5601643ae"
+          },
+          {
+            "path": "skills/engineering/wizard/template.sh",
+            "sha256": "d551b465e644a789cfa7c49e42b3bb6926a2559ae8d240da465f3ae51a2ac851"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/wizard/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "83c4393bd617f986bee4db69410a49b98f3709e56b88537440ac27a5601643ae",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "writing-beats",
@@ -3051,16 +3258,37 @@
     {
       "id": "writing-for-agents",
       "source": "mattpocock-skills",
-      "path": "sources/mattpocock-skills/skills/productivity/writing-for-agents/SKILL.md",
-      "bundle": null,
+      "path": "skills/engineering/writing-for-agents/SKILL.md",
+      "bundle": {
+        "scope": "directory",
+        "root": "skills/engineering/writing-for-agents",
+        "files": [
+          {
+            "path": "skills/engineering/writing-for-agents/SKILL-MECHANICS.md",
+            "sha256": "39109da72aa024ac026a2941c9e7f2bb2f63628a7be17ec831812f5b507d56e2"
+          },
+          {
+            "path": "skills/engineering/writing-for-agents/SKILL.md",
+            "sha256": "4d3ae4ce6a181fbb0bc4024982f27432e52185d37439c90ec593c18be0b59a8d"
+          }
+        ],
+        "excluded": [
+          {
+            "path": "skills/engineering/writing-for-agents/agents/openai.yaml",
+            "reason": "宿主编排/版本控制资产（bundlePolicy.directoryExcludedSegments）"
+          }
+        ]
+      },
       "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
       "invocation": "model-invoked-or-user-invoked",
       "domain": "primitive",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "reason": "来源专用工程原语；未验收",
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "reason": "已验收工程原语；进入 runtime 静态投影",
       "sourceSha256": "4d3ae4ce6a181fbb0bc4024982f27432e52185d37439c90ec593c18be0b59a8d",
-      "writeAuthority": []
+      "writeAuthority": [
+        "none"
+      ]
     },
     {
       "id": "writing-fragments",
@@ -3249,21 +3477,29 @@
       "accepted-primitive",
       "accepted-checker",
       "accepted-product",
-      "accepted-ui"
+      "accepted-ui",
+      "accepted-user-tool",
+      "accepted-event"
     ],
     "runtimeExcludedStatuses": [
       "adapter-candidate",
+      "retired-adapter",
       "compatibility-alias",
       "retired-alias",
       "blocked-unclassified-working-tree",
+      "retired-checker",
       "source-only-checker",
       "event-only-source-only",
       "excluded-in-progress",
+      "retired-primitive",
       "source-only-primitive",
+      "retired-product-or-checker",
       "source-only-product-or-checker",
       "compatibility-selector",
       "source-only-ui",
+      "retired-unreviewed",
       "source-only-unreviewed",
+      "retired-user-tool",
       "source-only-user-tool"
     ],
     "writeAuthorityPolicy": {

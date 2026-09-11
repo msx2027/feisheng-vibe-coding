@@ -4,11 +4,11 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 39、待启用 7、来源专用 28、阻塞 0、兼容/排除 7、已退役 1。
+统计：共 **82** 项来源技能 —— 可用 52、待启用 7、来源专用 15、阻塞 0、兼容/排除 7、已退役 1。
 
 ## 现在可用（进入 runtime 静态投影）
 
-仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker`, `accepted-product`, `accepted-ui` 可进入 runtime；其余一律排除。
+仅 `decisionPolicy.acceptedStatuses` = `control-plane`, `accepted-primitive`, `accepted-checker`, `accepted-product`, `accepted-ui`, `accepted-user-tool`, `accepted-event` 可进入 runtime；其余一律排除。
 
 | id | 来源 | 域 | 状态 | 可写（writeAuthority） | runtime 单位 | 文件 |
 |---|---|---|---|---|---|---|
@@ -19,12 +19,14 @@
 | `bolder` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `brand` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 17 |
 | `bug-fixer` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
+| `clarify` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
 | `code-review` | mattpocock-skills | checker | accepted-checker | none | `directory` | 1 |
 | `codebase-design` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 | `colorize` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `critique` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 4 |
 | `delight` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `design-brief-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
+| `design-maker` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
 | `design-system` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 12 |
 | `dev-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 65 |
 | `dev-planner` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 9 |
@@ -32,6 +34,11 @@
 | `distill` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `doc-sync-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
 | `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `directory` | 3 |
+| `evolution-engine` | vibe-coding-skills | event | accepted-event | none | `directory` | 2 |
+| `experience-elevator` | vibe-coding-skills | event | accepted-event | none | `directory` | 3 |
+| `feedback-writer` | vibe-coding-skills | event | accepted-event | none | `directory` | 2 |
+| `grilling` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
+| `handoff` | mattpocock-skills | user-tool | accepted-user-tool | none | `directory` | 1 |
 | `harden` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
 | `hotspot-governor` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
 | `impeccable` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 13 |
@@ -40,10 +47,14 @@
 | `overdrive` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `polish` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `product-spec-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 12 |
+| `prototype` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 | `quieter` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `release-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
 | `requirements-test-designer` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 17 |
+| `research` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
+| `resolving-merge-conflicts` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
 | `rule-harvester` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
+| `setup-pre-commit` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
 | `sliver-vibe-coding` | sliver-vibe-coding | control-plane | control-plane | route-catalog、target-truth、validation-gate | `explicit` | 75 |
 | `tdd` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 | `test-automation` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 4 |
@@ -51,6 +62,8 @@
 | `ui-styling` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 93 |
 | `ui-system-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
 | `ui-ux-pro-max` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 38 |
+| `wizard` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
+| `writing-for-agents` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
 
 runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目录为 runtime 单位（文件清单在生成时枚举并逐文件记 sha256，是显式白名单）；`file` = 只投影记录自身文件（如控制面 `governance/sliver-core/SKILL.md`，那棵树的其余部分不是技能内容）。真源：`SKILL-CLASSIFICATION.json` 的 `runtimePromotionPolicy.bundlePolicy`。
 
@@ -79,15 +92,13 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 
 - **checker**（1）：`vibe-code-review`
   - 原因：专项 checker；Sliver 拥有验收门，未进入 runtime
-- **event**（3）：`evolution-engine`、`experience-elevator`、`feedback-writer`
-  - 原因：仅限结构化事件调用；需宿主事件契约与独立审查
-- **primitive**（10）：`git-guardrails-claude-code`、`grilling`、`migrate-to-shoehorn`、`prototype`、`research`、`resolving-merge-conflicts`、`scaffold-exercises`、`setup-pre-commit`、`wizard`、`writing-for-agents`
+- **primitive**（3）：`git-guardrails-claude-code`、`migrate-to-shoehorn`、`scaffold-exercises`
   - 原因：来源专用工程原语；未验收
-- **product-or-checker**（5）：`codebase-memory-scout`、`design-maker`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`
+- **product-or-checker**（4）：`codebase-memory-scout`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`
   - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke
-- **unreviewed**（3）：`beginner-flow-guide`、`clarify`、`shape`
+- **unreviewed**（2）：`beginner-flow-guide`、`shape`
   - 原因：尚未完成语义审查
-- **user-tool**（6）：`grill-me`、`grill-with-docs`、`handoff`、`teach`、`to-questionnaire`、`wait-what`
+- **user-tool**（5）：`grill-me`、`grill-with-docs`、`teach`、`to-questionnaire`、`wait-what`
   - 原因：用户显式工具；未做宿主行为 smoke
 
 ## 阻塞

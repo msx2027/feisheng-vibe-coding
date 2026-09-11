@@ -147,14 +147,14 @@
       "vibe-event-only": {
         "license": "vibe distribution (private); event-only source-only",
         "upstream": "F:\\skiils工具\\vibe-coding-skills (sourceCommit 635c54f9abb091c1293de346407663ad6af0862b)",
-        "notice": "none; event-only-source-only",
+        "notice": "legal/vibe-event-only/SOURCE-DECLARATION.md",
         "skills": [
           "evolution-engine",
           "experience-elevator",
           "feedback-writer"
         ],
-        "runtimeEligible": false,
-        "reason": "private distribution with no per-skill license text and no resolvable notice; additionally these are event-only capabilities"
+        "runtimeEligible": true,
+        "reason": "owner 2026-09-11 能力定批评次授权：事件三件套以轻量形态接入（方法学层；tools/*.mjs 自动化层与目标项目治理基础设施未随批）。原理由：private distribution with no per-skill license text and no resolvable notice; additionally these are event-only capabilities"
       },
       "vibe-compatibility-alias": {
         "license": "vibe distribution (private); compatibility alias",

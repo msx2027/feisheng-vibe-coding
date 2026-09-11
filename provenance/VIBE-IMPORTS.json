@@ -168,6 +168,19 @@
       ]
     },
     {
+      "id": "clarify",
+      "sourceDir": "clarify",
+      "sourcePath": "sources/vibe-coding-skills/skills/clarify",
+      "destination": "skills/checker/clarify",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb"
+        }
+      ]
+    },
+    {
       "id": "colorize",
       "sourceDir": "colorize",
       "sourcePath": "sources/vibe-coding-skills/skills/colorize",
@@ -232,6 +245,19 @@
         {
           "path": "templates/design-brief-template.md",
           "sha256": "a949c0e38ca8e15b55032dc95b8763c7fc80d8ac2a7cd63bbd79c9d39fd9a31e"
+        }
+      ]
+    },
+    {
+      "id": "design-maker",
+      "sourceDir": "design-maker",
+      "sourcePath": "sources/vibe-coding-skills/skills/design-maker",
+      "destination": "skills/product/design-maker",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda"
         }
       ]
     },
@@ -637,6 +663,49 @@
         {
           "path": "references/markdown-governance.md",
           "sha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc"
+        }
+      ]
+    },
+    {
+      "id": "evolution-engine",
+      "sourceDir": "evolution-engine",
+      "sourcePath": "sources/vibe-coding-skills/skills/evolution-engine",
+      "destination": "skills/event/evolution-engine",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641"
+        }
+      ]
+    },
+    {
+      "id": "experience-elevator",
+      "sourceDir": "experience-elevator",
+      "sourcePath": "sources/vibe-coding-skills/skills/experience-elevator",
+      "destination": "skills/event/experience-elevator",
+      "fileCount": 2,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d"
+        },
+        {
+          "path": "references/ledger-and-elevation.md",
+          "sha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f"
+        }
+      ]
+    },
+    {
+      "id": "feedback-writer",
+      "sourceDir": "feedback-writer",
+      "sourcePath": "sources/vibe-coding-skills/skills/feedback-writer",
+      "destination": "skills/event/feedback-writer",
+      "fileCount": 1,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "6b9b72c299771730494836b8254ded917b7ec66d5d30f7c4a7e96e17e37f628c"
         }
       ]
     },
@@ -1554,5 +1623,5 @@
       ]
     }
   ],
-  "generatedAt": "2026-09-10T19:14:54.0395306Z"
+  "generatedAt": "2026-09-11T00:23:51.9088910Z"
 }

@@ -80,13 +80,15 @@ if ($revisions.Count -ne 1) {
 $sourceRevision = @($revisions.Keys)[0]
 
 # 目录约定按 domain 分组（与 scripts/build-canonical-catalog.ps1 的 Get-RecordPath 保持一致）：
-#   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/
+#   checker → skills/checker/<id>/，product-or-checker → skills/product/<id>/，ui → skills/ui/<id>/，
+#   event → skills/event/<id>/（2026-09-11 能力定批评次：事件驱动技能，仅显式/事件调用）
 function Get-DestinationGroup {
     param([Parameter(Mandatory = $true)][string]$Domain)
     switch ($Domain) {
         'checker' { return 'checker' }
         'product-or-checker' { return 'product' }
         'ui' { return 'ui' }
+        'event' { return 'event' }
         default { throw "vibe accepted 记录的 domain '$Domain' 未定义导入目录分组（fail-closed）。" }
     }
 }

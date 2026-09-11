@@ -297,6 +297,19 @@ through this delegation; the condition below, not a user keyword, is its trigger
 | `skills/ui/ui-styling/SKILL.md` | the user explicitly asks for a page-level style system or a component styling framework |
 | `skills/ui/brand/SKILL.md` | brand voice, visual identity, messaging frameworks, or UI brand tokens need creating or reviewing |
 | `skills/ui/ui-ux-pro-max/SKILL.md` | an explicit design enhancement request needs UI/UX intelligence across visual direction, color, typography, tokens, accessibility, layout, or charts |
+| `skills/engineering/grilling/SKILL.md` | a plan or design needs structured stress-testing questioning before commitment (frontier-style decision interrogation rounds) |
+| `skills/engineering/prototype/SKILL.md` | a design question is best answered by a throwaway playable prototype (logic/state feel or UI variant exploration), not by discussion |
+| `skills/engineering/research/SKILL.md` | first-party background research with per-claim source attribution should run in a background agent while the main session continues |
+| `skills/engineering/resolving-merge-conflicts/SKILL.md` | an in-progress merge or rebase has conflicts to resolve while preserving both sides' intent |
+| `skills/engineering/setup-pre-commit/SKILL.md` | a JS/TS repository needs a commit-time quality gate (husky + lint-staged formatting, typecheck, tests) |
+| `skills/engineering/wizard/SKILL.md` | a human-only procedure (provisioning, credentials, CI secrets, third-party dashboards, one-off migration) needs an interactive guided script |
+| `skills/engineering/writing-for-agents/SKILL.md` | documentation written for agent consumption (AGENTS.md, CLAUDE.md, SKILL.md) is being created or revised |
+| `skills/engineering/handoff/SKILL.md` | the current session must hand off to a fresh agent with a compressed, desensitized briefing document |
+| `skills/product/design-maker/SKILL.md` | a completed design brief must be turned into concrete design deliverables in a design tool (Pencil/Figma MCP) |
+| `skills/checker/clarify/SKILL.md` | UI copy is confusing - labels, error messages, empty states, or CTAs need UX-writing rewrites |
+| `skills/event/experience-elevator/SKILL.md` | a recurring target-project correction must be promoted through the experience ledger (event-driven; explicit invocation only) |
+| `skills/event/evolution-engine/SKILL.md` | accumulated feedback signals must be scanned for rule-graduation, skill-optimization, or new-skill proposals (event-driven; explicit invocation only) |
+| `skills/event/feedback-writer/SKILL.md` | a notable correction or skill-performance signal must be recorded to the feedback index (event-driven; explicit invocation only) |
 
 A specialist finding enters this backbone's normal flow: it is evidence for the failing layer, it never
 authorizes remediation, and the active route with `代码审计` or `验收` still owns the verdict and gate.

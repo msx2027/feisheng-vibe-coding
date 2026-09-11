@@ -10,7 +10,9 @@
       "accepted-primitive",
       "accepted-checker",
       "accepted-product",
-      "accepted-ui"
+      "accepted-ui",
+      "accepted-user-tool",
+      "accepted-event"
     ],
     "note": "只有 acceptedStatuses 可进入 runtime 投影；其余一律 runtime-excluded（fail-closed）"
   },
@@ -18,6 +20,14 @@
     "adapter|candidate": "adapter-candidate",
     "alias|compatibility": "compatibility-alias",
     "alias|retired": "retired-alias",
+    "adapter|retired": "retired-adapter",
+    "checker|retired": "retired-checker",
+    "event|accepted": "accepted-event",
+    "primitive|retired": "retired-primitive",
+    "product-or-checker|retired": "retired-product-or-checker",
+    "unreviewed|retired": "retired-unreviewed",
+    "user-tool|accepted": "accepted-user-tool",
+    "user-tool|retired": "retired-user-tool",
     "checker|accepted": "accepted-checker",
     "checker|blocked": "blocked-unclassified-working-tree",
     "checker|candidate": "adapter-candidate",
@@ -59,10 +69,19 @@
     "source-only-unreviewed": "尚未完成语义审查",
     "source-only-user-tool": "用户显式工具；未做宿主行为 smoke",
     "accepted-product": "已验收产品/治理能力；进入 runtime 静态投影，写入仍受控制面 target-truth 约束",
-    "accepted-ui": "已验收 UI 设计实现能力；进入 runtime 静态投影"
+    "accepted-ui": "已验收 UI 设计实现能力；进入 runtime 静态投影",
+    "accepted-event": "事件驱动能力；经宿主事件契约裁决进入 runtime，仅显式/事件调用",
+    "accepted-user-tool": "用户显式工具；已验收并进入 runtime 静态投影",
+    "retired-primitive": "工程原语退役：价值不足或生态绑定过深；快照保留，可重走准入",
+    "retired-adapter": "适配候选退役：职能被已接入能力或控制面覆盖",
+    "retired-user-tool": "用户工具退役：单入口形态下无独立触发路径或定位外",
+    "retired-product-or-checker": "产品/checker 退役：与控制面写入者冲突或与已接入能力重复",
+    "retired-unreviewed": "未审技能退役：价值评估未达标；快照保留",
+    "retired-checker": "专项 checker 退役：依赖的目标项目基础设施未采纳"
   },
   "reasonsById": {
-        "vibe-coding-skills": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
+            "clarify": "语义审查于 2026-09-11 随能力定批评次完成（内容级逐技能评估）；domain 由 unreviewed 修正为 checker（impeccable 族 UX 文案专项）",
+    "vibe-coding-skills": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
     "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
     "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
@@ -281,9 +300,11 @@
       ]
     },
     "clarify": {
-      "domain": "unreviewed",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "domain": "checker",
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "clarify",
+      "writeAuthority": ["none"]
     },
     "claude-handoff": {
       "domain": "in-progress",
@@ -349,8 +370,10 @@
     },
     "design-maker": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "design-maker",
+      "writeAuthority": ["none"]
     },
     "design-system": {
       "domain": "ui",
@@ -415,18 +438,24 @@
     },
     "evolution-engine": {
       "domain": "event",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "evolution-engine",
+      "writeAuthority": ["none"]
     },
     "experience-elevator": {
       "domain": "event",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "experience-elevator",
+      "writeAuthority": ["none"]
     },
     "feedback-writer": {
       "domain": "event",
-      "readiness": "source-only",
-      "source": "vibe-coding-skills"
+      "readiness": "accepted",
+      "source": "vibe-coding-skills",
+      "sourceDir": "feedback-writer",
+      "writeAuthority": ["none"]
     },
     "git-guardrails-claude-code": {
       "domain": "primitive",
@@ -445,13 +474,15 @@
     },
     "grilling": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "handoff": {
       "domain": "user-tool",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "harden": {
       "domain": "checker",
@@ -547,8 +578,9 @@
     },
     "prototype": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "quieter": {
       "domain": "ui",
@@ -579,13 +611,15 @@
     },
     "research": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "resolving-merge-conflicts": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "rule-harvester": {
       "domain": "product-or-checker",
@@ -608,8 +642,9 @@
     },
     "setup-pre-commit": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "setup-ts-deep-modules": {
       "domain": "in-progress",
@@ -755,8 +790,9 @@
     },
     "wizard": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "writing-beats": {
       "domain": "in-progress",
@@ -765,8 +801,9 @@
     },
     "writing-for-agents": {
       "domain": "primitive",
-      "readiness": "source-only",
-      "source": "mattpocock-skills"
+      "readiness": "accepted",
+      "source": "mattpocock-skills",
+      "writeAuthority": ["none"]
     },
     "writing-fragments": {
       "domain": "in-progress",
