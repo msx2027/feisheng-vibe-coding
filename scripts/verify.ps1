@@ -1,7 +1,10 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [string]$RepositoryRoot = (Split-Path -Parent $PSScriptRoot),
+    # PS 5.1 的高级脚本（CmdletBinding）在 param 默认值里拿不到任何脚本路径表达式：
+    # $PSScriptRoot 为空、$MyInvocation.MyCommand.Path 为 null。默认留空，进脚本体后再解析——
+    # 脚本体的 $PSScriptRoot 在两个版本下都可用。
+    [string]$RepositoryRoot = '',
 
     [Parameter(Mandatory = $false)]
     [switch]$IncludePackage,
@@ -20,18 +23,28 @@ Set-StrictMode -Version Latest
 
 # 单入口验证器：一条命令跑完全部门禁 + 生成物新鲜度校验。
 #
-# 覆盖：
-#   1. catalog 与分类真源同步（重生成后语义比对）
-#   2. 能力索引新鲜度（重生成后逐字节比对）
-#   3. 发布 NOTICE 门禁
-#   4. Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记）
-#   5. Codex / Claude / 宿主中性静态投影 Build + Validate
-#   6. 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
-#   7. 可选：发布候选包装配（-IncludePackage）
+# 覆盖（步骤名以实际输出为准，编号随门禁演进而增删，对账勿依赖本文数字）：
+#   - catalog 与分类真源同步（重生成后语义比对）
+#   - runtime include 内容完整性（bundle 逐文件 sha256 + 全局路径唯一性）
+#   - 导入副本与快照一致性（Vibe 逐文件白名单 + Matt 侧，含登记补丁双向核对）
+#   - 保真树换行可复现性（-text 且索引==工作树）
+#   - 能力索引新鲜度（重生成后逐字节比对）
+#   - 来源快照完整性（聚合树摘要自证）
+#   - 路由绑定（admitted 在绑定 owner 唯一命中）
+#   - 退役引用扫描（全量 retired id 的 /id 命令形态；sources/ 快照路径引用除外）
+#   - 发布 NOTICE 门禁
+#   - Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记）
+#   - collector 路径归属单测（宿主证据归属逻辑回归门；会向 gitignore 的 _smoke/ 追加测试日志）
+#   - Codex / Claude / 宿主中性静态投影 Build + Validate
+#   - 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
+#   - 可选：发布候选包装配（-IncludePackage）
 #
-# 本脚本只读仓库、只在临时目录写入；不安装依赖、不写入宿主目录。
+# 本脚本只读仓库、只在临时目录写入（collector 单测的日志除外，见上）；不安装依赖、不写入宿主目录。
 # 退出码：0 = 全部通过；1 = 有失败。
 
+if ([string]::IsNullOrWhiteSpace($RepositoryRoot)) {
+    $RepositoryRoot = Split-Path -Parent $PSScriptRoot
+}
 $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
 if (-not (Test-Path -LiteralPath $repoRoot -PathType Container)) {
     throw "RepositoryRoot 不存在: $repoRoot"
@@ -452,6 +465,22 @@ try {
         Add-Result -Step '路由绑定' -Passed $false -Detail $_.Exception.Message
     }
 
+    # 3c) 退役引用扫描：runtime 一等内容里不得再有退役 id 的 /id 命令形态引用
+    #     （sources/<快照>/ 路径引用是合法指认，扫描时整段屏蔽；28c8089 的同形词人工剔除口径废止）
+    try {
+        $retiredScan = Invoke-Child -Script (Join-Path $repoRoot 'scripts/validate-retired-references.ps1') -Arguments @{
+            RepositoryRoot = $repoRoot
+        }
+        $retiredParsed = ($retiredScan.Output -join "`n") | ConvertFrom-Json
+        if ($retiredParsed.status -ne 'PASS') {
+            Add-Result -Step '退役引用扫描' -Passed $false -Detail ((@($retiredParsed.errors) -join '; '))
+        } else {
+            Add-Result -Step '退役引用扫描' -Passed $true -Detail ('retired=' + $retiredParsed.retiredCount + ' scanned=' + $retiredParsed.filesScanned)
+        }
+    } catch {
+        Add-Result -Step '退役引用扫描' -Passed $false -Detail $_.Exception.Message
+    }
+
     # 4) 发布 NOTICE 门禁
     try {
         $gate = Invoke-Child -Script (Join-Path $repoRoot 'scripts/validate-release-notices.ps1') -Arguments @{
@@ -476,6 +505,15 @@ try {
         Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $true
     } catch {
         Add-Result -Step 'Vibe Hook 适配器安全契约' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5c) collector 路径归属单测（宿主证据归属逻辑的回归门；测试失败走 exit 1，不是 throw）
+    try {
+        $collectorTest = Invoke-Child -Script (Join-Path $repoRoot 'tests/test-collector-path-resolution.ps1') -Arguments @{}
+        if ($collectorTest.ExitCode -ne 0) { throw ('collector 路径归属单测失败（exit ' + $collectorTest.ExitCode + '）') }
+        Add-Result -Step 'collector 路径归属单测' -Passed $true
+    } catch {
+        Add-Result -Step 'collector 路径归属单测' -Passed $false -Detail $_.Exception.Message
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）

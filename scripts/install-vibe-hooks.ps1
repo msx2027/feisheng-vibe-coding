@@ -66,6 +66,18 @@ $contract = Get-Content -Raw -Encoding UTF8 -LiteralPath $sourceContract | Conve
 $enabledStatuses = @('enabled-experience-sedimentation-v1')
 if ($enabledStatuses -notcontains [string]$contract.status) { throw "契约状态 '$($contract.status)' 不是启用态，拒绝安装。" }
 
+# 注册事件面从契约派生（单一事实源），不复制清单：契约的 enabled 集合与 runner 支持面漂移时
+# 显式失败，而不是把宿主用不到/不允许的钩子静默装上（runner 对未实现事件会 exit 3）。
+$contractEnabledEvents = @(@($contract.events.PSObject.Properties) |
+    Where-Object { [bool]$_.Value.enabled } | ForEach-Object { [string]$_.Name })
+$runnerSupportedEvents = @('SessionStart', 'UserPromptSubmit')
+# 比较键拆中间变量：-join 与 -ne 同表达式串联会被运算符优先级错误分组
+$contractEnabledKey = @($contractEnabledEvents | Sort-Object) -join ','
+$runnerSupportedKey = @($runnerSupportedEvents | Sort-Object) -join ','
+if ($contractEnabledKey -ne $runnerSupportedKey) {
+    throw ("契约启用事件集（" + ($contractEnabledEvents -join ', ') + "）与 runner 支持面（" + ($runnerSupportedEvents -join ', ') + "）不一致，拒绝安装。")
+}
+
 
 function Test-HasProperty {
     param($Object, [Parameter(Mandatory = $true)][string]$Name)
@@ -143,7 +155,7 @@ if ($DryRun) {
     [pscustomobject]@{
         status = 'DRY-RUN'; target = $targetFull
         wouldInstall = @('.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1', '.feisheng/vibe-hooks/contract.json', '.feisheng/vibe-hooks/install-manifest.json')
-        wouldRegister = @('SessionStart', 'UserPromptSubmit')
+        wouldRegister = $contractEnabledEvents
         runnerSha256 = $runnerSha; contractSha256 = $contractSha
     } | ConvertTo-Json -Compress
     exit 0
@@ -166,21 +178,24 @@ if (Test-Path -LiteralPath $settingsPath) {
 if (-not (Test-HasProperty -Object $settings -Name 'hooks')) {
     $settings | Add-Member -MemberType NoteProperty -Name 'hooks' -Value ([pscustomobject]@{})
 }
-foreach ($spec in @(
-    [pscustomobject]@{ eventName = 'SessionStart'; matcher = 'startup|resume'; timeout = 10 },
-    [pscustomobject]@{ eventName = 'UserPromptSubmit'; matcher = ''; timeout = 5 }
-)) {
-    $command = $hookCommandBase.Replace('{EVENT}', $spec.eventName)
-    $entry = [pscustomobject]@{ type = 'command'; command = $command; timeout = $spec.timeout }
+# matcher 是宿主注册语义（按事件名映射，与契约解耦），timeout 取契约 timeoutSeconds。
+$matcherByEvent = @{ SessionStart = 'startup|resume'; UserPromptSubmit = '' }
+foreach ($eventName in $contractEnabledEvents) {
+    $timeout = [int]$contract.events.$eventName.timeoutSeconds
+    if ($timeout -le 0) { $timeout = 10 }
+    $matcher = $matcherByEvent[$eventName]
+    if ($null -eq $matcher) { $matcher = '' }
+    $command = $hookCommandBase.Replace('{EVENT}', $eventName)
+    $entry = [pscustomobject]@{ type = 'command'; command = $command; timeout = $timeout }
     $group = [pscustomobject]@{ hooks = @($entry) }
-    if (-not [string]::IsNullOrWhiteSpace($spec.matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $spec.matcher }
-    if (Test-HasProperty -Object $settings.hooks -Name $spec.eventName) {
+    if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
+    if (Test-HasProperty -Object $settings.hooks -Name $eventName) {
         $existing = @($settings.hooks.$eventName) | Where-Object {
             -not (@($_.hooks) | Where-Object { [string]$_.command -like ('*' + $targetRunner + '*') })
         }
         $settings.hooks.$eventName = @($existing + @($group))
     } else {
-        $settings.hooks | Add-Member -MemberType NoteProperty -Name $spec.eventName -Value @($group)
+        $settings.hooks | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
     }
 }
 $settingsParent = Split-Path -Parent $settingsPath
@@ -196,7 +211,7 @@ $manifest = [ordered]@{
     schema = 'feisheng-vibe-hook-install/v1'
     installedAt = (Get-Date).ToUniversalTime().ToString('o')
     targetRoot = $targetFull
-    events = @('SessionStart', 'UserPromptSubmit')
+    events = $contractEnabledEvents
     files = @(
         [ordered]@{ path = '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'; sha256 = $runnerSha }
         [ordered]@{ path = '.feisheng/vibe-hooks/contract.json'; sha256 = $contractSha }
@@ -208,7 +223,7 @@ $manifest = [ordered]@{
 
 [pscustomobject]@{
     status = 'INSTALLED'; target = $targetFull
-    events = @('SessionStart', 'UserPromptSubmit')
+    events = $contractEnabledEvents
     runnerSha256 = $runnerSha; contractSha256 = $contractSha
     settingsPath = $settingsPath
     feedbackIndex = '.claude/feedback/FEEDBACK-INDEX.md（经验数据，卸载时保留）'

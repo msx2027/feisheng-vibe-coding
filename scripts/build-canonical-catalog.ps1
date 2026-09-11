@@ -611,5 +611,10 @@ $output = [ordered]@{
     }
 }
 
-$output | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath $outputPath
+# 确定性字节写出：LF 行尾、无 BOM——provenance/ 无 .gitattributes 归一覆盖，Windows 宿主的
+# Set-Content 会写 CRLF，导致同一脚本跨宿主再生出整文件级 diff 噪音。序列化缩进风格仍随宿主
+# （pwsh 7 是工作流头注声明的规范化构建运行时；语义比对门禁对缩进不敏感）。
+$catalogJson = $output | ConvertTo-Json -Depth 12
+$catalogJson = ($catalogJson -replace "`r`n", "`n").TrimEnd("`n") + "`n"
+[System.IO.File]::WriteAllText($outputPath, $catalogJson, [System.Text.UTF8Encoding]::new($false))
 Write-Output "Generated $outputPath with $($records.Count) records."

@@ -8,7 +8,10 @@ param(
     [string]$RepositoryRoot = (Split-Path -Parent $PSScriptRoot),
 
     [Parameter(Mandatory = $false)]
-    [string]$SourceRepositoryRoot = 'F:\skiils工具\sliver-vibe-coding',
+    # 上游 sliver git 检出路径（仅 -FetchTrustedBaseline 用）。三个源项目已于 2026-09-11 归档并删除
+    # 本地源目录，默认为空 = 不传 --trusted-base-root（深度校验按 UNAVAILABLE 软降级）；
+    # 如需按 SHA 取回基线对象，显式传入仍包含该 revision 的上游 git 检出。
+    [string]$SourceRepositoryRoot = '',
 
     [Parameter(Mandatory = $false)]
     [switch]$FetchTrustedBaseline,
@@ -82,6 +85,9 @@ function Get-TrustedBaselineRevision {
 }
 
 if ($FetchTrustedBaseline) {
+    if ([string]::IsNullOrWhiteSpace($SourceRepositoryRoot) -or -not (Test-Path -LiteralPath $SourceRepositoryRoot -PathType Container)) {
+        throw '已无上游 sliver 检出（源项目 2026-09-11 归档）；如需 trusted baseline，请用 -SourceRepositoryRoot 显式传入包含该 revision 的 git 检出。'
+    }
     $revision = Get-TrustedBaselineRevision
     if ([string]::IsNullOrWhiteSpace($revision)) { throw '无法从 Sliver baseline 记录中读出 source_commit。' }
     $exists = (& git -C $SourceRepositoryRoot cat-file -t $revision 2>$null)

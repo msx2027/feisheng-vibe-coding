@@ -1,6 +1,9 @@
 ﻿[CmdletBinding()]
 param(
-    [string]$RepositoryRoot = (Split-Path -Parent $PSScriptRoot)
+    # PS 5.1 的高级脚本（CmdletBinding）在 param 默认值里拿不到任何脚本路径表达式：
+    # $PSScriptRoot 为空、$MyInvocation.MyCommand.Path 为 null。默认留空，进脚本体后再解析。
+    # 默认解析值 = 本脚本目录（tests/）的上一级 = 仓库根。
+    [string]$RepositoryRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -18,6 +21,9 @@ Set-StrictMode -Version Latest
 #
 # 全部使用临时沙箱目标目录，不碰真实项目。
 
+if ([string]::IsNullOrWhiteSpace($RepositoryRoot)) {
+    $RepositoryRoot = Split-Path -Parent $PSScriptRoot
+}
 $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $runner = Join-Path $repoRoot 'scripts/invoke-vibe-hook-adapter.ps1'
 
@@ -72,8 +78,12 @@ try {
     $r = Invoke-Runner -Mode 'Validate' -Target $target
     if ($r.ExitCode -ne 0) { throw "Validate 应通过，exit=$($r.ExitCode): $($r.Output)" }
 
-    # 2) 未启用事件必须 exit 3
-    foreach ($disabled in @('Stop', 'PreToolUse', 'PostToolUse')) {
+    # 2) 未启用事件必须 exit 3（禁用集合从契约派生，不复制清单）
+    $hookContract = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'adapters/vibe-hooks/contract.json') | ConvertFrom-Json
+    $disabledEvents = @(@($hookContract.events.PSObject.Properties) |
+        Where-Object { -not [bool]$_.Value.enabled } | ForEach-Object { [string]$_.Name })
+    if ($disabledEvents.Count -eq 0) { throw '契约没有任何禁用事件，本用例口径失效' }
+    foreach ($disabled in $disabledEvents) {
         $r = Invoke-Runner -Mode 'Invoke' -EventName $disabled -Target $target
         if ($r.ExitCode -ne 3) { throw "禁用事件 $disabled 应 exit 3，实际 $($r.ExitCode)" }
     }
@@ -196,8 +206,10 @@ try {
     }
 
     # 5b) reparse 守卫负面用例：.claude/feedback 是 junction 时，纠错信号不得写入重定向目录
-    # 注：junction 是 Windows 特有机制，Linux CI 跳过此负面用例（Linux 无 junction，symlink 行为不同）
-    $isWindowsPlatform = (-not $IsLinux) -and (-not $IsMacOS)
+    # 注：junction 是 Windows 特有机制，非 Windows 平台跳过此负面用例（Linux 无 junction，symlink 行为不同）。
+    # 平台判定用环境变量而不是 $IsLinux/$IsMacOS——那两个自动变量只在 PowerShell 7+ 存在，
+    # Windows PowerShell 5.1 + StrictMode 下直接引用会让整个门禁步骤失败。
+    $isWindowsPlatform = ($env:OS -eq 'Windows_NT')
     if ($isWindowsPlatform) {
         $evil = Join-Path $work 'evil'
         New-Item -ItemType Directory -Force -Path $evil | Out-Null
@@ -208,6 +220,8 @@ try {
         if ($r.ExitCode -ne 0) { throw "junction 场景应 exit 0（静默降级）" }
         if (@(Get-ChildItem -LiteralPath $evil -Recurse -Force -File).Count -gt 0) { throw 'junction 逃逸：纠错数据被写出目标项目' }
         Remove-Item -LiteralPath $feedbackDir -Force
+    } else {
+        Write-Host '[SKIPPED] 5b) junction 负面用例（非 Windows 平台；该回归只受 Windows 本机运行保护，仓库无 Windows CI）'
     }
 
     # 6) 写入边界：目标目录里除白名单外不得有新文件

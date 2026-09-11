@@ -1,4 +1,4 @@
-# collector path 归属与布尔恒真回归测试
+﻿# collector path 归属与布尔恒真回归测试
 # 目标：验证 catalog path 精确匹配逻辑，以及 [string] 套布尔表达式的陷阱防护
 
 $ErrorActionPreference = 'Continue'

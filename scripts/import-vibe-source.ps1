@@ -1,4 +1,8 @@
-﻿param(
+﻿# 历史引导工具（bootstrap）：从外部检出生成 sources/vibe-coding-skills 快照。
+# 三个源项目已于 2026-09-11 归档冷存并删除本地源目录，快照已存在时本脚本直接 throw，
+# 正常流程下不再重跑；如需灾备重建，先按 provenance/SOURCE-INVENTORY.json 的归档终态记录
+# 恢复对应源项目检出，再以 -SourceRoot 指向它。
+param(
     [Parameter(Mandatory = $true)]
     [string]$TargetRoot,
     [Parameter(Mandatory = $true)]

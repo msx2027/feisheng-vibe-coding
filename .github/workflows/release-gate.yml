@@ -19,6 +19,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# push 与 pull_request 双通道会重复触发同一提交；同 ref 的新触发取消排队/进行中的旧跑，省配额。
+concurrency:
+  group: release-gate-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
