@@ -248,6 +248,11 @@ When work materializes stage truth under `project-flow.md`, a named sub-stage is
 
 ## Internal Capability Providers
 
+> **有界 D1 路径注释**：此节将已接入的内部技能绑定为条件触发的能力提供者（provider）。
+> 这些绑定写在执行主干 owner（本文件）的内容中，而非路由表（`routes-index.md`）——
+> 这是设计意图：provider 是「独立技能显式调用」专用，由路由条件触发后加载，
+> 不替代路由系统，也不在路由 owner 里重复注册。加载条件（下表）是它们的唯一触发器。
+
 Admitted internal skills are bounded capability providers under this backbone. They return findings,
 options, or a proved diagnosis; they never select a route, set task depth, classify action effect,
 declare the failing layer, or write project truth, and loading one never replaces an owner in this

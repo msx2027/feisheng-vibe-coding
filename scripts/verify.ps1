@@ -362,6 +362,20 @@ try {
             $gateAdmitted = 0
             foreach ($record in @($gateCatalog.records)) {
                 $isAdmitted = $gateAccepted -contains [string]$record.status
+                # readiness 漂移校验：status 前缀必须与 readiness 一致
+                $statusStr = [string]$record.status
+                $readinessStr = [string]$record.readiness
+                $expectedReadiness = switch -Regex ($statusStr) {
+                    '^accepted-' { 'accepted' }
+                    '^retired-'  { 'retired' }
+                    '^compatibility-' { 'compatibility' }
+                    '^excluded-' { 'excluded' }
+                    '^control-plane$' { 'runtime' }
+                    default      { $null }
+                }
+                if (($null -ne $expectedReadiness) -and ($readinessStr -ne $expectedReadiness)) {
+                    $gateViolations += ($record.id + ' (readiness 漂移: status=' + $statusStr + ' 但 readiness=' + $readinessStr + '，期望=' + $expectedReadiness + ')')
+                }
                 $er = $evidenceById[[string]$record.id]
                 if ($isAdmitted) {
                     $gateAdmitted++

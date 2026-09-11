@@ -61,8 +61,8 @@
         {
           "path": "references/engineering-execution.md",
           "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
-          "patchedSha256": "5255fe09e91b26d41aaacc4aae119ad4014f7b86aa96d59ff78861df26d384e5",
-          "linesChanged": 68
+          "patchedSha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f",
+          "linesChanged": 74
         }
       ]
     }
