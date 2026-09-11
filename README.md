@@ -6,9 +6,9 @@
 
 ## 当前状态
 
-处于闭环后受控运行阶段（2026-09-11）：三个源项目均保留只读快照，源目录不会被本仓库修改。82 个技能已全量登记并完成能力定编：**52 条进入 runtime**（Sliver 控制面 + 13 个 Matt 工程原语 + 38 个 Vibe 能力），runtime bundle 共 **422 文件**；**23 条正式退役**（快照保留、可重走准入），7 条排除/兼容不在迁移面。纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿；Vibe Hook 适配器已按契约 v2 解锁**纠错信号采集**两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集 + Digest 消化标记）。
+处于闭环后受控运行阶段（2026-09-11）：三个源项目已归档冷存并删除本体，仓库内 `sources/` 快照为**唯一内容真源**。82 个技能已全量登记并完成能力定编：**52 条进入 runtime**（Sliver 控制面 + 13 个 Matt 工程原语 + 38 个 Vibe 能力），runtime bundle 共 **420 文件**；**23 条正式退役**（快照保留、可重走准入），7 条排除/兼容不在迁移面。纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿；Vibe Hook 适配器已按契约 v2 解锁**纠错信号采集**两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集 + Digest 消化标记）。**GitHub Actions CI 已全绿**（`ubuntu-latest`，静态门禁 12/12 + 发布候选包装配）。
 
-仍保持 `UNVERIFIED` 的：宿主 trust、逐技能行为质量（用一次验一次）、Hook 的宿主 fresh-session 冒烟（无仓库内留痕物）、沉淀消费技能（三件套）的接入，以及发布 CI（尚未配置远端）。
+仍保持 `UNVERIFIED` 的：宿主 trust、逐技能行为质量（用一次验一次）、Hook 的宿主 fresh-session 冒烟（无仓库内留痕物）、沉淀消费技能（三件套）的接入。
 
 迁移前必须通过 `provenance/` 中的来源、调用类型、许可证、owner 和运行时清单门禁；决策唯一写入点是 `provenance/SKILL-CLASSIFICATION.json`，`CANONICAL-CATALOG.json` 只能再生。
 
