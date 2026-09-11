@@ -21,6 +21,9 @@ Set-StrictMode -Version Latest
 $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $runner = Join-Path $repoRoot 'scripts/invoke-vibe-hook-adapter.ps1'
 
+# 跨平台：Linux CI 只有 pwsh，Windows 可能有 powershell（PS 5.1）或 pwsh（PS 7）
+$pwshExe = if (Get-Command 'pwsh' -ErrorAction SilentlyContinue) { 'pwsh' } else { 'powershell' }
+
 $work = Join-Path ([System.IO.Path]::GetTempPath()) ('feisheng-hook-test-' + [guid]::NewGuid().ToString('N'))
 $target = Join-Path $work 'target'
 New-Item -ItemType Directory -Force -Path (Join-Path $target '.git') | Out-Null
@@ -47,9 +50,9 @@ function Invoke-Runner {
     $ErrorActionPreference = 'Continue'
     try {
         if (-not [string]::IsNullOrWhiteSpace($HookInput)) {
-            $out = $HookInput | & powershell @args2 2>&1
+            $out = $HookInput | & $pwshExe @args2 2>&1
         } else {
-            $out = & powershell @args2 2>&1
+            $out = & $pwshExe @args2 2>&1
         }
     } finally {
         $ErrorActionPreference = $previousEap
@@ -148,7 +151,7 @@ try {
     # 5) 安装 / 卸载 / 回滚 + 契约篡改必须 fail-closed
     $installer = Join-Path $repoRoot 'scripts/install-vibe-hooks.ps1'
     $global:LASTEXITCODE = 0
-    $instOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot 2>&1
+    $instOut = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot 2>&1
     if ($LASTEXITCODE -ne 0) { throw "安装应成功，exit=$LASTEXITCODE" }
     if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'))) { throw '安装副本缺失' }
     if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/install-manifest.json'))) { throw '安装清单缺失' }
@@ -157,7 +160,7 @@ try {
     $global:LASTEXITCODE = 0
     $previousEap = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    try { & powershell -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot 2>&1 | Out-Null } finally { $ErrorActionPreference = $previousEap }
+    try { & $pwshExe -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot 2>&1 | Out-Null } finally { $ErrorActionPreference = $previousEap }
     if ($LASTEXITCODE -eq 0) { throw '重复安装未加 -Force 应失败' }
 
     # 契约篡改必须 fail-closed（status 翻回禁用态后，安装态 runner 拒绝工作）
@@ -170,12 +173,12 @@ try {
     $global:LASTEXITCODE = 0
     $previousEap = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    try { & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $tamperDir 'invoke-vibe-hook-adapter.ps1') -Mode Invoke -RepositoryRoot $repoRoot -Event SessionStart -TargetRoot $target 2>&1 | Out-Null } finally { $ErrorActionPreference = $previousEap }
+    try { & $pwshExe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $tamperDir 'invoke-vibe-hook-adapter.ps1') -Mode Invoke -RepositoryRoot $repoRoot -Event SessionStart -TargetRoot $target 2>&1 | Out-Null } finally { $ErrorActionPreference = $previousEap }
     if ($LASTEXITCODE -eq 0) { throw '篡改契约后 runner 必须拒绝工作' }
 
     # 卸载：注册清除 + 安装副本清除 + 经验数据保留
     $global:LASTEXITCODE = 0
-    $uninstOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot -Uninstall 2>&1
+    $uninstOut = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot -Uninstall 2>&1
     if ($LASTEXITCODE -ne 0) { throw "卸载应成功，exit=$LASTEXITCODE" }
     if (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks')) { throw '卸载后安装副本残留' }
     if (-not (Test-Path -LiteralPath $feedbackIndex)) { throw '卸载不得删除经验数据' }
