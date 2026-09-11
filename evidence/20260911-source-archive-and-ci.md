@@ -38,7 +38,7 @@
 ## 门禁状态
 
 - 本机：`verify.ps1 -IncludeHostEvidence -IncludePackage` = **14/14 PASS**（2026-09-11 19:37）
-- Fresh clone（待 push 后复验）：计划验证
+- Fresh clone：`verify.ps1 -IncludePackage` = **13/13 PASS**（2026-09-11 19:53，commit `00498fb`）
 
 ## CI 问题记录
 
