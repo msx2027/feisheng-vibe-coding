@@ -1,6 +1,6 @@
 ---
 name: test-automation
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `test-automation`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要加自动化测试、补 E2E / 回归、接入 Playwright / Vitest /...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `test-automation`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要加自动化测试、补 E2E / 回归、接入 Playwright / Vitest /...'
 user-invocable: false
 disable-model-invocation: true
 ---

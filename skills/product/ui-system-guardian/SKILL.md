@@ -1,6 +1,6 @@
 ---
 name: ui-system-guardian
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-system-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要初始化组件库、补 token、补基础组件 / variant、治理 UI 债务...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `ui-system-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要初始化组件库、补 token、补基础组件 / variant、治理 UI 债务...'
 user-invocable: false
 disable-model-invocation: true
 ---

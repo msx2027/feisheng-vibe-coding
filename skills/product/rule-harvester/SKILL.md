@@ -1,6 +1,6 @@
 ---
 name: rule-harvester
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `rule-harvester`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说"淘金规则""扫描规则放对没""把通用规则收敛进技能包""规则归位""清理过时规则""退役没用的宪...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `rule-harvester`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说"淘金规则""扫描规则放对没""把通用规则收敛进技能包""规则归位""清理过时规则""退役没用的宪...'
 user-invocable: false
 disable-model-invocation: true
 ---

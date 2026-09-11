@@ -1,6 +1,6 @@
 ---
 name: audit
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `audit`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 可访问性, 性能, 主题, 响应式, anti-pattern audit...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `audit`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 可访问性, 性能, 主题, 响应式, anti-pattern audit...'
 version: 2.1.1
 user-invocable: false
 argument-hint: "[area (feature, page, component...)]"
@@ -119,7 +119,7 @@ For each issue, document:
 - **Impact**: How it affects users
 - **WCAG/Standard**: Which standard it violates (if applicable)
 - **Recommendation**: How to fix it
-- **Suggested command**: Which command to use (prefer: /animate, /quieter, /shape, /optimize, /adapt, /clarify, /layout, /distill, /delight, /audit, /harden, /polish, /bolder, /typeset, /critique, /colorize, /overdrive)
+- **Suggested command**: Which command to use (prefer: /animate, /quieter, /optimize, /adapt, /clarify, /layout, /distill, /delight, /audit, /harden, /polish, /bolder, /typeset, /critique, /colorize, /overdrive)
 
 ### Patterns & Systemic Issues
 
@@ -138,7 +138,7 @@ List recommended commands in priority order (P0 first, then P1, then P2):
 1. **[P?] `/command-name`** — Brief description (specific context from audit findings)
 2. **[P?] `/command-name`** — Brief description (specific context)
 
-**Rules**: Only recommend commands from: /animate, /quieter, /shape, /optimize, /adapt, /clarify, /layout, /distill, /delight, /audit, /harden, /polish, /bolder, /typeset, /critique, /colorize, /overdrive. Map findings to the most appropriate command. End with `/polish` as the final step if any fixes were recommended.
+**Rules**: Only recommend commands from: /animate, /quieter, /optimize, /adapt, /clarify, /layout, /distill, /delight, /audit, /harden, /polish, /bolder, /typeset, /critique, /colorize, /overdrive. Map findings to the most appropriate command. End with `/polish` as the final step if any fixes were recommended.
 
 After presenting the summary, tell the user:
 

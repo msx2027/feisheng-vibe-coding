@@ -1,6 +1,6 @@
 ---
 name: bug-fixer
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `bug-fixer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说“这个功能坏了”“报错了”“不正常”，或用大白话描述故障现象（打开是白屏、一直转圈圈加载不出来...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `bug-fixer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说“这个功能坏了”“报错了”“不正常”，或用大白话描述故障现象（打开是白屏、一直转圈圈加载不出来...'
 user-invocable: false
 disable-model-invocation: true
 ---

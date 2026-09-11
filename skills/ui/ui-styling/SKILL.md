@@ -1,6 +1,6 @@
 ---
 name: ui-styling
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-styling`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use only when the user explicitly asks for 页面样式体系,...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `ui-styling`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use only when the user explicitly asks for 页面样式体系,...'
 argument-hint: "[component or layout]"
 license: MIT
 metadata:

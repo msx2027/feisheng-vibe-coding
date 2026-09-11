@@ -1,6 +1,6 @@
 ---
 name: design-brief-builder
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `design-brief-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要确定设计风格、视觉方向，或说''我想要高级感/简洁/现代''这类模糊描述时使用'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `design-brief-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说要确定设计风格、视觉方向，或说''我想要高级感/简洁/现代''这类模糊描述时使用'
 user-invocable: false
 disable-model-invocation: true
 ---

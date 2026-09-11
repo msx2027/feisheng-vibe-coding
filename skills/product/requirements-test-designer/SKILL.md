@@ -1,6 +1,6 @@
 ---
 name: requirements-test-designer
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `requirements-test-designer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要把 PRD、需求文档、用户故事、验收标准、接口说明或设计稿说明转成工程级测...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `requirements-test-designer`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户要把 PRD、需求文档、用户故事、验收标准、接口说明或设计稿说明转成工程级测...'
 user-invocable: false
 disable-model-invocation: true
 ---

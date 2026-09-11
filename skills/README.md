@@ -1,6 +1,6 @@
 # Skills
 
-技能按工程、产品、UI 和 checker 分组。正式目录（本目录下的一等内容）**只接入已通过
+技能按工程（engineering）、产品（product）、UI（ui）、事件沉淀（event）和 checker 分组。正式目录（本目录下的一等内容）**只接入已通过
 `provenance/CANONICAL-CATALOG.json` 与运行时门禁的技能**；其余技能保留在 `sources/` 快照里。
 
 「接受」（`readiness=accepted`）在本仓库意味着内容被**物理导入**到这里：投影门禁禁止把 `sources` 段

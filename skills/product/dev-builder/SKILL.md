@@ -1,6 +1,6 @@
 ---
 name: dev-builder
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `dev-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目开发计划就绪、用户说要开始写代码或继续开发下一个 Phase 时使用'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `dev-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当目标项目开发计划就绪、用户说要开始写代码或继续开发下一个 Phase 时使用'
 user-invocable: false
 disable-model-invocation: true
 ---

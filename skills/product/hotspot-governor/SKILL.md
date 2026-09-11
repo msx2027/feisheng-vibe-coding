@@ -1,6 +1,6 @@
 ---
 name: hotspot-governor
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `hotspot-governor`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说核心热区、大文件、超大组件、文件太长、模块越来越大、这一坨太大、看不懂、别往这里塞...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `hotspot-governor`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说核心热区、大文件、超大组件、文件太长、模块越来越大、这一坨太大、看不懂、别往这里塞...'
 user-invocable: false
 disable-model-invocation: true
 ---

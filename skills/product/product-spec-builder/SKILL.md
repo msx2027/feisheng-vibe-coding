@@ -1,6 +1,6 @@
 ---
 name: product-spec-builder
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `product-spec-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说想做一个产品、应用或工具，或者说要加功能、改需求、调 UI 时使用'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `product-spec-builder`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当用户说想做一个产品、应用或工具，或者说要加功能、改需求、调 UI 时使用'
 user-invocable: false
 disable-model-invocation: true
 ---

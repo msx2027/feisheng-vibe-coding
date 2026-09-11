@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `ui-ux-pro-max`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发。UI/UX design intelligence for explicit design enhancement requests: visual direction, color, typography, tokens, design system, UX quality, accessibility, layout, chart, and stack-specific UI guidance. Use only when the user asks for design enhancement or another Skill routes here; ordinary page design stays on the product/design main chain.'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `ui-ux-pro-max`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发。UI/UX design intelligence for explicit design enhancement requests: visual direction, color, typography, tokens, design system, UX quality, accessibility, layout, chart, and stack-specific UI guidance. Use only when the user asks for design enhancement or another Skill routes here; ordinary page design stays on the product/design main chain.'
 user-invocable: false
 disable-model-invocation: true
 ---

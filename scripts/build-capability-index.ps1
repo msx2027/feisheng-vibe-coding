@@ -177,16 +177,22 @@ if ($retired.Count -eq 0) {
 $lines += ''
 $lines += '## 功能重叠裁决（duplicateGroups）'
 $lines += ''
-$lines += '重叠能力已归属到唯一 owner；同一能力有多个技能时按下列规则分工。owner 均登记在 `provenance/OWNER-LEDGER.json`。'
+$lines += '重叠能力已归属到唯一 owner；同一能力有多个技能时按下列规则分工。owner 均登记在 `provenance/OWNER-LEDGER.json`。被标记**（已退役）**的成员不在 runtime 集合内、不可调用，其分工规则文案为退役前口径，仅供溯源。'
 $lines += ''
 $lines += '| 组 | owner | 成员/别名 | 分工规则 |'
 $lines += '|---|---|---|---|'
 $arbitrationGroups = @($catalog.duplicateGroups)
+$statusById = @{}
+foreach ($record in @($records)) { $statusById[[string]$record.id] = [string]$record.status }
 foreach ($group in (Sort-ByKeyOrdinal -Items @($arbitrationGroups) -Key id)) {
     $memberList = @()
     if ($group.PSObject.Properties.Name -contains 'members') { $memberList += @($group.members) }
     if ($group.PSObject.Properties.Name -contains 'aliases') { $memberList += @($group.aliases) }
-    $memberText = (@($memberList | ForEach-Object { '`' + $_ + '`' }) -join '、')
+    $memberText = (@($memberList | ForEach-Object {
+        $retiredMarker = ''
+        if ($statusById.ContainsKey([string]$_) -and $statusById[[string]$_].StartsWith('retired')) { $retiredMarker = '**（已退役）**' }
+        '`' + $_ + '`' + $retiredMarker
+    }) -join '、')
     $lines += ('| `' + $group.id + '` | `' + $group.owner + '` | ' + $memberText + ' | ' + $group.rule + ' |')
 }
 $lines += ''
@@ -205,5 +211,8 @@ $directory = Split-Path -Parent $resolvedOutput
 if (-not (Test-Path -LiteralPath $directory)) {
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
 }
-Set-Content -Encoding UTF8 -LiteralPath $resolvedOutput -Value $text
+# 确定性字节写出：LF 行尾、无 BOM（Windows 宿主的 Set-Content 会写 CRLF，跨宿主再生会产出
+# 整文件级 diff 噪音；本文件与 catalog 一样无 .gitattributes 归一覆盖）。
+$indexText = ($text -replace "`r`n", "`n").TrimEnd("`n") + "`n"
+[System.IO.File]::WriteAllText($resolvedOutput, $indexText, [System.Text.UTF8Encoding]::new($false))
 Write-Output ("Generated " + $resolvedOutput + " (" + $records.Count + " records)")

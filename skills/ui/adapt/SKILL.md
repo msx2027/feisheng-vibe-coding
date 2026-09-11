@@ -1,6 +1,6 @@
 ---
 name: adapt
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `adapt`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Adapt designs to work across screen sizes, devices, contexts,...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `adapt`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Adapt designs to work across screen sizes, devices, contexts,...'
 version: 2.1.1
 user-invocable: false
 argument-hint: "[target] [context (mobile, tablet, print...)]"

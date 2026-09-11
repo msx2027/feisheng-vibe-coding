@@ -92,6 +92,14 @@ verify: 15/15 steps passed
 对 `governance/sliver-core` + `skills` 全部 579 个文件按 22 个退役 id 扫描（剔除 `shape`/`implement`/`teach`/`triage`
 这类与英文单词同形的 id）：**残留悬空引用 0 处**。
 
+> **2026-09-12 更正**：本节「0 残留」结论对 `/shape` 命令形态不成立——同形词剔除把 `shape` 的
+> `/shape` 引用一并放行，实际残留 6 处（`skills/checker/audit/SKILL.md:122,141`、
+> `skills/checker/critique/SKILL.md:162,227`、`skills/ui/impeccable/reference/craft.md:7,11`）。
+> 已按本文件第 2/3 节同一机制修复（登记 `entry-gate-description-retarget` 补丁 + 改写正文），
+> 并把扫描口径固化为门禁 `scripts/validate-retired-references.ps1`（全量 retired id 的 `/id`
+> 命令形态、屏蔽 `sources/` 快照路径引用，不再依赖人工同形词判断）。见
+> `evidence/20260912-chain-audit-and-closure.md`。
+
 ### 4.4 宿主侧生效
 
 `install-runtime-projection.ps1 -TargetHost Shared -Force` → `status=INSTALLED, fileCount=422, validated=true`；

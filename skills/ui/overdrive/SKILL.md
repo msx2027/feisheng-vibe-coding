@@ -1,6 +1,6 @@
 ---
 name: overdrive
-description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `overdrive`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 惊艳, 高阶动效, wow, impress, go...'
+description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `overdrive`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；Use when the user wants 惊艳, 高阶动效, wow, impress, go...'
 version: 2.1.1
 user-invocable: false
 argument-hint: "[target]"
