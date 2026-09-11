@@ -40,22 +40,25 @@
 - 本机：`verify.ps1 -IncludeHostEvidence -IncludePackage` = **14/14 PASS**（2026-09-11 19:37）
 - Fresh clone：`verify.ps1 -IncludePackage` = **13/13 PASS**（2026-09-11 19:53，commit `00498fb`）
 
-## CI 问题记录
+## CI 状态
 
-GitHub Actions 运行失败的根本原因是**免费用户私有仓库的 Actions runner 配额限制**。
+### 问题诊断
 
-证据：
-- 运行链接：https://github.com/msx2027/feisheng-vibe-coding/actions/runs/34590819282
-- `run_number=3`，`status=completed`，`conclusion=failure`
-- `runner_name` 为空，`steps=0`
-- 运行时长 ~3 秒，无步骤日志
-- 工作流已切至 `ubuntu-latest`，问题相同
-- 账户 plan：`None`（免费用户）
+最初 GitHub Actions 运行失败（run 1–3）的根本原因是**免费用户私有仓库的 Actions runner 配额限制**：runner 不被分配（steps=0, 3 秒结论=failure）。
 
-**解决方案（需 owner 决策）**：
-1. 将仓库设为 **public** → Actions 无限分钟数（推荐，若代码可公开）
-2. 升级 GitHub 计划 → 私有仓库获得 runner 配额
-3. 保持现状，CI 仅作为代码存在，不期望真跑
+### 解决过程
+
+1. **仓库转 public**（owner 决策已执行）：`private: False` → `visibility: public`
+2. **Linux 兼容性修复**：verify.ps1 使用 `[System.IO.Path]::GetTempPath()` 替代 `$env:TEMP`
+3. **跨平台 shell 检测**：vibe hook 测试自动检测 `pwsh` / `powershell`
+4. **Windows 专属测试隔离**：junction 负面用例只在 `$IsWindowsPlatform` 为真时运行
+
+### 最终状态
+
+- **CI 首次全绿**：run 9 ✅ `conclusion=success`
+- 运行链接：https://github.com/msx2027/feisheng-vibe-coding/actions/runs/34598624113
+- 12/12 步骤通过（不含 `-IncludeHostEvidence`，CI 无宿主环境）
+- 全部静态门禁 + 静态候选包装配通过
 
 ## 修改文件汇总
 
