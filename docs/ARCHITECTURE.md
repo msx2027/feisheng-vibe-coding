@@ -8,7 +8,7 @@
 
 ### route-catalog
 
-拥有主路由、operation、条件 lens 和 reference 加载映射。Sliver 的 route catalog 是迁移输入，统一仓库中的 canonical catalog 将成为唯一执行真源。
+拥有主路由、operation、条件 lens 和 reference 加载映射。路由真源是双文件两层：`governance/sliver-core/references/routes-index.md` 拥有映射语义（主路由/operation/lens/reference 加载）；技能级绑定 owner 由 `provenance/SKILL-CLASSIFICATION.json` 的 routeBinding 指认，`scripts/validate-route-bindings.ps1` 强制 admitted 技能在绑定 owner 中唯一命中。`provenance/CANONICAL-CATALOG.json` 是再生投影，不是路由真源。
 
 ### skill-catalog
 
@@ -16,7 +16,7 @@
 
 ### target-truth
 
-拥有目标项目的需求、计划、术语、任务状态、接受证据和写入权限。`.vibe-docs.json`、issue tracker 和其他文档索引只能作为适配器或投影，不能形成并列 authority。
+拥有目标项目的需求、计划、术语、任务状态、接受证据和写入权限。`.vibe-docs.json`、issue tracker 和其他文档索引只能作为适配器或投影，不能形成并列 authority。本仓库内 target-truth 只持有 schema 契约（`docs/target-truth-schema.json`），真源数据属目标项目本身。
 
 ### runtime-projection
 
@@ -28,7 +28,7 @@
 项目治理控制面
   ├─ Sliver：路由、深度、风险、授权、测试、真源、验收
   ├─ 工程原语：Matt 的 TDD、调试、领域建模、模块设计、review
-  ├─ 产品/UI：Vibe 的需求、设计、UI、文档和专项 checker
+  ├─ 产品/UI/事件：Vibe 的需求、设计、UI、文档、事件沉淀和专项 checker
   └─ 宿主适配：Codex、Claude、插件、Hook、镜像和发布清单
 ```
 

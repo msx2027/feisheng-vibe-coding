@@ -14,3 +14,6 @@ adapters/*/generated/
 
 # 宿主 smoke 脚手架（测试产物，总目标完成后清理）
 _smoke/
+
+# 宿主工具自动生成的工作目录（空 memory/）
+.workbuddy-ai/

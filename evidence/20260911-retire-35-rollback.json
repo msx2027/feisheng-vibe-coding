@@ -1,0 +1,182 @@
+{
+ "schema": "feisheng-host-link-retirement-rollback/v1",
+ "date": "2026-09-11",
+ "note": "final 35 source-repo links removed after all 35 skills adjudicated (13 admitted, 22 retired)",
+ "deleted": [
+  {
+   "name": "ask-matt",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\ask-matt"
+  },
+  {
+   "name": "beginner-flow-guide",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\beginner-flow-guide"
+  },
+  {
+   "name": "clarify",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\clarify"
+  },
+  {
+   "name": "codebase-memory-scout",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\codebase-memory-scout"
+  },
+  {
+   "name": "design-maker",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-maker"
+  },
+  {
+   "name": "evolution-engine",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\evolution-engine"
+  },
+  {
+   "name": "experience-elevator",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\experience-elevator"
+  },
+  {
+   "name": "feedback-writer",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\feedback-writer"
+  },
+  {
+   "name": "git-guardrails-claude-code",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\git-guardrails-claude-code"
+  },
+  {
+   "name": "grill-me",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\grill-me"
+  },
+  {
+   "name": "grill-with-docs",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\grill-with-docs"
+  },
+  {
+   "name": "grilling",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\grilling"
+  },
+  {
+   "name": "handoff",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\handoff"
+  },
+  {
+   "name": "implement",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\implement"
+  },
+  {
+   "name": "improve-codebase-architecture",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\improve-codebase-architecture"
+  },
+  {
+   "name": "migrate-to-shoehorn",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\migrate-to-shoehorn"
+  },
+  {
+   "name": "prototype",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\prototype"
+  },
+  {
+   "name": "research",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\research"
+  },
+  {
+   "name": "resolving-merge-conflicts",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\resolving-merge-conflicts"
+  },
+  {
+   "name": "scaffold-exercises",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\scaffold-exercises"
+  },
+  {
+   "name": "setup-matt-pocock-skills",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\setup-matt-pocock-skills"
+  },
+  {
+   "name": "setup-pre-commit",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\setup-pre-commit"
+  },
+  {
+   "name": "shape",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\shape"
+  },
+  {
+   "name": "skill-builder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\skill-builder"
+  },
+  {
+   "name": "target-constitution-setup",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\target-constitution-setup"
+  },
+  {
+   "name": "target-runtime-setup",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\target-runtime-setup"
+  },
+  {
+   "name": "teach",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\teach"
+  },
+  {
+   "name": "to-questionnaire",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\to-questionnaire"
+  },
+  {
+   "name": "to-spec",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\to-spec"
+  },
+  {
+   "name": "to-tickets",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\to-tickets"
+  },
+  {
+   "name": "triage",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\triage"
+  },
+  {
+   "name": "wait-what",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\wait-what"
+  },
+  {
+   "name": "wayfinder",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\wayfinder"
+  },
+  {
+   "name": "wizard",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\wizard"
+  },
+  {
+   "name": "writing-for-agents",
+   "kind": "SymbolicLink",
+   "target": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\writing-for-agents"
+  }
+ ]
+}

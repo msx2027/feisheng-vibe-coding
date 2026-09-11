@@ -1,0 +1,151 @@
+{
+ "schema": "feisheng-host-link-retirement-rollack/v1",
+ "date": "2026-09-11",
+ "deleted": [
+  {
+   "name": "adapt",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\adapt"
+  },
+  {
+   "name": "animate",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\animate"
+  },
+  {
+   "name": "architecture-foundation",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\architecture-foundation"
+  },
+  {
+   "name": "bolder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\bolder"
+  },
+  {
+   "name": "brand",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\brand"
+  },
+  {
+   "name": "bug-fixer",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\bug-fixer"
+  },
+  {
+   "name": "colorize",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\colorize"
+  },
+  {
+   "name": "delight",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\delight"
+  },
+  {
+   "name": "design-brief-builder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-brief-builder"
+  },
+  {
+   "name": "design-system",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-system"
+  },
+  {
+   "name": "dev-builder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\dev-builder"
+  },
+  {
+   "name": "dev-planner",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\dev-planner"
+  },
+  {
+   "name": "distill",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\distill"
+  },
+  {
+   "name": "doc-sync-guardian",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\doc-sync-guardian"
+  },
+  {
+   "name": "hotspot-governor",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\hotspot-governor"
+  },
+  {
+   "name": "impeccable",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\impeccable"
+  },
+  {
+   "name": "layout",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\layout"
+  },
+  {
+   "name": "overdrive",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\overdrive"
+  },
+  {
+   "name": "polish",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\polish"
+  },
+  {
+   "name": "product-spec-builder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\product-spec-builder"
+  },
+  {
+   "name": "quieter",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\quieter"
+  },
+  {
+   "name": "release-builder",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\release-builder"
+  },
+  {
+   "name": "requirements-test-designer",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\requirements-test-designer"
+  },
+  {
+   "name": "rule-harvester",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\rule-harvester"
+  },
+  {
+   "name": "test-automation",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\test-automation"
+  },
+  {
+   "name": "typeset",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\typeset"
+  },
+  {
+   "name": "ui-styling",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-styling"
+  },
+  {
+   "name": "ui-system-guardian",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-system-guardian"
+  },
+  {
+   "name": "ui-ux-pro-max",
+   "kind": "Junction",
+   "target": "F:\\skiils工具\\vibe-coding-skills\\skills\\ui-ux-pro-max"
+  }
+ ]
+}

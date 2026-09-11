@@ -6,7 +6,7 @@
 
 ## 当前状态
 
-处于闭环后受控运行阶段（2026-09-11）：三个源项目已归档冷存并删除本体，仓库内 `sources/` 快照为**唯一内容真源**。82 个技能已全量登记并完成能力定编：**52 条进入 runtime**（Sliver 控制面 + 13 个 Matt 工程原语 + 38 个 Vibe 能力），runtime bundle 共 **420 文件**；**23 条正式退役**（快照保留、可重走准入），7 条排除/兼容不在迁移面。纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿；Vibe Hook 适配器已按契约 v2 解锁**纠错信号采集**两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集 + Digest 消化标记）。**GitHub Actions CI 已全绿**（`ubuntu-latest`，静态门禁 12/12 + 发布候选包装配）。
+处于闭环后受控运行阶段（2026-09-11）：三个源项目已归档冷存并删除本体，仓库内 `sources/` 快照为**唯一内容真源**。82 个技能已全量登记并完成能力定编：**52 条进入 runtime**（Sliver 控制面 + 13 个 Matt 条目 + 38 个 Vibe 能力），runtime bundle 共 **420 文件**；**23 条正式退役**（快照保留、可重走准入），7 条排除/兼容不在迁移面。纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿；Vibe Hook 适配器已按契约 v2 解锁**纠错信号采集**两事件（SessionStart 只读提醒 / UserPromptSubmit 纠错采集 + Digest 消化标记）。**GitHub Actions CI 已全绿**（`ubuntu-latest`，verify.ps1 静态门禁 + 发布候选包装配；门禁步数随演进更新，口径见 docs/HANDOFF-NEXT.md）。
 
 仍保持 `UNVERIFIED` 的：宿主 trust、逐技能行为质量（用一次验一次）、Hook 的宿主 fresh-session 冒烟（无仓库内留痕物）、沉淀消费技能（三件套）的接入。
 
@@ -20,6 +20,8 @@
 - `runtime-projection`：面向 Codex、Claude 等宿主生成的运行时镜像和安装清单。
 
 下游 README、插件清单、镜像和生成 JSON 都只能是投影，不能反向成为 owner。
+
+以上是四个核心 owner；`provenance/OWNER-LEDGER.json` 另登记 9 个仲裁/登记类 owner（local-patch-registry、host-evidence、validation-gate、bug-rescue、ui-quality、context-handoff、doc-authoring、architecture、git-release）。target-truth 在本仓库内只持有 schema 契约（`docs/target-truth-schema.json`），真源数据属目标项目。
 
 ## 设计原则
 

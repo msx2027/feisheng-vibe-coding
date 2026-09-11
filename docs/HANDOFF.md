@@ -4,6 +4,7 @@
 > 它包含：直接可执行的下一步任务（功能重叠裁决补全）、已具备的定义（物理导入+门禁策略化 / Hook 解锁）、
 > 82 个技能的构成真相、本会话踩过的 14 个坑、入口速查与不可突破的边界。
 > **冲突时以 `HANDOFF-NEXT.md` 为准。**
+> 路径迁移注记（2026-09-12）：文中 `scripts/smoke-claude-skill-discovery.ps1`、`adapters/codex/agents/openai.yaml`、`docs/runtime-loading-policy.md` 等为历史布局；适配器契约现于 `governance/sliver-core/packaging/`，冒烟脚本现为 `scripts/smoke-host-skill-discovery.ps1`（以 HANDOFF-NEXT §12 为准）。
 
 更新时间：2026-09-10（第三轮：分类数据化 + 能力索引 + 单入口验证 + 写权限门禁）
 
@@ -234,7 +235,7 @@ Claude 不读 `~/.codex/skills`。→ 建议清掉 `~/.codex/skills` 里与 `r1`
 | **2 Vibe docs 补齐** | 补入 3 个 md（含被 `AGENTS.md`/README **引为权威**的 `docs/runtime-loading-policy.md`）；快照 550 → **553**，导入记录与基线同步，verify 8/8 |
 
 证据：`evidence/20260910-host-duplicate-cleanup.md`、`evidence/20260910-vibe-docs-import.md`。
-回滚：宿主 junction 映射见 `_smoke/r0-junction-removal.json`。
+回滚：宿主 junction 映射见 `evidence/20260910-r0-junction-removal.json`（2026-09-12 自 _smoke 迁入）。
 
 ## 当前技能状态（CANONICAL-CATALOG.json）
 
