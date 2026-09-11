@@ -91,7 +91,7 @@
 | 2 工程原语 | ✅ 完成（tdd/code-review/codebase-design/diagnosing-bugs/domain-modeling 已接入；7 个 adapter-candidate 未接） |
 | 3 宿主适配 | ✅ 完成（中性安装、D2/D3 实测转绿、Hook 纠错信号采集已启用 + Digest 消化标记；trust 与 Hook fresh-session 冒烟仍 UNVERIFIED） |
 | 4 产品/UI/第三方 | ✅ 主体完成（Vibe 46 条已接 33：checker 4 + product 13 + ui 16；剩 13 条按 §14 原因留待后续） |
-| 5 灰度退役 | 🟡 进行中（12 个旧链接已退役：4 重名 + 29 双重曝光；剩 **35 个**服务未接入技能，待 owner 对 35 技能逐个「接入或退役」后清零；源项目本体去留见 9.9） |
+| 5 灰度退役 | ✅ 完成（源仓库链接 64 个全部退役：4 重名 + 29 双重曝光 + 35 能力定编批；35 技能裁决 = **13 接入 / 22 退役**，三源链接清零，共享根 176→112；见 §9.9 与 `evidence/20260911-capability-finalization.md`） |
 
 ---
 
@@ -226,7 +226,9 @@ model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留�
 
 - 宿主 **trust** —— `UNVERIFIED`；Hook：**纠错信号采集面已启用**（SessionStart 待消化提醒 + UserPromptSubmit 采集 + `-Mode Digest` 消化标记，见 9.6/9.8），但宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`；治理门禁事件有意禁用
 - ~~纯自然语言自动触发（D2）：未达成~~ **已转绿（2026-09-11）**：owner 批准更新宿主全局路由块后，纯中文需求首动作即调用统一入口（证据见第 1 节注与 `evidence/20260911-d2-green-t4-and-retirement.md`）
-- `-p` 会话中技能**描述**是否进入模型决策上下文 —— UNVERIFIED（模型自述没有；无宿主日志可证）
+- ~~`-p` 会话中技能**描述**是否进入模型决策上下文~~ **已转绿（2026-09-11，§9.10）**：
+  `codex debug prompt-input` 完整输出显示包内 53 条技能描述逐条进入模型可见输入（YAML 引号转义归一后 53/53 全等；
+  根入口 description 674 字符未被截断）。证据：`evidence/20260911-codex-skill-description-context.md`
 - ~~发布 CI **从未在真实 GitHub runner 跑过**（本地已等价复现 fresh clone 情形）~~ **已转绿（2026-09-11）**：
   仓库已挂远端 `msx2027/feisheng-vibe-coding`（private），`.github/workflows/release-gate.yml` 已真实运行；
   运行链接与结论见 `evidence/20260911-source-archive-and-ci.md`。CI 按设计**不带 `-IncludeHostEvidence`**（无宿主环境）
@@ -261,8 +263,9 @@ model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留�
 
 - ✅ 已修（`507a07f`）：入口 SKILL.md 增加「启动动作」——第一条指令指向 `governance/sliver-core/SKILL.md` 的
   Startup Protocol，并禁止跳过控制面直接作答。对「技能已被引用」的一切路径生效。
-- ⏸️ 未动（等 owner）：入口 description 已符合触发面最佳实践（中英文触发语句都在），但探测显示 `-p` 会话里
-  描述是否在决策时可见本身 UNVERIFIED，盲目改描述无法验证，不折腾。
+- ✅ 已闭环（`evidence/20260911-codex-skill-description-context.md`）：入口 description 已符合触发面最佳实践
+  （中英文触发语句都在）；原先无法验证的「`-p` 会话里描述是否在决策时可见」已用 `codex debug prompt-input` 实测转绿
+  （53/53 全等，见 §9.10），因此维持现有 description，不做无依据改写。
 - ⏸️ owner 决定项：更新 `~/.claude/CLAUDE.md`（及镜像 `C:\Users\MSX\AGENTS.md`）的「Skills 路由规则」块，
   把统一入口 `feisheng-vibe-coding` 立为项目级请求的第一路由——这是 D2 转绿的关键一步（建议文案已给 owner）。
 
@@ -298,7 +301,9 @@ owner 授权「解锁，做全套安全门」后完成（`6311bc9`，见 `eviden
 - ✅ 本批文档一致性：交接文档数字、能力索引、 packaging 策略同步
 - ⏸️ `_smoke/` 清理：等 owner 真人测试通过后统一删（探测脚手架可能复用）
 - ⏸️ 新接入技能 frontmatter 描述里的旧入口名（`vibe-coding-skills`）：委派不受影响；改名需动导入保真机制，暂缓
-- ⏸️ 共享根其余 ~~~66 个~~ **64 个**源仓库链接退役：阶段 5，需 owner 口径（精确清点见 `scripts/audit-host-legacy-links.ps1` 输出，快照 `_smoke/host-legacy-links-20260911.json`）
+- ✅ 共享根其余 ~~~66 个~~ **64 个**源仓库链接退役：阶段 5 **已完成 2026-09-11**（29 双重曝光 + 35 能力定编批），
+  三源链接清零、共享根 176→112；回滚记录 `_smoke/retire-{29,35}-rollback.json`；本次复核见 §9.10
+- ⏸️ 退役后**正文残留引用**：已接入技能/文档正文仍有 25 处指向已退役能力的引用（13 文件），待 owner 定 A/B/C（见 §9.10）
 - 若 T2 推翻了形态决策，回头更新第 6 节决策日志（标注被推翻的原因）
 
 ### 9.8 GA【已完成 2026-09-11】**治理对齐批**（6 子 Agent 交叉复核后的五项修复）
@@ -341,7 +346,8 @@ GA 批后遗留（按优先级）：
 - 宿主 trust —— `UNVERIFIED`
 - 逐技能行为质量 —— `UNVERIFIED`（用一次验一次）
 - Hook fresh-session 冒烟 —— `UNVERIFIED`（无仓库内留痕物）
-- `-p` 会话中技能描述是否进入模型决策上下文 —— `UNVERIFIED`
+- ~~`-p` 会话中技能描述是否进入模型决策上下文~~ **已转绿（2026-09-11）**：53/53 逐条全等，见 §9.10；
+  证据 `evidence/20260911-codex-skill-description-context.md`
 终审新增 P3：`packaging/runtime-projection.json` 的 `hostDiscovery` 段已加"历史时点快照"标注（描述的是退役前的
 sliver 顶层条目时代）；`contract.json` status id 字面含 "sedimentation"（有意保留，改 id 需同步历史证据引用面）。
 
@@ -366,6 +372,55 @@ owner 审计后拍板：29 个「已接入统一包但旧链接还在」的链�
    批次证据：`evidence/20260911-source-archive-and-ci.md`。
    `sources/` 仓库内快照**永远保留**（未来接入唯一内容源，import 脚本只读快照，
    `import-vibe-skills.ps1`、`import-matt-source.ps1`）。
+
+### 9.10 V【已完成 2026-09-11】**owner 追问复核：技能描述可见性 + 35 项退役现状**
+
+owner 提出两件事：①验证 `-p` 会话里技能描述是否进入模型决策上下文；②确认剩余 35 个源仓库链接
+「确无价值」后清理。复核结果如下（全部为本次新鲜证据）：
+
+**① 描述可见性 —— 已转绿**
+
+- 命令：仓库根 `codex debug prompt-input '验证技能描述是否进入模型上下文'`（codex-cli 0.154.0）
+- `### Available skills` 共 **194 条**，其中本包 **53 条** = 根入口 1 + 控制面 1 + `skills/` 51，
+  与 CANONICAL-CATALOG 的「52 runtime + 1 控制面」一致
+- 逐条与宿主 SKILL.md frontmatter `description` 比对：**YAML 引号转义归一后 53/53 全等、0 处不等**；
+  根入口 description **674 字符完整出现**（源 676），不存在截断
+- **推翻首版记录**：早前「每条描述被截断到 30–40 字、宿主有长度限制」的判断来自被截断的工具结果文件
+  （32,826 字节，JSON 中途断开），不是宿主行为
+- 证据：`evidence/20260911-codex-skill-description-context.md`；原始输出 `_smoke/codex-prompt-input-20260911.json`；
+  派生对账 `_smoke/codex-skill-description-compare-20260911.json`
+
+**② 35 项退役现状 —— 已执行，但「35 个全都无价值」的前提不成立**
+
+- 事实澄清：35 个链接对应的能力**并非全部无价值**。能力定批评次已把 35 个技能裁决为
+  **13 个接入（10 个批次 A + 事件三件套）+ 22 个退役**；链接无论如何都要清零，因为三源项目本体已归档删除，
+  留着就是死链接（不影响已接入能力，但那 13 个能力的来源已转为统一包内副本）。
+- 本次复核（新鲜证据）：共享根 112 条 = 83 链接 + 29 目录，**断链 0、指向三源仓库的链接 0**；
+  `verify.ps1 -IncludeHostEvidence -IncludePackage` **14/14 全过**（本机重跑）。
+- 22 个退役技能的理由分类（逐条带证据指针在 `provenance/SKILL-CLASSIFICATION.json` 的 `reasonsById`）：
+  matt adapter/流程层 7（implement、to-spec、to-tickets、triage、wayfinder、improve-codebase-architecture、
+  setup-matt-pocock-skills）、matt 小工具 5（grill-me、grill-with-docs、teach、to-questionnaire、wait-what）、
+  matt 原语 3（git-guardrails-claude-code、migrate-to-shoehorn、scaffold-exercises）、
+  vibe 产品/checker 4（skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout）、
+  vibe 未审查 2（beginner-flow-guide、shape）、vibe checker 1（vibe-code-review）。
+  需要时可从 `sources/` 快照捞回。
+
+**③ 本次新发现（未修，待 owner 定）**
+
+退役只清了共享根链接，**已接入技能/文档正文里仍留有 25 处指向已退役能力的引用**（13 个文件）：
+
+| 残留类型 | 例 | 处数 |
+|---|---|---|
+| 指向包内不存在的路径/命令 | `bug-fixer` 依赖清单的 `skills/beginner-flow-guide/SKILL.md`；`code-review` 的 `/setup-matt-pocock-skills`；`diagnosing-bugs` 的 `/improve-codebase-architecture`；`evolution-engine` 的 `skill-builder`；`dev-builder` 的 `target-runtime-setup` | 5 |
+| 软引用（多带 `rg` 降级话术） | 6 文件 13 处 `codebase-memory-scout`（bug-fixer、dev-builder、dev-planner、hotspot-governor、test-automation、architecture-foundation） | 13 |
+| 模板 owner 字段 | dev-builder 脚手架 `_vibe-docs.json.template` / `文档索引.md.template` 的 `owner: target-constitution-setup`（3 文件 5 处） | 5 |
+| 文档陈旧清单 | `skills/README.md` 的「正式接入 / 明确未接入」两段（已被本轮修正） | 2（本轮已修） |
+
+三条可选路径（未获决定前不改 vendored 内容）：
+
+- **A** 登记 `LOCAL-PATCHES.json` 本地补丁，逐条改写文本（动 vendored 内容 → 需重录 provenance 基线 + 门禁复跑）；
+- **B** 沿用 §9.7 先例：文本不动，只加清点门禁 + 已知清单（保证不再新增、不静默漂移）；
+- **C** 不动，仅留档（当前状态）。
 
 ---
 
