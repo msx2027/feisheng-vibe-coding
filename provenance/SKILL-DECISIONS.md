@@ -38,7 +38,7 @@ ui-ux-pro-max、impeccable、design-system、ui-styling、brand、layout、polis
 - `architecture-foundation`、`target-constitution-setup`、`target-runtime-setup`：分别映射到 Sliver 的技术选型、项目宪法、环境启动，但保留 Vibe 的目标项目工具实现。
 - `product-spec-builder`、`design-brief-builder`、`dev-planner`、`dev-builder`：作为产品/设计/阶段交付模块，不能写第二份项目真源。
 - `bug-fixer`、`code-review`、`audit`、`requirements-test-designer`、`release-builder`：作为专项 checker 或 profile，不得自行改变 route、depth 或 truth。
-- `experience-elevator`、`feedback-writer`、`evolution-engine`：保留 event-only 语义，不开放普通自然语言直接调用。
+- `experience-elevator`、`feedback-writer`、`evolution-engine`：保留 event-only 语义，不开放普通自然语言直接调用。（2026-09-11 能力定批评次更新：三者已以轻量形态接入 runtime——方法学层随批、tools/*.mjs 自动化层与 .vibe-docs.json 基础设施留快照；仅显式/事件调用，见 contract.json enablementScope 与各技能 RUNTIME-NOTES.md。）
 - UI 技能先保持独立来源和 canonical id；只新增组合 profile，不立即物理合并。
 
 ## Matt

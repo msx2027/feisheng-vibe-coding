@@ -2,13 +2,14 @@
   "schema": "feisheng-vibe-hook-adapter/v2",
   "owner": "runtime-projection",
   "status": "enabled-experience-sedimentation-v1",
-  "enablementScope": "correction-signal CAPTURE only: SessionStart reminder + UserPromptSubmit capture + runner -Mode Digest digestion markers. The digestion/consumption skills (experience-elevator / evolution-engine / feedback-writer) are NOT admitted to runtime; claims must not describe this as a closed sedimentation loop.",
+  "enablementScope": "correction-signal capture + lightweight digestion: SessionStart pending reminder + UserPromptSubmit capture + runner -Mode Digest markers. The consumption skills (experience-elevator / evolution-engine / feedback-writer) were admitted 2026-09-11 in LIGHTWEIGHT form (methodology only; their tools/*.mjs automation and .vibe-docs.json infrastructure stay in snapshot) and are invoked explicitly, not auto-triggered by hooks. Do not claim a fully automated sedimentation loop.",
   "digestion": {
     "mode": "Digest",
     "markerStore": "target-repository/.feisheng/vibe-hook-state/<dedupKey>.digested",
     "dedupKeyValidation": "strict 40-char lowercase hex, otherwise the entry is counted as unmarkable (prevents path injection via crafted index lines)",
     "semantics": "maintenance command invoked after a session digests the signals; SessionStart then reminds only about pending (undigested) entries",
-    "consumptionSkillsAdmitted": false
+    "consumptionSkillsAdmitted": true,
+    "consumptionForm": "lightweight (methodology only; tools automation and target-project infrastructure stay in snapshot; auto-trigger wiring pending)"
   },
   "ownerAuthorization": "2026-09-11 owner approved unlock with full safety gates (对话确认「解锁，做全套安全门」)",
   "source": {

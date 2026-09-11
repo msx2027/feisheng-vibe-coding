@@ -4,7 +4,7 @@
 > 分类唯一真源是 `provenance/SKILL-CLASSIFICATION.json`；改分类 = 改该文件后重生成 catalog。
 > 新鲜度校验：`pwsh scripts/verify.ps1`。
 
-统计：共 **82** 项来源技能 —— 可用 52、待启用 7、来源专用 15、阻塞 0、兼容/排除 7、已退役 1。
+统计：共 **82** 项来源技能 —— 可用 52、待启用 0、来源专用 0、阻塞 0、兼容/排除 7、已退役 23。
 
 ## 现在可用（进入 runtime 静态投影）
 
@@ -78,28 +78,11 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 
 | id | 来源 | 域 | 原因 |
 |---|---|---|---|
-| `implement` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `improve-codebase-architecture` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `setup-matt-pocock-skills` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `to-spec` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `to-tickets` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `triage` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
-| `wayfinder` | mattpocock-skills | adapter | 已审查、待适配器与行为 smoke；未进入 runtime |
 
 ## 来源专用（未启用）
 
 按域分组列出；`reason` 为未启用的统一原因。
 
-- **checker**（1）：`vibe-code-review`
-  - 原因：专项 checker；Sliver 拥有验收门，未进入 runtime
-- **primitive**（3）：`git-guardrails-claude-code`、`migrate-to-shoehorn`、`scaffold-exercises`
-  - 原因：来源专用工程原语；未验收
-- **product-or-checker**（4）：`codebase-memory-scout`、`skill-builder`、`target-constitution-setup`、`target-runtime-setup`
-  - 原因：产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke
-- **unreviewed**（2）：`beginner-flow-guide`、`shape`
-  - 原因：尚未完成语义审查
-- **user-tool**（5）：`grill-me`、`grill-with-docs`、`teach`、`to-questionnaire`、`wait-what`
-  - 原因：用户显式工具；未做宿主行为 smoke
 
 ## 阻塞
 
@@ -121,7 +104,29 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 
 | id | 来源 | 状态 | 原因 |
 |---|---|---|---|
+| `beginner-flow-guide` | vibe-coding-skills | retired-unreviewed | vibe 总入口的新手路由器=第二路由器，与 route-catalog 唯一路由 owner 正面冲突；总入口已退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `codebase-memory-scout` | vibe-coding-skills | retired-product-or-checker | 二梯队默认退役：vibe 主链附属侦查层，依赖 codebase-memory-mcp/.vibe-docs.json 体系；需要时从快照捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `git-guardrails-claude-code` | mattpocock-skills | retired-primitive | 宿主配置型技能（教 AI 改写宿主 settings.json 配 hook），写权限与本项目 hook-writer 门禁冲突；护栏职能由本项目自身 hook 体系承担（记为未来扩展参考）（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `grill-me` | mattpocock-skills | retired-user-tool | grilling 的一行别名包装，无独立内容；grilling 已接入，控制面直接路由（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `grill-with-docs` | mattpocock-skills | retired-user-tool | grilling+domain-modeling 组合别名，无独立内容（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `implement` | mattpocock-skills | retired-adapter | 15 行薄编排（调 tdd+code-review+提交），职能被已接入的 dev-builder 与控制面开发执行路由覆盖（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `improve-codebase-architecture` | mattpocock-skills | retired-adapter | 二梯队默认退役：职能独特但依赖 CONTEXT.md/ADR 约定与 grilling；需要时从快照捞回重走准入（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `migrate-to-shoehorn` | mattpocock-skills | retired-primitive | 整个技能绑定 Matt 私有 npm 包 @total-typescript/shoehorn，不采用该依赖则零价值（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `scaffold-exercises` | mattpocock-skills | retired-primitive | 强绑定 ai-hero 课程平台专有 CLI 与目录约定，脱离该平台即失效（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `setup-matt-pocock-skills` | mattpocock-skills | retired-adapter | 纯元技能（为 matt 族铺 tracker/label 配置），控制面自身即配置层；其下游 to-spec/to-tickets/triage/wayfinder 一并退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `shape` | vibe-coding-skills | retired-unreviewed | 与已接入的 design-brief-builder 高度同构（同一生态位两版），留已接者（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `skill-builder` | vibe-coding-skills | retired-product-or-checker | vibe 包内部的建技能机制，与本仓库「分类真源+五门禁+重生成」准入体系构成两套并行机制——单真源哲学下退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `target-constitution-setup` | vibe-coding-skills | retired-product-or-checker | 为目标项目写宪法/画像，与控制面 target-truth 排他写入语义冲突，职能由 sliver bootstrap 模板覆盖（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `target-runtime-setup` | vibe-coding-skills | retired-product-or-checker | 写目标项目 AGENTS/CLAUDE managed block，与 runtime-projection/hook-writer 写入者冲突（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `teach` | mattpocock-skills | retired-user-tool | 面向「教人学任何东西」的生活技能，超出软件项目协作包定位；140 行正文保留在快照（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `to-questionnaire` | mattpocock-skills | retired-user-tool | 决策转问卷，低频使用；需要时从快照捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `to-spec` | mattpocock-skills | retired-adapter | 与已接入的 product-spec-builder 同职能两入口，留已接者（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `to-tickets` | mattpocock-skills | retired-adapter | 垂直切片方法学有价值但强依赖 setup 的 tracker 生态，单人自用场景过重；快照可随时捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `triage` | mattpocock-skills | retired-adapter | issue 状态机强绑定 setup 的 label/tracker 生态，单人自用无 tracker 工作流（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `vibe-code-review` | vibe-coding-skills | retired-checker | 与已接入的 matt code-review 官方分工互补但强依赖 .vibe-docs.json 四字文档体系（未采纳）；matt 版已覆盖双轴审查（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
 | `vibe-coding-skills` | vibe-coding-skills | retired-alias | 旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10 |
+| `wait-what` | mattpocock-skills | retired-user-tool | 6 行微指令且依赖 matt 的 CONTEXT.md 约定（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
+| `wayfinder` | mattpocock-skills | retired-adapter | 跨 session 地图方法学依赖 setup+grilling+research+prototype 链，依赖链断裂且单人场景过重（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11 |
 
 ## 功能重叠裁决（duplicateGroups）
 

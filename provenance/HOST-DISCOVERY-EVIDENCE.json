@@ -1,27 +1,27 @@
 {
   "schema": "feisheng-host-discovery-evidence/v1",
   "owner": "provenance",
-  "capturedAt": "2026-09-10T23:55:09.6947075Z",
+  "capturedAt": "2026-09-11T00:50:23.3820030Z",
   "method": "codex debug prompt-input (model-visible skill list) + host skill directory presence",
   "caveat": "skills with disable-model-invocation are intentionally absent from the model-visible list; they are evidenced by installation instead",
   "codexSkillRoots": {
     "r4": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/remotion/d416fd5a/skills",
     "r0": "F:/skiils宸ュ叿/_adapters/shared/skills",
-    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
-    "r1": "C:/Users/MSX/.codex/skills/.system",
-    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime",
     "r2": "C:/Users/MSX/.codex/plugins/cache/basic-memory/codex/0.23.2/skills",
+    "r1": "C:/Users/MSX/.codex/skills/.system",
+    "r5": "C:/Users/MSX/.codex/plugins/cache/openai-bundled",
+    "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills",
     "r7": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.903.11726/skills",
-    "r3": "C:/Users/MSX/.codex/plugins/cache/openai-api-curated/hyperframes/d416fd5a/skills"
+    "r6": "C:/Users/MSX/.codex/plugins/cache/openai-primary-runtime"
   },
   "counts": {
     "catalogRecords": 82,
-    "modelVisible": 39,
-    "installedUserInvokedOnly": 25,
-    "notInstalled": 8,
-    "otherOrUnknown": 10,
+    "modelVisible": 52,
+    "installedUserInvokedOnly": 0,
+    "notInstalled": 30,
+    "otherOrUnknown": 0,
     "legacyVisible": 0,
-    "parsedModelVisibleEntries": 202
+    "parsedModelVisibleEntries": 194
   },
   "records": [
     {
@@ -112,15 +112,15 @@
       "invocation": "user-invoked",
       "readiness": "compatibility",
       "status": "compatibility-selector",
-      "installedInSharedRoot": true,
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\ask-matt",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "audit",
@@ -154,17 +154,17 @@
       "source": "vibe-coding-skills",
       "dirName": "beginner-flow-guide",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-unreviewed",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-unreviewed",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\beginner-flow-guide",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "bolder",
@@ -252,17 +252,27 @@
       "source": "vibe-coding-skills",
       "dirName": "clarify",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-unreviewed",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-checker",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\clarify",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "clarify",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/checker/clarify/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "claude-handoff",
@@ -340,17 +350,17 @@
       "source": "vibe-coding-skills",
       "dirName": "codebase-memory-scout",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-product-or-checker",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\codebase-memory-scout",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "colorize",
@@ -465,17 +475,27 @@
       "source": "vibe-coding-skills",
       "dirName": "design-maker",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-product",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\design-maker",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "design-maker",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/product/design-maker/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "design-system",
@@ -671,136 +691,186 @@
       "source": "vibe-coding-skills",
       "dirName": "evolution-engine",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\evolution-engine",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "evolution-engine",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/event/evolution-engine/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "experience-elevator",
       "source": "vibe-coding-skills",
       "dirName": "experience-elevator",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\experience-elevator",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "experience-elevator",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/event/experience-elevator/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "feedback-writer",
       "source": "vibe-coding-skills",
       "dirName": "feedback-writer",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "event-only-source-only",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-event",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\feedback-writer",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "feedback-writer",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/event/feedback-writer/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "git-guardrails-claude-code",
       "source": "mattpocock-skills",
       "dirName": "git-guardrails-claude-code",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-primitive",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\git-guardrails-claude-code",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "evidence": "not-installed"
     },
     {
       "id": "grill-me",
       "source": "mattpocock-skills",
       "dirName": "grill-me",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-user-tool",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\grill-me",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "grill-with-docs",
       "source": "mattpocock-skills",
       "dirName": "grill-with-docs",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-user-tool",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\grill-with-docs",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "grilling",
       "source": "mattpocock-skills",
       "dirName": "grilling",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\grilling",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "grilling",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/grilling/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "handoff",
       "source": "mattpocock-skills",
       "dirName": "handoff",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-user-tool",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\handoff",
-      "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "handoff",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/handoff/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "harden",
@@ -888,34 +958,34 @@
       "source": "mattpocock-skills",
       "dirName": "implement",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\implement",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "improve-codebase-architecture",
       "source": "mattpocock-skills",
       "dirName": "improve-codebase-architecture",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\improve-codebase-architecture",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "layout",
@@ -966,17 +1036,17 @@
       "source": "mattpocock-skills",
       "dirName": "migrate-to-shoehorn",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-primitive",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\migrate-to-shoehorn",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "evidence": "not-installed"
     },
     {
       "id": "optimize",
@@ -1091,17 +1161,27 @@
       "source": "mattpocock-skills",
       "dirName": "prototype",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\prototype",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "prototype",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/prototype/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "quieter",
@@ -1189,34 +1269,54 @@
       "source": "mattpocock-skills",
       "dirName": "research",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\research",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "research",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/research/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "resolving-merge-conflicts",
       "source": "mattpocock-skills",
       "dirName": "resolving-merge-conflicts",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\resolving-merge-conflicts",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "resolving-merge-conflicts",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/resolving-merge-conflicts/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "rule-harvester",
@@ -1250,51 +1350,61 @@
       "source": "mattpocock-skills",
       "dirName": "scaffold-exercises",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-primitive",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\scaffold-exercises",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "evidence": "not-installed"
     },
     {
       "id": "setup-matt-pocock-skills",
       "source": "mattpocock-skills",
       "dirName": "setup-matt-pocock-skills",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\setup-matt-pocock-skills",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "setup-pre-commit",
       "source": "mattpocock-skills",
       "dirName": "setup-pre-commit",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\misc\\setup-pre-commit",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "setup-pre-commit",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/setup-pre-commit/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "setup-ts-deep-modules",
@@ -1318,34 +1428,34 @@
       "source": "vibe-coding-skills",
       "dirName": "shape",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-unreviewed",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-unreviewed",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\shape",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "skill-builder",
       "source": "vibe-coding-skills",
       "dirName": "skill-builder",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-product-or-checker",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\skill-builder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "sliver-vibe-coding",
@@ -1379,34 +1489,34 @@
       "source": "vibe-coding-skills",
       "dirName": "target-constitution-setup",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-product-or-checker",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\target-constitution-setup",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "target-runtime-setup",
       "source": "vibe-coding-skills",
       "dirName": "target-runtime-setup",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-product-or-checker",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-product-or-checker",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\vibe-coding-skills\\skills\\target-runtime-setup",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "tdd",
@@ -1440,17 +1550,17 @@
       "source": "mattpocock-skills",
       "dirName": "teach",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-user-tool",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\teach",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "test-automation",
@@ -1484,68 +1594,68 @@
       "source": "mattpocock-skills",
       "dirName": "to-questionnaire",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-user-tool",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\to-questionnaire",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "to-spec",
       "source": "mattpocock-skills",
       "dirName": "to-spec",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\to-spec",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "to-tickets",
       "source": "mattpocock-skills",
       "dirName": "to-tickets",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\to-tickets",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "triage",
       "source": "mattpocock-skills",
       "dirName": "triage",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\triage",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "typeset",
@@ -1660,8 +1770,8 @@
       "source": "vibe-coding-skills",
       "dirName": "code-review",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-checker",
+      "readiness": "retired",
+      "status": "retired-checker",
       "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
@@ -1694,51 +1804,61 @@
       "source": "mattpocock-skills",
       "dirName": "wait-what",
       "invocation": "user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-user-tool",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-user-tool",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\wait-what",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "wayfinder",
       "source": "mattpocock-skills",
       "dirName": "wayfinder",
       "invocation": "user-invoked",
-      "readiness": "candidate",
-      "status": "adapter-candidate",
-      "installedInSharedRoot": true,
+      "readiness": "retired",
+      "status": "retired-adapter",
+      "installedInSharedRoot": false,
       "installedInSharedBundle": false,
       "installedInCodexRoot": false,
       "modelVisibleInCodex": false,
       "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\wayfinder",
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
       "visibleAs": [],
-      "evidence": "installed-user-invoked-only"
+      "evidence": "not-installed"
     },
     {
       "id": "wizard",
       "source": "mattpocock-skills",
       "dirName": "wizard",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\engineering\\wizard",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "wizard",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/wizard/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "writing-beats",
@@ -1762,17 +1882,27 @@
       "source": "mattpocock-skills",
       "dirName": "writing-for-agents",
       "invocation": "model-invoked-or-user-invoked",
-      "readiness": "source-only",
-      "status": "source-only-primitive",
-      "installedInSharedRoot": true,
-      "installedInSharedBundle": false,
+      "readiness": "accepted",
+      "status": "accepted-primitive",
+      "installedInSharedRoot": false,
+      "installedInSharedBundle": true,
       "installedInCodexRoot": false,
-      "modelVisibleInCodex": false,
-      "visibleVia": [],
-      "sharedRootEntryKind": "reparse-link",
-      "sharedRootEntryTarget": "F:\\skiils工具\\mattpocock-skills\\skills\\productivity\\writing-for-agents",
-      "visibleAs": [],
-      "evidence": "installed-but-not-model-visible"
+      "modelVisibleInCodex": true,
+      "visibleVia": [
+        "unified-bundle"
+      ],
+      "sharedRootEntryKind": null,
+      "sharedRootEntryTarget": null,
+      "visibleAs": [
+        {
+          "entryName": "writing-for-agents",
+          "root": "r0",
+          "rootPath": "F:/skiils宸ュ叿/_adapters/shared/skills",
+          "path": "feisheng-vibe-coding/skills/engineering/writing-for-agents/SKILL.md",
+          "via": "unified-bundle"
+        }
+      ],
+      "evidence": "model-visible"
     },
     {
       "id": "writing-fragments",

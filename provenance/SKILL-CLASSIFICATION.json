@@ -80,7 +80,29 @@
     "retired-checker": "专项 checker 退役：依赖的目标项目基础设施未采纳"
   },
   "reasonsById": {
-            "clarify": "语义审查于 2026-09-11 随能力定批评次完成（内容级逐技能评估）；domain 由 unreviewed 修正为 checker（impeccable 族 UX 文案专项）",
+    "vibe-code-review": "与已接入的 matt code-review 官方分工互补但强依赖 .vibe-docs.json 四字文档体系（未采纳）；matt 版已覆盖双轴审查（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "shape": "与已接入的 design-brief-builder 高度同构（同一生态位两版），留已接者（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "beginner-flow-guide": "vibe 总入口的新手路由器=第二路由器，与 route-catalog 唯一路由 owner 正面冲突；总入口已退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "codebase-memory-scout": "二梯队默认退役：vibe 主链附属侦查层，依赖 codebase-memory-mcp/.vibe-docs.json 体系；需要时从快照捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "target-runtime-setup": "写目标项目 AGENTS/CLAUDE managed block，与 runtime-projection/hook-writer 写入者冲突（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "target-constitution-setup": "为目标项目写宪法/画像，与控制面 target-truth 排他写入语义冲突，职能由 sliver bootstrap 模板覆盖（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "skill-builder": "vibe 包内部的建技能机制，与本仓库「分类真源+五门禁+重生成」准入体系构成两套并行机制——单真源哲学下退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "wait-what": "6 行微指令且依赖 matt 的 CONTEXT.md 约定（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "to-questionnaire": "决策转问卷，低频使用；需要时从快照捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "teach": "面向「教人学任何东西」的生活技能，超出软件项目协作包定位；140 行正文保留在快照（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "grill-with-docs": "grilling+domain-modeling 组合别名，无独立内容（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "grill-me": "grilling 的一行别名包装，无独立内容；grilling 已接入，控制面直接路由（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "improve-codebase-architecture": "二梯队默认退役：职能独特但依赖 CONTEXT.md/ADR 约定与 grilling；需要时从快照捞回重走准入（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "wayfinder": "跨 session 地图方法学依赖 setup+grilling+research+prototype 链，依赖链断裂且单人场景过重（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "triage": "issue 状态机强绑定 setup 的 label/tracker 生态，单人自用无 tracker 工作流（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "to-tickets": "垂直切片方法学有价值但强依赖 setup 的 tracker 生态，单人自用场景过重；快照可随时捞回（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "to-spec": "与已接入的 product-spec-builder 同职能两入口，留已接者（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "setup-matt-pocock-skills": "纯元技能（为 matt 族铺 tracker/label 配置），控制面自身即配置层；其下游 to-spec/to-tickets/triage/wayfinder 一并退役（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "implement": "15 行薄编排（调 tdd+code-review+提交），职能被已接入的 dev-builder 与控制面开发执行路由覆盖（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "scaffold-exercises": "强绑定 ai-hero 课程平台专有 CLI 与目录约定，脱离该平台即失效（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "migrate-to-shoehorn": "整个技能绑定 Matt 私有 npm 包 @total-typescript/shoehorn，不采用该依赖则零价值（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "git-guardrails-claude-code": "宿主配置型技能（教 AI 改写宿主 settings.json 配 hook），写权限与本项目 hook-writer 门禁冲突；护栏职能由本项目自身 hook 体系承担（记为未来扩展参考）（证据: evidence/20260911-capability-finalization.md）；retiredAt 2026-09-11",
+    "clarify": "语义审查于 2026-09-11 随能力定批评次完成（内容级逐技能评估）；domain 由 unreviewed 修正为 checker（impeccable 族 UX 文案专项）",
     "vibe-coding-skills": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
     "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
@@ -269,7 +291,7 @@
     },
     "beginner-flow-guide": {
       "domain": "unreviewed",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "bolder": {
@@ -329,7 +351,7 @@
     },
     "codebase-memory-scout": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "colorize": {
@@ -459,17 +481,17 @@
     },
     "git-guardrails-claude-code": {
       "domain": "primitive",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "grill-me": {
       "domain": "user-tool",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "grill-with-docs": {
       "domain": "user-tool",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "grilling": {
@@ -513,12 +535,12 @@
     },
     "implement": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "improve-codebase-architecture": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "layout": {
@@ -537,7 +559,7 @@
     },
     "migrate-to-shoehorn": {
       "domain": "primitive",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "optimize": {
@@ -632,12 +654,12 @@
     },
     "scaffold-exercises": {
       "domain": "primitive",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "setup-matt-pocock-skills": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "setup-pre-commit": {
@@ -653,12 +675,12 @@
     },
     "shape": {
       "domain": "unreviewed",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "skill-builder": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "sliver-vibe-coding": {
@@ -682,12 +704,12 @@
     },
     "target-constitution-setup": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "target-runtime-setup": {
       "domain": "product-or-checker",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "tdd": {
@@ -700,7 +722,7 @@
     },
     "teach": {
       "domain": "user-tool",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "test-automation": {
@@ -714,22 +736,22 @@
     },
     "to-questionnaire": {
       "domain": "user-tool",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "to-spec": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "to-tickets": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "triage": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "typeset": {
@@ -770,7 +792,7 @@
     },
     "vibe-code-review": {
       "domain": "checker",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "vibe-coding-skills"
     },
     "vibe-coding-skills": {
@@ -780,12 +802,12 @@
     },
     "wait-what": {
       "domain": "user-tool",
-      "readiness": "source-only",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "wayfinder": {
       "domain": "adapter",
-      "readiness": "candidate",
+      "readiness": "retired",
       "source": "mattpocock-skills"
     },
     "wizard": {

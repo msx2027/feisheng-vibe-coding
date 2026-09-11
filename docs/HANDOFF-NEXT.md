@@ -30,11 +30,11 @@
 
 - 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 门禁：`verify.ps1` 默认 **12 步**；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步。2026-09-11 治理对齐批实测 `-IncludeHostEvidence -IncludePackage` = **14/14**；fresh clone 两种 shell × 两种 `autocrlf` 全过
-- 分类：**82 条记录**，其中 **39 条 runtime 已接入**（控制面 1 + mattpocock 来源 5 + vibe 来源 33：checker 4 + product 13 + ui 16）；runtime bundle 共 **399** 文件；**1 条已退役**（`vibe-coding-skills` 别名，2026-09-11 数据层状态补齐）
+- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **422** 文件
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**147 条**（2026-09-11 治理对齐批退役 29 个双重曝光链接后：64→35），其中我们的包 `feisheng-vibe-coding` **401 文件**（宿主中性投影，含控制面 + 全部 38 个技能）
+- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **422 文件**（宿主中性投影，含控制面 + 全部 51 个技能）
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -169,6 +169,7 @@ Sliver 的 `packaging/runtime-manifest.json` 用 `targets.<host>.overlay_files` 
 | 10 | `e224c03` | **owner 确认批**：全局路由块更新（两文件）→ D2 复测转绿（纯中文首动作即调入口，全链路到体检报告）→ T4 接入 tdd/code-review（绑定 9/9）→ 4 个重名链接退役（共享根 180→176，包 96 文件） | `evidence/20260911-d2-green-t4-and-retirement.md` |
 | 11 | `6161ddc`..`7c33764` | 闭环批 + T6 解锁：27+2 能力接入（39 条/399 文件）、D2/D3 转绿留档、Hook 契约 v2 解锁 | `evidence/20260911-loop-closure-batch.md`、`evidence/20260911-t6-hook-unlock.md` |
 | 12 | 本批 | **治理对齐批**：AGENTS.md 决策写入规则修正、README/SKILL 阶段刷新、Hook 正名（采集面）+ Digest 消化状态机、宿主证据门（verify 5b）+ collector 伪影修复、retired readiness + 退役工具 + `vibe-coding-skills` 别名试点退役、遗留链接清点（64 条） | `evidence/20260911-governance-alignment.md` |
+| 13 | 本批 | **能力定批评次**：35 技能全部定编（10+3 接入 / 22 退役），event 分组 + 事件三件套轻量接入，三源链接清零（共享根 147→112），投影 422 文件 | `evidence/20260911-capability-finalization.md` |
 
 ---
 
@@ -336,11 +337,12 @@ owner 审计后拍板：29 个「已接入统一包但旧链接还在」的链�
 - 剩余 35 个链接 = 35 个未接入技能的现役服务，待 owner 按下方路线第 2 步逐个「接入或退役」
 
 **源项目终态路线（owner 已批终态 = 只保留 feisheng-vibe-coding 一个文件夹）**：
-1. ✅ 29 链接退役（本批）
-2. ⏳ 35 技能逐个「接入或退役」（原因分组见 `evidence/20260911-governance-alignment.md` §6）→ 完成后删剩余 35 链接
+1. ✅ 29 链接退役（D1 批）
+2. ✅ 35 技能全部定编（能力定批评次：13 接入 + 22 退役，裁决表见 `evidence/20260911-capability-finalization.md`）
+   → 剩余 35 个源链接已全部退役（回滚记录 `_smoke/retire-35-rollback.json`），**三源链接清零**，投影重装 422 文件
 3. ⏳ 三源项目归档（建议 zip 冷存，vibe 非 git 删前三思）+ 同步改写 AGENTS.md「不修改源项目」等规则文本
    （owner 已预批准修改）；`sources/` 仓库内快照**永远保留**（未来接入唯一内容源，import 脚本只读快照，
-   `import-vibe-skills.ps1:144`、`import-matt-source.ps1:26`）。
+   `import-vibe-skills.ps1`、`import-matt-source.ps1`）。
 
 ---
 
@@ -461,7 +463,7 @@ git log --oneline -3                      # 治理对齐批（2026-09-11）之�
 git status --porcelain                    # 应为空
 pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludeHostEvidence -IncludePackage
                                           # 应为 14/14
-ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 147（2026-09-11 D1 批退役 29 链接后）
+ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 112（2026-09-11 定编批退役全部 64 个源链接后）
 ```
 
 然后按顺序：T1–T7 与 GA 批均已完成。后续入口：**9.8 末尾的遗留清单**（沉淀消费三技能批次 →
