@@ -45,7 +45,7 @@ if (-not (Test-Path -LiteralPath $provenanceModule -PathType Leaf)) {
 . $provenanceModule
 
 $results = @()
-$workRoot = Join-Path $env:TEMP ('feisheng-verify-' + [guid]::NewGuid().ToString('N'))
+$workRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('feisheng-verify-' + [guid]::NewGuid().ToString('N'))
 
 function Add-Result {
     param(
