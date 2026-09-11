@@ -129,6 +129,46 @@ function Get-LocalPatches {
     return $map
 }
 
+function Get-RuntimeCopyPatches {
+    param(
+        [Parameter(Mandatory = $true)][string]$RepositoryRoot,
+        # 可选过滤：只取派生自某个来源快照的登记项（按登记项自带的 snapshotPath 前缀判断）。
+        # 两个消费方（vibe 导入 / matt 导入）各自只看自己负责的登记，避免把对方的登记误判成「登记过期」。
+        [Parameter(Mandatory = $false)][string]$SnapshotPathPrefix = ''
+    )
+
+    # 一等副本（skills/**）的本地补丁登记。
+    #
+    # 为什么需要独立命名空间：LOCAL-PATCHES.json 的键空间有两类互不重叠的对象——
+    #   ① 快照树补丁（snapshot = 快照名，path 相对该快照根）：校验「快照 == patchedSha256，来源 == originalSha256」；
+    #   ② 一等副本补丁（snapshot = 'runtime-import'，path 相对仓库根）：校验「导入副本 == patchedSha256，
+    #      它偏离的原始内容 == originalSha256（= 来源快照文件的哈希）」。
+    # 两类都 fail-closed：未登记的偏差仍然是漂移，登记过期（哈希不符）同样失败。
+    # 分开命名空间是必需的：副本路径若写进快照命名空间，会被快照校验误读成「快照本身应等于 patchedSha256」。
+    $map = @{}
+    $path = Join-Path $RepositoryRoot 'provenance/LOCAL-PATCHES.json'
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return $map }
+    $doc = Get-Content -Raw -Encoding UTF8 -LiteralPath $path | ConvertFrom-Json
+    if ($doc.schema -ne 'feisheng-local-patches/v1') { throw "不支持的 LOCAL-PATCHES schema: $($doc.schema)" }
+    foreach ($patch in @($doc.patches)) {
+        if ([string]$patch.snapshot -ne 'runtime-import') { continue }
+        foreach ($file in @($patch.files)) {
+            if (-not [string]::IsNullOrWhiteSpace($SnapshotPathPrefix)) {
+                $sourceSnapshotPath = ''
+                if ($file.PSObject.Properties.Name -contains 'snapshotPath') { $sourceSnapshotPath = ([string]$file.snapshotPath).Replace([System.IO.Path]::DirectorySeparatorChar, '/') }
+                if (-not $sourceSnapshotPath.StartsWith($SnapshotPathPrefix, [System.StringComparison]::OrdinalIgnoreCase)) { continue }
+            }
+            $relative = ([string]$file.path).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+            $map[$relative] = [pscustomobject]@{
+                originalSha256 = [string]$file.originalSha256
+                patchedSha256 = [string]$file.patchedSha256
+                patchId = [string]$patch.id
+            }
+        }
+    }
+    return $map
+}
+
 function Test-ProvenanceIntegrity {
     param(
         [Parameter(Mandatory = $true)][string]$RepositoryRoot,

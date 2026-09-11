@@ -11,12 +11,12 @@ disable-model-invocation: true
     Skill 启动时第一步自动执行：
 
     必需：
-    - 目标项目根目录和 `.vibe-docs.json`；缺失时先由 `target-constitution-setup` 或 `product-spec-builder` 建立项目真源。
+    - 目标项目根目录和 `.vibe-docs.json`；缺失时先由 `product-spec-builder` 建立项目真源（项目画像 / 宪法设计由控制面的项目宪法路由产出）。
     - 需求文档；需求仍有影响行为、验收、数据、权限、接口或范围的 `未决 / blocked` 时，先回到 `product-spec-builder`。
     - `<skills-root>/tools/architecture-foundation-policy.mjs`；先用其 `requiresArchitectureFoundation` 判定触发，避免把路径词或文件数量误当作高影响变更。
 
     按需：
-    - 已有项目代码、接口契约、项目画像与宪法设计；本轮影响面不清时先用 `codebase-memory-scout` 缩小范围。
+    - 已有项目代码、接口契约、项目画像与宪法设计；本轮影响面不清时先用 `rg` 沿 callers/callees 与相关测试缩小范围（有可用的代码图工具时再用）。
     - `docs/项目治理/系统架构.md`；不存在时创建，存在时只做本轮增量更新。
 
 [本包治理继承]

@@ -176,6 +176,11 @@ try {
             $importRecord = Get-Content -Raw -Encoding UTF8 -LiteralPath $importRecordPath | ConvertFrom-Json
             $importFailures = @()
             $importFileCount = 0
+            # 一等副本的本地补丁登记（命名空间 'runtime-import'，见 provenance-integrity.ps1）。
+            # 语义与快照树补丁一致：已登记的偏差合法，未登记的偏差仍是漂移，登记过期同样失败。
+            $runtimeCopyPatches = Get-RuntimeCopyPatches -RepositoryRoot $repoRoot -SnapshotPathPrefix 'sources/vibe-coding-skills'
+            $consumedRuntimePatches = @{}
+            $importPatchedCount = 0
             foreach ($importEntry in @($importRecord.imports)) {
                 $sourceRelativeRoot = ([string]$importEntry.sourcePath).Replace('\', '/')
                 $destinationRelativeRoot = ([string]$importEntry.destination).Replace('\', '/')
@@ -197,20 +202,152 @@ try {
                     }
                     $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourceFullPath).Hash.ToLowerInvariant()
                     $destinationHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $destinationFullPath).Hash.ToLowerInvariant()
+                    $destinationRelative = $destinationRelativeRoot.TrimEnd('/') + '/' + $fileRelative
                     if ($sourceHash -ne $destinationHash) {
-                        $importFailures += ([string]$importEntry.id + '/' + $fileRelative + ' (与快照不一致)')
+                        $registeredPatch = $null
+                        if ($runtimeCopyPatches.ContainsKey($destinationRelative)) { $registeredPatch = $runtimeCopyPatches[$destinationRelative] }
+                        if ($null -eq $registeredPatch) {
+                            $importFailures += ([string]$importEntry.id + '/' + $fileRelative + ' (与快照不一致，且无本地补丁登记)')
+                        } elseif ([string]$registeredPatch.originalSha256 -ne $sourceHash) {
+                            $importFailures += ($destinationRelative + ' (补丁登记的 originalSha256 与快照不符)')
+                        } elseif ([string]$registeredPatch.patchedSha256 -ne $destinationHash) {
+                            $importFailures += ($destinationRelative + ' (补丁登记的 patchedSha256 与副本不符)')
+                        } else {
+                            $consumedRuntimePatches[$destinationRelative] = $true
+                            $importPatchedCount++
+                        }
                     }
                     $importFileCount++
                 }
             }
+            # 登记的副本补丁必须被真实导入项消费：登记指向不存在的偏差 = 登记过期，fail-closed。
+            $staleRuntimePatches = @($runtimeCopyPatches.Keys | Where-Object { -not $consumedRuntimePatches.ContainsKey($_) })
+            if ($staleRuntimePatches.Count -gt 0) {
+                $sortedStalePatches = [string[]]@($staleRuntimePatches)
+                [Array]::Sort($sortedStalePatches, [System.StringComparer]::Ordinal)
+                $importFailures += ('本地补丁登记未对应任何「副本偏离快照」的导入项: ' + ($sortedStalePatches -join ', '))
+            }
             if ($importFailures.Count -gt 0) {
                 Add-Result -Step '导入副本与快照一致性' -Passed $false -Detail ($importFailures -join '; ')
             } else {
-                Add-Result -Step '导入副本与快照一致性' -Passed $true -Detail ('files = ' + $importFileCount)
+                Add-Result -Step '导入副本与快照一致性' -Passed $true -Detail ('files = ' + $importFileCount + '（含 ' + $importPatchedCount + ' 个已登记本地补丁）')
             }
         }
     } catch {
         Add-Result -Step '导入副本与快照一致性' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 1c-2) 一等副本与来源快照一致性（Matt 侧补充覆盖）
+    #     VIBE-IMPORTS.json 有逐文件白名单，1c 直接用它；MATT-IMPORT.json（v2）只登记快照根、文件数与
+    #     revision 来源，没有逐文件映射，所以 matt 副本此前**没有**副本↔快照覆盖（只被 catalog 的
+    #     记录级自洽校验间接覆盖一个文件）。这里用来源事实快照 SKILL-INVENTORY.json 把副本记录接回上游路径：
+    #     inventory 行按 (source, sha256) 唯一命中 → 上游目录 → 快照文件 = <snapshotRoot>/<上游相对路径>。
+    #     语义与 1c 完全一致：已登记的本地补丁合法，未登记的偏差失败，登记过期（副本不再偏离）也失败。
+    try {
+        $mattImportRecordPath = Join-Path $repoRoot 'provenance/MATT-IMPORT.json'
+        if (-not (Test-Path -LiteralPath $mattImportRecordPath -PathType Leaf)) {
+            Add-Result -Step '导入副本与快照一致性（Matt）' -Passed $true -Detail '无 Matt 导入记录（0 个导入技能）'
+        } else {
+            $mattImportRecord = Get-Content -Raw -Encoding UTF8 -LiteralPath $mattImportRecordPath | ConvertFrom-Json
+            $mattSnapshotRelativeRoot = ([string]$mattImportRecord.snapshotRoot).Replace('\', '/')
+            $inventoryDoc = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/SKILL-INVENTORY.json') | ConvertFrom-Json
+            $catalogDocForMatt = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/CANONICAL-CATALOG.json') | ConvertFrom-Json
+            $acceptedStatusesForMatt = @($catalogDocForMatt.decisionPolicy.acceptedStatuses)
+
+            $inventoryBySourceSha = @{}
+            foreach ($inventoryRow in @($inventoryDoc.skills)) {
+                $inventoryKey = ([string]$inventoryRow.source + '|' + ([string]$inventoryRow.sha256).ToLowerInvariant())
+                if (-not $inventoryBySourceSha.ContainsKey($inventoryKey)) { $inventoryBySourceSha[$inventoryKey] = @() }
+                $inventoryBySourceSha[$inventoryKey] = @($inventoryBySourceSha[$inventoryKey]) + @(([string]$inventoryRow.path).Replace('\', '/'))
+            }
+
+            $registeredMattPatches = Get-RuntimeCopyPatches -RepositoryRoot $repoRoot -SnapshotPathPrefix 'sources/mattpocock-skills'
+            $consumedMattPatches = @{}
+            $mattFailures = @()
+            $mattFileCount = 0
+            $mattPatchedCount = 0
+
+            foreach ($mattRecord in @($catalogDocForMatt.records)) {
+                if ([string]$mattRecord.source -ne 'mattpocock-skills') { continue }
+                if ($acceptedStatusesForMatt -notcontains [string]$mattRecord.status) { continue }
+
+                $mattRecordPath = ([string]$mattRecord.path).Replace('\', '/')
+                $inventoryKey = ([string]$mattRecord.source + '|' + ([string]$mattRecord.sourceSha256).ToLowerInvariant())
+                if (-not $inventoryBySourceSha.ContainsKey($inventoryKey)) {
+                    $mattFailures += ($mattRecordPath + ' (SKILL-INVENTORY 里没有匹配 (source, sha256) 的来源行)')
+                    continue
+                }
+                $upstreamCandidates = @($inventoryBySourceSha[$inventoryKey])
+                if ($upstreamCandidates.Count -ne 1) {
+                    $mattFailures += ($mattRecordPath + ' (无法唯一确定上游路径，命中 ' + $upstreamCandidates.Count + ' 条)')
+                    continue
+                }
+                $upstreamDirectory = [string](Split-Path -Path $upstreamCandidates[0] -Parent)
+                if ([string]::IsNullOrWhiteSpace($upstreamDirectory)) { $upstreamDirectory = '.' }
+
+                $mattBundleRoot = ''
+                $mattBundleFiles = @()
+                $hasMattBundle = ($mattRecord.PSObject.Properties.Name -contains 'bundle') -and ($null -ne $mattRecord.bundle)
+                if ($hasMattBundle) {
+                    $mattBundleRoot = ([string]$mattRecord.bundle.root).Replace('\', '/')
+                    foreach ($mattBundleFile in @($mattRecord.bundle.files)) { $mattBundleFiles += ([string]$mattBundleFile.path).Replace('\', '/') }
+                } else {
+                    $mattBundleFiles += $mattRecordPath
+                }
+
+                foreach ($mattDestinationPath in $mattBundleFiles) {
+                    $mattRelativeInside = [string](Split-Path -Path $mattDestinationPath -Leaf)
+                    if (-not [string]::IsNullOrWhiteSpace($mattBundleRoot) -and $mattDestinationPath.StartsWith($mattBundleRoot + '/')) {
+                        $mattRelativeInside = $mattDestinationPath.Substring($mattBundleRoot.Length + 1)
+                    }
+                    $mattUpstreamRelative = ($upstreamDirectory + '/' + $mattRelativeInside).Replace('\', '/')
+                    $mattSnapshotFullPath = Join-Path $repoRoot (($mattSnapshotRelativeRoot + '/' + $mattUpstreamRelative).Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+                    $mattDestinationFullPath = Join-Path $repoRoot ($mattDestinationPath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+
+                    if (-not (Test-Path -LiteralPath $mattSnapshotFullPath -PathType Leaf)) {
+                        $mattFailures += ($mattDestinationPath + ' (快照缺对应文件: ' + $mattSnapshotRelativeRoot + '/' + $mattUpstreamRelative + ')')
+                        continue
+                    }
+                    if (-not (Test-Path -LiteralPath $mattDestinationFullPath -PathType Leaf)) {
+                        $mattFailures += ($mattDestinationPath + ' (导入副本缺失)')
+                        continue
+                    }
+
+                    $mattSnapshotHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $mattSnapshotFullPath).Hash.ToLowerInvariant()
+                    $mattDestinationHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $mattDestinationFullPath).Hash.ToLowerInvariant()
+                    if ($mattSnapshotHash -ne $mattDestinationHash) {
+                        $registeredMattPatch = $null
+                        if ($registeredMattPatches.ContainsKey($mattDestinationPath)) { $registeredMattPatch = $registeredMattPatches[$mattDestinationPath] }
+                        if ($null -eq $registeredMattPatch) {
+                            $mattFailures += ($mattDestinationPath + ' (与快照不一致，且无本地补丁登记)')
+                        } elseif ([string]$registeredMattPatch.originalSha256 -ne $mattSnapshotHash) {
+                            $mattFailures += ($mattDestinationPath + ' (补丁登记的 originalSha256 与快照不符)')
+                        } elseif ([string]$registeredMattPatch.patchedSha256 -ne $mattDestinationHash) {
+                            $mattFailures += ($mattDestinationPath + ' (补丁登记的 patchedSha256 与副本不符)')
+                        } else {
+                            $consumedMattPatches[$mattDestinationPath] = $true
+                            $mattPatchedCount++
+                        }
+                    }
+                    $mattFileCount++
+                }
+            }
+
+            $staleMattPatches = @($registeredMattPatches.Keys | Where-Object { -not $consumedMattPatches.ContainsKey($_) })
+            if ($staleMattPatches.Count -gt 0) {
+                $sortedStaleMattPatches = [string[]]@($staleMattPatches)
+                [Array]::Sort($sortedStaleMattPatches, [System.StringComparer]::Ordinal)
+                $mattFailures += ('本地补丁登记未对应任何「副本偏离快照」的导入项: ' + ($sortedStaleMattPatches -join ', '))
+            }
+
+            if ($mattFailures.Count -gt 0) {
+                Add-Result -Step '导入副本与快照一致性（Matt）' -Passed $false -Detail ($mattFailures -join '; ')
+            } else {
+                Add-Result -Step '导入副本与快照一致性（Matt）' -Passed $true -Detail ('files = ' + $mattFileCount + '（含 ' + $mattPatchedCount + ' 个已登记本地补丁）')
+            }
+        }
+    } catch {
+        Add-Result -Step '导入副本与快照一致性（Matt）' -Passed $false -Detail $_.Exception.Message
     }
 
     # 1d) 保真树的换行可复现性（把刚修好的不变量锁住，防回归）

@@ -13,7 +13,6 @@ disable-model-invocation: true
     - 目标项目开发计划
     - 目标项目当前执行光标
     - 目标项目人工验收记录
-    - `skills/beginner-flow-guide/SKILL.md`
     输出：
     - bug 根因
     - 最小修复方案
@@ -48,7 +47,7 @@ disable-model-invocation: true
     - 设计工具或 UI 参考：对照预期界面
     - Playwright 或现有测试基础设施：复现和验证
     - git：追溯近期可疑改动
-    - codebase-memory-scout：跨模块、调用链不清、权限 / 数据 / 本地工具 / UI 流程等 T3 bug 可先做代码图侦察；MCP 不可用时降级为 `rg`
+    - 影响面侦察：跨模块、调用链不清、权限 / 数据 / 本地工具 / UI 流程等 T3 bug，先用 `rg` 沿 callers/callees 与相关测试侦察；有可用的代码图工具时再用
 
 [第一性原则]
     **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时先解析 schema v2、`documentIndex/documents/loadPolicy`，再用 `resolve-target-doc-context.mjs` 从 `documentIndex,currentExecution` 开始，只按复现路径追加受影响的 `productSpec/devPlan/manualAcceptance/interfaceContracts` role；任务胶囊 manifest 通过 `--capsule` 注入。只读取 resolver 返回的 selector，never 被拒绝即阻塞，本 Skill 不得自行使用 `--allow-never`。
@@ -65,7 +64,7 @@ disable-model-invocation: true
     **严格 TDD 铁律**：所有 bug 修复强制 `RED-GREEN-REFACTOR`。修复前先写并运行能稳定复现缺陷的最小 regression test，确认它因用户报告的行为缺陷而正确失败；没有这个 RED，不得修改生产代码。如果修复实现已经先写，删除该实现并从 RED 重新开始，不保留作参考。
     **先造自动化 tight loop**：优先在 public seam、统一接口契约或用户可观察行为边界建立 test、CLI fixture、HTTP integration test 或 Playwright 脚本；curl、日志、trace 和手动复现可用于定位，但不能自行替代失败测试。
     **无 RED 不实施**：没有正确失败的自动化 regression test 时，只能继续补测试 seam、补证据或声明阻塞；不能直接假设根因、不能用“看起来可能是”进入修改。code-review 证据可以作为输入，但仍要转成能复现缺陷的 RED。
-    **代码图辅助定位**：T3 bug 默认先判断是否需要 `codebase-memory-scout` 缩小调用链、callers/callees 和相关测试；侦察结果只是候选根因，必须用复现、源码和验证证据确认。
+    **调用链辅助定位**：T3 bug 默认先判断是否需要先做调用链 / 影响面侦察（`rg` 搜 callers/callees、相关测试与入口；有可用的代码图工具时再用）；侦察结果只是候选根因，必须用复现、源码和验证证据确认。
     **人工验收回归保护**：修 bug 前必须检查 `验收记录.md`。如果修复可能影响已人工验收功能，优先补自动化回归；自动化无法覆盖时，修复交付必须提醒用户只复验受影响路径，并标记 `需回归复验`。
     **无复现 / 无证据不修复**：没有复现路径、日志、断言失败、用户可验证症状或 code-review 证据时，不直接改代码。先补证据；如果只能手动复现，必须写清手动路径并实际跑过一次。无法跑通时声明阻塞，不进入实施修复。
     **例外必须审批**：仅当修复对象属于原型、生成代码或配置文件时，才能在写生产代码前向用户请求例外；必须写清原因、替代验证、风险和 rollback，并获得用户明确批准。无法自动化本身不构成例外资格，手动复现和人工验收也不是自动豁免。

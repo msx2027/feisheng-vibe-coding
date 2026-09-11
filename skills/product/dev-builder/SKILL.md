@@ -21,7 +21,7 @@ disable-model-invocation: true
     - 设计简报：优先 `.vibe-docs.json.designBrief`，新项目默认 `docs/设计简报.md`；缺失则标记“无设计规范模式”。
     - 目标项目任务胶囊：优先读取 `.vibe-docs.json.taskContext`；启用后当前任务目录为 `taskContext.currentTaskCapsule`，新项目默认根目录 `docs/plans/任务`。非快车道 T2/T3 Task 优先用 `node <skills-root>/tools/init-target-task-context.mjs <target-root> --slug <slug> --title "<title>" --write` 创建或读取；编码前读取 `任务状态.json` 和 `实现上下文.jsonl`。
     - 设计工具 MCP、Playwright、gh CLI：可用则增强交付；缺失则记录降级，不阻塞。
-    - `codebase-memory-scout`：已有项目 T2/T3、跨模块、入口不明、调用链不清或影响面不清时先侦察；不可用时降级 `rg`。
+    - 影响面侦察：已有项目 T2/T3、跨模块、入口不明、调用链不清或影响面不清时，先用 `rg` 沿 callers/callees、入口与相关测试缩小范围；有可用的代码图工具时再用。
 
     安装策略：新增依赖前先检查标准库、平台自带能力和项目已安装依赖；确实不够时说明缺口，等待用户明确同意后才能安装。必需依赖未获授权时记录阻塞；可选依赖缺失只记录降级模式。
 
@@ -38,7 +38,7 @@ disable-model-invocation: true
 
     **会话记录轻量恢复**：启用 `taskContext.sessionJournal` 后，可用 `会话记录.md` 记录“本轮做了什么、为什么这么做、下步是什么”。它只用于恢复和交接，不升级为需求、计划或验收真源。
 
-    **歧义与影响面**：非低风险歧义先写清假设、备选解释和阻塞点；每次改代码前评估影响范围，不顺手重构，不清理无关文件；每一行改动都应能追溯到用户请求、当前 Task 或验证修复所必需的最小清理。T2/T3 且影响面不明时先用 `codebase-memory-scout` 或 `rg` 缩小范围。
+    **歧义与影响面**：非低风险歧义先写清假设、备选解释和阻塞点；每次改代码前评估影响范围，不顺手重构，不清理无关文件；每一行改动都应能追溯到用户请求、当前 Task 或验证修复所必需的最小清理。T2/T3 且影响面不明时先用 `rg` 沿 callers/callees 与相关测试缩小范围（有可用的代码图工具时再用）。
 
     **执行强度与审查强度正交**：开工前先判定 `execution tier`，再独立计算 `review profile`。T0 低风险文字可直接改；T1 微计划 + 定向验证；T2 必须写短工程计划：目标、影响面、RED 测试、GREEN 验证路径、升级 T3 触发条件，并使用 `split-self-review`；高影响 T2 升为 `independent-two-stage`；T3 固定执行 `分类 -> 成功标准 -> 风险/影响面 -> RED -> GREEN -> REFACTOR -> fresh 验证 -> 独立 Spec review -> 独立 quality review -> doc-sync -> finish checklist`。高影响触发、Reviewer 隔离、finding 状态机、最小审查包、Phase ledger 与 Review Receipt 以 `code-review/references/review-profiles.md` 为统一协议。
 

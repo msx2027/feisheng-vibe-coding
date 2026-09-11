@@ -2,7 +2,7 @@
   "schema": "feisheng-local-patches/v1",
   "owner": "provenance",
   "status": "active",
-  "note": "本仓库自持（不再依靠上游）后，允许对 vendored 内容做本地补丁。每个补丁必须登记：快照、路径、来源 revision、原始内容 sha256、补丁后 sha256、原因、证据。未登记的偏差一律仍视为漂移（fail-closed）；登记但哈希不符也失败（登记不得过期）。",
+  "note": "本仓库自持（不再依靠上游）后，允许对 vendored 内容做本地补丁。每个补丁必须登记：快照、路径、来源 revision、原始内容 sha256、补丁后 sha256、原因、证据。未登记的偏差一律仍视为漂移（fail-closed）；登记但哈希不符也失败（登记不得过期）。命名空间有两类：snapshot = 快照名（path 相对该快照根，如 sliver-core）表示「快照树本身被打补丁」；snapshot = runtime-import（path 相对仓库根，如 skills/product/bug-fixer/SKILL.md）表示「一等副本偏离来源快照」。两类都同时登记 originalSha256 与 patchedSha256，因此都完全可逆。",
   "policy": {
     "unregisteredDeviation": "drift; verification fails",
     "staleRegistration": "registration hash mismatch; verification fails",
@@ -63,6 +63,114 @@
           "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
           "patchedSha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f",
           "linesChanged": 74
+        }
+      ]
+    },
+    {
+      "id": "retired-capability-reference-text-fix",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-11",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b，mattpocock-skills 9fe7e7a3bb352851b986725bab1c7cfb17610a97（见 files[]）",
+      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。",
+      "reason": "能力定批评次把 35 个未接入技能裁决为 13 接入 / 22 退役后，正文引用成了悬空指针：模型会去够包内并不存在的 skill 或路径（例如 bug-fixer 依赖清单里的 skills/beginner-flow-guide/SKILL.md、code-review 里的 /setup-matt-pocock-skills、diagnosing-bugs 里的 /improve-codebase-architecture、dev-builder 脚手架模板里的 owner: target-constitution-setup）。这是文本层一致性缺陷，不是能力缺失：被退役对象要么已有已接入替代（improve-codebase-architecture → codebase-design），要么职能已由控制面接管（target-constitution-setup / target-runtime-setup → 控制面项目宪法与接管路由，owner 记为 sliver-vibe-coding），要么本就是没有被配置的可选增强（codebase-memory-scout → 明确降级为 rg）。改法是就地替换引用文本，保留原有语义与降级话术，不新增能力、不放宽任何门禁。",
+      "evidence": "evidence/20260911-retired-reference-cleanup.md",
+      "verification": "verify.ps1 步骤 1c 与 build-canonical-catalog.ps1 的副本自洽校验都改为识别本登记：副本 == patchedSha256 且来源快照 == originalSha256 才算合法，未登记的偏差仍在两处失败（fail-closed）；重生成 catalog 后 verify -IncludeHostEvidence -IncludePackage 全绿",
+      "files": [
+        {
+          "path": "skills/event/evolution-engine/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/evolution-engine/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "d7527dcb9be0aa6a0d756b92cf55a5a26bdc488093813ef2d1b645b727f96641",
+          "patchedSha256": "40a86215444a7394039aa2af475d33552657a2fe948c3b5a94d24cb8cffc5be0",
+          "linesChanged": 1
+        },
+        {
+          "path": "skills/product/bug-fixer/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/bug-fixer/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec",
+          "patchedSha256": "335d7971d672394d03fb7de4023c8ba6a983b0ca5f3c5c72a66480bd5ccefeca",
+          "linesChanged": 3
+        },
+        {
+          "path": "skills/product/dev-builder/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
+          "patchedSha256": "1b1c1ed4056441a4a58475034ced741403ef97e4b051410598d9f4b8bcd606d4",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/product/dev-builder/references/workflow-initialization.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/references/workflow-initialization.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "8b7a70a21b46d149bd743184096e32ab2b19642f766ffe687a57edcefe707314",
+          "patchedSha256": "958ceb635bb5c92c2e630d84b4226e6eea18a996ff3fbfeeebdba6ebeff6a696",
+          "linesChanged": 1
+        },
+        {
+          "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/_vibe-docs.json.template",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/templates/project-scaffolds/_target-docs/_vibe-docs.json.template",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "3fa61949e50b8c2c91ebaaf18da4b8d7b07b63eead5d1d996d8f7516723a3d66",
+          "patchedSha256": "e361c2612ef79a62fb18e571f260cc9ba66f5e77e4defa538da6b84897c05fe7",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "e9a7dcd77e05590b907afe936ff1544b0f697df2cb23a277dd1682b2dcc7f796",
+          "patchedSha256": "fc684b8626149cbae6a216903fe2dd56e0d3aed3869a71ded3b718bf13bc3cca",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/product/architecture-foundation/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/architecture-foundation/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "dc24aeaa6727484097a7e599986d20dc761381d4e35d27838f04328aa4790de8",
+          "patchedSha256": "c4f3671dce746e317aff6bc57382decc5d68d50640fa9e883d36339794f65dec",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/product/dev-planner/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-planner/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
+          "patchedSha256": "6bfeacd88ffd0e43ac825619201f630e196a6d3a8f54f19ef7d7b6aac2caf0b8",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/product/hotspot-governor/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/hotspot-governor/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "e0397907ada596ffe14526d5cd5e278d9bf70b61cdad8ff0d925509f1aa258e7",
+          "patchedSha256": "2b8538a71ce258874a537a5cd79919c69bc00931ef028b9b67a1cddcfde478a2",
+          "linesChanged": 4
+        },
+        {
+          "path": "skills/product/test-automation/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/test-automation/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "4da564996970853f87f3f6041816e55d2a04a8e566c1bb9f42709a3301c96488",
+          "patchedSha256": "db20c145d8bebaacdfe464c1b85dd827f62c07bc8692decee476a2b300a48b77",
+          "linesChanged": 2
+        },
+        {
+          "path": "skills/engineering/code-review/SKILL.md",
+          "snapshotPath": "sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
+          "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+          "originalSha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903",
+          "patchedSha256": "e7e7f5f2afcb4e8dc1ad203793e9c899dd556c196bd8ae06c4322ae9105a4b9b",
+          "linesChanged": 1
+        },
+        {
+          "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+          "snapshotPath": "sources/mattpocock-skills/skills/engineering/diagnosing-bugs/SKILL.md",
+          "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+          "originalSha256": "279dc45fa48f3f53f1e156f2401f2c0799a5adcb0af419ce1bdeafc901644fb4",
+          "patchedSha256": "bd37e1e84f6a9c58a256c47081ae397f016d78645f74c6281a031d0bca1d4af1",
+          "linesChanged": 1
         }
       ]
     }

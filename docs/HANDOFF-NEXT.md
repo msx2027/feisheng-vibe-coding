@@ -16,7 +16,7 @@
 | D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `feisheng-vibe-coding` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
-| D4 | **门禁全绿** | `verify.ps1`（默认 12 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
+| D4 | **门禁全绿** | `verify.ps1`（默认 13 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
@@ -31,7 +31,7 @@
 - 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 远端：`https://github.com/msx2027/feisheng-vibe-coding`（private）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**已在 `F:\skiils工具\_archive\` 冷存并删除本体**（三个 zip 全等校验通过）；`sources/` 快照为唯一内容真源
-- 门禁：`verify.ps1` 默认 **12 步**；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步。2026-09-11 治理对齐批实测 `-IncludeHostEvidence -IncludePackage` = **14/14**；fresh clone 两种 shell × 两种 `autocrlf` 全过
+- 门禁：`verify.ps1` 默认 **13 步**（2026-09-11 退役引用清理批新增「导入副本与快照一致性（Matt）」）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步。同批实测 `-IncludeHostEvidence -IncludePackage` = **15/15**（治理对齐批时为 14/14，口径随新增步数更新）
 - 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **422** 文件
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
@@ -111,7 +111,7 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口；默认 12 步，可选步另计）
+门禁（scripts/verify.ps1，单入口；默认 13 步，可选步另计）
   1 catalog 同步 · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
   5 Vibe Hook 适配器安全契约（采集面 + Digest）
@@ -405,7 +405,7 @@ owner 提出两件事：①验证 `-p` 会话里技能描述是否进入模型�
   vibe 未审查 2（beginner-flow-guide、shape）、vibe checker 1（vibe-code-review）。
   需要时可从 `sources/` 快照捞回。
 
-**③ 本次新发现（未修，待 owner 定）**
+**③ 本次新发现（已按 owner 决定执行 A，2026-09-11 完成）**
 
 退役只清了共享根链接，**已接入技能/文档正文里仍留有 25 处指向已退役能力的引用**（13 个文件）：
 
@@ -416,11 +416,23 @@ owner 提出两件事：①验证 `-p` 会话里技能描述是否进入模型�
 | 模板 owner 字段 | dev-builder 脚手架 `_vibe-docs.json.template` / `文档索引.md.template` 的 `owner: target-constitution-setup`（3 文件 5 处） | 5 |
 | 文档陈旧清单 | `skills/README.md` 的「正式接入 / 明确未接入」两段（已被本轮修正） | 2（本轮已修） |
 
-三条可选路径（未获决定前不改 vendored 内容）：
+owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已实施完成：
 
-- **A** 登记 `LOCAL-PATCHES.json` 本地补丁，逐条改写文本（动 vendored 内容 → 需重录 provenance 基线 + 门禁复跑）；
-- **B** 沿用 §9.7 先例：文本不动，只加清点门禁 + 已知清单（保证不再新增、不静默漂移）；
-- **C** 不动，仅留档（当前状态）。
+- 处理 **12 文件 23 处**（另 2 处 `skills/README.md` 已在上批修掉）；替换口径：
+  `improve-codebase-architecture` → `codebase-design`（已接入）；`setup-matt-pocock-skills` → 向用户确认 tracker 约定；
+  `skill-builder` → 本仓登记流程；`target-constitution-setup` / `target-runtime-setup` → 控制面接管（owner 记 `sliver-vibe-coding`）；
+  `codebase-memory-scout` → 「影响面侦察（`rg` / 可用的代码图工具）」；`skills/beginner-flow-guide/SKILL.md` 死路径整行删除
+- **补丁模型扩成两个命名空间**（`provenance/LOCAL-PATCHES.json`）：原有「快照树补丁」+ 新增
+  `snapshot = runtime-import`（一等副本偏离来源快照，同时登记 `originalSha256` 与 `patchedSha256`，完全可逆）
+- **门禁同步收紧而非放宽**：`verify.ps1` 1c 与 `build-canonical-catalog.ps1` 两处副本自洽校验改为
+  「未登记即失败、登记需双哈希吻合、登记过期也失败」；并新增步骤 **1c-2「导入副本与快照一致性（Matt）」**，
+  补上 Matt 侧此前缺失的逐文件副本覆盖（用 `SKILL-INVENTORY.json` 按 `(source, sha256)` 还原上游路径）
+- 验证：`verify -IncludeHostEvidence -IncludePackage` = **15/15**（本机）；**4 条反例**（已登记文件再改 / 未登记文件改动 /
+  登记过期 / Matt 侧未登记改动）全部按设计失败并逐字节还原；修后扫描 579 文件，**残留悬空引用 0 处**；
+  共享根重装 422 文件（`validated=true`）后宿主包内复扫同样 0 命中
+- 证据：`evidence/20260911-retired-reference-cleanup.md`
+- 注意：`sources/**` 与 `provenance/SKILL-INVENTORY.json` **未被修改**（内容真源与来源事实快照保持原样）；
+  重跑导入脚本会用快照覆盖补丁副本，届时门禁按 `patchedSha256` 不符失败，这是有意的 fail-closed
 
 ---
 
@@ -478,6 +490,16 @@ owner 提出两件事：①验证 `-p` 会话里技能描述是否进入模型�
 30. **共享根不能承载宿主专属适配**：一个槽位文件放不了两个宿主的内容（Claude 专用版与核心中性版差 58 行，且 Codex 不覆盖该槽位）→ 共享根用中性版
 31. **`[string]` 套在布尔表达式上会把条件变成恒真**：`[string]$x.EndsWith(...)` 转换的是**整个方法调用结果**，布尔被转成 `"True"/"False"` 字符串，而非空字符串在 PowerShell 里是真值 → 条件永远成立（GA 批 collector 真实踩过：82 条记录全部误匹配 231 条目）。判定必须先赋给布尔变量再进 if
 32. **同一份数据别让两种匹配规则并存**：目录名匹配会认领重名技能（vibe `code-review` ↔ Matt `code-review`），宿主归属判定一律用 catalog path 精确匹配（GA 批已改，见 `collect-host-skill-evidence.ps1`）
+33. **`apply_patch` 编辑保真树文件有两个字节副作用**（2026-09-11 退役引用清理批实测）：①新增/替换的行按 **LF** 写入，
+    混进 CRLF 文件（如 `skills/engineering/*`，实测 `crlf=86 lf=1`）；②可能**吃掉文件末尾的空行**（实测
+    `workflow-initialization.md` 尾部从 2 个换行变 1 个）。所以改完必须逐文件核对：CRLF/LF 计数、尾部换行数、
+    以及 `git diff --stat` 是否**只有预期行**；发现混行就按原风格归一（读文本 → 统一 CRLF → 写回无 BOM 字节）
+34. **副本补丁是两个命名空间，不要混用**：`snapshot = <快照名>` 是快照树补丁（path 相对快照根）；
+    一等副本（`skills/**`）必须用 `snapshot = runtime-import`（path 相对仓库根，另带 `snapshotPath`）。
+    副本路径写进快照命名空间会被快照校验误读成「快照本身应等于 patchedSha256」而直接失败
+35. **Matt 侧副本检查依赖 `SKILL-INVENTORY.json` 的 `(source, sha256)` 唯一命中**来还原上游路径
+    （Matt 的 `skills/engineering`、`skills/productivity` 与目的地分组不同名，不能按路径猜）；
+    命中 0 或 >1 条都按失败处理，不允许静默跳过
 
 ---
 
@@ -493,7 +515,7 @@ owner 提出两件事：①验证 `-p` 会话里技能描述是否进入模型�
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                     单入口（默认 12 步；-IncludeHostEvidence / -IncludePackage 各 +1）
+  scripts/verify.ps1                     单入口（默认 13 步；-IncludeHostEvidence / -IncludePackage 各 +1）
   scripts/runtime-projection-guard.ps1   共享投影门禁 + 计划 + overlay 实现（唯一）
   scripts/validate-release-notices.ps1   NOTICE（逐族策略）
   scripts/validate-route-bindings.ps1    路由绑定（唯一命中 / 不得第二入口）

@@ -18,7 +18,7 @@ disable-model-invocation: true
     - `tools/check-hotspots.mjs` → 有则优先运行热区扫描；缺失时降级为 `rg`、行数统计和定向文件读取。
     - Git → 有则识别 staged diff、改动面和是否继续向热区新增逻辑。
     - `.vibe-docs.json`、需求文档、开发计划、验收记录和接口契约 → 用于判断热区是否落在当前 Phase、已验收范围或核心契约路径。
-    - `codebase-memory-scout` → 当热区涉及调用链不清、跨模块影响面或高耦合风险时，作为辅助侦察。
+    - 影响面侦察（`rg` / 可用的代码图工具）→ 当热区涉及调用链不清、跨模块影响面或高耦合风险时，作为辅助侦察。
 
     安装策略：
     - 本 Skill 不安装依赖、不修改目标项目依赖。
@@ -79,7 +79,7 @@ disable-model-invocation: true
     - 需要判断“还能不能继续往这里加”时交给 `code-review` 做审查。
     - 测试文件、fixture、测试数据和自动化覆盖问题交给 `test-automation`。
     - UI 大组件如果暴露 UI 包、token 或组件复用债务，交给 `ui-system-guardian`。
-    - 调用链不清、影响面跨模块或核心 runtime 高耦合时，建议先用 `codebase-memory-scout` 缩小范围。
+    - 调用链不清、影响面跨模块或核心 runtime 高耦合时，建议先用 `rg` 沿 callers/callees 与相关测试缩小范围（有可用的代码图工具时再用）。
 
 [报告模板]
     默认使用以下结构，不输出营销文案，不把方案写成已完成实现：
@@ -100,7 +100,7 @@ disable-model-invocation: true
     3. <暂不动的高风险范围>
 
     **后续路由**
-    <dev-builder / code-review / test-automation / ui-system-guardian / codebase-memory-scout / 等待用户确认>
+    <dev-builder / code-review / test-automation / ui-system-guardian / 影响面侦察 / 等待用户确认>
 
     **人工验收状态**
     <不需要人工验收 / 需要用户确认拆分方案 / 需要用户真实操作确认>
@@ -131,7 +131,7 @@ disable-model-invocation: true
     - 是否影响已人工验收路径。
     - 是否已有足够测试保护拆分。
     - 是否存在更小入口可以承接新逻辑。
-    - 是否需要先用 `codebase-memory-scout` 找调用链和相关测试。
+    - 是否需要先用 `rg`（有可用的代码图工具时再用）找调用链和相关测试。
 
 [热区治理策略]
     **分类策略**：

@@ -11,5 +11,5 @@
 | currentExecution | `docs/plans/执行光标.md` | dev-builder | projection | onDemand |
 | manualAcceptance | `验收记录.md` | dev-builder | log | onDemand |
 | interfaceContracts | `接口契约.md` | product-spec-builder | source | onDemand |
-| projectProfile | `项目画像.md` | target-constitution-setup | source | onDemand |
-| constitutionDesign | `宪法设计.md` | target-constitution-setup | source | onDemand |
+| projectProfile | `项目画像.md` | sliver-vibe-coding | source | onDemand |
+| constitutionDesign | `宪法设计.md` | sliver-vibe-coding | source | onDemand |

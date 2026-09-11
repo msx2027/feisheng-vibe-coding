@@ -10,7 +10,7 @@ description: 从固定点（commit、branch、tag 或 merge-base）开始，按 
 
 两个轴线都作为**并行 sub-agents**运行，避免互相污染 context；然后这个 skill 聚合它们的 findings。
 
-Issue tracker 应该已经提供给你；如果缺少 `docs/agents/issue-tracker.md`，运行 `/setup-matt-pocock-skills`。
+Issue tracker 应该已经提供给你；如果缺少 `docs/agents/issue-tracker.md`，向用户确认 issue 来源与 tracker 约定再继续，不要自行发明 tracker 规则（tracker 配置不随本包分发）。
 
 ## Process
 

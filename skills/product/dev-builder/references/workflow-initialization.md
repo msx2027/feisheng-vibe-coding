@@ -30,7 +30,7 @@
         如项目类型为 Web / Desktop / Node CLI、是新项目，且 `scaffold policy = template`：
         1. 先选择对应模板：`next-feature-first / vite-feature-first / electron-next-feature-first / cli-feature-first`
         2. 运行 `bash ./tools/render-project-scaffold.sh --template <template> --project-name <project-name> --output <project-dir>` 渲染默认骨架
-        3. 确认脚手架已调用 `tools/init-target-runtime.mjs` 初始化目标项目 `AGENTS.md` / `CLAUDE.md` 轻量 managed block；已有项目接入时单独走 `target-runtime-setup`
+        3. 确认脚手架已调用 `tools/init-target-runtime.mjs` 初始化目标项目 `AGENTS.md` / `CLAUDE.md` 轻量 managed block；已有项目接入时按控制面的接管路由处理（`references/routes-rescue.md`），不在本 Skill 内另写目标项目运行时块
         4. 先确认模板自带的运行壳齐全：Vite 至少有 `index.html`；Electron 至少有 `tsconfig.electron.json` 与 `scripts/dev-electron.mjs`；Node CLI 至少有 `src/index.mjs` 和 smoke 入口
         5. Web / Desktop 模板确认自带 `src/shared/ui`、`tools/check-ui-reuse.mjs` 和 `check:ui-reuse`，页面层从第一屏开始复用 UI 包；Node CLI 不创建 Web UI 包
         6. 确认模板自带 `接口契约.md`、`tools/check-api-contracts.mjs` 和 `check:api-contracts`，真实接口从第一版开始登记能力契约

@@ -37,6 +37,33 @@ if (-not (Test-Path -LiteralPath $classificationPath -PathType Leaf)) { throw "�
 $inventory = Get-Content -Raw -Encoding UTF8 -LiteralPath $inventoryPath | ConvertFrom-Json
 $classification = Get-Content -Raw -Encoding UTF8 -LiteralPath $classificationPath | ConvertFrom-Json
 
+# 一等副本的本地补丁登记（命名空间 'runtime-import'）。
+# 为什么放在生成期：本脚本的 self-check 会要求「一等副本 == 来源登记的 sha256」，
+# 这条断言正是「副本逐字节等于来源」的不变量。允许的例外只能来自 LOCAL-PATCHES.json
+# 的显式登记（原哈希 + 补丁后哈希都要对上），未登记的偏差仍然在这里失败（fail-closed）。
+# 复用共享模块，避免出现第二份补丁读取实现。
+$provenanceModule = Join-Path $PSScriptRoot 'provenance-integrity.ps1'
+if (-not (Test-Path -LiteralPath $provenanceModule -PathType Leaf)) {
+    throw "缺少 provenance integrity 模块: $provenanceModule"
+}
+. $provenanceModule
+$runtimeCopyPatches = Get-RuntimeCopyPatches -RepositoryRoot $RepoRoot
+
+function Test-RegisteredRuntimeCopyPatch {
+    param(
+        [Parameter(Mandatory = $true)][string]$RecordPath,
+        [Parameter(Mandatory = $true)][string]$RegisteredSha256,
+        [Parameter(Mandatory = $true)][string]$ActualSha256
+    )
+    # 返回 $null 表示「不是已登记补丁」，否则返回补丁登记对象（原哈希与补丁后哈希都必须吻合）。
+    $key = ([string]$RecordPath).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+    if (-not $runtimeCopyPatches.ContainsKey($key)) { return $null }
+    $patch = $runtimeCopyPatches[$key]
+    if ([string]$patch.originalSha256 -ne $RegisteredSha256) { return $null }
+    if ([string]$patch.patchedSha256 -ne $ActualSha256) { return $null }
+    return $patch
+}
+
 if ($classification.schema -ne 'feisheng-skill-classification/v1') {
     throw "不支持的 classification schema: $($classification.schema)"
 }
@@ -276,7 +303,10 @@ function Get-ExplicitBundlePlan {
         throw "显式 bundle 里没有记录指向的文件: $RecordPath（skill '$Id'）"
     }
     if ([string]$selfEntries[0].sha256 -ne $SourceSha256) {
-        throw "一等副本与登记 sha 不一致: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+        $registeredPatch = Test-RegisteredRuntimeCopyPatch -RecordPath $RecordPath -RegisteredSha256 ([string]$SourceSha256) -ActualSha256 ([string]$selfEntries[0].sha256)
+        if ($null -eq $registeredPatch) {
+            throw "一等副本与登记 sha 不一致（且无匹配的本地补丁登记）: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+        }
     }
 
     return [pscustomobject]@{
@@ -380,7 +410,10 @@ function Get-BundlePlan {
         throw "导入目录里没有记录指向的文件: $RecordPath（skill '$Id'）"
     }
     if ([string]$selfEntries[0].sha256 -ne $SourceSha256) {
-        throw "导入副本与登记 sha 不一致: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+        $registeredPatch = Test-RegisteredRuntimeCopyPatch -RecordPath $RecordPath -RegisteredSha256 ([string]$SourceSha256) -ActualSha256 ([string]$selfEntries[0].sha256)
+        if ($null -eq $registeredPatch) {
+            throw "导入副本与登记 sha 不一致（且无匹配的本地补丁登记）: $RecordPath 登记=$SourceSha256 实际=$($selfEntries[0].sha256)"
+        }
     }
 
     return [pscustomobject]@{

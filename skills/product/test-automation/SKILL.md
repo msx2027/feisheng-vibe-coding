@@ -32,7 +32,7 @@ disable-model-invocation: true
     - 现有测试配置 → 例如 `playwright.config.*`、`vitest.config.*`、`jest.config.*`、`pytest.ini`、`tox.ini`、`.github/workflows/*`
     - 浏览器自动化依赖 → Playwright / browser binaries 有则做 UI 自动化；缺失则按安装策略处理
     - CI 环境 → 有则同步测试命令；缺失不阻塞本地测试自动化
-    - codebase-memory-scout → author / audit 模式中用于找被测函数、调用链、相似测试和测试缺口；MCP 不可用时降级为 `rg`
+    - 影响面侦察（`rg` / 可用的代码图工具）→ author / audit 模式中用于找被测函数、调用链、相似测试和测试缺口；无可用代码图工具时用 `rg`
 
     安装策略：
     - 已有测试框架时优先复用，不新增平行框架
@@ -68,7 +68,7 @@ disable-model-invocation: true
 
     **UI 验收工具箱复用**：UI / Electron 验收脚本如果重复出现启动窗口、等待页面、点击路径、截图、DOM / 滚动条检查、report 输出和进程清理等样板逻辑，应优先复用或创建目标项目内的 UI 验收工具箱；一轮临时低风险脚本可以内联，第二次类似脚本或样板逻辑明显重复时不再继续复制整段脚本。
 
-    **代码图辅助选点**：补测试前，如目标函数、调用链或现有测试位置不清，先用 `codebase-memory-scout` 找被测入口、相关 callers/callees 和相似测试；侦察不替代测试断言设计和 fresh 运行证据。
+    **调用链辅助选点**：补测试前，如目标函数、调用链或现有测试位置不清，先用 `rg`（有可用的代码图工具时再用）找被测入口、相关 callers/callees 和相似测试；侦察不替代测试断言设计和 fresh 运行证据。
 
     **证据可复核**：完成声明必须同时包含本轮 RED 和 GREEN：刚刚运行的命令、RED 正确失败摘要、GREEN 测试数量或关键输出、相关回归结果和未验证项；`No test files found` 不是通过证据。
 

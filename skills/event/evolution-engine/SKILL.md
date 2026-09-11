@@ -71,7 +71,7 @@ disable-model-invocation: true
     用户逐条确认或跳过：
     - 规则毕业 → 将 feedback 内容写入目标 SKILL.md 或 CLAUDE.md，标记 graduated: true
     - Skill 优化 → 修改对应 SKILL.md
-    - 新 Skill → 调用 skill-builder 创建
+    - 新 Skill → 先出提议，再按宿主技能治理流程登记（本仓真源：`provenance/SKILL-CLASSIFICATION.json` 定编 + 导入脚本落盘），不得裸建未登记技能
     - 跳过 → 标记 skipped: true，不再重复提议
 
 [返回格式]
