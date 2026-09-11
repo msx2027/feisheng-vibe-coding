@@ -196,15 +196,19 @@ try {
     }
 
     # 5b) reparse 守卫负面用例：.claude/feedback 是 junction 时，纠错信号不得写入重定向目录
-    $evil = Join-Path $work 'evil'
-    New-Item -ItemType Directory -Force -Path $evil | Out-Null
-    $feedbackDir = Join-Path $target '.claude/feedback'
-    Remove-Item -LiteralPath $feedbackDir -Recurse -Force
-    cmd /c mklink /j ("$feedbackDir") ("$evil") | Out-Null
-    $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-junction","prompt":"不对，你理解错了"}' -Target $target
-    if ($r.ExitCode -ne 0) { throw "junction 场景应 exit 0（静默降级）" }
-    if (@(Get-ChildItem -LiteralPath $evil -Recurse -Force -File).Count -gt 0) { throw 'junction 逃逸：纠错数据被写出目标项目' }
-    Remove-Item -LiteralPath $feedbackDir -Force
+    # 注：junction 是 Windows 特有机制，Linux CI 跳过此负面用例（Linux 无 junction，symlink 行为不同）
+    $isWindowsPlatform = (-not $IsLinux) -and (-not $IsMacOS)
+    if ($isWindowsPlatform) {
+        $evil = Join-Path $work 'evil'
+        New-Item -ItemType Directory -Force -Path $evil | Out-Null
+        $feedbackDir = Join-Path $target '.claude/feedback'
+        Remove-Item -LiteralPath $feedbackDir -Recurse -Force
+        cmd /c mklink /j ("$feedbackDir") ("$evil") | Out-Null
+        $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-junction","prompt":"不对，你理解错了"}' -Target $target
+        if ($r.ExitCode -ne 0) { throw "junction 场景应 exit 0（静默降级）" }
+        if (@(Get-ChildItem -LiteralPath $evil -Recurse -Force -File).Count -gt 0) { throw 'junction 逃逸：纠错数据被写出目标项目' }
+        Remove-Item -LiteralPath $feedbackDir -Force
+    }
 
     # 6) 写入边界：目标目录里除白名单外不得有新文件
     $allowed = @(
