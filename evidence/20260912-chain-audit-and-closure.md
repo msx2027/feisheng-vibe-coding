@@ -78,7 +78,7 @@ Windows PowerShell 5.1：verify.ps1 裸调无参数 = 15/15（修复前为第 5 
 ## 4. owner 裁决与已知债处置（2026-09-12 第二轮，全部收口）
 
 1. **归档 zip 下落——已裁决**：owner 确认三个归档 zip 为**主动删除**，不留冷存副本。终态落档：AGENTS.md 迁移规则段改为「快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除；已删除的源项目不是工作对象，不得从任何外部副本/缓存/备份解包回去」；SOURCE-INVENTORY 各 archive 块加 `zipDisposition: deleted-by-owner`，auditNotes 改为终态说明（files/bytes 口径差异保留为历史记录，不作对账依据）；HANDOFF-NEXT §13 检查清单对应项作废。仓库内快照 + PROVENANCE-INTEGRITY.json 为唯一可对账终态。
-2. **CI 结果留痕**：本批已按 A/B/C/D 分组拆分提交；推送后 release-gate 触发的 run 应补登 evidence（延续 run 9 之后的空档）。
+2. **CI 结果留痕——已完成**：本批按 A/B/C/D 分组拆分提交（5071ed5 / ae3ffd3 / 68b4b41 / 02d06ca），推送后 release-gate run 34656178737 全绿（ubuntu fresh clone，verify 15/15 + 包装配），已补登 `evidence/20260912-ci-audit-batch-run.md`。
 3. **三项已知债——已处置**：
    - CAPABILITY-INDEX 裁决表退役标记：**已修**——build-capability-index.ps1 渲染层为 retired 成员追加「（已退役）」标记并加图例说明，再生生效（rule 文案保留退役前口径，属溯源内容）。
    - Hook 事件面 4 处硬编码：**已修**——install-vibe-hooks.ps1 改为从 contract.json 派生启用事件集（timeout 取契约 timeoutSeconds，matcher 保持宿主侧映射），契约与 runner 支持面漂移时拒绝安装（fail-closed）；测试的禁用事件清单同样改为契约派生。
