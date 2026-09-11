@@ -3385,5 +3385,12 @@
       "snapshotSha256": "52214a94d500e1548c14f4bca6e7ebbc9bb346fa0536cbeb7776cb2d56e14b58",
       "sha256Match": true
     }
+  ],
+  "auditNotes": [
+    {
+      "at": "2026-09-12",
+      "note": "本记录的 snapshotTreeSha256（d74d2c5a...）是 2026-09-10 导入时点基线；快照其后随 docs-import 批次扩为 553 文件，当前权威树摘要以 provenance/PROVENANCE-INTEGRITY.json 为准（d22a304c...，verify 步骤「来源快照完整性」强制比对）。跨文件对账勿引用本文件的树摘要字段。",
+      "evidence": "evidence/20260912-chain-audit-and-closure.md"
+    }
   ]
 }

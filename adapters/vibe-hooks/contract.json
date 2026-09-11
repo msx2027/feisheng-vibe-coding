@@ -87,7 +87,7 @@
   "enablePrerequisites": {
     "per-skill-license-and-notice-map": "PASS 2026-09-11 (owner personal-use waiver recorded in LICENSE-MAP vibe-original-* families)",
     "verified-source-revision": "PASS (snapshot pinned by provenance integrity gates)",
-    "host-discovery-evidenced": "PASS 2026-09-11 (HOST-DISCOVERY-EVIDENCE.json re-captured with path-exact attribution; 39 admitted all unified-bundle visible)",
+    "host-discovery-evidenced": "PASS 2026-09-11 (HOST-DISCOVERY-EVIDENCE.json re-captured with path-exact attribution; 52 admitted all unified-bundle visible)",
     "hook-fresh-session-smoke": "UNVERIFIED (no in-repo artifacts; installer refuses this repo by design; entry-level D2/D3 probes in evidence/20260911-* are a different scope - do not cite them as hook smoke)",
     "event-order-and-concurrency-smoke": "PASS 2026-09-11 (tests/test-vibe-hook-adapter.ps1 in pwsh + PS 5.1: dedup marker, expiry re-record, read-only session-start, junction-escape negative case)",
     "approved-write-whitelist-and-rollback-plan": "PASS 2026-09-11 (writeWhitelist v2; rollback = -Uninstall or contract status flip to disabled, runner then fails closed with non-zero exit)",

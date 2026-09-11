@@ -14,7 +14,8 @@
         "bytes": 7502050,
         "sha256Verified": true,
         "crcVerified": true,
-        "deletedAt": "2026-09-11"
+        "deletedAt": "2026-09-11",
+        "zipDisposition": "deleted-by-owner (owner ruling 2026-09-12; no cold-storage copy retained)"
       },
       "snapshot": {
         "path": "governance/sliver-core",
@@ -36,14 +37,15 @@
         "sha256Verified": true,
         "crcVerified": true,
         "deletedAt": "2026-09-11",
-        "note": "非 git 无远端；归档 zip 与仓库内 sources/vibe-coding-skills 快照为唯一来源"
+        "note": "非 git 无远端；归档 zip 与仓库内 sources/vibe-coding-skills 快照为唯一来源",
+        "zipDisposition": "deleted-by-owner (owner ruling 2026-09-12; no cold-storage copy retained)"
       },
       "snapshot": {
         "path": "sources/vibe-coding-skills",
         "files": 553,
         "sha256Mismatches": 0,
         "unexpectedFiles": 0,
-        "treeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca",
+        "treeSha256": "sha256:d22a304ce9b69e9d2467aea6abb8237dba7f78dfbbe711a0eed97994c9010393",
         "provenance": "provenance/VIBE-IMPORT.json"
       }
     },
@@ -70,7 +72,8 @@
           ],
           "evidence": "evidence/20260911-matt-source-dirty-state.md",
           "ownerDecision": "不需要保留（owner 本人随意改动）"
-        }
+        },
+        "zipDisposition": "deleted-by-owner (owner ruling 2026-09-12; no cold-storage copy retained)"
       },
       "snapshot": {
         "path": "sources/mattpocock-skills",
@@ -89,5 +92,12 @@
     "invocation and write-target mapping",
     "source-to-runtime rebuild result"
   ],
-  "note": "三个源项目已于 2026-09-11 归档并删除本体。归档 zip 是只读历史，不参与迁移；仓库内 snapshot 是唯一内容真源，import 脚本只读 snapshot。"
+  "note": "三个源项目已于 2026-09-11 归档并删除本体。归档 zip 是只读历史，不参与迁移；仓库内 snapshot 是唯一内容真源，import 脚本只读 snapshot。",
+  "auditNotes": [
+    {
+      "at": "2026-09-12",
+      "note": "owner 裁决（2026-09-12）：三个归档 zip 已删除，不留冷存副本——归档终态即本记录与仓库内快照（sources/、governance/sliver-core），快照树摘要以 provenance/PROVENANCE-INTEGRITY.json 为唯一权威（verify「来源快照完整性」步强制比对）。zip 缺席后 archive.files/bytes 不再可仲裁；本记录与 evidence/20260911-source-archive-and-ci.md 对 vibe/matt 的 files/bytes 口径差异（vibe 1342/12,281,313 vs 553/5,767,024；matt 173/1,046,962 vs 136/3,057,201）保留为历史记录，不作对账依据。vibe.snapshot.treeSha256 已同步为 PROVENANCE-INTEGRITY 现值。",
+      "evidence": "evidence/20260912-chain-audit-and-closure.md"
+    }
+  ]
 }

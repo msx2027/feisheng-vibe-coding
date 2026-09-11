@@ -20,9 +20,9 @@
         "projectEntry": "SKILL.md",
         "runtimeRecords": "由 provenance/CANONICAL-CATALOG.json 中 status ∈ decisionPolicy.acceptedStatuses 的 records[].bundle.files 决定（每条记录的 runtime 单位见 catalog.bundlePolicy）。",
         "hostFacts": [
-          "adapters/codex/agents/openai.yaml",
-          "adapters/codex/references/studio-codex.md",
-          "adapters/codex/references/execution-liveness-host.md"
+          "governance/sliver-core/packaging/adapters/codex/agents/openai.yaml",
+          "governance/sliver-core/packaging/adapters/codex/references/studio-codex.md",
+          "governance/sliver-core/packaging/adapters/codex/references/execution-liveness-host.md"
         ]
       },
       "exclude": [
@@ -31,7 +31,7 @@
         "unlicensed-third-party",
         "vibe-families-with-runtimeEligible-false"
       ],
-      "hostFacts": "mirrors Sliver's runtime-manifest targets.codex.overlay_files; symmetric with the claude projection which ships CLAUDE.md plus adapters/claude/runtime-adapter.md",
+      "hostFacts": "mirrors Sliver's runtime-manifest targets.codex.overlay_files; symmetric with the claude projection which ships CLAUDE.md plus governance/sliver-core/packaging/adapters/claude/references/runtime-adapter.md",
       "entryFileNote": "no AGENTS.md is shipped: those three files are the codex host facts. Codex reads the target project's own AGENTS.md natively (observed in the host smoke), and that constitution belongs to the target project and is materialised by Sliver's bootstrap/adoption templates - the claude projection does not ship AGENTS.md either, it ships a thin CLAUDE.md whose only content is @AGENTS.md",
       "freshSessionDiscovery": "VERIFIED for the Sliver control-plane bundle; A/B codex debug prompt-input: available skills 204 vs 203 and the skill gained its own root r0 (~/.codex/skills)",
       "freshSessionDiscoveryEvidence": "evidence/20260910-host-smoke-codex-and-bundle-validation.md",
@@ -44,7 +44,7 @@
         "runtimeRecords": "由 provenance/CANONICAL-CATALOG.json 中 status ∈ decisionPolicy.acceptedStatuses 的 records[].bundle.files 决定（与 codex 侧同一份 catalog 策略）。",
         "hostFacts": [
           "CLAUDE.md",
-          "adapters/claude/runtime-adapter.md"
+          "governance/sliver-core/packaging/adapters/claude/references/runtime-adapter.md"
         ]
       },
       "exclude": [
@@ -137,5 +137,11 @@
   "rollback": {
     "required": true,
     "condition": "any manifest, hook, plugin, provenance, or fresh-session smoke failure"
-  }
+  },
+  "projectionNotes": [
+    {
+      "at": "2026-09-12",
+      "note": "hostFacts 路径已按 2026-09-12 审计对齐实际落盘（overlay 契约源头在 governance/sliver-core/packaging/ 下；此前 adapters/codex|claude/... 为阶段 3 旧布局死路径）。本文件是投影策略/叙事文档：include 由 CANONICAL-CATALOG.json 的 bundle 决定，安装清单由三个 builder 生成并在 verify.ps1 中 Build+Validate。"
+    }
+  ]
 }

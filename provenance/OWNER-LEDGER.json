@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-owner-ledger/v1",
-  "status": "skeleton",
+  "status": "active",
   "owners": [
     {
       "id": "route-catalog",
@@ -18,7 +18,7 @@
     },
     {
       "id": "skill-catalog",
-      "path": "provenance/CANONICAL-CATALOG.json",
+      "path": "provenance/SKILL-CLASSIFICATION.json",
       "writes": [
         "canonical-skill-id",
         "invocation",
@@ -30,7 +30,6 @@
         "outputs"
       ],
       "inputs": [
-        "provenance/SKILL-CLASSIFICATION.json",
         "provenance/SKILL-INVENTORY.json",
         "provenance/SKILL-DECISIONS.md"
       ],
@@ -39,7 +38,11 @@
         "plugin manifests",
         "host discovery metadata",
         "docs/CAPABILITY-INDEX.md"
-      ]
+      ],
+      "ownedProjection": [
+        "provenance/CANONICAL-CATALOG.json"
+      ],
+      "note": "唯一决策写入点是 provenance/SKILL-CLASSIFICATION.json（AGENTS.md 迁移规则）；provenance/CANONICAL-CATALOG.json 只能由 scripts/build-canonical-catalog.ps1 再生（ownedProjection，非写入点）。SKILL-DECISIONS.md 是人读决策暂存，当前无机器消费方。"
     },
     {
       "id": "target-truth",
@@ -59,7 +62,7 @@
     },
     {
       "id": "runtime-projection",
-      "path": "packaging/runtime-projection.json",
+      "path": "scripts/runtime-projection-guard.ps1",
       "writes": [
         "host-bundle-include",
         "host-overlay",
@@ -67,12 +70,18 @@
         "manifest"
       ],
       "inputs": [
+        "provenance/CANONICAL-CATALOG.json",
+        "governance/sliver-core/references/routes-index.md",
+        "docs/target-truth-schema.json",
         "provenance/LICENSE-MAP.json"
       ],
       "projections": [
-        "Codex",
-        "Claude"
-      ]
+        "scripts/build-codex-runtime-projection.ps1",
+        "scripts/build-claude-runtime-projection.ps1",
+        "scripts/build-shared-runtime-projection.ps1",
+        "安装清单 shared-projection-manifest.json（install-runtime-projection.ps1）"
+      ],
+      "note": "唯一共享构建/校验实现是 runtime-projection-guard.ps1（三个 builder 点源它）；packaging/runtime-projection.json 是策略/叙事文档（非生成物、非安装清单，历史时点段已有 HISTORICAL 标注）。"
     },
     {
       "id": "local-patch-registry",

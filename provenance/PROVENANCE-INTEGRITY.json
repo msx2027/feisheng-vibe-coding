@@ -93,12 +93,20 @@
         },
         {
           "path": "references/engineering-execution.md",
-          "patchedSha256": "5255fe09e91b26d41aaacc4aae119ad4014f7b86aa96d59ff78861df26d384e5",
+          "patchedSha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f",
           "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
           "patchId": "sliver-route-binding-capability-providers"
         }
       ],
       "importRecord": "provenance/SLIVER-IMPORT.json"
+    }
+  ],
+  "annotations": [
+    {
+      "at": "2026-09-12",
+      "scope": "snapshots[sliver-core].locallyPatchedPaths",
+      "change": "engineering-execution.md 的 patchedSha256 由 5255fe09e91b26d4... 修正为 b6c78417705e6301...，与 LOCAL-PATCHES.json 补丁 sliver-route-binding-capability-providers 及当前文件字节一致（49207c0/00498fb 批次更新登记时未同步本文件）。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），本修正在此登记，并与 LOCAL-PATCHES、实际文件 sha256 双重对账。",
+      "evidence": "evidence/20260912-chain-audit-and-closure.md"
     }
   ]
 }
