@@ -33,4 +33,4 @@
 
 ## 目录
 
-见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)、[`docs/MIGRATION-PLAN.md`](docs/MIGRATION-PLAN.md)、[`provenance/SOURCE-BASELINE.json`](provenance/SOURCE-BASELINE.json) 和 [`provenance/OWNER-LEDGER.json`](provenance/OWNER-LEDGER.json)。
+见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)、[`docs/archive/MIGRATION-PLAN.md`](docs/archive/MIGRATION-PLAN.md)（历史基线）、[`provenance/SOURCE-BASELINE.json`](provenance/SOURCE-BASELINE.json) 和 [`provenance/OWNER-LEDGER.json`](provenance/OWNER-LEDGER.json)。
