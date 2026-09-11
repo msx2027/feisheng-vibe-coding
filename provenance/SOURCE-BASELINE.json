@@ -1,13 +1,21 @@
 {
   "schema": "feisheng-source-baseline/v1",
   "capturedAt": "2026-09-10",
-  "purpose": "迁移前只读基线；不是统一仓库的完成声明。",
+  "archivedAt": "2026-09-11",
+  "purpose": "迁移前只读基线；不是统一仓库的完成声明。归档终态记录见 SOURCE-INVENTORY.json。",
   "sources": {
     "sliver-vibe-coding": {
       "path": "F:\\skiils工具\\sliver-vibe-coding",
       "git": {"present": true, "validation": "python scripts/validate_skill.py -> pass"},
       "license": "Apache-2.0",
-      "migrationGate": "eligible-for-control-plane-review"
+      "migrationGate": "eligible-for-control-plane-review",
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\sliver-vibe-coding-20260911.zip",
+        "files": 299,
+        "bytes": 7502050,
+        "sha256Verified": true,
+        "crcVerified": true
+      }
     },
     "vibe-coding-skills": {
       "path": "F:\\skiils工具\\vibe-coding-skills",
@@ -21,7 +29,15 @@
         "mirrorSyncFailures": 95,
         "routingManifest": "stale"
       },
-      "migrationGate": "blocked-pending-source-mirror-repair-and-immutable-snapshot"
+      "migrationGate": "blocked-pending-source-mirror-repair-and-immutable-snapshot",
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\vibe-coding-skills-20260911.zip",
+        "files": 1342,
+        "bytes": 12281313,
+        "sha256Verified": true,
+        "crcVerified": true,
+        "note": "非 git 无远端；归档 zip 与仓库内 sources/vibe-coding-skills 快照为唯一来源"
+      }
     },
     "mattpocock-skills": {
       "path": "F:\\skiils工具\\mattpocock-skills",
@@ -35,7 +51,19 @@
         ]
       },
       "license": "MIT plus localized/source notices",
-      "migrationGate": "blocked-pending-working-tree-classification"
+      "migrationGate": "blocked-pending-working-tree-classification",
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\mattpocock-skills-20260911.zip",
+        "files": 173,
+        "bytes": 1046962,
+        "sha256Verified": true,
+        "crcVerified": true,
+        "dirtyFiles": {
+          "count": 4,
+          "evidence": "evidence/20260911-matt-source-dirty-state.md",
+          "ownerDecision": "不需要保留（owner 本人随意改动）"
+        }
+      }
     }
   },
   "commands": [
@@ -44,6 +72,6 @@
     "python F:\\skiils工具\\sliver-vibe-coding\\scripts\\validate_skill.py",
     "PowerShell: recompute MANIFEST.json file SHA-256 values"
   ],
-  "overallGate": "BLOCKED_FOR_CONTENT_MIGRATION"
+  "overallGate": "BLOCKED_FOR_CONTENT_MIGRATION",
+  "note": "源项目已于 2026-09-11 归档并删除本体。本文件保留迁移前基线快照以作历史审计；归档终态见 SOURCE-INVENTORY.json。"
 }
-

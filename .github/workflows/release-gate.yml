@@ -10,6 +10,7 @@
 #
 # 运行环境：PowerShell 7 (pwsh) 是唯一规范化构建运行时；Windows PowerShell 5.1 也能运行同一套
 # 门禁，但 ConvertTo-Json 的格式差异会产生不同的 manifest 字节（值相同）。
+# CI 使用 ubuntu-latest（pwsh 已预装），避免 windows-latest 在免费私有仓库上的 runner 配额问题。
 
 name: release-gate
 
@@ -24,7 +25,7 @@ permissions:
 jobs:
   static-gates:
     name: static release gates
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

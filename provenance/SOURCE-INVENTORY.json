@@ -1,13 +1,27 @@
 {
   "schema": "feisheng-source-inventory/v1",
-  "status": "baseline-captured-content-migration-blocked",
+  "status": "archived-2026-09-11",
   "sources": [
     {
       "id": "sliver-vibe-coding",
       "path": "F:\\skiils工具\\sliver-vibe-coding",
       "role": "governance-candidate",
       "license": "Apache-2.0",
-      "migration": "control-plane-source-imported-and-validated"
+      "migration": "control-plane-source-imported-and-validated",
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\sliver-vibe-coding-20260911.zip",
+        "files": 299,
+        "bytes": 7502050,
+        "sha256Verified": true,
+        "crcVerified": true,
+        "deletedAt": "2026-09-11"
+      },
+      "snapshot": {
+        "path": "governance/sliver-core",
+        "files": 220,
+        "sha256Mismatches": 0,
+        "provenance": "provenance/SLIVER-IMPORT.json"
+      }
     },
     {
       "id": "vibe-coding-skills",
@@ -15,12 +29,22 @@
       "role": "host-and-product-candidate",
       "license": "mixed-third-party; verify per path",
       "migration": "source-snapshot-accepted; runtime-migration-blocked-pending-host-and-license-gates",
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\vibe-coding-skills-20260911.zip",
+        "files": 1342,
+        "bytes": 12281313,
+        "sha256Verified": true,
+        "crcVerified": true,
+        "deletedAt": "2026-09-11",
+        "note": "非 git 无远端；归档 zip 与仓库内 sources/vibe-coding-skills 快照为唯一来源"
+      },
       "snapshot": {
         "path": "sources/vibe-coding-skills",
-        "files": 550,
+        "files": 553,
         "sha256Mismatches": 0,
         "unexpectedFiles": 0,
-        "treeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca"
+        "treeSha256": "sha256:d74d2c5a535926b6d0595e48df33c3016487cad1e160346bcbf99e2e981799ca",
+        "provenance": "provenance/VIBE-IMPORT.json"
       }
     },
     {
@@ -29,16 +53,29 @@
       "role": "engineering-primitives-candidate",
       "license": "MIT plus localized/source notices",
       "migration": "clean-head-snapshot-accepted; runtime-migration-blocked-pending-dirty-file-decision",
-      "workingTreeAudit": {
-        "status": "accepted",
-        "evidence": "evidence/20260910-matt-dirty-classification.md",
-        "unclassifiedFiles": 4,
-        "migrationAllowed": false
+      "archive": {
+        "zip": "F:\\skiils工具\\_archive\\mattpocock-skills-20260911.zip",
+        "files": 173,
+        "bytes": 1046962,
+        "sha256Verified": true,
+        "crcVerified": true,
+        "deletedAt": "2026-09-11",
+        "dirtyFiles": {
+          "count": 4,
+          "files": [
+            "skills/engineering/ask-matt/SKILL.md",
+            "skills/engineering/code-review/SKILL.md",
+            "skills/engineering/implement/SKILL.md",
+            "skills/engineering/tdd/SKILL.md"
+          ],
+          "evidence": "evidence/20260911-matt-source-dirty-state.md",
+          "ownerDecision": "不需要保留（owner 本人随意改动）"
+        }
       },
       "snapshot": {
         "path": "sources/mattpocock-skills",
         "revision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
-        "files": 132,
+        "files": 136,
         "excludedDirtyFiles": 4,
         "provenance": "provenance/MATT-IMPORT.json"
       }
@@ -51,5 +88,6 @@
     "license and NOTICE mapping",
     "invocation and write-target mapping",
     "source-to-runtime rebuild result"
-  ]
+  ],
+  "note": "三个源项目已于 2026-09-11 归档并删除本体。归档 zip 是只读历史，不参与迁移；仓库内 snapshot 是唯一内容真源，import 脚本只读 snapshot。"
 }
