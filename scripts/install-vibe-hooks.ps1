@@ -4,7 +4,12 @@ param(
     [string]$TargetRoot,
 
     [Parameter(Mandatory = $false)]
-    [string]$RepositoryRoot = (Split-Path -Parent $PSScriptRoot),
+    [string]$RepositoryRoot = '',
+
+    # 宿主适配面：claude(.claude/settings.json) / zcode(.zcode/config.json) / codex(.codex/hooks.json) / all
+    [Parameter(Mandatory = $false)]
+    [ValidateSet('claude', 'zcode', 'codex', 'all')]
+    [string]$HostAdapter = 'claude',
 
     [Parameter(Mandatory = $false)]
     [switch]$Uninstall,
@@ -19,23 +24,30 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-# Vibe Hook 适配器安装/卸载（目标项目侧）。
+# Vibe Hook 适配器安装/卸载（目标项目侧，多宿主）。
 #
 # 装什么：
 #   <target>/.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1  自包含 runner 副本（记录 SHA）
 #   <target>/.feisheng/vibe-hooks/contract.json                 契约副本（记录 SHA）
-#   <target>/.claude/settings.json                              合并注册 SessionStart / UserPromptSubmit 两个 Hook
+#   <target>/.feisheng/vibe-hooks/experience-recorder.mjs       经验台账记录器（记录 SHA；需 Node）
+#   <target>/.feisheng/vibe-hooks/install-manifest.json         安装清单（回滚与审计依据）
+#   宿主注册（按 -HostAdapter 选择）：
+#     claude → <target>/.claude/settings.json  SessionStart + UserPromptSubmit
+#     zcode  → <target>/.zcode/config.json     hooks.events 两事件 + enabled:true（合并保留 mcp 等）
+#     codex  → <target>/.codex/hooks.json      session_start + user_prompt_submit（capture-only 语义）
 #
 # 不碰什么：
-#   - 目标项目其它任何文件；.claude/feedback/（经验数据）在卸载时保留
+#   - 目标项目其它任何文件；.claude/feedback/（经验数据）与经验治理台账在卸载时保留
 #   - 绝不把本仓库目录作为安装目标（防止把钩子装回统一包自己）
 #
 # 回滚：
-#   -Uninstall：移除 settings.json 里本适配器的注册项 + 删除安装副本与状态目录；经验索引（用户数据）保留
+#   -Uninstall：移除三宿主注册项 + 删除安装副本与状态目录；经验索引与台账（用户数据）保留
 #   -DryRun：只输出将执行的动作
 
-$ErrorActionPreference = 'Stop'
-Set-StrictMode -Version Latest
+if (-not $RepositoryRoot) {
+    # PS 5.1 的 param 默认值里 $PSScriptRoot 为空（CmdletBinding 高级脚本已知限制），进脚本体后再解析
+    $RepositoryRoot = Split-Path -Parent $PSScriptRoot
+}
 
 function Get-ContainedPath {
     param(
@@ -53,7 +65,7 @@ function Get-ContainedPath {
 $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $targetFull = [System.IO.Path]::GetFullPath($TargetRoot)
 if (-not (Test-Path -LiteralPath $targetFull -PathType Container)) { throw "TargetRoot 不存在: $targetFull" }
-if (-not (Test-Path -LiteralPath (Join-Path $targetFull '.git'))) { throw "TargetRoot 不是 Git 仓库根（ refusing 安装到非项目目录）: $targetFull" }
+if (-not (Test-Path -LiteralPath (Join-Path $targetFull '.git'))) { throw "TargetRoot 不是 Git 仓库根（refusing 安装到非项目目录）: $targetFull" }
 
 # 防呆：不把钩子装进统一包自己
 if ($targetFull.TrimEnd('\', '/') -eq $repoRoot.TrimEnd('\', '/')) {
@@ -62,22 +74,20 @@ if ($targetFull.TrimEnd('\', '/') -eq $repoRoot.TrimEnd('\', '/')) {
 
 $sourceRunner = Get-ContainedPath -Root $repoRoot -RelativePath 'scripts/invoke-vibe-hook-adapter.ps1'
 $sourceContract = Get-ContainedPath -Root $repoRoot -RelativePath 'adapters/vibe-hooks/contract.json'
+$sourceRecorder = Get-ContainedPath -Root $repoRoot -RelativePath 'adapters/vibe-hooks/experience-recorder.mjs'
 $contract = Get-Content -Raw -Encoding UTF8 -LiteralPath $sourceContract | ConvertFrom-Json
-$enabledStatuses = @('enabled-experience-sedimentation-v1')
+$enabledStatuses = @('enabled-experience-sedimentation-v1', 'enabled-experience-auto-record-v1', 'enabled-experience-autonomous-v1', 'enabled-experience-hard-gate-v1')
 if ($enabledStatuses -notcontains [string]$contract.status) { throw "契约状态 '$($contract.status)' 不是启用态，拒绝安装。" }
 
-# 注册事件面从契约派生（单一事实源），不复制清单：契约的 enabled 集合与 runner 支持面漂移时
-# 显式失败，而不是把宿主用不到/不允许的钩子静默装上（runner 对未实现事件会 exit 3）。
+# 注册事件面从契约派生（单一事实源）：契约 enabled 集合与 runner 支持面漂移时显式失败
 $contractEnabledEvents = @(@($contract.events.PSObject.Properties) |
     Where-Object { [bool]$_.Value.enabled } | ForEach-Object { [string]$_.Name })
-$runnerSupportedEvents = @('SessionStart', 'UserPromptSubmit')
-# 比较键拆中间变量：-join 与 -ne 同表达式串联会被运算符优先级错误分组
+$runnerSupportedEvents = @('SessionStart', 'UserPromptSubmit', 'Stop')
 $contractEnabledKey = @($contractEnabledEvents | Sort-Object) -join ','
 $runnerSupportedKey = @($runnerSupportedEvents | Sort-Object) -join ','
 if ($contractEnabledKey -ne $runnerSupportedKey) {
     throw ("契约启用事件集（" + ($contractEnabledEvents -join ', ') + "）与 runner 支持面（" + ($runnerSupportedEvents -join ', ') + "）不一致，拒绝安装。")
 }
-
 
 function Test-HasProperty {
     param($Object, [Parameter(Mandatory = $true)][string]$Name)
@@ -90,142 +100,265 @@ function Get-Sha256 {
     return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
 }
 
+function Write-JsonAtomic {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)]$Value
+    )
+    $parent = Split-Path -Parent $Path
+    if (-not (Test-Path -LiteralPath $parent)) { New-Item -ItemType Directory -Force -Path $parent | Out-Null }
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    $tmp = $Path + '.tmp'
+    [System.IO.File]::WriteAllText($tmp, ($Value | ConvertTo-Json -Depth 20), $utf8)
+    Move-Item -LiteralPath $tmp -Destination $Path -Force
+}
+
 $installDir = Get-ContainedPath -Root $targetFull -RelativePath '.feisheng/vibe-hooks'
 $stateDir = Get-ContainedPath -Root $targetFull -RelativePath '.feisheng/vibe-hook-state'
 $targetRunner = Join-Path $installDir 'invoke-vibe-hook-adapter.ps1'
 $targetContract = Join-Path $installDir 'contract.json'
+$targetRecorder = Join-Path $installDir 'experience-recorder.mjs'
 $manifestPath = Join-Path $installDir 'install-manifest.json'
-$settingsPath = Join-Path $targetFull '.claude/settings.json'
+$claudeSettingsPath = Join-Path $targetFull '.claude/settings.json'
+$zcodeConfigPath = Join-Path $targetFull '.zcode/config.json'
+$codexHooksPath = Join-Path $targetFull '.codex/hooks.json'
+
+$runnerMarker = [string]$targetRunner   # 注册去重标记：宿主注册命令里含 runner 绝对路径
 
 $hookCommandBase = 'powershell -NoProfile -ExecutionPolicy Bypass -File "' + $targetRunner + '" -Mode Invoke -RepositoryRoot "' + $installDir + '" -TargetRoot "' + $targetFull + '" -Event {EVENT}'
+$commandByEvent = @{}
+foreach ($eventName in $contractEnabledEvents) {
+    $commandByEvent[$eventName] = $hookCommandBase.Replace('{EVENT}', $eventName)
+}
+function Get-EventTimeout {
+    param([Parameter(Mandatory = $true)][string]$EventName)
+    $timeout = [int]$contract.events.$EventName.timeoutSeconds
+    if ($timeout -le 0) { $timeout = 10 }
+    return $timeout
+}
+
+# ---- 各宿主：读配置 / 写注册 / 清注册 ----
+function Get-JsonFile {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+    return Get-Content -Raw -Encoding UTF8 -LiteralPath $Path | ConvertFrom-Json
+}
+
+function Register-ClaudeHost {
+    $settings = Get-JsonFile -Path $claudeSettingsPath
+    if ($null -eq $settings) { $settings = [pscustomobject]@{} }
+    if (-not (Test-HasProperty -Object $settings -Name 'hooks')) {
+        $settings | Add-Member -MemberType NoteProperty -Name 'hooks' -Value ([pscustomobject]@{})
+    }
+    $matcherByEvent = @{ SessionStart = 'startup|resume'; UserPromptSubmit = ''; Stop = '' }
+    foreach ($eventName in $contractEnabledEvents) {
+        $entry = [pscustomobject]@{ type = 'command'; command = $commandByEvent[$eventName]; timeout = (Get-EventTimeout -EventName $eventName) }
+        $group = [pscustomobject]@{ hooks = @($entry) }
+        $matcher = $matcherByEvent[$eventName]
+        if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
+        if (Test-HasProperty -Object $settings.hooks -Name $eventName) {
+            $existing = @($settings.hooks.$eventName) | Where-Object {
+                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
+            }
+            $settings.hooks.$eventName = @($existing + @($group))
+        } else {
+            $settings.hooks | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
+        }
+    }
+    Write-JsonAtomic -Path $claudeSettingsPath -Value $settings
+}
+
+function Register-ZcodeHost {
+    $config = Get-JsonFile -Path $zcodeConfigPath
+    if ($null -eq $config) { $config = [pscustomobject]@{} }
+    if (-not (Test-HasProperty -Object $config -Name 'hooks')) {
+        $config | Add-Member -MemberType NoteProperty -Name 'hooks' -Value ([pscustomobject]@{})
+    }
+    # 配置文件 hooks 默认禁用：必须显式 enabled:true 才会运行（ZCode hooks 语义）
+    if (-not (Test-HasProperty -Object $config.hooks -Name 'enabled')) {
+        $config.hooks | Add-Member -MemberType NoteProperty -Name 'enabled' -Value $true
+    } else {
+        $config.hooks.enabled = $true
+    }
+    if (-not (Test-HasProperty -Object $config.hooks -Name 'events')) {
+        $config.hooks | Add-Member -MemberType NoteProperty -Name 'events' -Value ([pscustomobject]@{})
+    }
+    $matcherByEvent = @{ SessionStart = 'startup|resume'; UserPromptSubmit = ''; Stop = '' }
+    foreach ($eventName in $contractEnabledEvents) {
+        $entry = [pscustomobject]@{ type = 'command'; command = $commandByEvent[$eventName]; timeout = (Get-EventTimeout -EventName $eventName) }
+        $group = [pscustomobject]@{ hooks = @($entry) }
+        $matcher = $matcherByEvent[$eventName]
+        if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
+        if (Test-HasProperty -Object $config.hooks.events -Name $eventName) {
+            $existing = @($config.hooks.events.$eventName) | Where-Object {
+                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
+            }
+            $config.hooks.events.$eventName = @($existing + @($group))
+        } else {
+            $config.hooks.events | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
+        }
+    }
+    Write-JsonAtomic -Path $zcodeConfigPath -Value $config
+}
+
+function Register-CodexHost {
+    # codex hooks.json：事件名为 snake_case；本宿主契约语义为 capture-only（注入与 Stop 门禁语义未验证，
+    # 显式跳过 Stop），常备义务由项目 AGENTS.md 经验治理文本承载
+    $hooks = Get-JsonFile -Path $codexHooksPath
+    if ($null -eq $hooks) { $hooks = [pscustomobject]@{} }
+    if (-not (Test-HasProperty -Object $hooks -Name 'hooks')) {
+        $hooks | Add-Member -MemberType NoteProperty -Name 'hooks' -Value ([pscustomobject]@{})
+    }
+    $eventBySnake = @{ SessionStart = 'session_start'; UserPromptSubmit = 'user_prompt_submit' }
+    $codexEvents = @($contractEnabledEvents | Where-Object { $_ -ne 'Stop' })
+    foreach ($eventName in $codexEvents) {
+        $snake = $eventBySnake[$eventName]
+        $entry = [pscustomobject]@{ type = 'command'; command = $commandByEvent[$eventName]; timeout = (Get-EventTimeout -EventName $eventName) }
+        $group = [pscustomobject]@{ hooks = @($entry) }
+        if ($eventName -eq 'SessionStart') { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value 'startup|resume' }
+        if (Test-HasProperty -Object $hooks.hooks -Name $snake) {
+            $existing = @($hooks.hooks.$snake) | Where-Object {
+                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
+            }
+            $hooks.hooks.$snake = @($existing + @($group))
+        } else {
+            $hooks.hooks | Add-Member -MemberType NoteProperty -Name $snake -Value @($group)
+        }
+    }
+    Write-JsonAtomic -Path $codexHooksPath -Value $hooks
+}
+
+function Remove-HostRegistrations {
+    # 三个宿主一起清（即使本次只装了部分；清注册按命令含 runner 路径判定，幂等）
+    $hostFiles = @(
+        @{ Path = $claudeSettingsPath; Events = @('SessionStart', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'Stop') },
+        @{ Path = $zcodeConfigPath; Events = @('SessionStart', 'UserPromptSubmit', 'PreToolUse', 'PermissionRequest', 'PostToolUse', 'PostToolUseFailure', 'Stop'); NestedEvents = $true },
+        @{ Path = $codexHooksPath; Events = @('session_start', 'user_prompt_submit', 'pre_tool_use', 'permission_request', 'post_tool_use', 'subagent_start', 'subagent_stop', 'stop') }
+    )
+    foreach ($hostFile in $hostFiles) {
+        if (-not (Test-Path -LiteralPath $hostFile.Path -PathType Leaf)) { continue }
+        $settings = Get-JsonFile -Path $hostFile.Path
+        if ($null -eq $settings) { continue }
+        if (-not (Test-HasProperty -Object $settings -Name 'hooks')) { continue }
+        $hooksRoot = $settings.hooks
+        if ($hostFile.ContainsKey('NestedEvents') -and $hostFile.NestedEvents -and (Test-HasProperty -Object $hooksRoot -Name 'events')) { $hooksRoot = $hooksRoot.events }
+        $changed = $false
+        foreach ($eventName in $hostFile.Events) {
+            if (-not (Test-HasProperty -Object $hooksRoot -Name $eventName)) { continue }
+            $kept = @()
+            foreach ($group in @($hooksRoot.$eventName)) {
+                $matched = $false
+                foreach ($h in @($group.hooks)) {
+                    if ([string]$h.command -like ('*' + $runnerMarker + '*')) { $matched = $true }
+                }
+                if (-not $matched) { $kept += $group }
+            }
+            if (@($kept).Count -ne @($hooksRoot.$eventName).Count) {
+                $changed = $true
+                if (@($kept).Count -gt 0) { $hooksRoot.$eventName = $kept }
+                else { $hooksRoot.PSObject.Properties.Remove($eventName) }
+            }
+        }
+        if ($changed) { Write-JsonAtomic -Path $hostFile.Path -Value $settings }
+    }
+}
 
 if ($Uninstall) {
-    if (-not (Test-Path -LiteralPath $installDir -PathType Container) -and -not (Test-Path -LiteralPath $settingsPath)) {
+    if (-not (Test-Path -LiteralPath $installDir -PathType Container) -and
+        -not (Test-Path -LiteralPath $claudeSettingsPath) -and
+        -not (Test-Path -LiteralPath $zcodeConfigPath) -and
+        -not (Test-Path -LiteralPath $codexHooksPath)) {
         [pscustomobject]@{ status = 'SKIPPED'; reason = 'not-installed'; target = $targetFull } | ConvertTo-Json -Compress
         exit 0
     }
     if ($DryRun) { [pscustomobject]@{ status = 'DRY-RUN-UNINSTALL'; target = $targetFull } | ConvertTo-Json -Compress; exit 0 }
-    # 1) settings.json 移除本适配器注册项（即使安装目录已被手删也要清注册，防残留死钩子）
-    if (Test-Path -LiteralPath $settingsPath) {
-        $settings = Get-Content -Raw -Encoding UTF8 -LiteralPath $settingsPath | ConvertFrom-Json
-        if (Test-HasProperty -Object $settings -Name 'hooks') {
-            foreach ($eventName in @('SessionStart', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'Stop')) {
-                if (-not (Test-HasProperty -Object $settings.hooks -Name $eventName)) { continue }
-                $kept = @()
-                foreach ($group in @($settings.hooks.$eventName)) {
-                    $matched = $false
-                    foreach ($h in @($group.hooks)) {
-                        if ([string]$h.command -like ('*' + $targetRunner + '*')) { $matched = $true }
-                    }
-                    if (-not $matched) { $kept += $group }
-                }
-                if (@($kept).Count -gt 0) { $settings.hooks.$eventName = $kept }
-                else { $settings.hooks.PSObject.Properties.Remove($eventName) }
-            }
-            $utf8 = New-Object System.Text.UTF8Encoding($false)
-            $settingsTmp = $settingsPath + '.tmp'
-            [System.IO.File]::WriteAllText($settingsTmp, ($settings | ConvertTo-Json -Depth 20), $utf8)
-            Move-Item -LiteralPath $settingsTmp -Destination $settingsPath -Force
-        }
-    }
-    # 2) 删除安装副本与状态目录（保留 .claude/feedback/ 经验数据）；副本可能已被手删，对称守卫
+    # 1) 三宿主清注册（安装目录被手删也要清，防残留死钩子）
+    Remove-HostRegistrations
+    # 2) 删除安装副本与状态目录（保留 .claude/feedback/ 与经验治理台账）
     if (Test-Path -LiteralPath $installDir) { Remove-Item -LiteralPath $installDir -Recurse -Force }
     if (Test-Path -LiteralPath $stateDir) { Remove-Item -LiteralPath $stateDir -Recurse -Force }
-    [pscustomobject]@{ status = 'UNINSTALLED'; target = $targetFull; preserved = '.claude/feedback/' } | ConvertTo-Json -Compress
+    [pscustomobject]@{ status = 'UNINSTALLED'; target = $targetFull; preserved = '.claude/feedback/ + 经验治理台账' } | ConvertTo-Json -Compress
     exit 0
 }
 
-# 注册项去重：settings.json 里已有本 runner 的命令则视为已安装
+# 注册项去重：任一目标宿主文件里已有本 runner 的命令则视为已安装
+$selectedHosts = if ($HostAdapter -eq 'all') { @('claude', 'zcode', 'codex') } else { @($HostAdapter) }
+$pathByHost = @{ claude = $claudeSettingsPath; zcode = $zcodeConfigPath; codex = $codexHooksPath }
 $alreadyRegistered = $false
-if (Test-Path -LiteralPath $settingsPath) {
-    $raw = Get-Content -Raw -Encoding UTF8 -LiteralPath $settingsPath
-    if ($raw -like ('*' + $targetRunner + '*')) { $alreadyRegistered = $true }
+foreach ($hostName in $selectedHosts) {
+    $raw = $null
+    if (Test-Path -LiteralPath $pathByHost[$hostName] -PathType Leaf) {
+        $raw = Get-Content -Raw -Encoding UTF8 -LiteralPath $pathByHost[$hostName]
+    }
+    if ($raw -like ('*' + $runnerMarker + '*')) { $alreadyRegistered = $true }
 }
 if ($alreadyRegistered -and -not $Force) {
-    throw "目标项目已注册本适配器（未加 -Force）: $settingsPath"
+    throw "目标项目已注册本适配器（未加 -Force）: 请用 -Force 重装或先 -Uninstall"
 }
 if ((Test-Path -LiteralPath $installDir -PathType Container) -and -not $Force) {
     throw "安装目录已存在（未加 -Force）: $installDir"
 }
 
+# recorder 需要 Node 运行时（三大宿主均自带 Node；目标机缺失时显式失败而非半装）
+$nodeCheck = & node --version 2>$null
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($nodeCheck)) {
+    throw 'experience-recorder 需要 Node 运行时（node 不在 PATH）。请安装 Node 后重试。'
+}
+
 $runnerSha = Get-Sha256 -Path $sourceRunner
 $contractSha = Get-Sha256 -Path $sourceContract
+$recorderSha = Get-Sha256 -Path $sourceRecorder
 
 if ($DryRun) {
     [pscustomobject]@{
-        status = 'DRY-RUN'; target = $targetFull
-        wouldInstall = @('.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1', '.feisheng/vibe-hooks/contract.json', '.feisheng/vibe-hooks/install-manifest.json')
+        status = 'DRY-RUN'; target = $targetFull; hosts = $selectedHosts
+        wouldInstall = @('.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1', '.feisheng/vibe-hooks/contract.json', '.feisheng/vibe-hooks/experience-recorder.mjs', '.feisheng/vibe-hooks/install-manifest.json')
         wouldRegister = $contractEnabledEvents
-        runnerSha256 = $runnerSha; contractSha256 = $contractSha
+        runnerSha256 = $runnerSha; contractSha256 = $contractSha; recorderSha256 = $recorderSha
     } | ConvertTo-Json -Compress
     exit 0
 }
 
-# 1) 拷贝 runner + 契约
+# 1) 拷贝 runner + 契约 + recorder
 New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 Copy-Item -LiteralPath $sourceRunner -Destination $targetRunner -Force
 Copy-Item -LiteralPath $sourceContract -Destination $targetContract -Force
+Copy-Item -LiteralPath $sourceRecorder -Destination $targetRecorder -Force
 if ((Get-Sha256 -Path $targetRunner) -ne $runnerSha) { throw 'runner 副本 SHA 不一致' }
 if ((Get-Sha256 -Path $targetContract) -ne $contractSha) { throw 'contract 副本 SHA 不一致' }
+if ((Get-Sha256 -Path $targetRecorder) -ne $recorderSha) { throw 'recorder 副本 SHA 不一致' }
 
-# 2) 注册 Claude Code hooks（合并写入，不动其它键）
-$settings = $null
-if (Test-Path -LiteralPath $settingsPath) {
-    $settings = Get-Content -Raw -Encoding UTF8 -LiteralPath $settingsPath | ConvertFrom-Json
-} else {
-    $settings = [pscustomobject]@{}
-}
-if (-not (Test-HasProperty -Object $settings -Name 'hooks')) {
-    $settings | Add-Member -MemberType NoteProperty -Name 'hooks' -Value ([pscustomobject]@{})
-}
-# matcher 是宿主注册语义（按事件名映射，与契约解耦），timeout 取契约 timeoutSeconds。
-$matcherByEvent = @{ SessionStart = 'startup|resume'; UserPromptSubmit = '' }
-foreach ($eventName in $contractEnabledEvents) {
-    $timeout = [int]$contract.events.$eventName.timeoutSeconds
-    if ($timeout -le 0) { $timeout = 10 }
-    $matcher = $matcherByEvent[$eventName]
-    if ($null -eq $matcher) { $matcher = '' }
-    $command = $hookCommandBase.Replace('{EVENT}', $eventName)
-    $entry = [pscustomobject]@{ type = 'command'; command = $command; timeout = $timeout }
-    $group = [pscustomobject]@{ hooks = @($entry) }
-    if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
-    if (Test-HasProperty -Object $settings.hooks -Name $eventName) {
-        $existing = @($settings.hooks.$eventName) | Where-Object {
-            -not (@($_.hooks) | Where-Object { [string]$_.command -like ('*' + $targetRunner + '*') })
-        }
-        $settings.hooks.$eventName = @($existing + @($group))
-    } else {
-        $settings.hooks | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
+# 2) 各宿主注册（合并写入，不动宿主文件其它键）
+foreach ($hostName in $selectedHosts) {
+    switch ($hostName) {
+        'claude' { Register-ClaudeHost }
+        'zcode' { Register-ZcodeHost }
+        'codex' { Register-CodexHost }
     }
 }
-$settingsParent = Split-Path -Parent $settingsPath
-if (-not (Test-Path -LiteralPath $settingsParent)) { New-Item -ItemType Directory -Force -Path $settingsParent | Out-Null }
-$utf8 = New-Object System.Text.UTF8Encoding($false)
-$settingsJson = $settings | ConvertTo-Json -Depth 20
-$settingsTmp = $settingsPath + '.tmp'
-[System.IO.File]::WriteAllText($settingsTmp, $settingsJson, $utf8)
-Move-Item -LiteralPath $settingsTmp -Destination $settingsPath -Force
 
 # 3) 安装清单（回滚与审计依据）
 $manifest = [ordered]@{
     schema = 'feisheng-vibe-hook-install/v1'
     installedAt = (Get-Date).ToUniversalTime().ToString('o')
     targetRoot = $targetFull
+    hosts = $selectedHosts
     events = $contractEnabledEvents
     files = @(
         [ordered]@{ path = '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'; sha256 = $runnerSha }
         [ordered]@{ path = '.feisheng/vibe-hooks/contract.json'; sha256 = $contractSha }
+        [ordered]@{ path = '.feisheng/vibe-hooks/experience-recorder.mjs'; sha256 = $recorderSha }
     )
     writeWhitelist = @($contract.writeWhitelist)
     rollback = 'scripts/install-vibe-hooks.ps1 -TargetRoot <target> -Uninstall'
 }
-[System.IO.File]::WriteAllText($manifestPath, ($manifest | ConvertTo-Json -Depth 8), $utf8)
+[System.IO.File]::WriteAllText($manifestPath, ($manifest | ConvertTo-Json -Depth 8), (New-Object System.Text.UTF8Encoding($false)))
 
 [pscustomobject]@{
-    status = 'INSTALLED'; target = $targetFull
+    status = 'INSTALLED'; target = $targetFull; hosts = $selectedHosts
     events = $contractEnabledEvents
-    runnerSha256 = $runnerSha; contractSha256 = $contractSha
-    settingsPath = $settingsPath
+    runnerSha256 = $runnerSha; contractSha256 = $contractSha; recorderSha256 = $recorderSha
+    settingsPaths = @($selectedHosts | ForEach-Object { $pathByHost[$_] })
     feedbackIndex = '.claude/feedback/FEEDBACK-INDEX.md（经验数据，卸载时保留）'
     rollback = $manifest.rollback
 } | ConvertTo-Json -Compress

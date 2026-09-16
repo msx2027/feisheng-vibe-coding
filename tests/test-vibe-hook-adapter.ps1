@@ -50,6 +50,9 @@ function Invoke-Runner {
     # HookInput 一律走 stdin 管道：payload 内嵌双引号经原生命令行传参会被剥掉（PS 5.1 无自动转义），
     # 且 $OutputEncoding 必须显式 UTF-8，否则 PS 5.1 按 ASCII 编码管道、中文信号失配
     $global:OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+    # 父进程同样必须按 UTF-8 解码子进程 stdout：否则中文之后紧邻的 ASCII（如「。PENDING=2」的 P）
+    # 会被 GBK 多字节对吞掉，断言误报。真实宿主按字节 UTF-8 读取，不受此影响
+    [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
     # PS 5.1 下 2>&1 会把子进程 stderr 行变成错误记录，$ErrorActionPreference='Stop' 时一遇即炸；
     # 禁用事件的预期 stderr（DISABLED 提示）也走这条通道，捕获时临时降级
     $previousEap = $ErrorActionPreference
@@ -224,6 +227,195 @@ try {
         Write-Host '[SKIPPED] 5b) junction 负面用例（非 Windows 平台；该回归只受 Windows 本机运行保护，仓库无 Windows CI）'
     }
 
+    # 5c) auto-record 注入 + experience-recorder 闭环（独立沙箱 target2，带台账基础设施）
+    $target2 = Join-Path $work 'target2'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target2 '.git') | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $target2 'docs/项目治理') | Out-Null
+    $vibeDocs = Join-Path $target2 '.vibe-docs.json'
+    [System.IO.File]::WriteAllText($vibeDocs, '{"experienceGovernance": "docs/项目治理/经验治理.md"}', (New-Object System.Text.UTF8Encoding($false)))
+    $ledgerPath2 = Join-Path $target2 'docs/项目治理/经验治理.md'
+    $ledgerJson = @'
+{
+  "vibeExperienceLedger": "v2",
+  "revision": 0,
+  "l1RegistryAnchor": null,
+  "thresholds": { "L0": 3, "L1": 5, "L2": 8 },
+  "processedEvents": [],
+  "consumedConfirmations": [],
+  "experiences": [],
+  "archived": []
+}
+'@
+    # 注意：围栏三连反引号必须用单引号字符串拼（双引号里 ` 是转义符）
+    [System.IO.File]::WriteAllText($ledgerPath2, ('```json vibe-experience-ledger' + "`n" + $ledgerJson + "`n" + '```' + "`n`n人工登记区（必须原样保留）`n"), (New-Object System.Text.UTF8Encoding($false)))
+    $recorder = Join-Path $repoRoot 'adapters/vibe-hooks/experience-recorder.mjs'
+
+    function Get-LastJsonLine {
+        param([Parameter(Mandatory = $true)][string]$Text)
+        $line = @($Text -split "`n" | Where-Object { $_ -match '^\{' } | Select-Object -Last 1)
+        if (@($line).Count -eq 0) { throw "输出中没有 JSON 行: $Text" }
+        return (@($line)[0] | ConvertFrom-Json)
+    }
+    function Invoke-Recorder {
+        param([Parameter(Mandatory = $true)][string[]]$RecorderArgs)
+        $global:LASTEXITCODE = 0
+        $out = & node $recorder $RecorderArgs 2>&1
+        return [pscustomobject]@{ Output = (@($out) -join "`n"); ExitCode = $global:LASTEXITCODE }
+    }
+
+    # 5c-1) 捕获后必须注入 autoRecord 路由（JSON、事件名、命令模板俱全）
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-auto","prompt":"不对，日期字段搞错了"}' -Target $target2
+    if ($r.ExitCode -ne 0) { throw "auto-record 捕获应 exit 0: $($r.Output)" }
+    $injection = Get-LastJsonLine -Text $r.Output
+    if ($injection.hookSpecificOutput.hookEventName -ne 'UserPromptSubmit') { throw '注入事件名必须是 UserPromptSubmit' }
+    if ($injection.hookSpecificOutput.additionalContext -notmatch 'autoRecord') { throw '注入缺少 autoRecord 标识' }
+    if ($injection.hookSpecificOutput.additionalContext -notmatch '--action record') { throw '注入缺少 record 命令模板' }
+    # 索引行必须带 eventId + promptHash（最小事件身份）
+    $indexLine2 = @(Get-Content -LiteralPath (Join-Path $target2 '.claude/feedback/FEEDBACK-INDEX.md') -Encoding UTF8 | Where-Object { $_ -match '^\{' })[0] | ConvertFrom-Json
+    if (-not $indexLine2.eventId -or $indexLine2.eventId -notlike 'EVT-*') { throw '索引行缺少 EVT- eventId' }
+    if ($indexLine2.promptHash -notmatch '^sha256:[a-f0-9]{64}$') { throw '索引行 promptHash 格式非法' }
+
+    # 5c-2) recorder：check → record → 自动消化标记 → replay no-op → CAS 拒绝
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'check')
+    if ($r.ExitCode -ne 0) { throw "recorder check 应成功: $($r.Output)" }
+    if ((Get-LastJsonLine -Text $r.Output).revision -ne 0) { throw 'check 应报 revision 0' }
+    $occurredAt = $indexLine2.ts
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'record', '--event-id', $indexLine2.eventId, '--prompt-hash', $indexLine2.promptHash, '--occurred-at', $occurredAt, '--summary', '自动记账冒烟：日期字段格式纠错', '--expected-revision', '0', '--source-dedup-key', $indexLine2.dedupKey)
+    if ($r.ExitCode -ne 0) { throw "recorder record 应成功: $($r.Output)" }
+    $recorded = Get-LastJsonLine -Text $r.Output
+    if ($recorded.experienceId -ne 'EXP-001' -or $recorded.revision -ne 1 -or $recorded.replay) { throw "record 结果异常: $($r.Output)" }
+    if (-not $recorded.digestMarked) { throw 'record 应自动消化源信号' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target2 ".feisheng/vibe-hook-state/$($indexLine2.dedupKey).digested"))) { throw '消化标记未落盘' }
+    # 台账外人工区必须原样保留
+    if ((Get-Content -Raw -Encoding UTF8 -LiteralPath $ledgerPath2) -notmatch '人工登记区') { throw '台账围栏外人工区被破坏' }
+    # 重放（同 payload 同 occurredAt）→ no-op
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'record', '--event-id', $indexLine2.eventId, '--prompt-hash', $indexLine2.promptHash, '--occurred-at', $occurredAt, '--experience-id', 'EXP-001', '--expected-revision', '1')
+    if ($r.ExitCode -ne 0 -or -not (Get-LastJsonLine -Text $r.Output).replay) { throw "重放应 no-op 成功: $($r.Output)" }
+    # CAS 不匹配必须拒绝
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'record', '--event-id', 'EVT-cas0000cas0000cas0000cas0000cas0000', '--prompt-material', 'x', '--summary', 'y', '--expected-revision', '99')
+    if ($r.ExitCode -eq 0) { throw 'CAS 不匹配必须失败' }
+
+    # 5c-3) SessionStart 注入契约（消化完成后不再报 PENDING）
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target2
+    if ($r.ExitCode -ne 0) { throw "SessionStart（auto-record）应 exit 0" }
+    $ss = Get-LastJsonLine -Text $r.Output
+    if ($ss.hookSpecificOutput.hookEventName -ne 'SessionStart') { throw 'SessionStart 注入事件名错误' }
+    if ($ss.hookSpecificOutput.additionalContext -notmatch '经验自动记账契约') { throw 'SessionStart 缺少自动记账契约' }
+    if ($ss.hookSpecificOutput.additionalContext -match 'PENDING=') { throw '源信号已消化后不得再报 PENDING' }
+
+    # 5c-4) 无台账项目：捕获只报「未启用」，不得给出 record 指令
+    $target3 = Join-Path $work 'target3'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target3 '.git') | Out-Null
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-noledge","prompt":"不对，搞错了"}' -Target $target3
+    if ($r.ExitCode -ne 0) { throw '无台账捕获应 exit 0' }
+    $noLedger = Get-LastJsonLine -Text $r.Output
+    if ($noLedger.hookSpecificOutput.additionalContext -match '--action record') { throw '无台账项目不得注入 record 指令（fail-closed）' }
+
+    # 5d) 零触发词自检 + 政策制治理（独立沙箱 target4：预置老化 L0 条目）
+    $target4 = Join-Path $work 'target4'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target4 '.git') | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $target4 'docs/项目治理') | Out-Null
+    [System.IO.File]::WriteAllText((Join-Path $target4 '.vibe-docs.json'), '{"experienceGovernance": "docs/项目治理/经验治理.md"}', (New-Object System.Text.UTF8Encoding($false)))
+    $oldHex = 'a' * 40
+    $ledgerOld = [ordered]@{
+        vibeExperienceLedger = 'v2'; revision = 2; l1RegistryAnchor = $null
+        thresholds = [ordered]@{ L0 = 3; L1 = 5; L2 = 8 }
+        processedEvents = @(
+            [ordered]@{ eventId = "EVT-$oldHex"; signalType = 'explicit-correction'; scope = 'target-project'; promptHash = ('sha256:' + ('a' * 64)); occurredAt = '2026-06-01T00:00:00.000Z'; experienceId = 'EXP-001' }
+        )
+        consumedConfirmations = @(); archived = @()
+        experiences = @(
+            [ordered]@{ id = 'EXP-001'; summary = '老化教训应被清扫'; tier = 'L0'; count = 1; trajectory = @('2026-06-01 记录@L0'); landing = $null }
+        )
+    }
+    $ledgerPath4 = Join-Path $target4 'docs/项目治理/经验治理.md'
+    [System.IO.File]::WriteAllText($ledgerPath4, ('```json vibe-experience-ledger' + "`n" + ($ledgerOld | ConvertTo-Json -Depth 12) + "`n" + '```' + "`n人工区保留`n"), (New-Object System.Text.UTF8Encoding($false)))
+
+    # 5d-1) 自检义务进契约文本（零触发词）：SessionStart 注入含自检与治理义务
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target4
+    $ssText = (Get-LastJsonLine -Text $r.Output).hookSpecificOutput.additionalContext
+    if ($ssText -notmatch '自检义务') { throw '契约注入缺少自检义务（零触发词）' }
+    if ($ssText -notmatch '治理义务') { throw '契约注入缺少治理义务' }
+
+    # 5d-2) 政策登记（owner 会话确认一次）→ check 出现政策与 dueForReview
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'policy-add', '--policy-id', 'P-001', '--tier', 'L0', '--count-below', '3', '--days-unhit', '30', '--confirmed-by', 'owner', '--policy-source', 'owner 会话拍板 2026-09-17 政策制自治')
+    if ($r.ExitCode -ne 0) { throw "policy-add 应成功: $($r.Output)" }
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'check')
+    $checked = Get-LastJsonLine -Text $r.Output
+    if ($checked.policies.Count -ne 1 -or -not $checked.governance.dueForReview) { throw "check 应含政策且 dueForReview=true: $($r.Output)" }
+
+    # 5d-3) 未登记政策执行 govern 必须拒绝；登记后清扫老化条目进日志
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'govern', '--policy-id', 'P-999')
+    if ($r.ExitCode -eq 0) { throw '未登记政策的 govern 必须失败' }
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'govern', '--policy-id', 'P-001')
+    if ($r.ExitCode -ne 0) { throw "govern 应成功: $($r.Output)" }
+    $governed = Get-LastJsonLine -Text $r.Output
+    if ($governed.swept -notcontains 'EXP-001') { throw "老化条目应被清扫: $($r.Output)" }
+    $journalPath4 = Join-Path $target4 'docs/项目治理/经验治理-清扫.md'
+    if (-not (Test-Path -LiteralPath $journalPath4)) { throw '清扫日志缺失' }
+    if ((Get-Content -Raw -Encoding UTF8 -LiteralPath $journalPath4) -notmatch 'EXP-001') { throw '清扫日志缺条目' }
+    if ((Get-Content -Raw -Encoding UTF8 -LiteralPath $ledgerPath4) -notmatch '人工区保留') { throw '清扫后人工区被破坏' }
+
+    # 5d-4) 清扫后 dueForReview 翻转 + 零触发词自造身份记录（无 hook 信号）
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'check')
+    $checked = Get-LastJsonLine -Text $r.Output
+    if ($checked.governance.dueForReview) { throw '刚治理完不应 dueForReview' }
+    $selfEventId = 'EVT-' + -join ((1..40) | ForEach-Object { 'c' })
+    $checkOut = (Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'check')).Output
+    $expectedRev = (Get-LastJsonLine -Text $checkOut).revision
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'record', '--event-id', $selfEventId, '--prompt-material', 'AI 自检：返工了一次日期格式', '--summary', '自检教训：日期格式先用 ISO', '--expected-revision', "$expectedRev")
+    if ($r.ExitCode -ne 0) { throw "自造身份记录应成功: $($r.Output)" }
+    $selfRecorded = Get-LastJsonLine -Text $r.Output
+    if ($selfRecorded.experienceId -ne 'EXP-002' -or $selfRecorded.replay) { throw "自检记录结果异常: $($r.Output)" }
+
+    # 5e) Stop 硬门禁：自检留痕 + 未消化信号拦截 + 封顶放行（fail-open audited）
+    function Get-BlockReason {
+        param([Parameter(Mandatory = $true)][AllowEmptyString()][string]$Text)
+        if ([string]::IsNullOrWhiteSpace($Text)) { return $null }
+        $line = @($Text -split "`n" | Where-Object { $_ -match '"decision"' } | Select-Object -Last 1)
+        if (@($line).Count -eq 0) { return $null }
+        return ((@($line)[0] | ConvertFrom-Json).reason)
+    }
+    $gateTarget = $target2
+    $gateState = Join-Path $gateTarget '.feisheng/vibe-hook-state'
+
+    # 5e-1) 无未消化信号 + 未自检留痕 → 拦截一次，理由含 selfcheck 指令
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
+    if ($r.ExitCode -ne 0) { throw "Stop 门禁应 exit 0: $($r.Output)" }
+    $reason1 = Get-BlockReason -Text $r.Output
+    if ($null -eq $reason1 -or $reason1 -notmatch '自检' -or $reason1 -notmatch 'selfcheck') { throw "首次 Stop 应拦截并给出 selfcheck 指令: $($r.Output)" }
+
+    # 5e-2) selfcheck 留痕后放行（无输出）
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $gateTarget '.'), '--action', 'selfcheck', '--session', 's-gate', '--finding', 'none')
+    if ($r.ExitCode -ne 0) { throw "selfcheck 应成功: $($r.Output)" }
+    if (-not (Test-Path -LiteralPath (Join-Path $gateState 'selfcheck-s-gate.json'))) { throw 'selfcheck 标记未落盘' }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
+    if ($r.ExitCode -ne 0 -or (Get-BlockReason -Text $r.Output)) { throw "自检留痕后 Stop 应放行: $($r.Output)" }
+
+    # 5e-3) 新的未消化纠错信号 → 拦截并给出 record/dismiss 指令
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-cap","prompt":"不对，搞错了"}' -Target $gateTarget
+    if ($r.ExitCode -ne 0) { throw '捕获应成功' }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":false}' -Target $gateTarget
+    $reason3 = Get-BlockReason -Text $r.Output
+    if ($null -eq $reason3 -or $reason3 -notmatch '未消化纠错信号' -or $reason3 -notmatch '--action record') { throw "未消化信号应拦截: $($r.Output)" }
+
+    # 5e-4) stop_hook_active=true 直接放行（宿主已在继续轮次中）
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":true}' -Target $gateTarget
+    if ($r.ExitCode -ne 0 -or (Get-BlockReason -Text $r.Output)) { throw "stop_hook_active 应放行: $($r.Output)" }
+
+    # 5e-5) 封顶：同会话第 3 次拦截后，第 4 次放行并留审计
+    Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":false}' -Target $gateTarget | Out-Null
+    Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":false}' -Target $gateTarget | Out-Null
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":false}' -Target $gateTarget
+    if (Get-BlockReason -Text $r.Output) { throw '第 4 次 Stop 应 fail-open 放行' }
+    if (-not (Test-Path -LiteralPath (Join-Path $gateState 'stop-gate-audit.log'))) { throw 'fail-open 未留审计' }
+
+    # 5e-6) 恶意会话 id 不得逃逸状态目录
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"..\\..\\evil","stop_hook_active":false}' -Target $gateTarget
+    if ($r.ExitCode -ne 0) { throw '恶意 sid 应安全处理' }
+    $escaped = @(Get-ChildItem -LiteralPath $gateTarget -Recurse -Force -File | Where-Object { $_.FullName -notlike ($gateState + '*') -and $_.Name -like '*evil*' })
+    if ($escaped.Count -gt 0) { throw ("恶意 sid 逃逸状态目录: " + (@($escaped | ForEach-Object { $_.FullName }) -join '; ')) }
+
     # 6) 写入边界：目标目录里除白名单外不得有新文件
     $allowed = @(
         (Join-Path $target '.git'),
@@ -243,7 +435,7 @@ try {
     }
     if ($violations.Count -gt 0) { throw ("白名单外出现写入: " + ($violations -join '; ')) }
 
-    [Console]::WriteLine('PASS: Vibe Hook adapter v2 — capture-scoped enablement, whitelist enforced, idempotent, digestion markers pending-aware, governance events stay disabled.')
+    [Console]::WriteLine('PASS: Vibe Hook adapter hard-gate-v1 — capture + autoRecord injection + recorder closed loop + policy governance + Stop self-check hard gate (capped fail-open), whitelist enforced, idempotent, governance events stay disabled.')
     exit 0
 } finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
