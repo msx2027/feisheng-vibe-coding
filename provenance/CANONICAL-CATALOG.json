@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-11T22:27:01.9979218Z",
+  "generatedAt": "2026-09-16T22:14:20.6434165Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1334,6 +1334,50 @@
           {
             "path": "skills/product/hotspot-governor/SKILL.md",
             "sha256": "34c1f8695755c007d4c79dd403aeeb6b592534192ac187506eabeda1069c01ae"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/check-hotspots.mjs",
+            "sha256": "19968b42668019b837f4414a720b35189f69ac74164f07e2866b7ec765794d07"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-files.mjs",
+            "sha256": "8f530ff7092b710a4efa9db7ece872518bd461a6f45c0797a6fe53e6d642151e"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-findings.mjs",
+            "sha256": "dbfefa966dd949235df6c7146dc890f274f67e525c675a1cb0c7bda4ac08e6be"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-function-scan.mjs",
+            "sha256": "2a1a9e544b424bc294a73580126f3d0516e0eff8ebd67066aa5cea26a5185bfe"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-function-shared.mjs",
+            "sha256": "d6d2c302ac983b8ab4a180236e2c05e30b90beace49432f64d50ff85b510b2ff"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-git.mjs",
+            "sha256": "d82c3638f28f1c4bf65094f682264e0d76d975a8a394281d4e26510e020990de"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-policy.mjs",
+            "sha256": "28d02540c1980f102577a8a4eb163a59f9d84d8f3768201e6ba6bec5a914c2eb"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-rust-function-scan.mjs",
+            "sha256": "2b0485ec6263de10f9193a30d58a5ecae802fdec0738d718ac8aad816282e01c"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/hotspot-scan.mjs",
+            "sha256": "2114c2b5ef002cec35d18ed6d39779ea09e29075e2d6ca612b18faffbb4322e4"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/safe-target-fs.mjs",
+            "sha256": "d27b61479b6f60e8fb3715dc0fb073c042c98d3b7f41750d8acc71bafe73fbc8"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/trusted-git.mjs",
+            "sha256": "82a36bf9e1874d247c22d155195fbac8e0c8892b81f941e4b5ad18f98e14a619"
           }
         ],
         "excluded": []
