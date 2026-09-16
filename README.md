@@ -31,6 +31,18 @@
 4. 先证明来源、许可证、revision 和可重建性，再迁移行为。
 5. 宿主 Hook 没有 fresh-session 证据时，只报告 `UNVERIFIED`。
 
+## 文档治理工具（新项目接入）
+
+`scripts/check-doc-governance.mjs` 是面向任意目标项目的文档命名/归位治理检查器（零依赖 Node，可移植）：门面 H1 与文件名同步、docs 空目录残留、类目目录散落 md、全项目正文重名、门面导航双向登记、孤儿卷目录；并从 frontmatter（`status: completed|resolved|deprecated`）自动检测归档候选，归档经人确认后由 `--archive` 一键执行（git mv + 引用改链 + 归档门面登记；有未提交改动时拒绝执行）。
+
+新项目开箱接入：
+
+```sh
+node scripts/init-doc-governance.mjs <目标项目根>
+```
+
+接入器只新增/追加，不覆盖既有内容：复制检查器与测试到 `<项目>/tools/`、生成默认 `tools/doc-governance.json`（豁免清单由项目拍板）、在 pre-commit 末尾追加接线块（已接线则跳过）。归档语义为「检测全自动 + 执行一键确认」：机器判据只是候选，是否使命完结仍由人确认。
+
 ## 目录
 
 见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)、[`docs/archive/MIGRATION-PLAN.md`](docs/archive/MIGRATION-PLAN.md)（历史基线）、[`provenance/SOURCE-BASELINE.json`](provenance/SOURCE-BASELINE.json) 和 [`provenance/OWNER-LEDGER.json`](provenance/OWNER-LEDGER.json)。
