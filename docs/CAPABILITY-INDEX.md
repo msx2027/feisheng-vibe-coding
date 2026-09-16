@@ -40,7 +40,7 @@
 | `grilling` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
 | `handoff` | mattpocock-skills | user-tool | accepted-user-tool | none | `directory` | 1 |
 | `harden` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
-| `hotspot-governor` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 12 |
+| `hotspot-governor` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 13 |
 | `impeccable` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 13 |
 | `layout` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `optimize` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |

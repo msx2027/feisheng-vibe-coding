@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-16T22:14:20.6434165Z",
+  "generatedAt": "2026-09-16T22:35:06.9427949Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1370,6 +1370,10 @@
           {
             "path": "skills/product/hotspot-governor/tools/hotspot-scan.mjs",
             "sha256": "2114c2b5ef002cec35d18ed6d39779ea09e29075e2d6ca612b18faffbb4322e4"
+          },
+          {
+            "path": "skills/product/hotspot-governor/tools/install-hotspot-gate.mjs",
+            "sha256": "9353bca7cd142390f7d5fcf338789664656c52194a6b3aa2cd0e6f4ec5f76834"
           },
           {
             "path": "skills/product/hotspot-governor/tools/safe-target-fs.mjs",
