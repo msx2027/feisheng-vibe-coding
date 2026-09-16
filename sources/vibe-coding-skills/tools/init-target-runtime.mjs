@@ -29,7 +29,7 @@ import {
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SKILLS_ROOT = path.dirname(SCRIPT_DIR);
-export const TARGET_RUNTIME_BLOCK_VERSION = "21";
+export const TARGET_RUNTIME_BLOCK_VERSION = "22";
 const RUNTIME_REGISTRY_FILE = ".vibe-runtime.json";
 const RUNTIME_REGISTRY_VERSION = 1;
 const START_PREFIX = "<!-- vibe-coding-skills:target-runtime:start";
@@ -173,7 +173,7 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     ``,
     `- 运行时：${runtime} 会读取本项目根目录的 \`${entry}\`。`,
     `- Skills 包位置：如果设置了 \`VIBE_CODING_SKILLS_HOME\` 就优先使用它；否则使用 \`<skills-root>\` 表示的本包根目录。`,
-    `- 真源入口：先读 \`.vibe-docs.json\`，再运行 \`node <skills-root>/tools/resolve-target-doc-context.mjs . --roles <当前任务显式角色> --budget <本轮预算> --json\`；集合文档先从 \`文档索引.md\` 选定文件，再用 \`--document <角色>:<项目相对路径>\` 精确取一份。启用 \`markdownGovernance\` 后，非生命周期 Markdown 先用 \`rg --files -g '*.md'\` 定位，再用 \`--markdown <项目相对路径>\` 申请单份读取。只读取 resolver 返回的文档与 selector，不因进入 T2/T3 固定全文读取画像、需求、计划或契约。`,
+    `- 真源入口：先读 \`.vibe-docs.json\`，再按「当前任务显式角色 + 本轮预算」精准取读文档：集合文档先从 \`文档索引.md\` 选定文件，再精确取一份。\`resolve-target-doc-context.mjs\` 属旧代 resolver，未随本包分发：项目自备等价工具时按其输出执行，未自备时由协作方按同一口径人工执行（rg 定位 → 门面索引 → 单份正文）。启用 \`markdownGovernance\` 后，非生命周期 Markdown 先用 \`rg --files -g '*.md'\` 定位，再申请单份读取。只读取所需文档与 selector，不因进入 T2/T3 固定全文读取画像、需求、计划或契约。`,
     `- 项目画像：当前项目事实以 \`.vibe-docs.json.projectProfile\` 实际指向的文件为准（新项目默认 \`docs/项目治理/项目画像.md\`）；未在项目画像、源码、配置、命令输出或用户确认中出现的技术栈、命令、接口、schema 不得假设存在。`,
     `- 宪法设计：规则来源以 \`.vibe-docs.json.constitutionDesign\` 实际指向的文件为准（新项目默认 \`docs/项目治理/宪法设计.md\`）；缺少 evidence、owner map、停止条件或验证命令时，标记 \`未验证\`，不得声明接入完成。`,
     `- 文件落位：根目录 Markdown 白名单仅 \`AGENTS.md\`、\`CLAUDE.md\`、\`文档索引.md\`；其他新建 Markdown 必须进入 \`docs/\` 并按职责分类。已有文档先沿用 manifest 映射，不擅自移动。`,
@@ -216,10 +216,10 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     ``,
     `### 文档真源与 Markdown 治理`,
     `- 文档索引：默认先使用 \`.vibe-docs.json.documentIndex\` 映射的 \`文档索引.md\` 获取角色、owner、状态和定位；索引只负责导航，不复制需求、计划、契约或验收正文。`,
-    `- 受管文档自动同步：Claude / Codex 修改 \`.vibe-docs.json.documents[]\` 已登记文档后，必须由 \`setup-target-hooks.mjs\` 安装的 PostToolUse Hook 自动刷新 manifest metadata 与 \`文档索引.md\`；提交前由 \`check-target-doc-precommit.mjs\` 对受管正文、metadata、索引和任务胶囊漂移做硬检查。自动同步只更新可再生 metadata / index，绝不改写正文、Git 暂存区或旧任务胶囊的 \`sourceRevision\`；正文变化使旧证据过期时必须重新核对。`,
+    `- 受管文档一致性：Claude / Codex 修改 \`.vibe-docs.json.documents[]\` 已登记文档后，须同步刷新 manifest metadata 与 \`文档索引.md\`，并在提交前对受管正文、metadata、索引和任务胶囊漂移做硬检查。\`setup-target-hooks.mjs\` 的 PostToolUse 自动同步与 \`check-target-doc-precommit.mjs\` 属旧代工具，未随本包分发：项目自备等价工具（如本地文档索引门禁）时按其执行，未自备时由协作方在交付前人工完成同口径核对。同步与核对只更新可再生 metadata / index，绝不改写正文、Git 暂存区或旧任务胶囊的 \`sourceRevision\`；正文变化使旧证据过期时必须重新核对。`,
     `- Markdown 分卷命名：正文文件名使用中文短编号加主题（如 \`062-输出式学习.md\`、\`附录-001-术语说明.md\`）；机器编号只留在 \`vibe-section\` 和索引，不得出现在人看的文件名中，且全项目正文不得重复。`,
     `- Markdown 专属文件夹：每个导航门面 \`X.md\` 的正文只能放入同名 \`X/\` 文件夹；正文再次拆分时仍用该子门面的完整同名文件夹，不得散落到别处。一级总目录优先用四个中文概括并与文档同名；确实无法概括时可加“补充”，但文档和文件夹必须同步同名。`,
-    `- Markdown 自动治理：启用 \`markdownGovernance\` 的项目中，每次新建、改写、移动或拆分 Markdown 后，交付前必须运行 \`node <skills-root>/tools/check-markdown-governance.mjs .\`；检查只报告和拦截超长、失链、重复编号等问题，不得自行拆分、移动、合并或删除。结构性整理必须等写入停止并取得用户明确确认；读取仍先取门面、再精确取一份正文。`,
+    `- Markdown 治理：启用 \`markdownGovernance\` 的项目中，每次新建、改写、移动或拆分 Markdown 后，交付前须完成超长、失链、重复编号等项检查；\`check-markdown-governance.mjs\` 属旧代工具，未随本包分发：项目自备等价工具时按其执行，未自备时由协作方按同一清单人工核对。检查只报告和拦截问题，不得自行拆分、移动、合并或删除。结构性整理必须等写入停止并取得用户明确确认；读取仍先取门面、再精确取一份正文。`,
     `- Markdown 链接与备份：项目内 Markdown 链接必须指向实际存在的文件；用户删掉或移出备份时，必须同步删除 \`archiveDirectories\` 登记和所有指向该路径的项目内链接，不得恢复用户移出的备份。`,
     ``,
     `### 加载策略与任务续接`,

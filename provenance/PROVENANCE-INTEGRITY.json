@@ -13,13 +13,20 @@
       "name": "vibe-coding-skills",
       "path": "sources/vibe-coding-skills",
       "fileCount": 553,
-      "treeHash": "sha256:d22a304ce9b69e9d2467aea6abb8237dba7f78dfbbe711a0eed97994c9010393",
+      "treeHash": "sha256:73462289d20ffbb48e7039365b2188e2ab1e126ac9faa9e123a172a170e450da",
       "sourceRoot": "F:\\skiils工具\\vibe-coding-skills",
       "sourceKind": "not-a-git-checkout",
       "sourceRevision": null,
       "supplementAllowlist": [],
       "revisionSourcedPaths": [],
-      "locallyPatchedPaths": [],
+      "locallyPatchedPaths": [
+        {
+          "path": "tools/init-target-runtime.mjs",
+          "patchedSha256": "6536deae0d04f0fe374e8b8b5f589ab6ece679d702af0a49959279b5b539d268",
+          "originalSha256": "8cf766979ad019937cce1e3e3ff155b731e0dd3e33dc7d9cf976f7eccbc38080",
+          "patchId": "vibe-target-runtime-promise-reality-fix"
+        }
+      ],
       "importRecord": "provenance/VIBE-IMPORT.json"
     },
     {
@@ -107,6 +114,12 @@
       "scope": "snapshots[sliver-core].locallyPatchedPaths",
       "change": "engineering-execution.md 的 patchedSha256 由 5255fe09e91b26d4... 修正为 b6c78417705e6301...，与 LOCAL-PATCHES.json 补丁 sliver-route-binding-capability-providers 及当前文件字节一致（49207c0/00498fb 批次更新登记时未同步本文件）。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），本修正在此登记，并与 LOCAL-PATCHES、实际文件 sha256 双重对账。",
       "evidence": "evidence/20260912-chain-audit-and-closure.md"
+    },
+    {
+      "at": "2026-09-17",
+      "scope": "snapshots[vibe-coding-skills].treeHash + locallyPatchedPaths",
+      "change": "快照补丁 vibe-target-runtime-promise-reality-fix（init-target-runtime.mjs 去谎 4 行、BLOCK_VERSION 21→22）后树摘要由 d22a304ce9b69e9d2467aea6abb8237dba7f78dfbbe711a0eed97994c9010393 更新为 73462289d20ffbb48e7039365b2188e2ab1e126ac9faa9e123a172a170e450da，与 LOCAL-PATCHES.json 登记及当前文件 sha256 双重对账。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求来源逐字节背书），沿用 2026-09-12 annotation 修订通道。",
+      "evidence": "evidence/20260917-template-promise-reality-fix.md"
     }
   ]
 }
