@@ -243,12 +243,22 @@ function Get-DedupKeyFromLine {
     return ''
 }
 
+function Get-LegacyLineKey {
+    param([Parameter(Mandatory = $true)][string]$Line)
+    # 无有效 dedupKey 的旧/损坏索引行：以行内容 sha256 前 40 hex 加 legacy- 前缀作标记名。
+    # 文件名只由行内容哈希派生，恶意行同样无法路径逃逸；否则这些行永久 pending 卡住 Stop 门禁。
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return 'legacy-' + [System.BitConverter]::ToString($sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Line))).Replace('-', '').ToLowerInvariant().Substring(0, 40)
+    } finally { $sha.Dispose() }
+}
+
 function Get-PendingSignalCount {
     param(
         [Parameter(Mandatory = $true)][string]$TargetRoot,
         [Parameter(Mandatory = $true)][string]$StateDir
     )
-    # 只读：统计索引中「待消化」条数（无有效 dedupKey 的按未消化计，保守不漏）。索引缺失/不可读 → 0。
+    # 只读：统计索引中「待消化」条数（无标记的不计已消化；无有效 dedupKey 的行按内容哈希查标记）。索引缺失/不可读 → 0。
     $indexPath = Join-Path $TargetRoot '.claude/feedback/FEEDBACK-INDEX.md'
     if (-not (Test-Path -LiteralPath $indexPath -PathType Leaf)) { return 0 }
     try {
@@ -257,10 +267,9 @@ function Get-PendingSignalCount {
     $pending = 0
     foreach ($line in $lines) {
         $key = Get-DedupKeyFromLine -Line $line
-        if (-not [string]::IsNullOrWhiteSpace($key)) {
-            $marker = Join-Path $StateDir ($key + '.digested')
-            if (Test-Path -LiteralPath $marker -PathType Leaf) { continue }
-        }
+        if ([string]::IsNullOrWhiteSpace($key)) { $key = Get-LegacyLineKey -Line $line }
+        $marker = Join-Path $StateDir ($key + '.digested')
+        if (Test-Path -LiteralPath $marker -PathType Leaf) { continue }
         $pending++
     }
     return $pending
@@ -273,7 +282,7 @@ function Invoke-StopGateHandler {
     )
     # 自检硬门禁（owner 授权 2026-09-17）：会话结束前必须（a）消化全部已捕获纠错信号（b）完成本会话自检留痕。
     # 防死锁：每会话最多拦截 3 次，超限放行并留痕（fail-open, audited）；宿主 stop_hook_active=true 直接放行。
-    # 本 handler 除状态目录外零写入；任何异常静默放行（绝不困住用户会话）。
+    # 本 handler 除状态目录外零写入；任何异常放行但留审计（绝不困住用户会话）。
     try {
         $sessionId = ''
         $stopHookActive = $false
@@ -307,6 +316,14 @@ function Invoke-StopGateHandler {
         if ($pending -eq 0 -and $hasAck) { exit 0 }
 
         $counterPath = Join-Path $StateDir ("stop-gate-" + $sessionId + ".json")
+        # 状态目录不存在时 WriteAllText 会抛 DirectoryNotFoundException 并被外层 catch 吞掉，
+        # block 输不出来 → 门禁整体静默失效（P1 复核项）。写任何状态前先确保目录存在；
+        # 路径被同名文件占位时显式抛错走 fail-open 审计（New-Item 对类型冲突的行为跨版本不一）。
+        if (Test-Path -LiteralPath $StateDir) {
+            if (-not (Test-Path -LiteralPath $StateDir -PathType Container)) { throw "状态目录路径被文件占位，拒绝写入: $StateDir" }
+        } else {
+            New-Item -ItemType Directory -Force -Path $StateDir | Out-Null
+        }
         $blocks = 0
         if (Test-Path -LiteralPath $counterPath -PathType Leaf) {
             try { $prev = Get-Content -Raw -Encoding UTF8 -LiteralPath $counterPath | ConvertFrom-Json; $blocks = [int]$prev.blocks } catch { $blocks = 0 }
@@ -323,9 +340,8 @@ function Invoke-StopGateHandler {
         $counterJson = '{"sessionId":"' + $sessionId + '","blocks":' + $blocks + ',"at":"' + (Get-Date).ToUniversalTime().ToString('o') + '"}'
         [System.IO.File]::WriteAllText($counterPath, $counterJson, $utf8NoBom)
 
-        $recorderPath = Join-Path $scriptDir 'experience-recorder.mjs'
         if ($pending -gt 0) {
-            $reason = "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --expected-revision <先 check 获取>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>。处理后正常结束即可。"
+            $reason = "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须逐条处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --expected-revision <先 check 获取> --source-dedup-key <该信号索引行的40hex>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>；旧格式行（索引行无 dedupKey）→ 用 runner -Mode Digest 统一消化。处理后正常结束即可。"
         } else {
             $reason = "【经验自检硬门禁】本会话尚未自检留痕。任务完成前自检：有可复用教训（自身返工/重试、推翻方案、用户重复请求或手动撤销产出等）→ node ""$recorderPath"" ""$TargetRoot"" --action record 自行记录；没有 → node ""$recorderPath"" ""$TargetRoot"" --action selfcheck --session $sessionId --finding none 留痕后正常结束。"
         }
@@ -334,6 +350,13 @@ function Invoke-StopGateHandler {
         Write-Output (($blockPayload | ConvertTo-Json -Compress -Depth 4))
         exit 0
     } catch {
+        # 门禁自身故障绝不困住会话（fail-open），但必须留审计：状态目录不可用时退回 TEMP 落盘
+        try {
+            $auditDir = $StateDir
+            if ([string]::IsNullOrWhiteSpace($auditDir) -or -not (Test-Path -LiteralPath $auditDir -PathType Container)) { $auditDir = [System.IO.Path]::GetTempPath() }
+            $utf8Audit = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::AppendAllText((Join-Path $auditDir 'stop-gate-audit.log'), ((Get-Date).ToUniversalTime().ToString('o') + " gate-error " + $_.Exception.Message + "`n"), $utf8Audit)
+        } catch { }
         exit 0  # 门禁自身故障绝不困住会话
     }
 }
@@ -370,7 +393,6 @@ function Invoke-SessionStartHandler {
         if ($pending -gt 0) { Invoke-ContextInjection -EventName 'SessionStart' -ContextText ("经验沉淀提醒（只读）：" + $pendingLine.TrimStart("`n")) }
         exit 0
     }
-    $recorderPath = Join-Path $scriptDir 'experience-recorder.mjs'
     $contractText = @"
 【经验自动记账契约 enabled-experience-autonomous-v1】本项目已启用经验治理台账（$ledgerRelative）。
 1) 检测到纠错信号时 hook 会注入 autoRecord 路由；你必须在当前任务完成后立即自主处理，不需要等待用户再次指示。
@@ -398,13 +420,14 @@ function Invoke-DigestHandler {
     $lines = @(Get-Content -LiteralPath $indexPath -Encoding UTF8 | Where-Object { $_ -match '^\{' })
     if (-not (Test-Path -LiteralPath $StateDir)) { New-Item -ItemType Directory -Force -Path $StateDir | Out-Null }
     $utf8 = New-Object System.Text.UTF8Encoding($false)
-    $unmarkable = 0
     $uniqueKeys = @{}
+    $legacyKeys = @{}
     foreach ($line in $lines) {
         $key = Get-DedupKeyFromLine -Line $line
-        if ([string]::IsNullOrWhiteSpace($key)) { $unmarkable++; continue }
-        $uniqueKeys[$key] = $true
+        if ([string]::IsNullOrWhiteSpace($key)) { $legacyKeys[(Get-LegacyLineKey -Line $line)] = $true }
+        else { $uniqueKeys[$key] = $true }
     }
+    # 两类键都打 <key>.digested 标记：真实信号按 dedupKey，旧/损坏行按内容哈希（legacy- 前缀）。
     $marked = 0; $already = 0
     foreach ($key in $uniqueKeys.Keys) {
         $marker = Join-Path $StateDir ($key + '.digested')
@@ -412,7 +435,14 @@ function Invoke-DigestHandler {
         [System.IO.File]::WriteAllText($marker, (Get-Date).ToUniversalTime().ToString('o'), $utf8)
         $marked++
     }
-    [Console]::WriteLine('DIGEST: marked=' + $marked + ' already=' + $already + ' unmarkable=' + $unmarkable)
+    $legacyMarked = 0; $legacyAlready = 0
+    foreach ($key in $legacyKeys.Keys) {
+        $marker = Join-Path $StateDir ($key + '.digested')
+        if (Test-Path -LiteralPath $marker -PathType Leaf) { $legacyAlready++; continue }
+        [System.IO.File]::WriteAllText($marker, (Get-Date).ToUniversalTime().ToString('o'), $utf8)
+        $legacyMarked++
+    }
+    [Console]::WriteLine('DIGEST: marked=' + $marked + ' already=' + $already + ' legacy=' + $legacyMarked + ' legacyAlready=' + $legacyAlready)
     exit 0
 }
 
@@ -481,11 +511,10 @@ function Invoke-PromptSubmitHandler {
         Invoke-ContextInjection -EventName 'UserPromptSubmit' -ContextText ("已捕获纠错信号（eventId=" + $eventId + "）；本项目未启用经验治理台账（.vibe-docs.json 无 experienceGovernance 或台账文件缺失），不做自动记录。")
         exit 0
     }
-    $recorderPath = Join-Path $scriptDir 'experience-recorder.mjs'
     $contextText = @"
 【autoRecord 纠错信号已采集】eventId=$eventId; signalType=explicit-correction; scope=target-project; promptHash=$promptHash; occurredAt=$occurredAt; sourceDedupKey=$dedupKey
 请在当前任务完成后立即自主处理（无需用户指示）：判断该纠错是否可复用教训。
-可复用 → node "$recorderPath" "$TargetRoot" --action check 取 revision，再 --action record --event-id $eventId --prompt-hash $promptHash --occurred-at $occurredAt --summary <一句话单行摘要，禁止照抄原始 prompt> --expected-revision <N>（命中已有经验加 --experience-id EXP-NNN）
+可复用 → node "$recorderPath" "$TargetRoot" --action check 取 revision，再 --action record --event-id $eventId --prompt-hash $promptHash --occurred-at $occurredAt --source-dedup-key $dedupKey --summary <一句话单行摘要，禁止照抄原始 prompt> --expected-revision <N>（命中已有经验加 --experience-id EXP-NNN）
 不可复用 → node "$recorderPath" "$TargetRoot" --action dismiss --source-dedup-key $dedupKey --reason <一句话>
 两条路径都会自动消化源信号；绝不自动升档，达阈值只报告。
 "@
@@ -500,6 +529,10 @@ if (-not (Test-Path -LiteralPath $contractPath -PathType Leaf)) {
     $contractPath = Get-ContainedPath -Root $RepositoryRoot -RelativePath 'adapters/vibe-hooks/contract.json'
 }
 if (-not (Test-Path -LiteralPath $contractPath -PathType Leaf)) { throw "缺少 Hook adapter contract: $contractPath" }
+
+# recorder 与契约副本同目录：安装态即 runner 目录，仓库态在 adapters/vibe-hooks/。
+# 按 scriptDir 拼会在仓库态注入不存在的 scripts/experience-recorder.mjs（P2 复核项）。
+$recorderPath = Join-Path (Split-Path -Parent $contractPath) 'experience-recorder.mjs'
 
 $contract = Get-Content -Raw -Encoding UTF8 -LiteralPath $contractPath | ConvertFrom-Json
 Assert-Contract -Contract $contract

@@ -16,7 +16,8 @@ Set-StrictMode -Version Latest
 #   2) 未启用事件（Stop / PreToolUse / PostToolUse）Invoke 必须 exit 3
 #   3) SessionStart：无索引 → exit 0 且零写入；有索引 → 输出待处理条数，仍零写入
 #   4) UserPromptSubmit：纠错信号 → 白名单索引恰好新增一行；重复事件幂等；普通输入零写入；非法 payload 静默
-#   4f) Digest：消化标记使 SessionStart 只计未消化条数；恶意 dedupKey 不可标记不逃逸；幂等
+#   4f) Digest：消化标记使 SessionStart 只计未消化条数；无 dedupKey 旧行按内容哈希打 legacy 标记；幂等
+#   4g) 安装器遇到用户既有异形 hook 条目（缺 command/hooks 键）不崩溃且保留原条目
 #   5) 写入边界：全部动作结束后，目标目录里除白名单外不得出现任何新文件
 #
 # 全部使用临时沙箱目标目录，不碰真实项目。
@@ -134,38 +135,45 @@ try {
     Assert-IndexLineCount 4
 
     # 4f) Digest 消化状态机：
-    #     此刻索引 4 行 = 2 条合成行（无 dedupKey，不可标记）+ 2 条真实行（同一 dedupKey，过期重录）
+    #     此刻索引 4 行 = 2 条合成行（无 dedupKey → 按行内容哈希打 legacy 标记）+ 2 条真实行（同一 dedupKey，过期重录）
     $r = Invoke-Runner -Mode 'Digest' -Target $target
     if ($r.ExitCode -ne 0) { throw "Digest 应 exit 0，实际 $($r.ExitCode): $($r.Output)" }
-    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=0 unmarkable=2')) { throw "Digest 首跑计数不符: $($r.Output)" }
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=0 legacy=2 legacyAlready=0')) { throw "Digest 首跑计数不符: $($r.Output)" }
 
-    # 恶意 dedupKey（路径注入形态）必须被判定为不可标记，且不得在状态目录外产生任何文件
+    # 恶意 dedupKey（路径注入形态）不得直接用作标记文件名：按内容哈希归入 legacy 标记，仍限状态目录内
     Add-Content -LiteralPath $feedbackIndex -Encoding UTF8 -Value '{"dedupKey":"../../evil","ts":"2026-09-11T00:00:02Z"}'
 
-    # 新增一条不同信号 → SessionStart 应只报「未消化」条数：3 不可标记 + 1 未标记真实 = 4（已标记的 1 条不计）
+    # 新增一条不同信号 → SessionStart 应只报「未消化」条数：1 未标记真实 + 1 未标记 legacy（恶意行）= 2
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-test-3","prompt":"还是错，日期格式应该是 ISO"}' -Target $target
     if ($r.ExitCode -ne 0) { throw "新信号应 exit 0" }
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target
-    if ($r.Output -notmatch 'PENDING=4') { throw "SessionStart 应报 PENDING=4（剔除已标记）: $($r.Output)" }
+    if ($r.Output -notmatch 'PENDING=2') { throw "SessionStart 应报 PENDING=2（剔除已标记）: $($r.Output)" }
 
-    # 第二次 Digest：标记新条目 + 识别恶意行为不可标记
+    # 第二次 Digest：标记新真实条目 + 恶意行走 legacy 标记
     $r = Invoke-Runner -Mode 'Digest' -Target $target
-    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=1 unmarkable=3')) { throw "Digest 二跑计数不符: $($r.Output)" }
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=1 already=1 legacy=1 legacyAlready=2')) { throw "Digest 二跑计数不符: $($r.Output)" }
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'SessionStart' -Target $target
-    if ($r.Output -notmatch 'PENDING=3') { throw "SessionStart 应报 PENDING=3: $($r.Output)" }
+    if ($r.Output -match 'PENDING=') { throw "全部消化后不得再报 PENDING: $($r.Output)" }
 
-    # 幂等：第三次 Digest 全部 already，SessionStart 继续只报不可标记的 3 条
+    # 幂等：第三次 Digest 全部 already
     $r = Invoke-Runner -Mode 'Digest' -Target $target
-    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=0 already=2 unmarkable=3')) { throw "Digest 幂等计数不符: $($r.Output)" }
+    if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=0 already=2 legacy=0 legacyAlready=3')) { throw "Digest 幂等计数不符: $($r.Output)" }
     # 负面断言：状态目录之外不得出现任何 .digested 文件（恶意 dedupKey 不得逃逸）
     $escaped = @(Get-ChildItem -LiteralPath $target -Recurse -Force -Filter '*.digested' | Where-Object { $_.FullName -notlike ((Join-Path $target '.feisheng/vibe-hook-state') + '*') })
     if ($escaped.Count -gt 0) { throw ("digested 标记出现在状态目录之外: " + (@($escaped | ForEach-Object { $_.FullName }) -join '; ')) }
 
     # 5) 安装 / 卸载 / 回滚 + 契约篡改必须 fail-closed
     $installer = Join-Path $repoRoot 'scripts/install-vibe-hooks.ps1'
+    # 5-0) 用户既有 hook 条目形状不可信：缺 command/hooks 键的异形组不得让安装器 StrictMode 崩溃
+    New-Item -ItemType Directory -Force -Path (Join-Path $target '.claude') | Out-Null
+    $foreignSettings = '{"hooks":{"SessionStart":[{"matcher":"workspace:*","hooks":[{"type":"prompt","timeout":2}]},{"unknownShape":true}]}}'
+    [System.IO.File]::WriteAllText((Join-Path $target '.claude/settings.json'), $foreignSettings, (New-Object System.Text.UTF8Encoding($false)))
     $global:LASTEXITCODE = 0
     $instOut = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot 2>&1
-    if ($LASTEXITCODE -ne 0) { throw "安装应成功，exit=$LASTEXITCODE" }
+    if ($LASTEXITCODE -ne 0) { throw "安装应成功（含异形既有 hook 条目），exit=$LASTEXITCODE" }
+    $settingsInstalled = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.claude/settings.json') | ConvertFrom-Json
+    $foreignKept = @(@($settingsInstalled.hooks.SessionStart) | Where-Object { $null -ne $_.PSObject.Properties['unknownShape'] })
+    if (@($foreignKept).Count -ne 1) { throw '安装器破坏了用户既有 hook 条目' }
     if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'))) { throw '安装副本缺失' }
     if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/install-manifest.json'))) { throw '安装清单缺失' }
 
@@ -198,11 +206,12 @@ try {
     $settingsAfter = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.claude/settings.json') | ConvertFrom-Json
     if ($null -ne $settingsAfter.PSObject.Properties['hooks'] -and $null -ne $settingsAfter.hooks) {
         foreach ($eventName in @('SessionStart', 'UserPromptSubmit')) {
-            if ($null -ne $settingsAfter.hooks.PSObject.Properties[$eventName]) {
-                foreach ($group in @($settingsAfter.hooks.$eventName)) {
-                    foreach ($h in @($group.hooks)) {
-                        if ([string]$h.command -like '*invoke-vibe-hook-adapter.ps1*') { throw '卸载后注册残留' }
-                    }
+            if ($null -eq $settingsAfter.hooks.PSObject.Properties[$eventName]) { continue }
+            foreach ($group in @($settingsAfter.hooks.$eventName)) {
+                if ($null -eq $group -or $null -eq $group.PSObject.Properties['hooks']) { continue }
+                foreach ($h in @($group.hooks)) {
+                    if ($null -eq $h -or $null -eq $h.PSObject.Properties['command']) { continue }
+                    if ([string]$h.command -like '*invoke-vibe-hook-adapter.ps1*') { throw '卸载后注册残留' }
                 }
             }
         }
@@ -274,6 +283,13 @@ try {
     $indexLine2 = @(Get-Content -LiteralPath (Join-Path $target2 '.claude/feedback/FEEDBACK-INDEX.md') -Encoding UTF8 | Where-Object { $_ -match '^\{' })[0] | ConvertFrom-Json
     if (-not $indexLine2.eventId -or $indexLine2.eventId -notlike 'EVT-*') { throw '索引行缺少 EVT- eventId' }
     if ($indexLine2.promptHash -notmatch '^sha256:[a-f0-9]{64}$') { throw '索引行 promptHash 格式非法' }
+    # record 模板必须携带源信号 dedupKey：缺失则 record 永不消化源信号 → Stop 门禁死循环 + 重复记账
+    if ($injection.hookSpecificOutput.additionalContext -notmatch ('--action record[^\r\n]*--source-dedup-key ' + [regex]::Escape($indexLine2.dedupKey))) { throw '注入 record 模板缺少 --source-dedup-key' }
+    # 注入的 recorder 路径必须真实存在（仓库态曾指向不存在的 scripts/experience-recorder.mjs）
+    $recorderRef = $null
+    if ($injection.hookSpecificOutput.additionalContext -match 'node "([^"]+experience-recorder\.mjs)"') { $recorderRef = $Matches[1] }
+    if ([string]::IsNullOrWhiteSpace($recorderRef)) { throw '注入缺少 recorder 路径' }
+    if (-not (Test-Path -LiteralPath $recorderRef -PathType Leaf)) { throw "注入的 recorder 路径不存在: $recorderRef" }
 
     # 5c-2) recorder：check → record → 自动消化标记 → replay no-op → CAS 拒绝
     $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'check')
@@ -368,6 +384,17 @@ try {
     $selfRecorded = Get-LastJsonLine -Text $r.Output
     if ($selfRecorded.experienceId -ne 'EXP-002' -or $selfRecorded.replay) { throw "自检记录结果异常: $($r.Output)" }
 
+    # 5d-5) 清扫后重放旧事件（processedEvents 保留、experiences 已移除）：必须幂等成功并只消化
+    #       源信号，不得因 find() 得 undefined TypeError 崩溃（P1 回归）
+    $checkOut5 = (Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'check')).Output
+    $rev5 = (Get-LastJsonLine -Text $checkOut5).revision
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'record', '--event-id', "EVT-$oldHex", '--prompt-hash', ('sha256:' + ('a' * 64)), '--occurred-at', '2026-06-01T00:00:00.000Z', '--experience-id', 'EXP-001', '--source-dedup-key', $oldHex, '--expected-revision', "$rev5")
+    if ($r.ExitCode -ne 0) { throw "清扫后重放应幂等成功: $($r.Output)" }
+    $replayed = Get-LastJsonLine -Text $r.Output
+    if (-not $replayed.replay -or -not $replayed.swept) { throw "重放已清扫经验结果异常: $($r.Output)" }
+    if ($null -ne $replayed.count -or $null -ne $replayed.tier) { throw "重放已清扫经验不应返回计数/档位: $($r.Output)" }
+    if (-not (Test-Path -LiteralPath (Join-Path $target4 ".feisheng/vibe-hook-state/$oldHex.digested"))) { throw '清扫后重放未消化源信号' }
+
     # 5e) Stop 硬门禁：自检留痕 + 未消化信号拦截 + 封顶放行（fail-open audited）
     function Get-BlockReason {
         param([Parameter(Mandatory = $true)][AllowEmptyString()][string]$Text)
@@ -397,7 +424,7 @@ try {
     if ($r.ExitCode -ne 0) { throw '捕获应成功' }
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":false}' -Target $gateTarget
     $reason3 = Get-BlockReason -Text $r.Output
-    if ($null -eq $reason3 -or $reason3 -notmatch '未消化纠错信号' -or $reason3 -notmatch '--action record') { throw "未消化信号应拦截: $($r.Output)" }
+    if ($null -eq $reason3 -or $reason3 -notmatch '未消化纠错信号' -or $reason3 -notmatch '--action record' -or $reason3 -notmatch '--source-dedup-key') { throw "未消化信号应拦截（理由需含可消化源的 record 指令）: $($r.Output)" }
 
     # 5e-4) stop_hook_active=true 直接放行（宿主已在继续轮次中）
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cap","stop_hook_active":true}' -Target $gateTarget
@@ -415,6 +442,27 @@ try {
     if ($r.ExitCode -ne 0) { throw '恶意 sid 应安全处理' }
     $escaped = @(Get-ChildItem -LiteralPath $gateTarget -Recurse -Force -File | Where-Object { $_.FullName -notlike ($gateState + '*') -and $_.Name -like '*evil*' })
     if ($escaped.Count -gt 0) { throw ("恶意 sid 逃逸状态目录: " + (@($escaped | ForEach-Object { $_.FullName }) -join '; ')) }
+
+    # 5f) Stop 门禁冷启动回归：状态目录不存在时不得静默失效
+    #     （曾因计数器写入抛 DirectoryNotFoundException 被 catch 吞掉 → 门禁整体失效，P1 回归）
+    $target5 = Join-Path $work 'target5'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target5 '.git') | Out-Null
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cold","stop_hook_active":false}' -Target $target5
+    if ($r.ExitCode -ne 0) { throw "冷启动 Stop 应 exit 0: $($r.Output)" }
+    if ($null -eq (Get-BlockReason -Text $r.Output)) { throw '状态目录缺失时 Stop 门禁静默失效（应输出 block 拦截）' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target5 '.feisheng/vibe-hook-state/stop-gate-s-cold.json'))) { throw '拦截计数器未落盘（状态目录未创建）' }
+
+    # 5f-2) 状态目录不可用（同名文件占位）→ fail-open 放行，但异常必须留审计（TEMP 兜底）
+    $target6 = Join-Path $work 'target6'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target6 '.git') | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $target6 '.feisheng') | Out-Null
+    Set-Content -LiteralPath (Join-Path $target6 '.feisheng/vibe-hook-state') -Value 'not-a-dir'
+    $tempAudit = Join-Path ([System.IO.Path]::GetTempPath()) 'stop-gate-audit.log'
+    $auditBefore = if (Test-Path -LiteralPath $tempAudit) { (Get-Item -LiteralPath $tempAudit).Length } else { 0 }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-blocked","stop_hook_active":false}' -Target $target6
+    if ($r.ExitCode -ne 0) { throw "状态目录不可用应 fail-open exit 0: $($r.Output)" }
+    if ($null -ne (Get-BlockReason -Text $r.Output)) { throw '状态目录不可用应放行（绝不困住会话）' }
+    if (-not (Test-Path -LiteralPath $tempAudit) -or (Get-Item -LiteralPath $tempAudit).Length -le $auditBefore) { throw '门禁异常未留审计' }
 
     # 6) 写入边界：目标目录里除白名单外不得有新文件
     $allowed = @(

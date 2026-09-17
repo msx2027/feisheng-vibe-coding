@@ -95,6 +95,17 @@ function Test-HasProperty {
     return ($null -ne $Object.PSObject.Properties[$Name])
 }
 
+function Test-RunnerMarkedGroup {
+    # 用户既有 hook 组的形状不可信（组可能缺 hooks 键、条目可能缺 command 键）：
+    # StrictMode 下直接取 $_.command 会崩掉整个安装/卸载。属性存在性先行，任何形状都安全。
+    param($Group)
+    if ($null -eq $Group -or -not (Test-HasProperty -Object $Group -Name 'hooks')) { return $false }
+    foreach ($h in @($Group.hooks)) {
+        if ($null -ne $h -and (Test-HasProperty -Object $h -Name 'command') -and ([string]$h.command -like ('*' + $runnerMarker + '*'))) { return $true }
+    }
+    return $false
+}
+
 function Get-Sha256 {
     param([Parameter(Mandatory = $true)][string]$Path)
     return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
@@ -157,9 +168,7 @@ function Register-ClaudeHost {
         $matcher = $matcherByEvent[$eventName]
         if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
         if (Test-HasProperty -Object $settings.hooks -Name $eventName) {
-            $existing = @($settings.hooks.$eventName) | Where-Object {
-                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
-            }
+            $existing = @($settings.hooks.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
             $settings.hooks.$eventName = @($existing + @($group))
         } else {
             $settings.hooks | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
@@ -190,9 +199,7 @@ function Register-ZcodeHost {
         $matcher = $matcherByEvent[$eventName]
         if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
         if (Test-HasProperty -Object $config.hooks.events -Name $eventName) {
-            $existing = @($config.hooks.events.$eventName) | Where-Object {
-                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
-            }
+            $existing = @($config.hooks.events.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
             $config.hooks.events.$eventName = @($existing + @($group))
         } else {
             $config.hooks.events | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
@@ -217,9 +224,7 @@ function Register-CodexHost {
         $group = [pscustomobject]@{ hooks = @($entry) }
         if ($eventName -eq 'SessionStart') { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value 'startup|resume' }
         if (Test-HasProperty -Object $hooks.hooks -Name $snake) {
-            $existing = @($hooks.hooks.$snake) | Where-Object {
-                -not (@($_.hooks) | Where-Object { ([string]$_.command) -like ('*' + $runnerMarker + '*') })
-            }
+            $existing = @($hooks.hooks.$snake) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
             $hooks.hooks.$snake = @($existing + @($group))
         } else {
             $hooks.hooks | Add-Member -MemberType NoteProperty -Name $snake -Value @($group)
@@ -247,10 +252,7 @@ function Remove-HostRegistrations {
             if (-not (Test-HasProperty -Object $hooksRoot -Name $eventName)) { continue }
             $kept = @()
             foreach ($group in @($hooksRoot.$eventName)) {
-                $matched = $false
-                foreach ($h in @($group.hooks)) {
-                    if ([string]$h.command -like ('*' + $runnerMarker + '*')) { $matched = $true }
-                }
+                $matched = Test-RunnerMarkedGroup -Group $group
                 if (-not $matched) { $kept += $group }
             }
             if (@($kept).Count -ne @($hooksRoot.$eventName).Count) {

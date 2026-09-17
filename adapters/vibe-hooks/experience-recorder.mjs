@@ -576,6 +576,35 @@ if (existingEvent) {
 
 validateLedger(ledger);
 const record = ledger.experiences.find((item) => item.id === experienceId);
+if (!record) {
+  // 走到这里只可能是重放：processedEvents 保留了事件但经验已被 govern 清扫（移入清扫日志）
+  // 或退役归档，experiences[] 里 find 得 undefined，直接取 .tier 会 TypeError 崩溃，
+  // 且崩溃点在消化标记写入之前 → 信号永不消化。按幂等重放成功处理：台账零改动，
+  // 只消化源信号，不恢复计数（恢复走清扫日志的人工恢复流程）。
+  const archivedRecord = ledger.archived.find((item) => item.id === experienceId) || null;
+  let digestMarkedSwept = false;
+  if (sourceDedupKey) {
+    writeDigestMarker(sourceDedupKey);
+    digestMarkedSwept = true;
+  }
+  out({
+    ok: true,
+    action: "record",
+    experienceId,
+    swept: !archivedRecord,
+    count: archivedRecord ? archivedRecord.count : null,
+    tier: archivedRecord ? archivedRecord.tier : null,
+    revision: ledger.revision,
+    replay: true,
+    atThreshold: false,
+    threshold: null,
+    digestMarked: digestMarkedSwept,
+    note: archivedRecord
+      ? "经验已退役归档：重放只消化源信号，不再计数"
+      : "经验已被清扫（可从清扫日志恢复）：重放只消化源信号，不再计数",
+  });
+  process.exit(0);
+}
 const threshold = thresholdOf(ledger, record.tier);
 const atThreshold = threshold !== null && record.count >= threshold;
 

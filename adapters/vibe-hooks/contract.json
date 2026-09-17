@@ -6,7 +6,7 @@
   "digestion": {
     "mode": "Digest",
     "markerStore": "target-repository/.feisheng/vibe-hook-state/<dedupKey>.digested",
-    "dedupKeyValidation": "strict 40-char lowercase hex, otherwise the entry is counted as unmarkable (prevents path injection via crafted index lines)",
+    "dedupKeyValidation": "strict 40-char lowercase hex (prevents path injection via crafted index lines); entries without a valid dedupKey are digested by the Digest maintenance command via a legacy content-hash marker (legacy-<sha256(line) first 40 hex>.digested) inside the same state store, so legacy/corrupt rows can no longer stay pending forever",
     "semantics": "maintenance command invoked after a session digests the signals; SessionStart then reminds only about pending (undigested) entries; the recorder auto-digests the source signal on successful record/dismiss",
     "consumptionSkillsAdmitted": true,
     "consumptionForm": "auto-record wired (contract enabled-experience-auto-record-v1): capture injects a structured autoRecord route; the session AI judges reusability and calls experience-recorder; record/dismiss both auto-digest the source signal. Elevation/retirement remain explicit and user-confirmed."
@@ -71,7 +71,7 @@
       "enabled": true,
       "timeoutSeconds": 10,
       "handler": "stop",
-      "behavior": "experience self-check hard gate (owner-authorized 2026-09-17, replacing the former 'stop-gate duplicates control-plane governance' disablement): blocks session end when (a) captured correction signals remain undigested, or (b) the session has no self-check acknowledgment yet; instructions are actionable (record/dismiss/selfcheck); fails open after 3 blocks per session with an audit log entry; honors the host stop_hook_active flag; read-only except state store",
+      "behavior": "experience self-check hard gate (owner-authorized 2026-09-17, replacing the former 'stop-gate duplicates control-plane governance' disablement): blocks session end when (a) captured correction signals remain undigested, or (b) the session has no self-check acknowledgment yet; instructions are actionable (record/dismiss with --source-dedup-key, or Digest for legacy rows); fails open after 3 blocks per session with an audit log entry; honors the host stop_hook_active flag; the state store is created on demand and any gate error fails open with an audit entry (TEMP fallback when the state store is unusable); read-only except state store",
       "vibeOrigin": "none (package-original enforcement; vibe source stop-gate remains intentionally unported)"
     }
   },

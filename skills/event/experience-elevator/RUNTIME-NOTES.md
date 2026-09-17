@@ -16,12 +16,17 @@
   该义务由 **Stop 硬门禁强制**（owner 授权 2026-09-17，解除原「Stop 与控制面重复」禁用）：
   会话结束时若有未消化纠错信号或本会话未 `selfcheck` 留痕，结束请求被拦截并给出处理指令；
   每会话最多拦截 3 次，超限 fail-open 放行并写审计日志（`stop-gate-audit.log`）；
-  宿主 `stop_hook_active` 直接放行；门禁自身异常静默放行，绝不困住会话。
+  宿主 `stop_hook_active` 直接放行；门禁自身异常放行但留审计（状态目录不可用时退系统 TEMP），
+  拦截前先确保状态目录存在，绝不困住会话。
   无新教训时 `--action selfcheck --session <id> --finding none` 留痕即可正常结束。
 - **政策制治理（autonomous 批次）**：owner 会话确认一次清扫政策（`policy-add`，政策存台账文件的政策围栏
   `vibe-experience-policies`，含 confirmedBy/source 凭据），此后 AI 按政策自治执行 `govern` 清扫；
   清扫条目完整进清扫日志（台账同名 `-清扫.md`），ID 永不复用、可恢复。`check` 输出
   `governance.dueForReview` 驱动治理时机（超过 14 天未治理或台账增长 ≥5）。
+  重放命中已清扫/已退役经验的 `record` 幂等成功（只消化源信号，不恢复计数；恢复走清扫日志人工流程）。
+- **Digest 兜底（修复批次 2026-09-18）**：注入的 record 模板必带 `--source-dedup-key`（record 即消化源信号，
+  不会死循环卡 Stop 门禁）；无 dedupKey 的旧/损坏索引行由 Digest 维护命令按行内容哈希打 `legacy-` 标记消化，
+  不再永久 pending。
 - **不自动做的事（红线不变）**：升档（L1/L2/L3）、退役、adopt-anchor 一律必须用户逐次确认凭据；
   recorder 达到阈值只输出 `atThreshold=true` 供 AI 向用户报告；无登记政策绝不执行清扫。
 - **工具等价性**：正文引用的 `tools/experience-governance.mjs`（源快照）的 `record` 动作
