@@ -34,64 +34,19 @@ User goal → one main route → conditional lens / one or more internal capabil
 
 **运行时架构 Runtime architecture** — 用户只接触一个入口；控制面是唯一的项目级决策者，内部能力只能返回结果或 finding，不得成为第二个路由器。
 
-```mermaid
-flowchart TB
-    User["用户 · 自然语言目标<br/>User goal in natural language"]
-
-    subgraph HOSTS["宿主 Hosts — Claude Code / Codex"]
-        ENTRY["唯一入口 Single entry<br/>feisheng-vibe-coding · SKILL.md"]
-    end
-
-    subgraph CP["治理控制面 Control plane — governance/sliver-core"]
-        ROUTE["路由 · 深度 · 风险 · 授权<br/>Routing · Depth · Risk · Authorization"]
-        GATE["真源 · 测试 · 验收<br/>Truth · Tests · Acceptance"]
-    end
-
-    subgraph CAPS["内部能力 Internal capabilities · 52 in runtime"]
-        direction LR
-        ENG["engineering ×13<br/>TDD · review · modeling"]
-        PRD["product ×14<br/>spec · builder · release"]
-        UIX["ui ×16<br/>design-system · polish"]
-        CHK["checker ×5<br/>audit · critique · harden"]
-        EVT["event ×3<br/>沉淀 · 复盘"]
-    end
-
-    subgraph ADP["宿主适配层 Host adapters"]
-        PRJ["运行时投影 Runtime projections<br/>Codex 95 · Claude 93 · Shared 92 files"]
-        HOOK["Hook 契约 v2<br/>纠错信号采集 Correction signals"]
-    end
-
-    User --> ENTRY
-    ENTRY --> ROUTE
-    ROUTE --> GATE
-    ROUTE -->|"调用 invoke"| CAPS
-    CAPS -->|"只返回结果 / finding<br/>results only · no second router"| ROUTE
-    PRJ -.->|"静态投影安装 static install"| HOSTS
-    HOOK -.-> HOSTS
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/architecture-runtime-dark.svg">
+  <img src="docs/assets/architecture-runtime.svg" alt="运行时架构：用户 → 唯一入口 → 治理控制面 → 内部能力 → 宿主适配层 Runtime architecture" width="100%">
+</picture>
 
 **治理与构建流水线 Governance & build pipeline** — 真源（人写）→ 生成物（只可再生）→ 门禁（单入口）→ 投影 → 安装。
 
-```mermaid
-flowchart LR
-    SRC["sources/ 只读快照<br/>read-only snapshots<br/>唯一内容真源"]
-    CLS["provenance/SKILL-CLASSIFICATION.json<br/>分类唯一写入点"]
-    CAT["provenance/CANONICAL-CATALOG.json<br/>再生投影 · 禁止手工编辑"]
-    IDX["docs/CAPABILITY-INDEX.md<br/>生成物"]
-    V["verify.ps1<br/>静态门禁 · 默认 15 步"]
-    PRJ["packaging + builders<br/>Codex / Claude / Shared 投影"]
-    INST["install-runtime-projection.ps1<br/>宿主投递"]
-    H["Claude Code · Codex"]
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/architecture-pipeline-dark.svg">
+  <img src="docs/assets/architecture-pipeline.svg" alt="治理与构建流水线：真源 → 生成物 → 门禁 → 投递 Governance and build pipeline" width="100%">
+</picture>
 
-    SRC -->|"import-*.ps1 只读导入"| CLS
-    CLS -->|"build-canonical-catalog.ps1 再生"| CAT
-    CAT --> IDX
-    CLS --> V
-    CAT --> V
-    V -->|"全绿 green"| PRJ
-    PRJ --> INST
-    INST --> H
-```
+> 图为 [`docs/assets/architecture.mjs`](docs/assets/architecture.mjs) 再生的双主题 SVG（跟随 GitHub 明暗模式自动切换），调整后运行 `node docs/assets/architecture.mjs` 重新生成。Theme-aware SVGs regenerated from the builder — run `node docs/assets/architecture.mjs` after changes.
 
 ---
 
@@ -106,7 +61,7 @@ flowchart LR
 ### 当前状态（2026-09-11 闭环后受控运行）
 
 - 三个源项目已完成快照与全量校验并删除本体；仓库内 `sources/` 快照是**唯一内容真源**，逐文件 sha256 自证。
-- **82 条**来源技能全量登记定编：**52 条进入 runtime**（420 文件）、**23 条退役**（快照保留、可重走准入）、**7 条排除/兼容**。
+- **82 条**来源技能全量登记定编：**52 条进入 runtime**（432 文件）、**23 条退役**（快照保留、可重走准入）、**7 条排除/兼容**。
 - 纯中文自然语言触发（D2）与全链路路由（D3）已在真实宿主会话实测转绿。
 - Hook 适配器契约 v2：**纠错信号采集面已启用**（SessionStart 只读提醒 / UserPromptSubmit 采集 / `-Mode Digest` 消化标记）；治理门禁事件仍禁用归控制面。
 - **GitHub Actions CI 全绿**（`ubuntu-latest`：`verify.ps1` 静态门禁 + 发布候选包装配）。
@@ -236,7 +191,7 @@ A unified AI collaboration runtime package for software projects. Externally the
 ### Current status (controlled run since 2026-09-11 closure)
 
 - The three source projects were snapshotted, fully verified, and deleted; the in-repo `sources/` snapshots are the **single source of content truth**, self-attested by per-file sha256.
-- **82** source skills fully registered and classified: **52 in runtime** (420 files), **23 retired** (snapshots kept; re-admission restarts the full gate), **7 excluded/compat**.
+- **82** source skills fully registered and classified: **52 in runtime** (432 files), **23 retired** (snapshots kept; re-admission restarts the full gate), **7 excluded/compat**.
 - Pure-Chinese natural-language triggering (D2) and end-to-end routing (D3) verified green in real host sessions.
 - Hook adapter contract v2: the **correction-signal collection surface is enabled** (SessionStart read-only reminder / UserPromptSubmit collection / `-Mode Digest` markers); governance gate events remain disabled and belong to the control plane.
 - **GitHub Actions CI is green** (`ubuntu-latest`: `verify.ps1` static gates + release-candidate packaging).
