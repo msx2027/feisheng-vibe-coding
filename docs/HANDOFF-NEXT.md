@@ -2,6 +2,7 @@
 
 > 这是**唯一**的交接入口（取代并覆盖本文件的历史版本）。`docs/archive/HANDOFF.md` 是历史留档（2026-09-12 移入 docs/archive/），冲突时以本文为准。
 > 本文自包含：新会话读完即可接手，不需要任何对话历史。请用 goal 模式按第 9 节推进到第 8 节定义的「完成」。
+> 2026-09-18 路径同步：磁盘根目录 `F:\skiils工具` 已改名 `F:\skiils`（同批 `Agent项目`→`Agent`）；本文全部路径已批量替换为新根，历史批次记录中的旧路径以当时磁盘实况为准，不必回改。
 
 ---
 
@@ -28,7 +29,7 @@
 
 ## 2. 一分钟现状（数字快照）
 
-- 仓库：`F:/skiils工具/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
+- 仓库：`F:/skiils/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 远端：`https://github.com/msx2027/feisheng-vibe-coding`（private）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
 - 门禁：`verify.ps1` 默认 **15 步**（2026-09-12 审计批新增「退役引用扫描」与「collector 路径归属单测」；此前 13 步为退役清理批口径，CI 首绿时点为 12 步——步数随门禁演进，对账以 verify.ps1 实际输出为准）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 17 步）
@@ -36,7 +37,7 @@
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils工具\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **422 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明（2026-09-12）：**420** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**422** = 部署态 = 420 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移
+- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **422 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明（2026-09-12）：**420** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**422** = 部署态 = 420 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -200,7 +201,7 @@ Sliver 的 `governance/sliver-core/packaging/runtime-manifest.json` 用 `targets
 
 ### 7.1 布局
 
-- `~/.claude/skills` 是**junction** → `F:\skiils工具\_adapters\shared\skills`（宿主技能根，176 条【历史时点 2026-09-10；2026-09-12 实测 112 条，见 §13 检查清单】；2026-09-11 退役 4 个重名链接，见 `evidence/20260911-d2-green-t4-and-retirement.md`）
+- `~/.claude/skills` 是**junction** → `F:\skiils\_adapters\shared\skills`（宿主技能根，176 条【历史时点 2026-09-10；2026-09-12 实测 112 条，见 §13 检查清单】；2026-09-11 退役 4 个重名链接，见 `evidence/20260911-d2-green-t4-and-retirement.md`）
 - 我们的包：`.../shared/skills/feisheng-vibe-coding`，**401 文件**【历史时点；2026-09-12 实测 422 文件 / 52 技能，含控制面】
 - `~/.codex/skills` 只有 `.system`（Codex 通过 junction 根读取同一目录）
 - 已退役的 8 个旧条目**不在**这个根里了；它们的源仓库仍在原处（可回滚，见 `evidence/20260910-host-install-and-discovery.md` 第 8 节表格）
@@ -366,7 +367,7 @@ owner 审计后拍板：29 个「已接入统一包但旧链接还在」的链�
 1. ✅ 29 链接退役（D1 批）
 2. ✅ 35 技能全部定编（能力定批评次：13 接入 + 22 退役，裁决表见 `evidence/20260911-capability-finalization.md`）
    → 剩余 35 个源链接已全部退役（回滚记录 `evidence/20260911-retire-35-rollback.json`，2026-09-12 迁入），**三源链接清零**，投影重装 422 文件
-3. ✅ 三源项目归档 + 规则文本对齐（本批）：三个源项目 zip 冷存 `F:\skiils工具\_archive\`
+3. ✅ 三源项目归档 + 规则文本对齐（本批）：三个源项目 zip 冷存 `F:\skiils\_archive\`
    （逐文件 sha256 + CRC 全等校验通过），**本地源目录已删除**；AGENTS.md「不修改源项目」改写为
    「源已归档、`sources/` 快照为唯一内容真源」；HANDOFF §10 两条边界按新事实改写。
    归档前状态证据：`evidence/20260911-matt-source-dirty-state.md`（matt 4 个脏文件如实记录）；
@@ -537,20 +538,20 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
 
 ```powershell
 # 一键全套门禁（提交后必须重跑）
-pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludePackage
+pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -IncludePackage
 
 # 宿主投递（干跑 / 安装 / 卸载）
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -DryRun
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -Force
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -Uninstall
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -DryRun
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -Force
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -Uninstall
 
 # 改 vendored 内容（顺序不能反）
 # 1. 改 governance/sliver-core/**  2. 登记 LOCAL-PATCHES.json（originalSha256 + patchedSha256）
-pwsh -NoProfile -File 'scripts/record-provenance-integrity.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
-pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils工具\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/record-provenance-integrity.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils\feisheng-vibe-coding'
 
 # 新增 runtime 技能后的路由绑定（门禁 3b 会强制）
-pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding'
 
 # 唯一可信的验收方式
 git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/verify.ps1' -IncludePackage
@@ -561,15 +562,15 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 ## 13. 新会话起点检查清单
 
 ```powershell
-cd F:/skiils工具/feisheng-vibe-coding
+cd F:/skiils/feisheng-vibe-coding
 git log --oneline -3                      # 终态收尾批（2026-09-11）之后的提交
 git status --porcelain                    # 应为空
-pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils工具\feisheng-vibe-coding' -IncludeHostEvidence -IncludePackage
+pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -IncludeHostEvidence -IncludePackage
                                           # 应为 17/17（默认 15 步 + 宿主证据 + 包装配；2026-09-12 口径）
-ls 'F:/skiils工具/_adapters/shared/skills' | wc -l     # 应为 112（2026-09-11 定编批退役全部 64 个源链接后）
-ls -d 'F:/skiils工具/sliver-vibe-coding' 'F:/skiils工具/vibe-coding-skills' 'F:/skiils工具/mattpocock-skills'
+ls 'F:/skiils/_adapters/shared/skills' | wc -l     # 应为 141（2026-09-18 实测；112 为 2026-09-11 定编批口径，后续新增技能未回写本清单）
+ls -d 'F:/skiils/sliver-vibe-coding' 'F:/skiils/vibe-coding-skills' 'F:/skiils/mattpocock-skills'
                                           # 应全部 not found（源项目已归档删除）
-ls 'F:/skiils工具/_archive'               # 【已作废】归档 zip 由 owner 于 2026-09-12 裁决删除，不再检查；来源唯一对账副本 = 仓库内快照 + PROVENANCE-INTEGRITY.json
+ls 'F:/skiils/_archive'               # 【已作废】归档 zip 由 owner 于 2026-09-12 裁决删除，不再检查；来源唯一对账副本 = 仓库内快照 + PROVENANCE-INTEGRITY.json
 ```
 
 然后按顺序：T1–T7 与 GA 批均已完成。后续入口：**9.8 末尾的遗留清单**（沉淀消费三技能批次 →

@@ -39,3 +39,6 @@ audit-rules.md + references/workflow.md）内无 LICENSE/NOTICE，且
 - 上游分发包是否有更细粒度（逐技能）许可证声明未在本轮核查到（README 只声明两大
   来源族）；如后续取得上游逐技能声明，可升级本条目。
 - 独立 Luna 交叉审查仍不可用。
+
+> 2026-09-18 路径备注：声明中上游路径 `F:\skiils工具\vibe-coding-skills` 所在根目录已改名 `F:\skiils`，
+> 且 vibe-coding-skills 已退役并入 feisheng-vibe-coding；本声明的审计证据、sourceCommit 与结论不受影响，原文按审计时点保留。
