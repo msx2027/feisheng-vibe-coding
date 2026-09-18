@@ -27,6 +27,7 @@ Set-StrictMode -Version Latest
 #   - catalog 与分类真源同步（重生成后语义比对）
 #   - runtime include 内容完整性（bundle 逐文件 sha256 + 全局路径唯一性）
 #   - 导入副本与快照一致性（Vibe 逐文件白名单 + Matt 侧，含登记补丁双向核对）
+#   - 已登记补丁结构不变量（runtime-import 补丁的围栏奇偶 / frontmatter 键集 / 路径 token 结构比对）
 #   - 保真树换行可复现性（-text 且索引==工作树）
 #   - 能力索引新鲜度（重生成后逐字节比对）
 #   - 来源快照完整性（聚合树摘要自证）
@@ -361,6 +362,24 @@ try {
         }
     } catch {
         Add-Result -Step '导入副本与快照一致性（Matt）' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 1c-3) 已登记补丁的结构不变量（文本补丁安全网）
+    #     哈希对账只证明「登记内容 == 文件内容」，不证明「补丁没有顺手破坏结构」：哈希证明意图，不证明安全。
+    #     对每个 runtime-import 登记项，把来源快照原文与补丁后副本做三类结构级比对：
+    #     ① ``` 围栏奇偶一致；② frontmatter 有无与键集一致（值允许变）；
+    #     ③ 既有「像路径的反引号 token」未被加料改写（骨架相同、原文不同，典型是路径被顺手翻译）。
+    #     不拦新增合法引用、删除既有引用与正文改写——那是文本补丁的正常形态。
+    #     sliver-core 命名空间原文不在本仓库（只有哈希），不覆盖；原文/副本缺失一律失败（fail-closed）。
+    try {
+        $patchStructure = Test-RuntimePatchStructureInvariants -RepositoryRoot $repoRoot
+        if ($patchStructure.ok) {
+            Add-Result -Step '已登记补丁结构不变量' -Passed $true -Detail ('patches = ' + $patchStructure.checked)
+        } else {
+            Add-Result -Step '已登记补丁结构不变量' -Passed $false -Detail (@($patchStructure.errors) -join '; ')
+        }
+    } catch {
+        Add-Result -Step '已登记补丁结构不变量' -Passed $false -Detail $_.Exception.Message
     }
 
     # 1d) 保真树的换行可复现性（把刚修好的不变量锁住，防回归）

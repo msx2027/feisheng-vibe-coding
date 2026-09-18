@@ -153,9 +153,11 @@ function Get-RuntimeCopyPatches {
     foreach ($patch in @($doc.patches)) {
         if ([string]$patch.snapshot -ne 'runtime-import') { continue }
         foreach ($file in @($patch.files)) {
+            $sourceSnapshotPath = ''
+            if ($file.PSObject.Properties.Name -contains 'snapshotPath') {
+                $sourceSnapshotPath = ([string]$file.snapshotPath).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+            }
             if (-not [string]::IsNullOrWhiteSpace($SnapshotPathPrefix)) {
-                $sourceSnapshotPath = ''
-                if ($file.PSObject.Properties.Name -contains 'snapshotPath') { $sourceSnapshotPath = ([string]$file.snapshotPath).Replace([System.IO.Path]::DirectorySeparatorChar, '/') }
                 if (-not $sourceSnapshotPath.StartsWith($SnapshotPathPrefix, [System.StringComparison]::OrdinalIgnoreCase)) { continue }
             }
             $relative = ([string]$file.path).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
@@ -163,6 +165,7 @@ function Get-RuntimeCopyPatches {
                 originalSha256 = [string]$file.originalSha256
                 patchedSha256 = [string]$file.patchedSha256
                 patchId = [string]$patch.id
+                snapshotPath = $sourceSnapshotPath
             }
         }
     }
@@ -381,4 +384,137 @@ function Sort-StringsOrdinal {
     $copy = [string[]]@($Values)
     [Array]::Sort($copy, [System.StringComparer]::Ordinal)
     return @($copy)
+}
+
+function Get-MarkdownFenceCount {
+    param([Parameter(Mandatory = $true)][string]$Text)
+
+    # 统计「行首 ``` 围栏行」数量（允许 ≤3 空格缩进，CommonMark）。奇偶用于判断围栏是否配对；
+    # 嵌套围栏等历史怪癖在原文与副本两侧同构，比奇偶不影响判定。
+    $count = 0
+    foreach ($line in @($Text.Replace("`r`n", "`n").Split("`n"))) {
+        if ($line.TrimStart(' ').StartsWith('```')) { $count++ }
+    }
+    return $count
+}
+
+function Get-FrontmatterInfo {
+    param([Parameter(Mandatory = $true)][string]$Text)
+
+    # 解析 YAML frontmatter 的有无与顶层键名集合（键名顺序不敏感；值不解析、允许变）。
+    $lines = @($Text.Replace("`r`n", "`n").Split("`n"))
+    $info = [pscustomobject]@{ hasFrontmatter = $false; keys = @() }
+    if ($lines.Count -lt 2) { return $info }
+    if ($lines[0] -ne '---') { return $info }
+    $info.hasFrontmatter = $true
+    $keys = @()
+    for ($i = 1; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -eq '---' -or $lines[$i] -eq '...') { break }
+        if ($lines[$i] -match '^([A-Za-z][A-Za-z0-9_-]*)\s*:') { $keys += $Matches[1] }
+    }
+    $info.keys = @($keys)
+    return $info
+}
+
+function Get-AsciiPathSkeletonMap {
+    param([Parameter(Mandatory = $true)][string]$Text)
+
+    # 从反引号 inline code 里提取「像路径的 token」（含 '/' 且纯 ASCII 路径字符），
+    # 骨架 = 剥掉所有 [A-Za-z0-9/._-] 之外的字符。骨架 -> 原始 token 集合。
+    # 用途：识别「路径被加料改写」——骨架相同但原文不同，典型是把
+    # tools/check-api-contracts.mjs 顺手写成 tools/check-api-contracts（接口契约）.mjs。
+    $map = @{}
+    $spans = [System.Text.RegularExpressions.Regex]::Matches($Text, '`([^`\r\n]+)`')
+    foreach ($span in $spans) {
+        $token = $span.Groups[1].Value
+        if ($token.IndexOf('/') -lt 0) { continue }
+        if ($token -notmatch '^[A-Za-z0-9][A-Za-z0-9/._\-]*$') { continue }
+        $skeleton = [System.Text.RegularExpressions.Regex]::Replace($token, '[^A-Za-z0-9/._\-]', '')
+        if (-not $map.ContainsKey($skeleton)) {
+            $map[$skeleton] = New-Object 'System.Collections.Generic.HashSet[string]'
+        }
+        $map[$skeleton].Add($token) | Out-Null
+    }
+    return $map
+}
+
+function Test-RuntimePatchStructureInvariants {
+    param([Parameter(Mandatory = $true)][string]$RepositoryRoot)
+
+    # 已登记文本补丁的结构不变量（vendored 补丁安全网）。
+    #
+    # 背景：哈希对账只证明「登记内容 == 文件内容」，不证明「补丁没有顺手破坏结构」——
+    # 哈希证明意图，不证明安全。本检查对每个 runtime-import 登记项，把来源快照原文与
+    # 补丁后副本做三类结构级比对，拦三类手滑：
+    #   ① 围栏奇偶：补丁把 ``` 围栏数从偶数改成奇数（删了半个代码围栏，其后全部内容错位）；
+    #   ② frontmatter：有无翻转或键集变化（键丢失/新增会改变技能加载与门控行为；值允许变）；
+    #   ③ 路径 token 改写：补丁后出现骨架与既有路径相同、原文不同的 token（路径被翻译/加料）。
+    # 不拦：新增合法引用、删除既有引用、正文改写——这些是文本补丁的正常形态。
+    # 限制：sliver-core 命名空间的原文不在本仓库（只有哈希），无法做内容级比对，不覆盖。
+    # fail-closed：原文或副本缺失 = 失败；检查不了不等于通过。
+
+    $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
+    $patches = Get-RuntimeCopyPatches -RepositoryRoot $repoRoot
+    $errors = @()
+    $checked = 0
+
+    foreach ($relative in $patches.Keys) {
+        $entry = $patches[$relative]
+        $snapshotPath = [string]$entry.snapshotPath
+        $patchedPath = Join-Path $repoRoot ($relative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        $originalPath = Join-Path $repoRoot ($snapshotPath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        if ([string]::IsNullOrWhiteSpace($snapshotPath) -or -not (Test-Path -LiteralPath $originalPath -PathType Leaf)) {
+            $errors += ($relative + ' (结构不变量无法执行：来源原文缺失 ' + $snapshotPath + ')')
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $patchedPath -PathType Leaf)) {
+            $errors += ($relative + ' (结构不变量无法执行：补丁副本缺失)')
+            continue
+        }
+
+        $originalText = [System.IO.File]::ReadAllText($originalPath)
+        $patchedText = [System.IO.File]::ReadAllText($patchedPath)
+
+        # ① 围栏奇偶一致
+        $originalFences = Get-MarkdownFenceCount -Text $originalText
+        $patchedFences = Get-MarkdownFenceCount -Text $patchedText
+        if (($originalFences % 2) -ne ($patchedFences % 2)) {
+            $errors += ($relative + ' (围栏奇偶变化: 原文 ' + $originalFences + ' 个 ``` 行，补丁后 ' + $patchedFences + ' 个——疑似删/多了半个代码围栏)')
+        }
+
+        # ② frontmatter 有无与键集一致（值允许变）
+        $originalFm = Get-FrontmatterInfo -Text $originalText
+        $patchedFm = Get-FrontmatterInfo -Text $patchedText
+        if ($originalFm.hasFrontmatter -ne $patchedFm.hasFrontmatter) {
+            $errors += ($relative + ' (frontmatter 有无翻转: 原文 ' + $originalFm.hasFrontmatter + '，补丁后 ' + $patchedFm.hasFrontmatter + ')')
+        } elseif ($originalFm.hasFrontmatter) {
+            $originalKeys = Sort-StringsOrdinal -Values $originalFm.keys
+            $patchedKeys = Sort-StringsOrdinal -Values $patchedFm.keys
+            if ((@($originalKeys) -join '`n') -ne (@($patchedKeys) -join '`n')) {
+                $errors += ($relative + ' (frontmatter 键集变化: 原文 [' + ($originalKeys -join ', ') + ']，补丁后 [' + ($patchedKeys -join ', ') + '])')
+            }
+        }
+
+        # ③ 既有路径 token 未被加料改写（骨架相同、原文不同）。
+        # 补丁侧必须对全部反引号 token 算骨架——带中文加料的 token 本身过不了 ASCII 门禁，
+        # 先按门禁过滤会把恰要抓的对象（tools/foo（工具）.mjs）放走。
+        $originalSkeletons = Get-AsciiPathSkeletonMap -Text $originalText
+        $patchedSpans = [System.Text.RegularExpressions.Regex]::Matches($patchedText, '`([^`\r\n]+)`')
+        foreach ($span in $patchedSpans) {
+            $token = $span.Groups[1].Value
+            $skeleton = [System.Text.RegularExpressions.Regex]::Replace($token, '[^A-Za-z0-9/._\-]', '')
+            if ($skeleton.IndexOf('/') -lt 0) { continue }
+            if ($originalSkeletons.ContainsKey($skeleton) -and -not $originalSkeletons[$skeleton].Contains($token)) {
+                $errors += ($relative + ' (路径 token 被改写: ' + $token + ')')
+            }
+        }
+
+        $checked++
+    }
+
+    return [pscustomobject]@{
+        ok = ($errors.Count -eq 0)
+        checked = $checked
+        errors = @($errors)
+    }
 }

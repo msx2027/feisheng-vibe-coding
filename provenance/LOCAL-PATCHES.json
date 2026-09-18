@@ -2,7 +2,7 @@
   "schema": "feisheng-local-patches/v1",
   "owner": "provenance",
   "status": "active",
-  "note": "本仓库自持（不再依靠上游）后，允许对 vendored 内容做本地补丁。每个补丁必须登记：快照、路径、来源 revision、原始内容 sha256、补丁后 sha256、原因、证据。未登记的偏差一律仍视为漂移（fail-closed）；登记但哈希不符也失败（登记不得过期）。命名空间有两类：snapshot = 快照名（path 相对该快照根，如 sliver-core）表示「快照树本身被打补丁」；snapshot = runtime-import（path 相对仓库根，如 skills/product/bug-fixer/SKILL.md）表示「一等副本偏离来源快照」。两类都同时登记 originalSha256 与 patchedSha256，因此都完全可逆。",
+  "note": "本仓库自持（不再依靠上游）后，允许对 vendored 内容做本地补丁。每个补丁必须登记：快照、路径、来源 revision、原始内容 sha256、补丁后 sha256、原因、证据。未登记的偏差一律仍视为漂移（fail-closed）；登记但哈希不符也失败（登记不得过期）。命名空间有两类：snapshot = 快照名（path 相对该快照根，如 sliver-core）表示「快照树本身被打补丁」；snapshot = runtime-import（path 相对仓库根，如 skills/product/bug-fixer/SKILL.md）表示「一等副本偏离来源快照」。两类都同时登记 originalSha256 与 patchedSha256，因此都完全可逆。 2026-09-19 起 verify 另设「已登记补丁结构不变量」门禁：对每个 runtime-import 登记项比对来源原文与补丁后副本的 ``` 围栏奇偶、frontmatter 有无与键集、既有路径 token 是否被加料改写——哈希证明意图，结构校验证明安全。实现单一来源 scripts/provenance-integrity.ps1 的 Test-RuntimePatchStructureInvariants。",
   "policy": {
     "unregisteredDeviation": "drift; verification fails",
     "staleRegistration": "registration hash mismatch; verification fails",
