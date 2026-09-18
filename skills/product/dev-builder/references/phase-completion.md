@@ -15,7 +15,7 @@
     - 检查代码质量：命名规范、类型安全、无 any、无循环依赖
     - 检查术语一致性：代码标识、模块名、状态名和公开文案是否符合目标项目需求文档的“术语与命名规范”和开发计划的“术语对齐”
     - 检查接口契约一致性：真实 endpoint、service、public entry、server action、IPC / event 通道和 schema 是否登记到 `接口契约.md`，同一业务能力是否复用统一入口
-    - 检查有没有超出 Phase 范围的改动（scope creep）
+    - 检查有没有超出 Phase 范围的改动（scope creep）：对照当前 Phase 的交付清单与「不做边界/停止条件」逐条核对；`## Spec Compliance` 必须包含固定行「超出计划的内容：无 / <清单>」，不为“无”时逐项列出文件、功能与处理方式（回退 / 用户批准计入需求变更）
     - 输出证据：`## Spec Compliance`、`## Code Quality`、累计 diff hash、Phase ledger 终态与两个 review receipt
 
     第二步：验证完整性

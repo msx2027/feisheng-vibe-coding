@@ -86,7 +86,7 @@ disable-model-invocation: true
     - 用户确认前不能把人工验收写成通过；用户确认后写入 `.vibe-docs.json.manualAcceptance` 映射文档，默认 `验收记录.md`
     - 已人工验收范围必须进入后续 Phase 的影响分析；能自动化回归的优先补自动化，不能覆盖时才提醒用户复验受影响路径
 
-    **粒度适中原则**：Phase 太大做不完，太小管理成本高。一个 Phase 对应一个可独立验收的功能单元，通常 1-3 个核心交付物。
+    **粒度适中原则**：Phase 太大做不完，太小管理成本高。一个 Phase 对应一个可独立验收的功能单元，通常 1-3 个核心交付物。Error / Loading / Empty 等状态补全与工程化收尾默认按洋葱剥皮法排入辅助功能或收尾 Phase，核心链路 Phase 只验收 happy path，除非需求文档显式要求本轮包含。
 
     **文件路径明确原则**：每个 Phase 必须列出要创建或修改的具体文件路径。"实现聊天功能"不是计划，"创建 src/components/views/chat-view.tsx 和 src/hooks/use-chat.ts" 才是计划。
 

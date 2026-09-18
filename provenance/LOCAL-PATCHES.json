@@ -71,7 +71,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-11",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b，mattpocock-skills 9fe7e7a3bb352851b986725bab1c7cfb17610a97（见 files[]）",
-      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。",
+      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。 2026-09-18 追加：dev-planner/SKILL.md 并入 anti-bloat 计划边界改动（粒度适中原则追加状态延后句），patchedSha256 已随之更新。",
       "reason": "能力定批评次把 35 个未接入技能裁决为 13 接入 / 22 退役后，正文引用成了悬空指针：模型会去够包内并不存在的 skill 或路径（例如 bug-fixer 依赖清单里的 skills/beginner-flow-guide/SKILL.md、code-review 里的 /setup-matt-pocock-skills、diagnosing-bugs 里的 /improve-codebase-architecture、dev-builder 脚手架模板里的 owner: target-constitution-setup）。这是文本层一致性缺陷，不是能力缺失：被退役对象要么已有已接入替代（improve-codebase-architecture → codebase-design），要么职能已由控制面接管（target-constitution-setup / target-runtime-setup → 控制面项目宪法与接管路由，owner 记为 sliver-vibe-coding），要么本就是没有被配置的可选增强（codebase-memory-scout → 明确降级为 rg）。改法是就地替换引用文本，保留原有语义与降级话术，不新增能力、不放宽任何门禁。",
       "evidence": "evidence/20260911-retired-reference-cleanup.md",
       "verification": "verify.ps1 步骤 1c 与 build-canonical-catalog.ps1 的副本自洽校验都改为识别本登记：副本 == patchedSha256 且来源快照 == originalSha256 才算合法，未登记的偏差仍在两处失败（fail-closed）；重生成 catalog 后 verify -IncludeHostEvidence -IncludePackage 全绿",
@@ -137,8 +137,8 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/dev-planner/SKILL.md",
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "fd168a661f392f6b27b2ae26ee286dee60d4fdee9fcef6888460637ff7b30b12",
-          "patchedSha256": "36a13f9f82c38bbf4070e822ea3ab2de4c039002947ca9c50939546defb8bacf",
-          "linesChanged": 3
+          "patchedSha256": "016728f88339b2d8ba7d27851f5d061b95249df94ab5602969465dff0337a8a3",
+          "linesChanged": 4
         },
         {
           "path": "skills/product/hotspot-governor/SKILL.md",
@@ -179,7 +179,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-12",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
-      "change": "全链路审计批次：35 个已接入 SKILL.md 的 frontmatter description 门控短语把总入口写成已退役别名 vibe-coding-skills，改名为唯一公开入口 feisheng-vibe-coding（每文件 1 行）；并把已退役能力 shape 的 6 处 /shape 命令引用改为已接入等价物——checker/audit 与 checker/critique 的命令清单移除 /shape，impeccable/reference/craft.md 的流程步骤改为 /design-brief-builder。不改变触发语义（仍仅显式调用/控制面路由）、不新增能力、不放宽任何门禁。",
+      "change": "全链路审计批次：35 个已接入 SKILL.md 的 frontmatter description 门控短语把总入口写成已退役别名 vibe-coding-skills，改名为唯一公开入口 feisheng-vibe-coding（每文件 1 行）；并把已退役能力 shape 的 6 处 /shape 命令引用改为已接入等价物——checker/audit 与 checker/critique 的命令清单移除 /shape，impeccable/reference/craft.md 的流程步骤改为 /design-brief-builder。不改变触发语义（仍仅显式调用/控制面路由）、不新增能力、不放宽任何门禁。 2026-09-18 追加：product-spec-builder/SKILL.md 并入 anti-bloat 计划边界改动（核心流程摘要需求文档必备节清单加入非目标），patchedSha256 已随之更新。",
       "reason": "宿主可见的 description 是触发判断的输入：指向包内不存在的入口名（vibe-coding-skills 已 retired-alias，不在 bundle）会把可显式调用的技能判为不可达；/shape 指向 retired-unreviewed 记录，运行时正文引用会引导模型调用包内不存在的命令。28c8089 清理批的残留扫描把与英文单词同形的 id 剔除在扫描外，/shape 命令形态恰恰漏网；本次以「全量 retired id 的 /id 命令形态、剔除 sources/ 快照路径」为扫描口径补齐，并固化为门禁（scripts/validate-retired-references.ps1）。",
       "evidence": "evidence/20260912-chain-audit-and-closure.md",
       "verification": "verify.ps1 全量门禁复跑全绿（catalog 自洽、1b runtime include、1c/1c-2 副本一致性均消费本登记）；退役引用扫描 0 残留",
@@ -253,8 +253,8 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/product-spec-builder/SKILL.md",
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "ea28e7a526a7301b6f08ffa4de4455cf99ff96e7cb074c0ed84a5cb158fa2f29",
-          "patchedSha256": "2cd109fec7aa419316576983c89f6eef9c9fe482071e5198adf3c208d8c1c0e3",
-          "linesChanged": 1
+          "patchedSha256": "382eff88d4b26615a2a9e230cf25aef3264a67396c14d2bfd2187e3de49637da",
+          "linesChanged": 2
         },
         {
           "path": "skills/product/release-builder/SKILL.md",
@@ -441,6 +441,66 @@
           "originalSha256": "8cf766979ad019937cce1e3e3ff155b731e0dd3e33dc7d9cf976f7eccbc38080",
           "patchedSha256": "6536deae0d04f0fe374e8b8b5f589ab6ece679d702af0a49959279b5b539d268",
           "linesChanged": 4
+        }
+      ]
+    },
+    {
+      "id": "anti-bloat-plan-boundary-minimal",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-18",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "反膨胀最小充分方案 v2（红队/YAGNI 双子代理交叉审计裁决版）落地，共 6 个文件：①需求文档模板新增「非目标（本期明确不做）」真源节（模板结构 + 完整示例 + 写作要点）；②开发计划模板 Phase 新增「不做边界/停止条件」字段（两个结构块 + 两个示例 + 写作要点）；③dev-planner 生成自检把粒度校准法阈值（交付 ≤5 项、关键文件 ≤10 个）与 Phase 总数 ≤10 升级为 fail-closed 计数判定，并修正「覆盖 Spec 全部功能」与非目标排除语义的矛盾表述及收尾引导语；④analysis-strategy 确认策略细粒度选项 10-15 → 8-10 并写明总数上限，消除与 Phase 上限的双真源冲突；⑤phase-completion 的 scope creep 检查改为对照交付清单与不做边界逐条核对，Spec Compliance 增加固定行「超出计划的内容：无 / <清单>」；⑥dev-builder 质量门槛增加「验收范围以当前 Phase 交付清单为准」条款。不改变任何技能触发条件、依赖授权与执行强度。",
+      "reason": "用户主诉：只给需求文档+原子实施方案时项目持续过度膨胀。双审计定位根因在生成层：Spec 模板无非目标节（全集信号）、计划无停止条件、粒度阈值仅是建议、全覆盖成功标准与排除语义互相矛盾。本补丁按最小充分版本只扩展现有文件，零新建脚本、零新增门禁层；随批附带减法（细粒度选项收紧到 8-10），符合零净增原则。审计裁决明确不做的：Phase 预算字段（与粒度校准法形成双真源）、提交期预算/路径允许集阻断（与 TDD 模板「关键文件不列测试文件」矛盾、误拦会导致 hook 被整体禁用）、质量档位体系（对既有质量门槛开后门，改为一条验收范围条款）。",
+      "evidence": "evidence/20260918-anti-bloat-minimal.md",
+      "verification": "verify.ps1 全门禁：1c 副本自洽（副本 == patchedSha256 且来源快照 == originalSha256）+ catalog 再生后语义比对 + runtime include 完整性全绿",
+      "files": [
+        {
+          "path": "skills/product/product-spec-builder/templates/product-spec-template.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/product-spec-builder/templates/product-spec-template.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "6fc5e37f136b69674658f9c4920be0c254b93374ac8d0a937e2d5c9f783a48e8",
+          "patchedSha256": "833ee5a7fd442e92be6f9487569b7b85ac70b4386390874b876d4ea1fc9d62bb",
+          "linesChanged": 19
+        },
+        {
+          "path": "skills/product/dev-planner/templates/dev-plan-template.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-planner/templates/dev-plan-template.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "4523458e0fbfbb2ca802e387339467b76b9aea1e22c94a0bd40c1996914cc7ec",
+          "patchedSha256": "5ccc362492a0f7ab6a43423915375c71a44a61f9e834bfc8140216fad3fdf4a9",
+          "linesChanged": 15
+        },
+        {
+          "path": "skills/product/dev-planner/references/workflow-generation.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-planner/references/workflow-generation.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "a3cb07be7a563ef870c933e99496e9497fcd5cba85aa10310db25e0b5adc6473",
+          "patchedSha256": "9cf0cde44179967e67f49a21a9b9d12b341eed7ee52c36818c158787b615354c",
+          "linesChanged": 5
+        },
+        {
+          "path": "skills/product/dev-planner/references/analysis-strategy.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-planner/references/analysis-strategy.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "b0f67fadd3a16759bda6fd7b5eff2242edd3b18468389ed73d27b20815420207",
+          "patchedSha256": "a7b7ba57b420f72e19b6a1d3e44f843d82b9860e0d4e743b8c56949d38d6ddf1",
+          "linesChanged": 1
+        },
+        {
+          "path": "skills/product/dev-builder/references/phase-completion.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/references/phase-completion.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "721c21e27d2cd4e17c882e7d53034e990d120521db7a85ffb22a39c01fdd805c",
+          "patchedSha256": "1016ae53380332cb3f664378b54bc3bc96b38af3443fcbe48efc5a0c7d234cd7",
+          "linesChanged": 1
+        },
+        {
+          "path": "skills/product/dev-builder/references/development-rules.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/references/development-rules.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "28288240f6ac111000d761e46d4110b65ce0918ec17cb63c019acf136e3c69ec",
+          "patchedSha256": "ebe04c2b8b5ae1dd2842874052fcd6910711249490a26919665cc8be6a313433",
+          "linesChanged": 1
         }
       ]
     }

@@ -120,7 +120,7 @@ disable-model-invocation: true
 
     - 新目标项目默认生成四字中文生命周期文档和 `.vibe-docs.json`。
     - 默认映射包含 `productSpec/productSpecChangelog/designBrief/devPlan/currentExecution/manualAcceptance/interfaceContracts`。
-    - 需求文档必须写清执行语境、术语、技术方向、接口契约治理、测试与验证策略、人工验收记录和需求澄清记录。
+    - 需求文档必须写清执行语境、术语、非目标（本期明确不做）、技术方向、接口契约治理、测试与验证策略、人工验收记录和需求澄清记录。
     - 保存后运行 `check-target-doc-names.mjs --require-existing`。
 
 [初始化]
