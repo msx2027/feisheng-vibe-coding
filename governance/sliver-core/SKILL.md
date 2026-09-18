@@ -52,7 +52,7 @@ Increase depth only when owner topology or required semantic judgment expands. R
 ## Sliver Operating Law
 
 Execution gates are not suggestions. Route before action; owner before patch; contract before cross-owner implementation.
-- Ordinary work stays narrow but still needs current truth, a clear owner, a test decision, and targeted verification.
+- Ordinary work stays narrow but still needs current truth, a clear owner, a test decision, targeted verification, and a declared file boundary checked against the actual diff at close.
 - When truth sources conflict or the question is current external executability, load `references/truth-resolution.md`; do not resolve by file type or lead with architectural possibility.
 - `D2`/`D3` work needs explicit acceptance, owner/contract direction, affected risk lanes, validation method, and a stop condition before implementation.
 - First-time or materially changed stack/architecture decisions use `references/tech-stack.md` as a hard foundation gate: unresolved decision-changing facts block a recommendation; the AI researches and selects one combined technical route instead of asking the user to choose technology.

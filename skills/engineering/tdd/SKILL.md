@@ -33,6 +33,6 @@ Tests 应通过 public interfaces 验证 behavior，而不是 implementation det
 
 ## Rules of the loop
 
-- **Red before green.** 先写 failing test，再只写足够让它通过的代码。不要预判未来 tests，也不要添加 speculative features。
+- **Red before green.** 先写 failing test，再只写足够让它通过的代码。不要预判未来 tests，也不要添加 speculative features；refactoring 属于 review stage（见 `code-review` skill）。
+- **Production code first = delete it.** 生产代码先于失败测试写出时，删除该实现并从 RED 重新开始，不保留作参考（与 dev-builder「严格 TDD 铁律」同一规则）。
 - **One slice at a time.** 每个 cycle 只处理一个 seam、一个 test、一个 minimal implementation。
-- **Refactoring is not part of the loop.** Refactoring 属于 review stage（见 `code-review` skill），不属于 red -> green implementation cycle。

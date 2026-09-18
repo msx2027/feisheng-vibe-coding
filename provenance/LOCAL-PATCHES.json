@@ -71,7 +71,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-11",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b，mattpocock-skills 9fe7e7a3bb352851b986725bab1c7cfb17610a97（见 files[]）",
-      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。 2026-09-18 追加：dev-planner/SKILL.md 并入 anti-bloat 计划边界改动（粒度适中原则追加状态延后句），patchedSha256 已随之更新。",
+      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。 2026-09-18 追加：dev-planner/SKILL.md 并入 anti-bloat 计划边界改动（粒度适中原则追加状态延后句），patchedSha256 已随之更新。 2026-09-19：曾试加反表演句（Standards 与 Spec 两个 Brief 末尾各一句），同日按预注册标准「无效不登记」撤回——压力测试两轮构造基线与对照均 3/3 抵抗、无增量（evidence/20260919-hardening-batch-a.md 场景①），patchedSha256 还原为撤回后实算值。",
       "reason": "能力定批评次把 35 个未接入技能裁决为 13 接入 / 22 退役后，正文引用成了悬空指针：模型会去够包内并不存在的 skill 或路径（例如 bug-fixer 依赖清单里的 skills/beginner-flow-guide/SKILL.md、code-review 里的 /setup-matt-pocock-skills、diagnosing-bugs 里的 /improve-codebase-architecture、dev-builder 脚手架模板里的 owner: target-constitution-setup）。这是文本层一致性缺陷，不是能力缺失：被退役对象要么已有已接入替代（improve-codebase-architecture → codebase-design），要么职能已由控制面接管（target-constitution-setup / target-runtime-setup → 控制面项目宪法与接管路由，owner 记为 sliver-vibe-coding），要么本就是没有被配置的可选增强（codebase-memory-scout → 明确降级为 rg）。改法是就地替换引用文本，保留原有语义与降级话术，不新增能力、不放宽任何门禁。",
       "evidence": "evidence/20260911-retired-reference-cleanup.md",
       "verification": "verify.ps1 步骤 1c 与 build-canonical-catalog.ps1 的副本自洽校验都改为识别本登记：副本 == patchedSha256 且来源快照 == originalSha256 才算合法，未登记的偏差仍在两处失败（fail-closed）；重生成 catalog 后 verify -IncludeHostEvidence -IncludePackage 全绿",
@@ -500,6 +500,63 @@
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "28288240f6ac111000d761e46d4110b65ce0918ec17cb63c019acf136e3c69ec",
           "patchedSha256": "ebe04c2b8b5ae1dd2842874052fcd6910711249490a26919665cc8be6a313433",
+          "linesChanged": 1
+        }
+      ]
+    },
+    {
+      "id": "tdd-loop-production-code-first-pointer",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-19",
+      "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+      "change": "tdd/SKILL.md 的 Rules of the loop 新增删码指针行「Production code first = delete it.」：生产代码先于失败测试写出时，删除该实现并从 RED 重新开始，不保留作参考（核心句逐字对齐 dev-builder「严格 TDD 铁律」的同一表述，防双真源）。零净增账（owner 裁决采纳合并方案）：原「Refactoring is not part of the loop.」整条并入 Red before green 尾部（……；refactoring 属于 review stage（见 `code-review` skill）），删去原整条，条目数 3->3 不变。不改变触发条件、依赖授权与执行强度。",
+      "reason": "逃逸路径：dev-builder「严格 TDD 铁律」只在 dev-builder 流可达，控制面强制只在控制面加载时可达；单独执行 tdd 循环的会话两者都不加载，删码义务缺位。A0 压力测试（claude CLI 非交互实测，见 evidence）：无条款基线 0/3 删除先写实现（1 轮明确表示用户坚持即照做跳过测试、1 轮提出把新测试搭在既有实现上、1 轮给出退出循环再裸写的选项），加条款对照 3/3 引用「Production code first = delete it」删除实现并从 RED 重新开始，行为差异成立，满足「现有规则拦不住的逃逸路径 + 实测数据」准入。",
+      "evidence": "evidence/20260919-hardening-batch-a.md",
+      "verification": "1c-3 结构不变量自查：围栏数 0/0（奇偶不变）、frontmatter 键集 name+description 不变、既有 `code-review` 引用 token 保留在合并句内；originalSha256 == sources/mattpocock-skills 快照实算；patchedSha256 实算回填；verify.ps1 与 catalog 再生由总指挥落地阶段统一执行",
+      "files": [
+        {
+          "path": "skills/engineering/tdd/SKILL.md",
+          "snapshotPath": "sources/mattpocock-skills/skills/engineering/tdd/SKILL.md",
+          "sourceRevision": "9fe7e7a3bb352851b986725bab1c7cfb17610a97",
+          "originalSha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24",
+          "patchedSha256": "c2c8a109315b728d3b68c5adf3a9f78bb3cf7f302d3f200a612c8e29f6404c38",
+          "linesChanged": 3
+        }
+      ]
+    },
+    {
+      "id": "sliver-operating-law-declared-file-boundary",
+      "snapshot": "sliver-core",
+      "appliedAt": "2026-09-19",
+      "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
+      "change": "Sliver Operating Law 的 ordinary work 条款原位追加半句：..., and a declared file boundary checked against the actual diff at close（普通任务也要声明文件边界并在收工时对照实际 diff 核对）。单行原位扩展，不新增节、不新增 owner、不改变路由与深度语义；声明源头仍是 dev-plan「不做边界/停止条件」字段（dev-builder 流）或本句本身（普通任务），批 B 收工凭据只做对照、不产生第二份声明。",
+      "reason": "逃逸路径：owner 活案例（复核拆分漂移为改造工具本身 + git 环境连带损伤）证明不加载 dev-plan 模板的普通任务没有强制边界声明与收工对账锚点，越界后无对照物可比。本半句把边界声明覆盖到 dev-builder 流之外的普通任务（G3：半句补齐，不新建）。",
+      "evidence": "evidence/20260919-hardening-batch-a.md",
+      "verification": "单行原位扩展（1 行）；sliver-core 快照补丁通道同先例 sliver-route-binding-capability-providers；originalSha256 == 补丁前 governance/sliver-core/SKILL.md 实算；patchedSha256 实算回填；verify.ps1 由总指挥落地阶段统一执行",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
+          "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
+          "linesChanged": 1
+        }
+      ]
+    },
+    {
+      "id": "sliver-core-skill-md-projected-copy-boundary",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-19",
+      "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e（sliver-core 快照 revision；本项目录即快照本体，无独立副本）",
+      "change": "catalog 投影偏差登记：governance/sliver-core/SKILL.md 经批 A 快照树补丁 sliver-operating-law-declared-file-boundary（Operating Law ordinary work 条原位追加半句 declared file boundary）后，投影文件偏离 SKILL-INVENTORY 导入事实哈希 35aebac3。本条目使 build-canonical-catalog 自检（runtime-import 命名空间）与快照树补丁（sliver-core 命名空间）双通道对账一致；快照树摘要同批经 PROVENANCE-INTEGRITY annotation 通道重录（2650e940→61137c15）。",
+      "reason": "逃逸路径：不加载 dev-plan 模板的普通任务没有强制边界声明与收工对账锚点（owner 活案例：复核拆分漂移为改造工具本身 + git 环境连带损伤）。半句把边界声明覆盖到全部执行路径；catalog 投影必须随快照本体同步，故双命名空间各记一半事实。",
+      "evidence": "evidence/20260919-hardening-batch-a.md",
+      "verification": "originalSha256 == SKILL-INVENTORY 导入事实哈希；patchedSha256 == 实际文件实算；verify.ps1 由总指挥落地阶段统一执行（16 步）",
+      "files": [
+        {
+          "path": "governance/sliver-core/SKILL.md",
+          "snapshotPath": "governance/sliver-core/SKILL.md",
+          "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
+          "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
           "linesChanged": 1
         }
       ]

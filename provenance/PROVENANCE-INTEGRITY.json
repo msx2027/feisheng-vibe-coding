@@ -63,7 +63,7 @@
       "name": "sliver-core",
       "path": "governance/sliver-core",
       "fileCount": 220,
-      "treeHash": "sha256:2650e94006604c9068a636289d823620890a349a22de17bded700ea7d3fe73ce",
+      "treeHash": "sha256:61137c15764b0e3e1452b702ed9ed7ff15695869a2fab0d5ffd9f63a613a6fcf",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
@@ -103,6 +103,12 @@
           "patchedSha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f",
           "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
           "patchId": "sliver-route-binding-capability-providers"
+        },
+        {
+          "path": "SKILL.md",
+          "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
+          "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
+          "patchId": "sliver-operating-law-declared-file-boundary"
         }
       ],
       "importRecord": "provenance/SLIVER-IMPORT.json"
@@ -120,6 +126,12 @@
       "scope": "snapshots[vibe-coding-skills].treeHash + locallyPatchedPaths",
       "change": "快照补丁 vibe-target-runtime-promise-reality-fix（init-target-runtime.mjs 去谎 4 行、BLOCK_VERSION 21→22）后树摘要由 d22a304ce9b69e9d2467aea6abb8237dba7f78dfbbe711a0eed97994c9010393 更新为 73462289d20ffbb48e7039365b2188e2ab1e126ac9faa9e123a172a170e450da，与 LOCAL-PATCHES.json 登记及当前文件 sha256 双重对账。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求来源逐字节背书），沿用 2026-09-12 annotation 修订通道。",
       "evidence": "evidence/20260917-template-promise-reality-fix.md"
+    },
+    {
+      "at": "2026-09-19",
+      "scope": "snapshots[sliver-core].treeHash + locallyPatchedPaths",
+      "change": "批 A 补丁 sliver-operating-law-declared-file-boundary（Operating Law ordinary work 条原位追加半句 declared file boundary，1 行）后树摘要由 2650e940 更新为 61137c15；SKILL.md 同时以 runtime-import 通道登记 catalog 投影偏差（sliver-core-skill-md-projected-copy-boundary）。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），本修正在此登记，并与 LOCAL-PATCHES.json、实际文件 sha256 双重对账。",
+      "evidence": "evidence/20260919-hardening-batch-a.md"
     }
   ]
 }
