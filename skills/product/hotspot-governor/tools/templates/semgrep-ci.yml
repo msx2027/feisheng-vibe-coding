@@ -1,0 +1,49 @@
+# ============================================================================
+# Semgrep CI 工作流（密钥泄漏护栏加购 · install-hotspot-gate 投放，标记：guardrail-semgrep-ci）
+# 来源（上游官方，零自研）：https://docs.semgrep.dev/semgrep-ci/sample-ci-configs
+#   「Sample GitHub Actions configuration file」Semgrep CE 变体，YAML 逐字保留。
+#   锁定：semgrep-docs 仓库 54083d188f8f8279b8585af906098b09921ac897（2026-05-28）；
+#   规则集 --config auto（官方自动选择），容器镜像 semgrep/semgrep。
+# 边界说明：本 CI 层沿用上游默认失败语义（发现即 CI 红），作为收工凭据的「真伪兜底」
+#   独立复跑层；本地提交层（tools/guardrails/secret-scan.mjs）始终警告级不阻断。
+#   需要平台版（semgrep ci + SEMGREP_APP_TOKEN）请参照上游同页 Platform 变体替换。
+# ============================================================================
+
+# Name of this GitHub Actions workflow.
+name: Semgrep CE scan
+
+on:
+  # Scan in PRs:
+  pull_request: {}
+  # Scan on-demand through GitHub Actions interface:
+  workflow_dispatch: {}
+  # Scan mainline branches and report all findings:
+  push:
+    branches: ["master", "main"]
+  # Schedule the CI job (this method uses cron syntax):
+  schedule:
+    - cron: '20 17 * * *' # Sets Semgrep to scan every day at 17:20 UTC.
+    # It is recommended to change the schedule to a random time.
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    # User definable name of this GitHub Actions job.
+    name: semgrep-oss/scan
+    # If you are self-hosting, change the following `runs-on` value:
+    runs-on: ubuntu-latest
+
+    container:
+      # A Docker image with Semgrep installed. Do not change this.
+      image: semgrep/semgrep
+
+    # Skip any PR created by dependabot to avoid permission issues:
+    if: (github.actor != 'dependabot[bot]')
+
+    steps:
+      # Fetch project source with GitHub Actions Checkout. Use either v3 or v4.
+      - uses: actions/checkout@v6
+      # Run the "semgrep scan" command on the command line of the docker image.
+      - run: semgrep scan --config auto

@@ -4,16 +4,24 @@
 // 接 pre-commit 棘轮、跑首检基线。宿主加载 feisheng-vibe-coding 后由启动动作执行，
 // 用户无需逐次开口；重复调用幂等（已装齐 = 零改动退出）。
 //
+// 密钥泄漏护栏加购（2026-09-19 批 C，guardrail-addon.mjs）：默认随装配一同装上——
+// gitleaks/Semgrep 官方模板投放（templates/，零自研）+ 密钥首检基线棘轮 +
+// pre-commit 警告级接线（不阻断提交）。降级矩阵与卸载语义见 guardrail-addon.mjs 文件头。
+//
 // 安全边界（fail-safe）：
 //   - 已存在但与本 bundle 不一致的模块一律跳过不覆盖（本地适配神圣，如 fs-agent 的 SCAN_ROOTS）；
 //   - pre-commit 只追加带标记的自包含段，不动既有内容；
 //   - 拒绝装回本分发包自身；
-//   - 首检基线允许存量超标（棘轮语义：只减不增），装配成功 ≠ 零热点。
-// 用法：node install-hotspot-gate.mjs <目标项目根>
+//   - 首检基线允许存量超标（棘轮语义：只减不增），装配成功 ≠ 零热点；
+//   - 密钥护栏永远警告级（退出码恒 0），不做提交期硬阻断（9-18 否决项：误拦致 hook 被禁）。
+// 用法：node install-hotspot-gate.mjs <目标项目根> [--guardrails-only] [--uninstall]
+//   --guardrails-only  只装密钥护栏加购，不动 hotspot 主门禁（非 Node 栈等场景）
+//   --uninstall        只卸载密钥护栏加购写入段（hotspot 主门禁与用户自有 hook 不动）
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { provisionGuardrails, uninstallGuardrails } from './guardrail-addon.mjs';
 
 const TOOL_DIR = path.dirname(fileURLToPath(import.meta.url));
 const MODULES = [
@@ -120,15 +128,7 @@ function inventory(target) {
   return rows;
 }
 
-try {
-  const target = path.resolve(process.argv[2] ?? '.');
-  if (!existsSync(target) || !statSync(target).isDirectory()) throw new Error(`目标不存在或非目录：${target}`);
-  if (existsSync(path.join(target, 'skills', 'product', 'hotspot-governor', 'tools'))) {
-    throw new Error('拒绝装回分发包自身：请指向目标项目根');
-  }
-  if (git(target, ['rev-parse', '--show-toplevel']) === null) throw new Error('目标不是 git 仓库（棘轮依赖 git 基线）');
-  say(`目标：${target}`);
-
+function installHotspotGate(target) {
   const targetTools = path.join(target, 'tools');
   mkdirSync(targetTools, { recursive: true });
   let copied = 0, skippedLocal = 0, identical = 0;
@@ -153,10 +153,32 @@ try {
   say('—— 首检基线（存量超标只减不增，不阻断装配）——');
   const scan = spawnSync(process.execPath, [path.join(targetTools, 'check-hotspots.mjs'), target], { stdio: 'inherit' });
   if (scan.status === 2) throw new Error('首检无法完成：扫描器对部分代码不可读（fail-closed），请人工排查');
+}
 
-  say('—— 运行件盘点（超出本装配器职责的只报告）——');
-  for (const [name, ok, hint] of inventory(target)) say(`${ok ? '✓' : '○'} ${name}${ok || !hint ? '' : `（缺失；${hint}）`}`);
-  say('装配完成。');
+try {
+  const target = path.resolve(process.argv[2] ?? '.');
+  const flags = new Set(process.argv.slice(3));
+  if (!existsSync(target) || !statSync(target).isDirectory()) throw new Error(`目标不存在或非目录：${target}`);
+  if (existsSync(path.join(target, 'skills', 'product', 'hotspot-governor', 'tools'))) {
+    throw new Error('拒绝装回分发包自身：请指向目标项目根');
+  }
+  if (flags.has('--uninstall')) {
+    uninstallGuardrails({ target, say });
+    say('卸载完成。');
+  } else {
+    if (git(target, ['rev-parse', '--show-toplevel']) === null) throw new Error('目标不是 git 仓库（棘轮依赖 git 基线）');
+    say(`目标：${target}`);
+    if (flags.has('--guardrails-only')) {
+      provisionGuardrails({ target, say, toolDir: TOOL_DIR });
+      say('装配完成（仅护栏加购；hotspot 主门禁未装，需要时去掉 --guardrails-only 重跑）。');
+    } else {
+      installHotspotGate(target);
+      provisionGuardrails({ target, say, toolDir: TOOL_DIR });
+      say('—— 运行件盘点（超出本装配器职责的只报告）——');
+      for (const [name, ok, hint] of inventory(target)) say(`${ok ? '✓' : '○'} ${name}${ok || !hint ? '' : `（缺失；${hint}）`}`);
+      say('装配完成。');
+    }
+  }
 } catch (error) {
   say(`装配失败：${error.message}`);
   process.exitCode = 1;

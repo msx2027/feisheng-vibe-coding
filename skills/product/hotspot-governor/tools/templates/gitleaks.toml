@@ -1,0 +1,16 @@
+# 密钥泄漏护栏加购 · gitleaks 项目配置模板（2026-09-19 批 C 投放；标记：guardrail-gitleaks-config）
+# 来源（上游官方，零自研规则）：
+#   - 推荐写法：gitleaks 官方 README「Custom configuration」——自定义配置 = 扩展内嵌默认规则：
+#       [extend]
+#       useDefault = true
+#     https://github.com/gitleaks/gitleaks（v8.30.1 README，逐字采用）
+#   - 内嵌默认规则真源（规则不在本文件、不复制进本仓库，构建期嵌入官方二进制）：
+#     https://github.com/gitleaks/gitleaks/blob/v8.30.1/config/gitleaks.toml
+#     锁定：release v8.30.1（2026-03-21 发布），tag commit
+#     83d9cd684c87d95d656c1458ef04895a7f1cbd8e，文件 blob sha
+#     256f64790ea6d954f0041024be2938089ae1e7a7（97,731 字节）
+# 本文件不定义、不覆盖任何规则；规则随锁定版本的 gitleaks 二进制内嵌默认集走。
+# 由 tools/guardrails/secret-scan.mjs 经 --config 挂载（gitleaks 二进制在 PATH 时）。
+
+[extend]
+useDefault = true
