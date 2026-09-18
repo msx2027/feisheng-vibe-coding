@@ -126,3 +126,10 @@
 - 全链路级联：加购安装后的目标项目内，PATH 注入官方二进制 → secret-scan 引擎选择 = gitleaks，检出同一密钥、警告级、进基线、退出码 0（不阻断提交），与设计完全一致。
 - fail-open 复验：无官方二进制环境（裸目标）→ 自动回退内置正则，行为不变。
 - 残留：semgrep 级联仍属"字段映射按官方格式实现、待有容器环境复验"（本机无 Docker/Semgrep，风险低——CI 模板仅在项目接远端后激活）。
+
+## fs-agent CI 首跑红灯诊断补记（总指挥，2026-09-19）
+
+- 现象：fs-agent（私有仓库）推送安装提交后，Semgrep CE scan 首跑 4 秒失败。
+- 取证（gh api annotations）：failure 注记原文「The job was not started because recent account payments have failed or your spending limit needs to be increased」——作业**未被调度**，steps 为空；非工作流错误、非扫描发现。
+- 对照：同账号公共仓库 feisheng-vibe-coding 的 release-gate 在 4 分钟前成功（公共仓 Actions 免费计费）→ 结论：私有仓库计费额度/付款方式问题，账号级，与代码和本批交付无关。
+- 处置：属 owner 账号决策（公开化/修复付款/暂缓云端层），本地护栏层不受影响照常工作。工作流文件本身经查为官方样例逐字版，无需改动。
