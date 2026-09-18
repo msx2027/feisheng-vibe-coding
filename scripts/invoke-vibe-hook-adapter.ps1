@@ -71,6 +71,8 @@ function Assert-Contract {
     $hasRecorder = $null -ne ($Contract.PSObject.Properties | Where-Object { $_.Name -eq 'recorder' })
     if ($hasInjection -ne $hasRecorder) { throw '契约完整性：contextInjection 与 recorder 必须同时声明。' }
     if ($hasRecorder -and @($Contract.recorder.actions) -notcontains 'record') { throw '契约完整性：recorder 缺少 record 动作。' }
+    # Stop 硬门禁完整性：Stop 启用就必须声明收工凭据契约（存在与形状门禁），缺一 fail-closed（v2 加固批 B）
+    if ([bool]$Contract.events.Stop.enabled -and $null -eq ($Contract.PSObject.Properties | Where-Object { $_.Name -eq 'stopCredential' })) { throw '契约完整性：Stop 启用时必须声明 stopCredential 节。' }
     if (-not $Contract.runner.singleRunner -or $Contract.runner.path -ne 'scripts/invoke-vibe-hook-adapter.ps1') { throw 'Hook adapter 必须只有本仓库的单一 runner。' }
     if ($Contract.runner.sourceRunnerExecution -or $Contract.source.executionAllowed) { throw '来源 Hook 任何情况下都不得执行。' }
     if (-not $Contract.idempotency.required -or [string]::IsNullOrWhiteSpace([string]$Contract.idempotency.key)) { throw 'Hook adapter 必须声明幂等键。' }
@@ -275,12 +277,71 @@ function Get-PendingSignalCount {
     return $pending
 }
 
+function Test-StopCredentialShape {
+    param(
+        [Parameter(Mandatory = $true)][string]$StateDir,
+        [Parameter(Mandatory = $true)][string]$SessionId
+    )
+    # 收工凭据（owner 授权 2026-09-19，v2 加固批 B）：会话 AI 收工前把凭据 JSON 写入
+    # <StateDir>/stop-credential-<sessionId>.json；钩子只验存在与形状（字段齐、类型对），
+    # 不重跑命令、不验真伪——真伪由 CI 独立复跑兜底（无 CI 项目凭据只余仪式价值，属已知边界，
+    # 如实登记于契约 stopCredential.hookBoundary）。任何读取/解析/取值异常一律按形状不合格处理。
+    $credPath = Join-Path $StateDir ("stop-credential-" + $sessionId + ".json")
+    if (-not (Test-Path -LiteralPath $credPath -PathType Leaf)) { return $false }
+    $cred = $null
+    try { $cred = Get-Content -Raw -Encoding UTF8 -LiteralPath $credPath | ConvertFrom-Json } catch { return $false }
+    if ($null -eq $cred) { return $false }
+    try {
+        $credProps = $cred.PSObject.Properties
+        # verification：数组语义且至少 1 项，每项含 command（非空字符串）/exitCode（数值）/outputDigest（非空字符串）
+        $vProp = $credProps['verification']
+        if ($null -eq $vProp -or $null -eq $vProp.Value -or @($vProp.Value).Count -lt 1) { return $false }
+        foreach ($item in @($vProp.Value)) {
+            if ($null -eq $item) { return $false }
+            $itemProps = $item.PSObject.Properties
+            $cmd = $itemProps['command']
+            if ($null -eq $cmd -or $null -eq $cmd.Value -or [string]::IsNullOrWhiteSpace([string]$cmd.Value)) { return $false }
+            $exitCode = $itemProps['exitCode']
+            if ($null -eq $exitCode -or $null -eq $exitCode.Value) { return $false }
+            [void][double]$exitCode.Value
+            $digest = $itemProps['outputDigest']
+            if ($null -eq $digest -or $null -eq $digest.Value -or [string]::IsNullOrWhiteSpace([string]$digest.Value)) { return $false }
+        }
+        # scope：对象，declared 非空数组（声明源语义见契约 stopCredential.scopeDeclaredSources），outOfScope 数组（可为空）
+        $sProp = $credProps['scope']
+        if ($null -eq $sProp -or $null -eq $sProp.Value -or $sProp.Value -isnot [pscustomobject]) { return $false }
+        $sProps = $sProp.Value.PSObject.Properties
+        $dProp = $sProps['declared']
+        if ($null -eq $dProp -or $null -eq $dProp.Value -or @($dProp.Value).Count -lt 1) { return $false }
+        foreach ($entry in @($dProp.Value)) {
+            if ($null -eq $entry -or [string]::IsNullOrWhiteSpace([string]$entry)) { return $false }
+        }
+        $oProp = $sProps['outOfScope']
+        if ($null -eq $oProp -or $null -eq $oProp.Value) { return $false }
+        foreach ($entry in @($oProp.Value)) {
+            if ($null -eq $entry -or [string]::IsNullOrWhiteSpace([string]$entry)) { return $false }
+        }
+        # findings：对象，deferred / rejectedWithReason 均为数值
+        $fProp = $credProps['findings']
+        if ($null -eq $fProp -or $null -eq $fProp.Value -or $fProp.Value -isnot [pscustomobject]) { return $false }
+        $fProps = $fProp.Value.PSObject.Properties
+        foreach ($fieldName in @('deferred', 'rejectedWithReason')) {
+            $field = $fProps[$fieldName]
+            if ($null -eq $field -or $null -eq $field.Value) { return $false }
+            [void][double]$field.Value
+        }
+    } catch { return $false }
+    return $true
+}
+
 function Invoke-StopGateHandler {
     param(
         [Parameter(Mandatory = $true)][string]$TargetRoot,
         [Parameter(Mandatory = $true)][string]$StateDir
     )
-    # 自检硬门禁（owner 授权 2026-09-17）：会话结束前必须（a）消化全部已捕获纠错信号（b）完成本会话自检留痕。
+    # 自检硬门禁（owner 授权 2026-09-17；收工凭据扩展 owner 授权 2026-09-19，v2 加固批 B）：会话结束前必须
+    # （a）消化全部已捕获纠错信号（b）完成本会话自检留痕（c）落一张收工凭据（verification/scope/findings
+    # 三字段，钩子只验存在与形状、不验真伪，见 Test-StopCredentialShape 与契约 stopCredential 节）。
     # 防死锁：每会话最多拦截 3 次，超限放行并留痕（fail-open, audited）；宿主 stop_hook_active=true 直接放行。
     # 本 handler 除状态目录外零写入；任何异常放行但留审计（绝不困住用户会话）。
     try {
@@ -313,7 +374,8 @@ function Invoke-StopGateHandler {
         $pending = Get-PendingSignalCount -TargetRoot $TargetRoot -StateDir $StateDir
         $ackPath = Join-Path $StateDir ("selfcheck-" + $sessionId + ".json")
         $hasAck = Test-Path -LiteralPath $ackPath -PathType Leaf
-        if ($pending -eq 0 -and $hasAck) { exit 0 }
+        $credOk = Test-StopCredentialShape -StateDir $StateDir -SessionId $sessionId
+        if ($pending -eq 0 -and $hasAck -and $credOk) { exit 0 }
 
         $counterPath = Join-Path $StateDir ("stop-gate-" + $sessionId + ".json")
         # 状态目录不存在时 WriteAllText 会抛 DirectoryNotFoundException 并被外层 catch 吞掉，
@@ -340,11 +402,18 @@ function Invoke-StopGateHandler {
         $counterJson = '{"sessionId":"' + $sessionId + '","blocks":' + $blocks + ',"at":"' + (Get-Date).ToUniversalTime().ToString('o') + '"}'
         [System.IO.File]::WriteAllText($counterPath, $counterJson, $utf8NoBom)
 
+        # 拦截理由按「剩余义务」拼接：一次拦截给全图景，避免 AI 分次补齐烧掉 3 次封顶预算
+        $reasonParts = @()
         if ($pending -gt 0) {
-            $reason = "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须逐条处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --expected-revision <先 check 获取> --source-dedup-key <该信号索引行的40hex>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>；旧格式行（索引行无 dedupKey）→ 用 runner -Mode Digest 统一消化。处理后正常结束即可。"
-        } else {
-            $reason = "【经验自检硬门禁】本会话尚未自检留痕。任务完成前自检：有可复用教训（自身返工/重试、推翻方案、用户重复请求或手动撤销产出等）→ node ""$recorderPath"" ""$TargetRoot"" --action record 自行记录；没有 → node ""$recorderPath"" ""$TargetRoot"" --action selfcheck --session $sessionId --finding none 留痕后正常结束。"
+            $reasonParts += "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须逐条处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --expected-revision <先 check 获取> --source-dedup-key <该信号索引行的40hex>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>；旧格式行（索引行无 dedupKey）→ 用 runner -Mode Digest 统一消化。"
         }
+        if (-not $credOk) {
+            $reasonParts += "【收工凭据硬门禁】本会话尚未落收工凭据或凭据形状不合格（owner 授权 2026-09-19）。收工前把凭据 JSON 写入 ""$StateDir/stop-credential-$sessionId.json""：{""verification"":[{""command"":""<实际执行的验证命令>"",""exitCode"":0,""outputDigest"":""<关键输出摘要>""}],""scope"":{""declared"":[""<本任务声明的文件边界或来源声明>""],""outOfScope"":[]},""findings"":{""deferred"":0,""rejectedWithReason"":0}}。钩子只验存在与形状（字段齐、类型对），不重跑命令、不验真伪（真伪由 CI 独立复跑兜底）；scope.declared 声明源：dev-builder 流 = dev-plan「不做边界/停止条件」字段，普通任务 = Sliver Operating Law 的 declared file boundary（收工时与实际 diff 对照）；findings 记账：新发现未当场处理条数记 deferred，评估后不采纳的记 rejectedWithReason。"
+        }
+        if (-not $hasAck) {
+            $reasonParts += "【经验自检硬门禁】本会话尚未自检留痕。任务完成前自检：有可复用教训（自身返工/重试、推翻方案、用户重复请求或手动撤销产出等）→ node ""$recorderPath"" ""$TargetRoot"" --action record 自行记录；没有 → node ""$recorderPath"" ""$TargetRoot"" --action selfcheck --session $sessionId --finding none 留痕。"
+        }
+        $reason = $reasonParts -join "`n"
         [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
         $blockPayload = [ordered]@{ decision = 'block'; reason = $reason }
         Write-Output (($blockPayload | ConvertTo-Json -Compress -Depth 4))
@@ -396,11 +465,12 @@ function Invoke-SessionStartHandler {
     $contractText = @"
 【经验自动记账契约 enabled-experience-autonomous-v1】本项目已启用经验治理台账（$ledgerRelative）。
 1) 检测到纠错信号时 hook 会注入 autoRecord 路由；你必须在当前任务完成后立即自主处理，不需要等待用户再次指示。
-2) 自检义务（零触发词，不依赖用户说任何纠错词）：每个任务完成前自检——你自己的返工/重试、推翻重来的方案、修掉的自身错误、用户重复提出同一请求、用户手动改写或撤销你的产出、用户放弃你的方案转向他路，这些一律按纠错处理：可复用→立即自行记录；不可复用→不记（宁可漏记，不可滥记）。此义务由 Stop 硬门禁强制：会话结束时若有未消化纠错信号或本会话尚未自检留痕，结束请求会被拦截并给出处理指令（每会话最多拦截 3 次，超限放行并留痕）；无新教训时用 --action selfcheck --session <sessionId> --finding none 留痕后即可正常结束。
-3) 记录方法：node "$recorderPath" "$TargetRoot" --action check 获取 revision 与现有经验；新教训用 --action record --event-id EVT-<sha256("self|<sessionId>|<教训摘要>")前40位> --prompt-material <一句话教训描述> --summary <一句话单行摘要> --expected-revision <N>；命中已有经验加 --experience-id EXP-NNN。无需任何 hook 信号，事件身份由你自造且必须确定性（同 session 同教训重跑同 eventId 幂等）。
-4) 判定不值得记的 hook 信号：--action dismiss --source-dedup-key <40hex> --reason <一句话>（留痕审计）。
-5) 治理义务：--action check 输出 dueForReview=true 时，先跑一轮治理审查——已登记政策则按政策执行 --action govern；无政策时向用户提议政策文本（政策经用户确认一次后即可自治执行）。清扫条目进清扫日志，可恢复。
-6) 红线：绝不自动升档/退役（升档 L1/L2/L3、退役必须用户逐次确认，达阈值只向用户报告可升信号）；绝不未经登记政策执行清扫。
+2) 自检义务（零触发词，不依赖用户说任何纠错词）：每个任务完成前自检——你自己的返工/重试、推翻重来的方案、修掉的自身错误、用户重复提出同一请求、用户手动改写或撤销你的产出、用户放弃你的方案转向他路，这些一律按纠错处理：可复用→立即自行记录；不可复用→不记（宁可漏记，不可滥记）。无新教训时用 --action selfcheck --session <sessionId> --finding none 留痕。
+3) 收工凭据义务（owner 授权 2026-09-19）：收工前把凭据 JSON 写入 .feisheng/vibe-hook-state/stop-credential-<sessionId>.json，形状：{"verification":[{"command":"<实际执行的验证命令>","exitCode":0,"outputDigest":"<关键输出摘要>"}],"scope":{"declared":["<本任务声明的文件边界或来源声明>"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}。钩子只验存在与形状（字段齐、类型对），不重跑命令、不验真伪（真伪由 CI 独立复跑兜底）。scope.declared 声明源：dev-builder 流 = dev-plan「不做边界/停止条件」字段；普通任务 = Sliver Operating Law 的 declared file boundary（收工时与实际 diff 对照）。此义务由 Stop 硬门禁强制：未消化信号、未自检留痕或凭据缺失/形状不对任一存在即拦截并给出处理指令（每会话最多拦截 3 次，超限放行并留痕）。
+4) 记录方法：node "$recorderPath" "$TargetRoot" --action check 获取 revision 与现有经验；新教训用 --action record --event-id EVT-<sha256("self|<sessionId>|<教训摘要>")前40位> --prompt-material <一句话教训描述> --summary <一句话单行摘要> --expected-revision <N>；命中已有经验加 --experience-id EXP-NNN。无需任何 hook 信号，事件身份由你自造且必须确定性（同 session 同教训重跑同 eventId 幂等）。
+5) 判定不值得记的 hook 信号：--action dismiss --source-dedup-key <40hex> --reason <一句话>（留痕审计）。
+6) 治理义务：--action check 输出 dueForReview=true 时，先跑一轮治理审查——已登记政策则按政策执行 --action govern；无政策时向用户提议政策文本（政策经用户确认一次后即可自治执行）。清扫条目进清扫日志，可恢复。
+7) 红线：绝不自动升档/退役（升档 L1/L2/L3、退役必须用户逐次确认，达阈值只向用户报告可升信号）；绝不未经登记政策执行清扫。
 "@
     Invoke-ContextInjection -EventName 'SessionStart' -ContextText ($contractText + $pendingLine)
     exit 0

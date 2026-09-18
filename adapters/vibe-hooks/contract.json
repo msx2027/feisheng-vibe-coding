@@ -1,8 +1,9 @@
 {
   "schema": "feisheng-vibe-hook-adapter/v2",
   "owner": "runtime-projection",
+  "contractVersion": "v6 (2026-09-19 v2-hardening batch B: Stop completion credential; narrative lineage v2 sedimentation → v3 auto-record → v4 autonomous → v5 hard-gate)",
   "status": "enabled-experience-hard-gate-v1",
-  "enablementScope": "experience autonomy with hard enforcement: (a) self-check duty — the session AI detects its own rework/mistakes and user-behavior proxies without any correction utterance, mints its own event identity and records via experience-recorder; (b) policy-based governance — the owner confirms a sweep POLICY once (policy fence in the ledger file), then the AI executes sweeps autonomously with a full audit journal and restorable entries; (c) Stop hard gate — the session may not end while captured correction signals are undigested or the session self-check acknowledgment is missing; the gate blocks with actionable instructions and fails open after 3 blocks per session (audited). Per-action user confirmation is still required for elevation (L1/L2/L3) and retirement; the recorder never does those.",
+  "enablementScope": "experience autonomy with hard enforcement: (a) self-check duty — the session AI detects its own rework/mistakes and user-behavior proxies without any correction utterance, mints its own event identity and records via experience-recorder; (b) policy-based governance — the owner confirms a sweep POLICY once (policy fence in the ledger file), then the AI executes sweeps autonomously with a full audit journal and restorable entries; (c) Stop hard gate — the session may not end while captured correction signals are undigested, the session self-check acknowledgment is missing, or the close-out completion credential (verification/scope/findings, see stopCredential) is missing or malformed; the gate blocks with actionable instructions and fails open after 3 blocks per session (audited). Per-action user confirmation is still required for elevation (L1/L2/L3) and retirement; the recorder never does those.",
   "digestion": {
     "mode": "Digest",
     "markerStore": "target-repository/.feisheng/vibe-hook-state/<dedupKey>.digested",
@@ -71,9 +72,22 @@
       "enabled": true,
       "timeoutSeconds": 10,
       "handler": "stop",
-      "behavior": "experience self-check hard gate (owner-authorized 2026-09-17, replacing the former 'stop-gate duplicates control-plane governance' disablement): blocks session end when (a) captured correction signals remain undigested, or (b) the session has no self-check acknowledgment yet; instructions are actionable (record/dismiss with --source-dedup-key, or Digest for legacy rows); fails open after 3 blocks per session with an audit log entry; honors the host stop_hook_active flag; the state store is created on demand and any gate error fails open with an audit entry (TEMP fallback when the state store is unusable); read-only except state store",
+      "behavior": "experience self-check hard gate + close-out completion credential (gate owner-authorized 2026-09-17; credential extension owner-authorized 2026-09-19, contractVersion v6): blocks session end when (a) captured correction signals remain undigested, (b) the session has no self-check acknowledgment yet, or (c) the completion credential (verification/scope/findings, see stopCredential) is missing or malformed; the hook validates the credential's EXISTENCE AND SHAPE ONLY — it never re-runs the listed commands and cannot judge their truth (CI re-verification is the authenticity backstop); instructions are actionable (record/dismiss with --source-dedup-key, Digest for legacy rows, the credential schema with its declared-boundary sources); fails open after 3 blocks per session with an audit log entry; honors the host stop_hook_active flag; the state store is created on demand and any gate error fails open with an audit entry (TEMP fallback when the state store is unusable); read-only except state store",
       "vibeOrigin": "none (package-original enforcement; vibe source stop-gate remains intentionally unported)"
     }
+  },
+  "stopCredential": {
+    "introduced": "contractVersion v6 (2026-09-19 v2-hardening batch B, owner-authorized)",
+    "carrier": "target-repository/.feisheng/vibe-hook-state/stop-credential-<sessionId>.json, written by the session AI before session end (inside the already-whitelisted state store; sessionId sanitized by the same rules as the self-check ack)",
+    "schema": {
+      "verification": "array with at least 1 entry: { command: non-empty string, exitCode: number, outputDigest: non-empty string } — the commands actually run to verify this session's work",
+      "scope": "object: { declared: non-empty string array, outOfScope: string array (may be empty) }",
+      "findings": "object: { deferred: number, rejectedWithReason: number } — new discoveries deferred for scheduling vs evaluated-and-rejected with a reason"
+    },
+    "hookBoundary": "the Stop hook validates EXISTENCE AND SHAPE ONLY (fields present, types correct) within the same 10-second existence-check budget; it never re-runs the listed commands and CANNOT judge authenticity — credential truth is independently re-verified by CI (v2-hardening batch C). A project without CI gets a credential of ceremonial value only: a known, accepted boundary recorded here by design",
+    "scopeDeclaredSources": "dev-builder flow: the dev-plan '不做边界/停止条件' field; ordinary tasks: the declared file boundary of the Sliver Operating Law close-out sentence (v2-hardening batch A) checked against the actual diff. The credential mirrors that declaration at close; it never creates a second declaration source",
+    "enforcement": "missing or malformed credential blocks at Stop, joined with the existing undigested-signal and self-check-ack conditions into one full-picture reason; stop_hook_active continuation and the 3-blocks-per-session fail-open cap are unchanged; no retry layer added",
+    "degradation": "subtraction mechanism (anti-bloat terminal clause): after 2 consecutive false blocks that the owner confirms as non-violations, the credential gate is downgraded to reminder mode — flip the contract status to a reminder value and teach the runner reminder-mode behavior in the SAME changeset, record the incident in evidence and the status field; no additional layers are ever stacked on this gate"
   },
   "idempotency": {
     "required": true,
@@ -114,13 +128,14 @@
     "per-skill-license-and-notice-map": "PASS 2026-09-11 (owner personal-use waiver recorded in LICENSE-MAP vibe-original-* families); recorder is package-original code, no third-party dependency",
     "verified-source-revision": "PASS (snapshot pinned by provenance integrity gates); ledger v2 shapes mirrored from sources/vibe-coding-skills/tools/experience-ledger-core.mjs read-only reference",
     "host-discovery-evidenced": "PASS 2026-09-11 (HOST-DISCOVERY-EVIDENCE.json re-captured with path-exact attribution)",
-    "hook-fresh-session-smoke": "PASS 2026-09-17 for batch auto-record-v1 on fs-agent (installer command executed with real host registration verified; see evidence/20260917-auto-record-batch.md); must be re-evidenced per target before claiming enforcement",
-    "event-order-and-concurrency-smoke": "PASS 2026-09-11 (tests/test-vibe-hook-adapter.ps1 in pwsh + PS 5.1) + PASS 2026-09-17 auto-record additions + PASS 2026-09-17 hard-gate additions (block/digest/ack/cap chain)",
-    "approved-write-whitelist-and-rollback-plan": "PASS 2026-09-11, extended 2026-09-17 with the registered experience ledger path (conventional docs/项目治理/经验治理.md); rollback = -Uninstall or contract status flip, runner then fails closed",
+    "hook-fresh-session-smoke": "PASS 2026-09-17 for batch auto-record-v1 on fs-agent (installer command executed with real host registration verified; see evidence/20260917-auto-record-batch.md); must be re-evidenced per target before claiming enforcement; 2026-09-19 contractVersion v6 (completion credential) invalidates prior per-target smoke evidence — every installed target reports UNVERIFIED until re-installed and re-smoked with the credential flow (activation is coordinator-owned, after batch A3 has landed)",
+    "event-order-and-concurrency-smoke": "PASS 2026-09-11 (tests/test-vibe-hook-adapter.ps1 in pwsh + PS 5.1) + PASS 2026-09-17 auto-record additions + PASS 2026-09-17 hard-gate additions (block/digest/ack/cap chain) + PASS 2026-09-19 completion-credential additions (missing→block, malformed shape→block, complete→pass, 3-block cap fail-open kept; re-verified in pwsh and PS 5.1; see evidence/20260919-hardening-batch-b.md)",
+    "approved-write-whitelist-and-rollback-plan": "PASS 2026-09-11, extended 2026-09-17 with the registered experience ledger path (conventional docs/项目治理/经验治理.md); rollback = -Uninstall or contract status flip, runner then fails closed; 2026-09-19 credential extension adds no new write surface (credential files live inside the already-whitelisted state store)",
     "independent-logical-review": "PASS 2026-09-11 (subagent review); 2026-09-17 delta reviewed as part of the auto-record batch evidence"
   },
   "rollback": {
     "action": "scripts/install-vibe-hooks.ps1 -Uninstall removes target hook registrations (claude/zcode/codex), installed adapter+recorder copies, and state store; feedback index and experience ledger (user data) are preserved. Repo-level: flipping status back to a disabled value makes Assert-Contract fail, so every runner instance fails closed with non-zero exit (no handler executes)",
-    "trigger": "any prerequisite, manifest, write-boundary, or smoke failure"
+    "trigger": "any prerequisite, manifest, write-boundary, or smoke failure",
+    "credentialGateDegradation": "downgrade path (subtraction mechanism, contractVersion v6): 2 consecutive false blocks that the owner confirms as non-violations → downgrade to reminder mode (contract status flip + runner reminder-mode behavior in the SAME changeset, incident recorded in evidence and the status field); full rollback of the credential extension = revert this contract to v5 semantics (remove the stopCredential section, restore the former Stop.behavior text) and re-install targets — the gate then blocks on undigested signals + self-check ack only, exactly as before v6"
   }
 }

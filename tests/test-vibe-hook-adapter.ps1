@@ -18,6 +18,7 @@ Set-StrictMode -Version Latest
 #   4) UserPromptSubmit：纠错信号 → 白名单索引恰好新增一行；重复事件幂等；普通输入零写入；非法 payload 静默
 #   4f) Digest：消化标记使 SessionStart 只计未消化条数；无 dedupKey 旧行按内容哈希打 legacy 标记；幂等
 #   4g) 安装器遇到用户既有异形 hook 条目（缺 command/hooks 键）不崩溃且保留原条目
+#   4h) Stop 收工凭据（v2 加固批 B）：缺失→block；形状不对→block；齐备（凭据+自检留痕）→放行；3 次封顶 fail-open 保持
 #   5) 写入边界：全部动作结束后，目标目录里除白名单外不得出现任何新文件
 #
 # 全部使用临时沙箱目标目录，不碰真实项目。
@@ -406,18 +407,24 @@ try {
     $gateTarget = $target2
     $gateState = Join-Path $gateTarget '.feisheng/vibe-hook-state'
 
-    # 5e-1) 无未消化信号 + 未自检留痕 → 拦截一次，理由含 selfcheck 指令
+    # 5e-1) 无未消化信号 + 未自检留痕 + 无凭据 → 拦截，理由含 selfcheck 指令与收工凭据指令
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
     if ($r.ExitCode -ne 0) { throw "Stop 门禁应 exit 0: $($r.Output)" }
     $reason1 = Get-BlockReason -Text $r.Output
-    if ($null -eq $reason1 -or $reason1 -notmatch '自检' -or $reason1 -notmatch 'selfcheck') { throw "首次 Stop 应拦截并给出 selfcheck 指令: $($r.Output)" }
+    if ($null -eq $reason1 -or $reason1 -notmatch '自检' -or $reason1 -notmatch 'selfcheck' -or $reason1 -notmatch '收工凭据') { throw "首次 Stop 应拦截并给出 selfcheck 与收工凭据指令: $($r.Output)" }
 
-    # 5e-2) selfcheck 留痕后放行（无输出）
+    # 5e-2) selfcheck 留痕后仍拦（只剩凭据缺失），凭据齐备后放行（无输出）
     $r = Invoke-Recorder -RecorderArgs @((Join-Path $gateTarget '.'), '--action', 'selfcheck', '--session', 's-gate', '--finding', 'none')
     if ($r.ExitCode -ne 0) { throw "selfcheck 应成功: $($r.Output)" }
     if (-not (Test-Path -LiteralPath (Join-Path $gateState 'selfcheck-s-gate.json'))) { throw 'selfcheck 标记未落盘' }
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
-    if ($r.ExitCode -ne 0 -or (Get-BlockReason -Text $r.Output)) { throw "自检留痕后 Stop 应放行: $($r.Output)" }
+    $reason2 = Get-BlockReason -Text $r.Output
+    if ($null -eq $reason2 -or $reason2 -notmatch '收工凭据' -or $reason2 -match '未消化纠错信号') { throw "自检留痕后应只剩收工凭据拦截: $($r.Output)" }
+    $credGatePath = Join-Path $gateState 'stop-credential-s-gate.json'
+    $validCredGate = '{"verification":[{"command":"pwsh tests/test-vibe-hook-adapter.ps1","exitCode":0,"outputDigest":"PASS: all green"}],"scope":{"declared":["tests/test-vibe-hook-adapter.ps1"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}'
+    [System.IO.File]::WriteAllText($credGatePath, $validCredGate, (New-Object System.Text.UTF8Encoding($false)))
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
+    if ($r.ExitCode -ne 0 -or (Get-BlockReason -Text $r.Output)) { throw "凭据齐备后 Stop 应放行: $($r.Output)" }
 
     # 5e-3) 新的未消化纠错信号 → 拦截并给出 record/dismiss 指令
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput '{"session_id":"s-cap","prompt":"不对，搞错了"}' -Target $gateTarget
@@ -464,6 +471,44 @@ try {
     if ($null -ne (Get-BlockReason -Text $r.Output)) { throw '状态目录不可用应放行（绝不困住会话）' }
     if (-not (Test-Path -LiteralPath $tempAudit) -or (Get-Item -LiteralPath $tempAudit).Length -le $auditBefore) { throw '门禁异常未留审计' }
 
+    # 5g) 收工凭据回归（v2 加固批 B，独立沙箱 target7）：缺失→block；形状不对→block；齐备→放行；封顶保持
+    $target7 = Join-Path $work 'target7'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target7 '.git') | Out-Null
+    $credState7 = Join-Path $target7 '.feisheng/vibe-hook-state'
+    $credPath7 = Join-Path $credState7 'stop-credential-s-cred.json'
+    $validCred7 = '{"verification":[{"command":"node adapters/vibe-hooks/experience-recorder.mjs . --action check","exitCode":0,"outputDigest":"revision=0"}],"scope":{"declared":["docs/需求变更.md"],"outOfScope":[]},"findings":{"deferred":1,"rejectedWithReason":2}}'
+
+    # 5g-1) 凭据缺失 → block，理由含凭据 schema、落盘路径与声明源说明
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cred","stop_hook_active":false}' -Target $target7
+    $g1 = Get-BlockReason -Text $r.Output
+    if ($null -eq $g1 -or $g1 -notmatch '收工凭据' -or $g1 -notmatch 'declared' -or $g1 -notmatch 'stop-credential-s-cred\.json') { throw "凭据缺失应拦截且给出凭据指令: $($r.Output)" }
+
+    # 5g-2) 形状不对（缺 verification 字段）→ 仍 block
+    New-Item -ItemType Directory -Force -Path $credState7 | Out-Null
+    [System.IO.File]::WriteAllText($credPath7, '{"scope":{"declared":["x"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}', (New-Object System.Text.UTF8Encoding($false)))
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cred","stop_hook_active":false}' -Target $target7
+    if ($null -eq (Get-BlockReason -Text $r.Output)) { throw '缺 verification 的凭据应拦截' }
+
+    # 5g-3) 形状不对（exitCode 非数值）→ 仍 block
+    [System.IO.File]::WriteAllText($credPath7, '{"verification":[{"command":"echo hi","exitCode":"ok","outputDigest":"x"}],"scope":{"declared":["x"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}', (New-Object System.Text.UTF8Encoding($false)))
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cred","stop_hook_active":false}' -Target $target7
+    if ($null -eq (Get-BlockReason -Text $r.Output)) { throw 'exitCode 非数值的凭据应拦截' }
+
+    # 5g-4) 齐备（合格凭据 + recorder selfcheck 留痕）→ 放行
+    [System.IO.File]::WriteAllText($credPath7, $validCred7, (New-Object System.Text.UTF8Encoding($false)))
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target7 '.'), '--action', 'selfcheck', '--session', 's-cred', '--finding', 'none')
+    if ($r.ExitCode -ne 0) { throw "target7 selfcheck 应成功: $($r.Output)" }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cred","stop_hook_active":false}' -Target $target7
+    if ($r.ExitCode -ne 0 -or (Get-BlockReason -Text $r.Output)) { throw "凭据齐备应放行: $($r.Output)" }
+
+    # 5g-5) 封顶保持：同会话 3 次拦截后第 4 次 fail-open 放行并留审计（凭据缺失场景下语义不变）
+    for ($i = 0; $i -lt 3; $i++) {
+        Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-capc","stop_hook_active":false}' -Target $target7 | Out-Null
+    }
+    $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-capc","stop_hook_active":false}' -Target $target7
+    if (Get-BlockReason -Text $r.Output) { throw '第 4 次 Stop 应 fail-open 放行（凭据缺失不改变封顶语义）' }
+    if (-not (Test-Path -LiteralPath (Join-Path $credState7 'stop-gate-audit.log'))) { throw 'fail-open 未留审计（target7）' }
+
     # 6) 写入边界：目标目录里除白名单外不得有新文件
     $allowed = @(
         (Join-Path $target '.git'),
@@ -483,7 +528,7 @@ try {
     }
     if ($violations.Count -gt 0) { throw ("白名单外出现写入: " + ($violations -join '; ')) }
 
-    [Console]::WriteLine('PASS: Vibe Hook adapter hard-gate-v1 — capture + autoRecord injection + recorder closed loop + policy governance + Stop self-check hard gate (capped fail-open), whitelist enforced, idempotent, governance events stay disabled.')
+    [Console]::WriteLine('PASS: Vibe Hook adapter hard-gate-v1 + completion credential (v6, shape-only) — capture + autoRecord injection + recorder closed loop + policy governance + Stop self-check/credential hard gate (capped fail-open), whitelist enforced, idempotent, governance events stay disabled.')
     exit 0
 } finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
