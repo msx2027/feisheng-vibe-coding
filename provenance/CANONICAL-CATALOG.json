@@ -1341,7 +1341,7 @@
           },
           {
             "path": "skills/product/hotspot-governor/tools/guardrail-addon.mjs",
-            "sha256": "5658072bda8a2fac445d2436348accabd3f0794fb5eb16bfb0919de7648b6781"
+            "sha256": "0e7163df3b49b164d0b0af9c0aa15bea1f5867a503da9803774665673b032c8b"
           },
           {
             "path": "skills/product/hotspot-governor/tools/hotspot-files.mjs",
@@ -1385,7 +1385,7 @@
           },
           {
             "path": "skills/product/hotspot-governor/tools/secret-scan.mjs",
-            "sha256": "8c1f26b04846e76733da7fb9086b1a146fb460669fa1252b5a2e63511ebe42bd"
+            "sha256": "563af3df7c5fdad1707e127e365cf607846c7f2f196a11e15dc604ccee91abf8"
           },
           {
             "path": "skills/product/hotspot-governor/tools/templates/gitleaks.toml",

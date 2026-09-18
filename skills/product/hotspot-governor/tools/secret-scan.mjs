@@ -21,8 +21,10 @@ const SKIP_PATH = /(?:^|\/)(?:\.git|node_modules|dist|build|vendor|coverage|targ
 
 // 内置轻量正则兜底（保守初值；误报数据回传 evidence，为「连续 2 次误拦降级」攒预算）。
 // 此五类为兜底实现、非上游模板的一部分；上游 gitleaks 可用时以官方规则集为准。
+// AWS 键字母表对齐官方 v8.30.1 aws-access-token（[A-Z2-7]，2026-09-19 审计整改）：
+// 官方放行的含 0/1/8/9 形态不再兜底告警，省「2 次误拦降级」预算。
 const FALLBACK_RULES = [
-  { id: 'FALLBACK-AWS-KEY', re: /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g },
+  { id: 'FALLBACK-AWS-KEY', re: /\b(?:A3T[A-Z0-9]|AKIA|ASIA|ABIA|ACCA)[A-Z2-7]{16}\b/g },
   { id: 'FALLBACK-GITHUB-TOKEN', re: /\bgh[pousr]_[A-Za-z0-9]{36,255}\b/g },
   { id: 'FALLBACK-SLACK-TOKEN', re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/g },
   { id: 'FALLBACK-PRIVATE-KEY', re: /-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY(?: BLOCK)?-----/g },

@@ -581,9 +581,16 @@ foreach ($group in @($classification.duplicateGroups)) {
     }
 }
 
+# 再生可复现：比对/审计场景设 CATALOG_GENERATED_AT 可固定时间戳，使再生 diff 严格为零；
+# 缺省仍取当前 UTC 时间（行为不变）。值须为 ISO-8601 时间戳，防呆。
+$generatedAt = if ($env:CATALOG_GENERATED_AT) {
+    if ($env:CATALOG_GENERATED_AT -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}') { throw "CATALOG_GENERATED_AT 不是 ISO-8601 时间戳: $env:CATALOG_GENERATED_AT" }
+    $env:CATALOG_GENERATED_AT
+} else { (Get-Date).ToUniversalTime().ToString('o') }
+
 $output = [ordered]@{
     schema = 'feisheng-canonical-skill-catalog/v1'
-    generatedAt = (Get-Date).ToUniversalTime().ToString('o')
+    generatedAt = $generatedAt
     owner = 'skill-catalog'
     projectEntry = 'SKILL.md'
     routeOwner = 'governance/sliver-core/references/routes-index.md'

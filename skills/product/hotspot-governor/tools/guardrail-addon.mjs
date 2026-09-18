@@ -11,10 +11,11 @@
 //   已装 hotspot 门禁 → 合并装配路径下 core.hooksPath 已由主门禁指到 tools/githooks，
 //                       加购追加到同一钩子文件的同一标记段风格内；重跑幂等零改动跳过。
 //
-// 卸载（--uninstall）：只移除本加购写入段（钩子标记段 / tools/guardrails/ / 本加购激活的
-//   CI 工作流），不动 hotspot 主门禁（模块、棘轮段、core.hooksPath 配置）与用户自有 hook/CI。
+// 卸载（--uninstall）：只移除本加购写入段（钩子标记段 / tools/guardrails/ 内本加购点名文件 /
+//   本加购激活的 CI 工作流）；目录内有用户自有文件时保留目录不整删（本地适配神圣）。
+//   不动 hotspot 主门禁（模块、棘轮段、core.hooksPath 配置）与用户自有 hook/CI。
 import { spawnSync } from 'node:child_process';
-import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 export const HOOK_MARKER = 'guardrail-secret-wired';
@@ -23,6 +24,9 @@ const RUNNER_FILES = ['secret-scan.mjs'];
 // 常驻投放：执行器 + gitleaks 官方模板。semgrep-ci.yml 只落一处：激活态在
 // .github/workflows/semgrep.yml，未激活态在 tools/guardrails/semgrep-ci.yml.disabled。
 const TEMPLATE_FILES = ['gitleaks.toml'];
+// tools/guardrails/ 内本加购可能写入的全部文件（点名卸载用，不整删目录）：执行器、官方模板、
+// 未激活 CI 副本、首检基线。
+const GUARDRAIL_DIR_FILES = [...RUNNER_FILES, ...TEMPLATE_FILES, 'semgrep-ci.yml.disabled', 'secret-baseline.json'];
 
 const HOOK_SEGMENT = `# --- 密钥泄漏护栏加购（install-hotspot-gate 接线，标记：${HOOK_MARKER}）---
 grroot="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
@@ -165,8 +169,20 @@ export function uninstallGuardrails({ target, say }) {
   if (!stripped) say('钩子标记段：未发现，跳过');
   const grDir = path.join(target, 'tools', 'guardrails');
   if (existsSync(grDir)) {
-    rmSync(grDir, { recursive: true, force: true });
-    say(`已移除加购目录：${path.relative(target, grDir)}（模板 + 扫描器 + 首检基线）`);
+    // 按加购清单点名删除（本地适配过的同名文件也随之移除——卸载即移除整个加购能力），
+    // 用户自有的其他文件一律保留；目录因此变空才整体移除。
+    let removed = 0;
+    for (const name of GUARDRAIL_DIR_FILES) {
+      const filePath = path.join(grDir, name);
+      if (existsSync(filePath)) { rmSync(filePath); removed += 1; }
+    }
+    const rest = readdirSync(grDir);
+    if (rest.length === 0) {
+      rmSync(grDir, { recursive: true, force: true });
+      say(`已移除加购目录：${path.relative(target, grDir)}（模板 + 扫描器 + 首检基线，点名删除 ${removed} 个文件）`);
+    } else {
+      say(`加购文件已点名移除（${removed} 个）；目录内有非本加购文件，保留目录与这些文件：${rest.join('、')}`);
+    }
   } else {
     say('加购目录：不存在，跳过');
   }
