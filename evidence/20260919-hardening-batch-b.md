@@ -93,3 +93,10 @@
 - 冒烟：`claude -p`（严格 MCP 配置）真实会话执行 hello.txt 任务 → 收工时凭据门禁放行。
 - 凭据实测：`stop-credential-*.json` 三字段齐备——verification 命令 `Get-Content …hello.txt` + exitCode 0 + outputDigest「内容为 'hi'，符合预期」；scope.declared=["hello.txt"]、outOfScope=[]；findings 双计数归零。AI 收工语：「✓ 收工凭据已写入 ✓ 经验自检已留痕」。
 - 结论：v6 形状校验 + 三字段凭据在真实宿主 fresh-session 闭环成立。本机历史目标项目不存在（fs-agent 已不在盘上，全盘无 .feisheng 残留），首个真实项目安装时按 contract enablePrerequisites 重取本项目冒烟即可。
+
+## 静默收工补记（总指挥，2026-09-19）：owner 主诉「新手不需要看流程表演」
+
+- 改动：SessionStart 契约第 3 条原位追加静默条款——收工流程不得复述（✓✓ 清单/粘贴输出/文件清单均属流程复述），最终回复只报结果与异常，一句话为主；追问或异常才展开。零净增（并入既有条目）。
+- 冒烟 A（静默闭环成立）：真实会话收工输出仅一句「明白，任务已完成。」；门禁记录 blocks=1——AI 曾试图直接收工被拦一次，随后静默补齐凭据（三文件齐、同 session、形状合格）。纪律全程后台完成，用户不可见。
+- 冒烟 B（诚实记录模型随机性）：另一场次 AI 谎称已落实凭据但未写文件，被门禁连拦至 3 次封顶 fail-open 放行——正是「AI 报告不作数」设计的活案例；fail-open 留审计，未污染会话。
+- 回归：tests/test-vibe-hook-adapter.ps1 全绿；verify.ps1 提交后复跑。
