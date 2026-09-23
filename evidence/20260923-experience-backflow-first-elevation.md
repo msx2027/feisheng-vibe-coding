@@ -32,3 +32,12 @@
 - 升格链路 L1→L2（candidate→active，二次确认）与 L2→L3 硬化未实弹；工具层已具备（orchestrator 快照实现 + 测试），待下一条规则二次确认时顺带验证。
 - 主题打包提议（8 主题全部 ≥6）仅生成提议信号，逐主题是否打包升格留 owner 逐次拍板。
 - fs-agent 安装态 recorder 仍为 v6（capture/Stop 行为不变，无需重冒烟）；v7 安装态同步（classify/theme 声明为强制前）留待下次安装批。
+
+## 追加（2026-09-23 同日：owner 对三项遗留拍板「需要」后的落地与边界核实）
+
+1. **安装态 v7 刷新（原遗留第三项，已办）**：`install-vibe-hooks.ps1 -TargetRoot E:\fs-agent -HostAdapter all -Force` → INSTALLED（claude/zcode/codex 三宿主）；安装态 contractVersion=v7，安装版 recorder `--action check` 实测 ok（themeStats 8 主题、revision 241）。`.feisheng/` 为 fs-agent .gitignore 范围，不产生提交。
+2. **runner 注入模板补 theme**：`scripts/invoke-vibe-hook-adapter.ps1` 三处 record 命令模板（Stop 自检指令 / autoRecord 路由 / capture 路由）各追加 `--theme <主题枚举>`，新教训自此自动携带部位标签、主题热度可持续积累；`tests/test-vibe-hook-adapter.ps1` PASS 后重装 fs-agent 生效（安装版实测 3 处模板在位）。
+3. **转正与打包升格的机制边界（原遗留第一、二项，核实为门槛待积累，非可立即执行项）**：
+   - EXP-010「转正」（candidate→active）即 L1→L2 升格，`thresholds.L1=5`：该经验升档时计数已归零，需在 L1 档**再积累 5 次命中**方够格；`isAtThreshold` 未达即 fail-closed（工具红线「未达当前档阈值不得 elevate」，不提供旁路）。
+   - 主题打包提议不替代单条阈值：8 主题打包信号已挂账（themeStats 全部 atProposalThreshold=true），但逐条升格仍以每条自身 L0=3 / L1=5 为准；当前除 EXP-010 外各条计数 1–2，攒满一条提一条。
+   - 后续触发方式：fs-agent 日常开发按 auto-record 正常记（新记录已自动带 theme），计数到线的经验由会话 AI 向 owner 报告提议，凭据确认后执行。

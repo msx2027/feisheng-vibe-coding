@@ -405,7 +405,7 @@ function Invoke-StopGateHandler {
         # 拦截理由按「剩余义务」拼接：一次拦截给全图景，避免 AI 分次补齐烧掉 3 次封顶预算
         $reasonParts = @()
         if ($pending -gt 0) {
-            $reasonParts += "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须逐条处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --expected-revision <先 check 获取> --source-dedup-key <该信号索引行的40hex>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>；旧格式行（索引行无 dedupKey）→ 用 runner -Mode Digest 统一消化。"
+            $reasonParts += "【经验自检硬门禁】检测到 $pending 条未消化纠错信号，会话结束前必须逐条处理：可复用教训 → node ""$recorderPath"" ""$TargetRoot"" --action record --event-id EVT-<sha256(""self|<sessionId>|<教训摘要>""前40位)> --prompt-material <一句话教训> --summary <一句话单行> --theme <主题枚举:git-concurrency|browser-verify|canvas-design|gate-ops|evidence-honesty|assertion-quality|decision-communication|env-platform> --expected-revision <先 check 获取> --source-dedup-key <该信号索引行的40hex>；不可复用 → node ""$recorderPath"" ""$TargetRoot"" --action dismiss --source-dedup-key <40hex> --reason <一句话>；旧格式行（索引行无 dedupKey）→ 用 runner -Mode Digest 统一消化。"
         }
         if (-not $credOk) {
             $reasonParts += "【收工凭据硬门禁】本会话尚未落收工凭据或凭据形状不合格（owner 授权 2026-09-19）。收工前把凭据 JSON 写入 ""$StateDir/stop-credential-$sessionId.json""：{""verification"":[{""command"":""<实际执行的验证命令>"",""exitCode"":0,""outputDigest"":""<关键输出摘要>""}],""scope"":{""declared"":[""<本任务声明的文件边界或来源声明>""],""outOfScope"":[]},""findings"":{""deferred"":0,""rejectedWithReason"":0}}。钩子只验存在与形状（字段齐、类型对），不重跑命令、不验真伪（真伪由 CI 独立复跑兜底）；scope.declared 声明源：dev-builder 流 = dev-plan「不做边界/停止条件」字段，普通任务 = Sliver Operating Law 的 declared file boundary（收工时与实际 diff 对照）；findings 记账：新发现未当场处理条数记 deferred，评估后不采纳的记 rejectedWithReason。"
@@ -467,7 +467,7 @@ function Invoke-SessionStartHandler {
 1) 检测到纠错信号时 hook 会注入 autoRecord 路由；你必须在当前任务完成后立即自主处理，不需要等待用户再次指示。
 2) 自检义务（零触发词，不依赖用户说任何纠错词）：每个任务完成前自检——你自己的返工/重试、推翻重来的方案、修掉的自身错误、用户重复提出同一请求、用户手动改写或撤销你的产出、用户放弃你的方案转向他路，这些一律按纠错处理：可复用→立即自行记录；不可复用→不记（宁可漏记，不可滥记）。无新教训时用 --action selfcheck --session <sessionId> --finding none 留痕。
 3) 收工凭据义务（owner 授权 2026-09-19）：收工前把凭据 JSON 写入 .feisheng/vibe-hook-state/stop-credential-<sessionId>.json，形状：{"verification":[{"command":"<实际执行的验证命令>","exitCode":0,"outputDigest":"<关键输出摘要>"}],"scope":{"declared":["<本任务声明的文件边界或来源声明>"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}。钩子只验存在与形状（字段齐、类型对），不重跑命令、不验真伪（真伪由 CI 独立复跑兜底）。scope.declared 声明源：dev-builder 流 = dev-plan「不做边界/停止条件」字段；普通任务 = Sliver Operating Law 的 declared file boundary（收工时与实际 diff 对照）。此义务由 Stop 硬门禁强制：未消化信号、未自检留痕或凭据缺失/形状不对任一存在即拦截并给出处理指令（每会话最多拦截 3 次，超限放行并留痕）。收工流程一律静默完成：凭据与自检的写入、验证命令的运行过程不得在最终回复中复述或打卡式罗列（✓✓ 清单、粘贴命令输出、文件清单等均属流程复述），最终回复只向用户报告任务结果与异常（必要结果一句话为主）；用户追问或出现异常时才展开细节。
-4) 记录方法：node "$recorderPath" "$TargetRoot" --action check 获取 revision 与现有经验；新教训用 --action record --event-id EVT-<sha256("self|<sessionId>|<教训摘要>")前40位> --prompt-material <一句话教训描述> --summary <一句话单行摘要> --expected-revision <N>；命中已有经验加 --experience-id EXP-NNN。无需任何 hook 信号，事件身份由你自造且必须确定性（同 session 同教训重跑同 eventId 幂等）。
+4) 记录方法：node "$recorderPath" "$TargetRoot" --action check 获取 revision 与现有经验；新教训用 --action record --event-id EVT-<sha256("self|<sessionId>|<教训摘要>")前40位> --prompt-material <一句话教训描述> --summary <一句话单行摘要> --theme <主题枚举:git-concurrency|browser-verify|canvas-design|gate-ops|evidence-honesty|assertion-quality|decision-communication|env-platform> --expected-revision <N>；命中已有经验加 --experience-id EXP-NNN。无需任何 hook 信号，事件身份由你自造且必须确定性（同 session 同教训重跑同 eventId 幂等）。
 5) 判定不值得记的 hook 信号：--action dismiss --source-dedup-key <40hex> --reason <一句话>（留痕审计）。
 6) 治理义务：--action check 输出 dueForReview=true 时，先跑一轮治理审查——已登记政策则按政策执行 --action govern；无政策时向用户提议政策文本（政策经用户确认一次后即可自治执行）。清扫条目进清扫日志，可恢复。
 7) 红线：绝不自动升档/退役（升档 L1/L2/L3、退役必须用户逐次确认，达阈值只向用户报告可升信号）；绝不未经登记政策执行清扫。
@@ -584,7 +584,7 @@ function Invoke-PromptSubmitHandler {
     $contextText = @"
 【autoRecord 纠错信号已采集】eventId=$eventId; signalType=explicit-correction; scope=target-project; promptHash=$promptHash; occurredAt=$occurredAt; sourceDedupKey=$dedupKey
 请在当前任务完成后立即自主处理（无需用户指示）：判断该纠错是否可复用教训。
-可复用 → node "$recorderPath" "$TargetRoot" --action check 取 revision，再 --action record --event-id $eventId --prompt-hash $promptHash --occurred-at $occurredAt --source-dedup-key $dedupKey --summary <一句话单行摘要，禁止照抄原始 prompt> --expected-revision <N>（命中已有经验加 --experience-id EXP-NNN）
+可复用 → node "$recorderPath" "$TargetRoot" --action check 取 revision，再 --action record --event-id $eventId --prompt-hash $promptHash --occurred-at $occurredAt --source-dedup-key $dedupKey --summary <一句话单行摘要，禁止照抄原始 prompt> --theme <主题枚举:git-concurrency|browser-verify|canvas-design|gate-ops|evidence-honesty|assertion-quality|decision-communication|env-platform> --expected-revision <N>（命中已有经验加 --experience-id EXP-NNN）
 不可复用 → node "$recorderPath" "$TargetRoot" --action dismiss --source-dedup-key $dedupKey --reason <一句话>
 两条路径都会自动消化源信号；绝不自动升档，达阈值只报告。
 "@
