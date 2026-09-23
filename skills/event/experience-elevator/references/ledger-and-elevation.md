@@ -31,6 +31,18 @@
 - 新 ID 扫描 experiences + archived；tombstone ID 永不复用。
 - 原始 prompt 不落项目文件。
 
+## theme 主题字段（2026-09-23 contract v7 增补）
+
+- 经验记录可选携带 `theme`（"疼的部位"），固定枚举 `EXPERIENCE_THEMES`：`git-concurrency / browser-verify / canvas-design / gate-ops / evidence-honesty / assertion-quality / decision-communication / env-platform`；字段缺席 = 未分类，不设 unknown 值，避免枚举漂移。
+- `record` 只对**新建** L0 接受 `--theme`；命中已有经验不带 `--theme`；存量条目回填/修正用 `classify`（expectedRevision CAS）。`archived` 条目不回填。
+- 主题热度是派生值：`check` 输出 `themeStats`（按主题的 L0 条数），`THEME_PROPOSAL_THRESHOLD = 6`，达到只生成**打包提议**信号；单条升档阈值（L0=3/L1=5/L2=8）不变，主题热度不参与单条阈值，也不会自动执行任何升格。
+- 动机：单条计数对"同一部位反复用不同表述踩坑"不可见（fs-agent 2026-09 实账：多会话 Git 纪律 13 条不同 EXP 各 1–2 次，按单条阈值永远够不着升格线）；主题维度让结构性热点可被提议升格。
+
+## 部署副本 delta（2026-09-23 起）
+
+- 工具族随本技能 bundle 发行于 `skills/event/experience-elevator/tools/`，来源为快照 `sources/vibe-coding-skills/tools/`，含三处部署 delta（详见 RUNTIME-NOTES.md 与 evidence/20260923-experience-backflow-batch-b.md）：①ledger-core 增 theme 字段；②governance 台账写回改为**围栏拼接**（只替换真源围栏内 JSON，围栏外的人工登记区与清扫政策围栏原样保留——整文件重渲染会静默删除这些内容）；③init-target-runtime 头注去掉对已退役 setup 技能的路径引用。
+- 快照自带的 `check-experience-ledger.mjs`（断言台账文件 == 整文件重渲染结果）**不随包**：它与围栏拼接写入语义冲突；部署态的台账校验由 recorder `check` 与 orchestrator `parseLedger` 承担。
+
 ## 用户确认凭据
 
 ```json

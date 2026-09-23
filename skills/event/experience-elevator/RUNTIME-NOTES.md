@@ -33,6 +33,24 @@
   在目标项目由 `experience-recorder.mjs` 等价承载（台账 v2 形状与快照
   `experience-ledger-core.mjs` 镜像一致）；elevate / retire / adopt-anchor 仍无自动化层，
   遇到这些步骤时如实报告「自动化层未接入」，不得假装完成，也不得手写台账 JSON。
+- **orchestrator 实物化 + theme（contract v7，2026-09-23）**：
+  - 升格工具族已随包发行于 `skills/event/experience-elevator/tools/`（来源快照 tools/，
+    按 hotspot-governor/tools 先例登记，非副本偏差）；「自动化层未接入」的历史状态自此解除，
+    elevate/retire/adopt-anchor 由 orchestrator 凭用户确认凭据执行。
+  - 部署 delta 三处：①`experience-ledger-core.mjs` 经验记录增可选 `theme`（固定枚举）；
+    ②`experience-governance.mjs` 台账写回改**围栏拼接**（只替换真源围栏内 JSON，围栏外的
+    人工登记区与清扫政策围栏原样保留——快照版整文件重渲染会静默删除这些内容，fs-agent 实账即含）；
+    ③`init-target-runtime.mjs` 头注去掉对已退役 setup 技能的路径引用。
+  - `theme` 固定枚举 8 值（git-concurrency / browser-verify / canvas-design / gate-ops /
+    evidence-honesty / assertion-quality / decision-communication / env-platform）；新建 L0 可携，
+    存量用 `classify` 回填；`check` 输出 `themeStats`，主题 L0 满 6 只生成**打包提议**，
+    单条阈值与全部红线不变。
+  - 快照 `check-experience-ledger.mjs`（整文件重渲染等值断言）不随包：与围栏拼接语义冲突；
+    部署态校验由 recorder `check` 与 orchestrator `parseLedger` 承担。
+  - 夹具实测（临时真包根 + 部署副本）：ledger-core 46 PASS / anchor 21 PASS /
+    closure 63 PASS + 3 个包作用域豁免（2 个因未随包的 check-experience-ledger、
+    1 个因快照钩子 wrapper——契约 v6 已由包内 runner 取代）；详见
+    evidence/20260923-experience-backflow-batch-b.md。
 - **宿主差异**：Claude Code 与 ZCode 注册全部启用事件（含 Stop 门禁）；**Codex 为 capture-only**
   （注入与 Stop 语义未验证，显式跳过 Stop），常备规则由项目 AGENTS.md 的经验治理文本承载。
 - **既有轻量形态条款仍然有效**：`.vibe-docs.json` 治理基础设施与其余 `tools/*.mjs`

@@ -23,14 +23,14 @@ disable-model-invocation: true
 [依赖与真源]
     - `.vibe-docs.json.experienceGovernance` 必须指向 `docs/项目治理/经验治理.md`，并与 `documents[]` role=`experienceGovernance` 一致。
     - 启用后缺台账必须 fail closed；只有未启用时 checker 才可显式 `SKIP`。
-    - 读写统一调用 `tools/experience-governance.mjs`；算账复用 `experience-ledger-core.mjs`，受管块复用 `experience-managed-blocks.mjs`，落盘复用 `safe-target-fs.mjs` 与 `target-doc-transaction.mjs`。
+    - 读写统一调用 `tools/experience-governance.mjs`；算账复用 `experience-ledger-core.mjs`，受管块复用 `experience-managed-blocks.mjs`，落盘复用 `safe-target-fs.mjs` 与 `target-doc-transaction.mjs`。自 2026-09-23 起该工具族已随本技能 bundle 发行（`skills/event/experience-elevator/tools/`，含两处部署 delta，见 RUNTIME-NOTES.md）；hook 侧自动记录仍由目标项目安装的 `experience-recorder.mjs` 承担（record/classify），二者共用 ledger v2 形状与 revision CAS。
     - 不手写 ledger JSON、不直接改投影、不另造平行计数文件。
 
 [自动 L0 入口]
     - Hook 提供 `disposition=record` 且 `scope=target-project` 时，会同时输出 `autoRecord={skill:experience-elevator, action:record, decision:ai}` 路由；这是 AI 的自动触发信号，主 Agent 不得等待用户再次说“记住”或再次确认，完成当前任务后立即执行本 Skill 的 L0 判断与记录。
     - `autoRecord` 只是 Hook→AI→Skill 的结构化路由，不是第二个写入器；Hook 不直接改目标文件，AI 判断为可复用后调用既有 `tools/experience-governance.mjs` 的 `action=record`，继续复用 revision、幂等和事务写入。
     - AI 只把可复用的纠错、重复失败或已验证的流程教训写入 L0；一次性偏好或证据不足时跳过；任务局部选择也不写入，并简短说明“无可沉淀 L0 经验”。
-    - 自动入口只允许 `record`：命中已有经验则 +1，未命中则创建 L0；达到阈值只生成升级提议，不得自动升级 L1/L2/L3、退役或硬化。
+    - 自动入口只允许 `record`：命中已有经验则 +1，未命中则创建 L0；新建 L0 可携 `theme`（"疼的部位"固定枚举，见 references/ledger-and-elevation.md），存量条目用 `classify` 回填；主题热度满打包阈值只生成打包提议，不得自动升级 L1/L2/L3、退役或硬化。
     - 目标项目未启用 `experienceGovernance` 或缺少台账时 fail closed，不创建替代经验文件；不保存原始 prompt。
 
 [记录流程]

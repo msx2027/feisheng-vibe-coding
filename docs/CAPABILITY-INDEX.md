@@ -35,7 +35,7 @@
 | `doc-sync-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
 | `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `directory` | 3 |
 | `evolution-engine` | vibe-coding-skills | event | accepted-event | none | `directory` | 2 |
-| `experience-elevator` | vibe-coding-skills | event | accepted-event | none | `directory` | 3 |
+| `experience-elevator` | vibe-coding-skills | event | accepted-event | none | `directory` | 15 |
 | `feedback-writer` | vibe-coding-skills | event | accepted-event | none | `directory` | 2 |
 | `grilling` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 1 |
 | `handoff` | mattpocock-skills | user-tool | accepted-user-tool | none | `directory` | 1 |

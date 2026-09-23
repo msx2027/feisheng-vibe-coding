@@ -612,6 +612,46 @@
           "linesChanged": 1
         }
       ]
+    },
+    {
+      "id": "vibe-experience-elevator-theme-and-deploy-pointer",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-23",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "SKILL.md 两处：①[依赖与真源] 注明 orchestrator 工具族自 2026-09-23 随 bundle 发行及 hook 侧 recorder 分工；②[自动 L0 入口] record 条目增补 theme（固定枚举）与 classify 回填、主题打包提议句。",
+      "reason": "fs-agent 115 条经验覆盖审计结论落地（owner 2026-09-23 拍板「同意」）：账本按单条计数使主题级复发不可见（多会话 Git 纪律 13 条不同 EXP 各 1–2 次永远够不着单条阈值），增主题维度；同时登记 orchestrator 实物化后的分工边界。",
+      "evidence": "evidence/20260923-experience-backflow-batch-b.md",
+      "verification": "夹具实测 ledger-core 46 PASS / anchor 21 PASS / closure 63 PASS+3 包作用域豁免；catalog 再生 + verify.ps1 全绿",
+      "files": [
+        {
+          "path": "skills/event/experience-elevator/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/experience-elevator/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d",
+          "patchedSha256": "1ee45f0783ce1028e1d57da3dbe5905a522f5cad5e51eb02824fbbd04cc3cb93",
+          "linesChanged": 2
+        }
+      ]
+    },
+    {
+      "id": "vibe-experience-elevator-ledger-theme-doc",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-23",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "references/ledger-and-elevation.md 新增两节：「theme 主题字段」（枚举/写入通道/打包提议阈值 6/单条阈值不变的动机）与「部署副本 delta」（三处 delta + check-experience-ledger 不随包及其原因）。",
+      "reason": "同上；把部署副本对快照的行为差异（theme、围栏拼接、退役引用改写）写进技能文档，防止按快照语义理解部署态台账写入。",
+      "evidence": "evidence/20260923-experience-backflow-batch-b.md",
+      "verification": "夹具实测 ledger-core 46 PASS / anchor 21 PASS / closure 63 PASS+3 包作用域豁免；catalog 再生 + verify.ps1 全绿",
+      "files": [
+        {
+          "path": "skills/event/experience-elevator/references/ledger-and-elevation.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/experience-elevator/references/ledger-and-elevation.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f",
+          "patchedSha256": "50287abc560440ef8d54ad060619c166976c6b1d48d6b242c44d6bde7981d290",
+          "linesChanged": 2
+        }
+      ]
     }
   ]
 }

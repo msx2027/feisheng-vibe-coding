@@ -1,6 +1,6 @@
 {
     "schema":  "feisheng-canonical-skill-catalog/v1",
-    "generatedAt":  "2026-09-23T00:58:41.7291784Z",
+    "generatedAt":  "2026-09-23T01:27:39.8765516Z",
     "owner":  "skill-catalog",
     "projectEntry":  "SKILL.md",
     "routeOwner":  "governance/sliver-core/references/routes-index.md",
@@ -1193,15 +1193,63 @@
                                        "files":  [
                                                      {
                                                          "path":  "skills/event/experience-elevator/RUNTIME-NOTES.md",
-                                                         "sha256":  "6404398460ada3fc407271425ebf56cb88c3de0eb45915e83db3cd8c99c3e0ab"
+                                                         "sha256":  "1c117aa31e98261a259d4bdb9771aa8670fac3d6c820d0b3c03912dff0f87486"
                                                      },
                                                      {
                                                          "path":  "skills/event/experience-elevator/SKILL.md",
-                                                         "sha256":  "d5ad25b0a1133a540bee5f34abad0b02be16e4fa8b70b66c7b32ef5eb731973d"
+                                                         "sha256":  "1ee45f0783ce1028e1d57da3dbe5905a522f5cad5e51eb02824fbbd04cc3cb93"
                                                      },
                                                      {
                                                          "path":  "skills/event/experience-elevator/references/ledger-and-elevation.md",
-                                                         "sha256":  "724b4004aa6838bb0cfa693522dc3fe4a485b2af230a366610450cfc909bc86f"
+                                                         "sha256":  "50287abc560440ef8d54ad060619c166976c6b1d48d6b242c44d6bde7981d290"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/detect-experience-signal.mjs",
+                                                         "sha256":  "30a2e8e2df55731b46ee76c43a467383b27f13847c16e0b1d3c681269a5c1543"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/experience-anchor-contract.mjs",
+                                                         "sha256":  "8480d2f555ce68015372dcf5380a2143f94331012d45aaba1da5bea96100d227"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/experience-governance.mjs",
+                                                         "sha256":  "9ae1a3d08668f28002be523d6bd1252fb065c8a1e65cb898ba9688928a111f4e"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/experience-ledger-core.mjs",
+                                                         "sha256":  "7948c7d52a1f544eb4c4914bbde29e1cabf194500b78e87892e056fb030137bc"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/experience-managed-blocks.mjs",
+                                                         "sha256":  "448cceace9a9f05d9acceaacedb5ac66d9a4d261dc71bdc96036dbe7364d8530"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/init-target-runtime.mjs",
+                                                         "sha256":  "cfe937a2fd5d3e2fb107315912c206d298587a5e61a38f5143e758a0ec159c02"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/safe-target-fs.mjs",
+                                                         "sha256":  "567afb308f6f175cfba942373f06bc77ab7433dc5a6f59705a7a5d2efd2cd9d2"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/target-doc-transaction.mjs",
+                                                         "sha256":  "38f71485470e453e615aa9d6448546d3558f3f340f047ae5b60034dca7bc4396"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/test-experience-governance-anchor.mjs",
+                                                         "sha256":  "b32c786561a2b32ad6fb276fbee082b0ce5a62378aee43f503540ebed7c78eb6"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/test-experience-governance-closure.mjs",
+                                                         "sha256":  "d065ce9bc0c728f6e2ae61bfb83d73e3415eb9a3581617ea30aca77ba47a6110"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/test-experience-ledger-core.mjs",
+                                                         "sha256":  "8b575f019763e1ac1fde08a527053e084deaee0054540a668517bbab898c4f19"
+                                                     },
+                                                     {
+                                                         "path":  "skills/event/experience-elevator/tools/trusted-git.mjs",
+                                                         "sha256":  "212b849e575d4b6745d7808721432cb54b37a9fdec7b76e4a9fc1b39bcb6aecc"
                                                      }
                                                  ],
                                        "excluded":  [

@@ -9,9 +9,15 @@
 // 作用（大白话）：经验台账的本地记录器。Hook 采集到纠错信号并注入 autoRecord 路由后，
 // 会话 AI 自主判断"是否值得记"；值得记就调用本工具把教训写进 L0 台账，不值得记就调用
 // dismiss 留痕消化。本工具是 ledger 的唯一机器写入器（单一写入者），但只做"记录"：
-//   - 不升档、不退役、不碰受管块（升档/退役走既有用户确认凭据流程）
+//   - 不升档、不退役、不碰受管块（升档/退役由随包发行的
+//     skills/event/experience-elevator/tools/experience-governance.mjs 凭用户确认凭据执行）
 //   - 不保存原始 prompt（只存 sha256 摘要）
 //   - revision CAS + eventId 幂等重放/collision + 原子落盘，全部 fail-closed
+//
+// theme（2026-09-23 contract v7）：经验记录可选携带固定枚举 theme（"疼的部位"），
+//   新建 L0 时由 --theme 标注；存量未分类条目用 action=classify 回填。
+//   主题热度只在 --action check 输出里汇总（themeStats），满打包阈值只生成打包提议，
+//   不改变单条升档阈值，也不会自动升档。
 //
 // 台账文件格式（ledger v2）：
 //   顶部 ```json vibe-experience-ledger 围栏 = 机器真源（本工具读写）
@@ -30,6 +36,20 @@ const FENCE_CLOSE = "```";
 const SIGNAL_TYPE = "explicit-correction";
 const SCOPE = "target-project";
 const TIER_ORDER = ["L0", "L1", "L2", "L3"];
+// 与 skills/event/experience-elevator/tools/experience-ledger-core.mjs（部署副本）的
+// EXPERIENCE_THEMES 保持一致；两处同时改，漏改会在 ledger 校验处 fail-closed 暴露。
+const EXPERIENCE_THEMES = [
+  "git-concurrency",        // 多会话/共享工区 Git 纪律
+  "browser-verify",         // 浏览器/CDP/桌面壳验收通道
+  "canvas-design",          // Pencil/画布操作与设计对齐
+  "gate-ops",               // 门禁/热点工具操作纪律
+  "evidence-honesty",       // 证据/回执诚实性
+  "assertion-quality",      // 测试断言判别力/假阳假阴
+  "decision-communication", // 用户拍板/需求真源/沟通
+  "env-platform",           // win32/shell/依赖环境坑
+];
+// 主题打包提议阈值：同一主题 L0 条数达到该值时，check 输出打包提议信号（不自动执行）。
+const THEME_PROPOSAL_THRESHOLD = 6;
 
 function out(payload) {
   process.stdout.write(JSON.stringify(payload) + "\n");
@@ -66,7 +86,7 @@ function singleLine(value) {
 }
 
 // ---- CLI ----
-const VALUE_FLAGS = new Set(["--action", "--event-id", "--prompt-hash", "--prompt-material", "--occurred-at", "--summary", "--experience-id", "--expected-revision", "--source-dedup-key", "--reason", "--state-dir", "--policy-id", "--tier", "--count-below", "--days-unhit", "--confirmed-by", "--policy-source", "--session", "--finding"]);
+const VALUE_FLAGS = new Set(["--action", "--event-id", "--prompt-hash", "--prompt-material", "--occurred-at", "--summary", "--experience-id", "--expected-revision", "--source-dedup-key", "--reason", "--state-dir", "--policy-id", "--tier", "--count-below", "--days-unhit", "--confirmed-by", "--policy-source", "--session", "--finding", "--theme"]);
 const argv = process.argv.slice(2);
 const opts = new Map();
 const positional = [];
@@ -84,13 +104,13 @@ for (let index = 0; index < argv.length; index++) {
 function argValue(name) {
   return opts.get(name);
 }
-const ACTIONS = ["check", "record", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"];
+const ACTIONS = ["check", "record", "classify", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"];
 const optAction = opts.get("--action") || positional.find((item) => ACTIONS.includes(item));
 const targetRootArg = positional.find((item) => !ACTIONS.includes(item));
 const targetRoot = path.resolve(targetRootArg || process.cwd());
 
 if (!ACTIONS.includes(optAction)) {
-  fail("usage", "用法: experience-recorder.mjs <target-root> --action check|record|dismiss|policy-add|policy-list|govern [选项]");
+  fail("usage", "用法: experience-recorder.mjs <target-root> --action check|record|classify|dismiss|policy-add|policy-list|govern [选项]");
 }
 
 // ---- 定位契约（与 recorder 同目录的安装态契约副本）与台账路径 ----
@@ -269,7 +289,7 @@ function validateLedger(ledger) {
     eventIds.add(event.eventId);
   }
   const checkExperience = (record, where) => {
-    assertExactKeys(record, ["id", "summary", "tier", "count", "trajectory", "landing"], ["confirmationHistory", "confirmation"], where);
+    assertExactKeys(record, ["id", "summary", "tier", "count", "trajectory", "landing"], ["confirmationHistory", "confirmation", "theme"], where);
     if (typeof record.id !== "string" || !/^EXP-\d{3,}$/u.test(record.id)) fail("schema", `${where}.id 必须是 EXP- 加至少三位数字`);
     if (!singleLine(record.summary)) fail("schema", `${where}.summary 必须是非空单行字符串`);
     if (!TIER_ORDER.includes(record.tier)) fail("schema", `${where}.tier 非法`);
@@ -278,6 +298,7 @@ function validateLedger(ledger) {
       fail("schema", `${where}.trajectory 必须是非空字符串数组`);
     }
     if (record.landing !== null && !singleLine(record.landing)) fail("schema", `${where}.landing 必须是 null 或非空字符串`);
+    if (record.theme !== undefined && !EXPERIENCE_THEMES.includes(record.theme)) fail("schema", `${where}.theme 必须是 EXPERIENCE_THEMES 内的固定枚举值`);
     if (ids.has(record.id)) fail("schema", `experience id 重复: ${record.id}`);
     ids.add(record.id);
   };
@@ -324,13 +345,28 @@ if (optAction === "check") {
   const DAY_MS = 86400000;
   const ageOver = marker ? (Date.now() - new Date(marker.at).getTime() > 14 * DAY_MS) : true;
   const growthOver = marker ? (ledger.revision - (Number.isInteger(marker.revision) ? marker.revision : 0) >= 5) : true;
+  // 主题热度（派生值，不落盘、不参与单条阈值）：同一主题的 L0 条数达到打包提议阈值时，
+  // 只输出提议信号，由用户确认后走逐条/打包升格流程，本工具绝不自动升档。
+  const themeCounts = new Map();
+  let unclassified = 0;
+  for (const record of ledger.experiences) {
+    if (record.tier !== "L0") continue;
+    if (record.theme === undefined) { unclassified += 1; continue; }
+    themeCounts.set(record.theme, (themeCounts.get(record.theme) || 0) + 1);
+  }
+  const themeStats = [...themeCounts.entries()]
+    .map(([theme, count]) => ({ theme, count, atProposalThreshold: count >= THEME_PROPOSAL_THRESHOLD }))
+    .sort((left, right) => right.count - left.count || left.theme.localeCompare(right.theme));
   out({
     ok: true,
     action: "check",
     ledgerPath: ledgerRelative,
     revision: ledger.revision,
     thresholds: ledger.thresholds,
-    experiences: ledger.experiences.map((record) => ({ id: record.id, summary: record.summary, tier: record.tier, count: record.count })),
+    experiences: ledger.experiences.map((record) => ({ id: record.id, summary: record.summary, tier: record.tier, count: record.count, theme: record.theme ?? null })),
+    themeStats,
+    unclassifiedL0: unclassified,
+    themeProposalThreshold: THEME_PROPOSAL_THRESHOLD,
     archivedCount: ledger.archived.length,
     policies: policyDoc.policies.map((policy) => ({ policyId: policy.policyId, tier: policy.tier, countBelow: policy.countBelow, daysUnhit: policy.daysUnhit })),
     governance: {
@@ -502,6 +538,41 @@ if (optAction === "govern") {
   process.exit(0);
 }
 
+// ---- classify：为既有经验回填/修正主题（theme 的唯一机器写入动作；revision CAS）----
+if (optAction === "classify") {
+  const experienceId = argValue("--experience-id") || "";
+  const theme = argValue("--theme") || "";
+  const expectedRevision = Number(argValue("--expected-revision"));
+  if (!/^EXP-\d{3,}$/u.test(experienceId)) fail("usage", "--experience-id 必须是 EXP- 加至少三位数字");
+  if (!EXPERIENCE_THEMES.includes(theme)) fail("usage", `--theme 必须是固定枚举之一: ${EXPERIENCE_THEMES.join(" / ")}`);
+  if (!Number.isInteger(expectedRevision) || expectedRevision < 0) fail("usage", "--expected-revision 必须是显式非负整数（先 --action check 获取）");
+  if (!fs.existsSync(ledgerPath)) fail("no-ledger", `台账文件不存在: ${ledgerRelative}`);
+  const { ledger, prefix, suffix, bom } = parseLedgerMarkdown(fs.readFileSync(ledgerPath, "utf8"));
+  validateLedger(ledger);
+  if (ledger.revision !== expectedRevision) {
+    fail("revision-conflict", `revision 冲突：台账当前 ${ledger.revision}，调用方期望 ${expectedRevision}；请重新 --action check 后再试`, { currentRevision: ledger.revision, expectedRevision });
+  }
+  const record = ledger.experiences.find((item) => item.id === experienceId);
+  if (!record) fail("unknown-experience", `未知经验 id：${experienceId}（已归档条目不回填主题）`);
+  const changed = record.theme !== theme;
+  if (changed) {
+    record.theme = theme;
+    ledger.revision += 1;
+    validateLedger(ledger);
+    const content = bom + prefix + JSON.stringify(ledger, null, 2) + suffix;
+    const tmpPath = `${ledgerPath}.tmp-${process.pid}-${Date.now()}`;
+    fs.writeFileSync(tmpPath, content, "utf8");
+    try {
+      fs.renameSync(tmpPath, ledgerPath);
+    } catch (error) {
+      try { fs.unlinkSync(tmpPath); } catch {}
+      fail("io", `classify 原子写入失败: ${error.message}`);
+    }
+  }
+  out({ ok: true, action: "classify", experienceId, theme, revision: ledger.revision, changed });
+  process.exit(0);
+}
+
 // record
 const eventId = argValue("--event-id") || "";
 const promptHashArg = argValue("--prompt-hash");
@@ -531,6 +602,9 @@ if (summary !== undefined && !singleLine(summary)) fail("usage", "--summary 必�
 if (experienceIdArg !== undefined && summary !== undefined) fail("usage", "--experience-id 与 --summary 只能二选一");
 const expectedRevision = Number(expectedRevisionRaw);
 if (!Number.isInteger(expectedRevision) || expectedRevision < 0) fail("usage", "--expected-revision 必须是显式非负整数（先 --action check 获取）");
+const themeArg = argValue("--theme");
+if (themeArg !== undefined && !EXPERIENCE_THEMES.includes(themeArg)) fail("usage", `--theme 必须是固定枚举之一: ${EXPERIENCE_THEMES.join(" / ")}`);
+if (themeArg !== undefined && experienceIdArg !== undefined) fail("usage", "命中已有经验不带 --theme；回填/修正既有条目主题用 --action classify");
 if (sourceDedupKey && !/^[0-9a-f]{40}$/u.test(sourceDedupKey)) fail("bad-dedup-key", "--source-dedup-key 必须是 40 位小写十六进制");
 
 if (!fs.existsSync(ledgerPath)) fail("no-ledger", `台账文件不存在: ${ledgerRelative}`);
@@ -561,14 +635,16 @@ if (existingEvent) {
     ledger.experiences[index].count += 1;
   } else {
     experienceId = nextExperienceId(ledger);
-    ledger.experiences.push({
+    const created = {
       id: experienceId,
       summary,
       tier: "L0",
       count: 1,
       trajectory: [`${occurredAt.slice(0, 10)} 记录@L0`],
       landing: null,
-    });
+    };
+    if (themeArg !== undefined) created.theme = themeArg;
+    ledger.experiences.push(created);
   }
   ledger.processedEvents.push({ ...event, experienceId });
   ledger.revision += 1;
