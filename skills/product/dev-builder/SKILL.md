@@ -85,6 +85,7 @@ disable-model-invocation: true
     | `references/phase-completion.md` | Task/Phase 收口、四步走验证、人工验收提醒和用户确认前。 |
     | `references/workflow-initialization.md` | 无代码新项目初始化、脚手架渲染、首次 commit/push 前。 |
     | `references/workflow-continuous-development.md` | 已有项目继续开发、恢复 doing/blocked 任务、逐 Task 实现时。 |
+    | `references/multi-session-git.md` | 多会话（或人 + AI）共享同一仓库/工区时：开工核归属、逐文件 add、路径限定提交、合并预查交叠、绿证据落已提交树。 |
 
 [核心流程摘要]
     1. 执行依赖检测，解析 `.vibe-docs.json`，读取需求、计划、执行光标、验收记录、必要契约和已启用的任务胶囊。

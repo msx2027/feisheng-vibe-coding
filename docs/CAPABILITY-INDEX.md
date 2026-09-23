@@ -26,9 +26,9 @@
 | `critique` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 4 |
 | `delight` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `design-brief-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
-| `design-maker` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 1 |
+| `design-maker` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 2 |
 | `design-system` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 12 |
-| `dev-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 65 |
+| `dev-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 66 |
 | `dev-planner` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 9 |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
 | `distill` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
@@ -45,7 +45,7 @@
 | `layout` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
 | `optimize` | vibe-coding-skills | checker | accepted-checker | none | `directory` | 1 |
 | `overdrive` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
-| `polish` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
+| `polish` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 2 |
 | `product-spec-builder` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 12 |
 | `prototype` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 3 |
 | `quieter` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |

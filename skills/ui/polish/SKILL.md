@@ -224,6 +224,7 @@ Before marking as done:
 - **Ask someone else to review**: Fresh eyes catch things
 - **Compare to design**: Match intended design
 - **Check all states**: Don't just test happy path
+- **Browser acceptance channel**: 用 CDP / headless / 复用 dev 服务器 / 证据目录做验收取证前，先读 `references/browser-acceptance.md`（端口归属、CDP 语义、假阴假阳、证据纪律），防止假绿假红。
 
 ## Clean Up
 

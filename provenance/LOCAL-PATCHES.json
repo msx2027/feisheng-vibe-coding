@@ -71,7 +71,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-11",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b，mattpocock-skills 9fe7e7a3bb352851b986725bab1c7cfb17610a97（见 files[]）",
-      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。 2026-09-18 追加：dev-planner/SKILL.md 并入 anti-bloat 计划边界改动（粒度适中原则追加状态延后句），patchedSha256 已随之更新。 2026-09-19：曾试加反表演句（Standards 与 Spec 两个 Brief 末尾各一句），同日按预注册标准「无效不登记」撤回——压力测试两轮构造基线与对照均 3/3 抵抗、无增量（evidence/20260919-hardening-batch-a.md 场景①），patchedSha256 还原为撤回后实算值。",
+      "change": "重写一等副本（skills/**）正文里指向已退役能力的 23 处引用（12 个文件、23 行）：把 /setup-matt-pocock-skills、/improve-codebase-architecture、skill-builder、target-constitution-setup、target-runtime-setup、codebase-memory-scout 与 skills/beginner-flow-guide/SKILL.md 换成已接入能力或控制面路由。不改变任何技能的触发条件、依赖授权、执行强度与写入范围。 2026-09-12 追加：其中 6 个 SKILL.md 的 frontmatter 门控短语同步改写总入口名（见新登记 entry-gate-description-retarget 的说明），patchedSha256 已随之更新。 2026-09-18 追加：dev-planner/SKILL.md 并入 anti-bloat 计划边界改动（粒度适中原则追加状态延后句），patchedSha256 已随之更新。 2026-09-19：曾试加反表演句（Standards 与 Spec 两个 Brief 末尾各一句），同日按预注册标准「无效不登记」撤回——压力测试两轮构造基线与对照均 3/3 抵抗、无增量（evidence/20260919-hardening-batch-a.md 场景①），patchedSha256 还原为撤回后实算值。 2026-09-23 追加:dev-builder/SKILL.md 的偏离记录移出本登记,改由新登记 vibe-dev-builder-multi-session-git-pointer 承载(该文件在同一路径只允许一条活登记;本条此前累计的三行偏离已并入新登记的累积 diff)。",
       "reason": "能力定批评次把 35 个未接入技能裁决为 13 接入 / 22 退役后，正文引用成了悬空指针：模型会去够包内并不存在的 skill 或路径（例如 bug-fixer 依赖清单里的 skills/beginner-flow-guide/SKILL.md、code-review 里的 /setup-matt-pocock-skills、diagnosing-bugs 里的 /improve-codebase-architecture、dev-builder 脚手架模板里的 owner: target-constitution-setup）。这是文本层一致性缺陷，不是能力缺失：被退役对象要么已有已接入替代（improve-codebase-architecture → codebase-design），要么职能已由控制面接管（target-constitution-setup / target-runtime-setup → 控制面项目宪法与接管路由，owner 记为 sliver-vibe-coding），要么本就是没有被配置的可选增强（codebase-memory-scout → 明确降级为 rg）。改法是就地替换引用文本，保留原有语义与降级话术，不新增能力、不放宽任何门禁。",
       "evidence": "evidence/20260911-retired-reference-cleanup.md",
       "verification": "verify.ps1 步骤 1c 与 build-canonical-catalog.ps1 的副本自洽校验都改为识别本登记：副本 == patchedSha256 且来源快照 == originalSha256 才算合法，未登记的偏差仍在两处失败（fail-closed）；重生成 catalog 后 verify -IncludeHostEvidence -IncludePackage 全绿",
@@ -91,14 +91,6 @@
           "originalSha256": "ecf909cbb990f5ea4b96312cbc08d0c0182998f5e2098eda9b121cc0494bcbec",
           "patchedSha256": "9988e84a9585c87ea345ef5fc8e11963c21375ebd8f05bcf72d6190b4754f6ec",
           "linesChanged": 4
-        },
-        {
-          "path": "skills/product/dev-builder/SKILL.md",
-          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
-          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
-          "originalSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
-          "patchedSha256": "5bf39fa90d1e94e7ac32682441938b7c22dd48b295ee5845e4a2b1e7cbeb855b",
-          "linesChanged": 3
         },
         {
           "path": "skills/product/dev-builder/references/workflow-initialization.md",
@@ -557,6 +549,66 @@
           "snapshotPath": "governance/sliver-core/SKILL.md",
           "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
           "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
+          "linesChanged": 1
+        }
+      ]
+    },
+    {
+      "id": "vibe-design-maker-pencil-pitfalls-pointer",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-23",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "design-maker/SKILL.md [技能] 清单末尾追加一条「Pencil 操作暗礁」指针：处理 .pen 文件（改节点、替换区域、收编母件、坐标换算、核验截图）前先读 references/pencil-pitfalls.md。同时新增 references/pencil-pitfalls.md（全新文件，快照无对应物，不经补丁登记）。",
+      "reason": "fs-agent 实机教训回流（2026-09 经验治理台账画布类约 8 条）：design-maker 只教「必须用 Pencil + 截图验证」，节点 id 生命周期、复制板/母板 id 分裂、母件默认值排查、画布/前端坐标系换算等操作级坑完全无落点，同型返工反复发生。owner 2026-09-23 会话拍板「同意」经验回流批。",
+      "evidence": "evidence/20260923-experience-backflow-batch-a.md",
+      "verification": "build-canonical-catalog 再生 + verify.ps1 全绿；新增 reference 文件进 bundle 清单",
+      "files": [
+        {
+          "path": "skills/product/design-maker/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/design-maker/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "21263c47b67640e0bd728977fff8ada6e73a74761ab66bac1a66b1d7a3b25fda",
+          "patchedSha256": "8407f4be29f3e296fa59c345959de0577e0c9ae3c9d4d0b694984734f54c1830",
+          "linesChanged": 1
+        }
+      ]
+    },
+    {
+      "id": "vibe-dev-builder-multi-session-git-pointer",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-23",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "dev-builder/SKILL.md [按需加载 references] 表追加一行 references/multi-session-git.md（多会话共享仓库/工区时读取）。同时新增该 reference 文件（全新文件，快照无对应物）。本文件对快照的累积偏离 = 本登记此前记录的三行 retired-reference 改写（已随登记移交）+ 本次一行新表行。",
+      "reason": "fs-agent 实机教训回流（2026-09 多会话同仓互相踩脚 13 条，最大未覆盖主题）：现有技能只覆盖「冲突已发生后的解决」，缺共享工区预防纪律（写前核归属、逐文件 add、路径限定提交、show --stat 复核、merge-tree 预查、绿证据落已提交树）。完整新技能因分类门禁要求 sources 快照对应物而不可立，按 hotspot-governor/tools 先例落为现有已验收技能的新增 reference。owner 2026-09-23 会话拍板「同意」。",
+      "evidence": "evidence/20260923-experience-backflow-batch-a.md",
+      "verification": "build-canonical-catalog 再生 + verify.ps1 全绿；新增 reference 文件进 bundle 清单",
+      "files": [
+        {
+          "path": "skills/product/dev-builder/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
+          "patchedSha256": "eef170252d35b0a386b73b38496e5b54cd30d39e9cc1144f8af7573388e0e370",
+          "linesChanged": 4
+        }
+      ]
+    },
+    {
+      "id": "vibe-polish-browser-acceptance-pointer",
+      "snapshot": "runtime-import",
+      "appliedAt": "2026-09-23",
+      "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
+      "change": "polish/SKILL.md Final Verification 清单追加一条「Browser acceptance channel」指针：用 CDP / headless / 复用 dev 服务器 / 证据目录做验收取证前先读 references/browser-acceptance.md。同时新增该 reference 文件（全新文件，快照无对应物）。",
+      "reason": "fs-agent 实机教训回流（2026-09 浏览器/CDP 验收通道类约 13 条，其中 7 条完全无落点）：现有 UI 技能只有「要用浏览器目检」的意图句，通道语义（端口归属、openPage/goto、waitFor 插值、headless 局限、证据目录默认值）零覆盖，假绿假红反复发生。owner 2026-09-23 会话拍板「同意」。",
+      "evidence": "evidence/20260923-experience-backflow-batch-a.md",
+      "verification": "build-canonical-catalog 再生 + verify.ps1 全绿；新增 reference 文件进 bundle 清单",
+      "files": [
+        {
+          "path": "skills/ui/polish/SKILL.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/polish/SKILL.md",
+          "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "920ea94ad76ccb813708d27e9818c30c45ea1905dc5dc5966eb8d1f42faaeb9c",
+          "patchedSha256": "f26474117d05fe0b3323eff9ed015060a58d7feb07cf740dfca98dba886678a6",
           "linesChanged": 1
         }
       ]
