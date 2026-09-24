@@ -19,12 +19,16 @@ let text;
 try {
   text = readFileSync(hookPath, 'utf8');
 } catch (error) {
-  console.error(`[pre-commit.test] 读不到提交关卡文件 ${hookPath}：${error.message}`);
+  console.log(`[pre-commit.test] 读不到提交关卡文件 ${hookPath}：${error.message}`);
   process.exit(1);
 }
 
 const failures = [];
-const block = text.split('---- 检查清单')[1] ?? '';
+const markerIndex = text.indexOf('---- 检查清单');
+if (markerIndex === -1) {
+  failures.push('找不到「---- 检查清单」声明块锚点——清单结构被破坏');
+}
+const block = markerIndex === -1 ? '' : text.slice(markerIndex);
 const declared = block.split('\n').filter((line) => line.trim().startsWith('run_check '));
 
 if (declared.length === 0) {
@@ -56,14 +60,16 @@ if (!scriptTokens.some((token) => token.includes('secret-scan.mjs'))) {
 if (!/run_check\(\)\s*\{/.test(text)) {
   failures.push('run_check 函数定义丢失——清单行不会被真正执行');
 } else {
-  const fn = text.slice(text.indexOf('run_check()'), text.indexOf('---- 检查清单'));
+  const fn = text.slice(text.indexOf('run_check()'), markerIndex);
   if (/\|\|\s*(true|exit 0)/.test(fn)) failures.push('run_check 定义含放行后缀——违反 fail-closed');
   if (!/exit 1/.test(fn)) failures.push('run_check 失败分支不阻断（缺 exit 1）');
 }
 
+// 失败信息走 stdout（而非 stderr）：verify 步骤 5d 的 Detail 只捕获 stdout，
+// 阻断语义不受影响（退出码 1），但保证失败明细能进验证留痕。
 if (failures.length > 0) {
-  console.error('[pre-commit.test] 提交关卡清单自检未通过：');
-  for (const failure of failures) console.error(`  - ${failure}`);
+  console.log('[pre-commit.test] 提交关卡清单自检未通过：');
+  for (const failure of failures) console.log(`  - ${failure}`);
   process.exit(1);
 }
 console.log(`[pre-commit.test] 清单自检通过：${declared.length} 项声明全部可实现且 fail-closed。`);

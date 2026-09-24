@@ -29,7 +29,7 @@
   `skills/product/design-maker/references/pencil-pitfalls.md`（+§6）。
 - 登记过的补丁文件（LOCAL-PATCHES 同步更新，one-active-registration-per-path 遵守）：
   - `skills/product/dev-builder/SKILL.md`：登记 `vibe-dev-builder-multi-session-git-pointer`，
-    patchedSha256 `eef17025…` → `44423df1…`，linesChanged 4 → 7（新增「方案冻结与状态措辞」1 行 + finding 闭环改写 1 行）。
+    patchedSha256 `eef17025…` → `44423df1…`，linesChanged 4 → 7（新增「方案冻结与状态措辞」正文 1 行 + 其后空行分隔 1 行 + finding 闭环改写 1 行）。
   - `skills/product/dev-builder/references/phase-completion.md`：登记 `anti-bloat-plan-boundary-minimal`（files[] 该项），
     patchedSha256 `1016ae53…` → `7ea29b4e…`，linesChanged 1 → 2（Minor 处置清单改写）。
 

@@ -72,6 +72,7 @@ User goal → one main route → conditional lens / one or more internal capabil
 | Runtime bundle | 432 文件（catalog 逐文件 sha256 自证；2026-09-18 门禁实测） |
 | 主路由 / Operation / Lens | 22 / 31 / 8 |
 | 静态门禁 | `verify.ps1` 默认 17 步（`-IncludeHostEvidence` / `-IncludePackage` 各 +1） |
+| 本地提交关卡 | pre-commit 两项（密钥两档扫描 + 清单自检）；本机一次性接线 `git config core.hooksPath scripts/githooks`，fresh clone 需重跑；宿主 hook 接线与重挂手册见 `evidence/20260925-gate-hardening.md` |
 | CI | GitHub Actions · `ubuntu-latest` · 全绿 |
 
 > [!WARNING]

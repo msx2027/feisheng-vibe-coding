@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-24T22:39:55.9237364Z",
+  "generatedAt": "2026-09-24T23:20:20.5319977Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1397,7 +1397,7 @@
           },
           {
             "path": "skills/product/hotspot-governor/tools/guardrail-addon.mjs",
-            "sha256": "8b839e5d07e58c2ad737e19cb0b860ed84fe6fca51fc4ef03aa30140ca868132"
+            "sha256": "bc04023083248e02ee761b224c270abe3528b43a5ad6112a2ccc6315a71c10b6"
           },
           {
             "path": "skills/product/hotspot-governor/tools/hotspot-files.mjs",

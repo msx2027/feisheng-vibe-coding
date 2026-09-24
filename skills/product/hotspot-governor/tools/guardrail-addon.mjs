@@ -39,6 +39,16 @@ if command -v node >/dev/null 2>&1; then
 fi
 `;
 
+// 2026-09-19 批 C 首发的恒警告段（`|| true`，fail-open）。marker 与新版相同——只按
+// 「已含 marker 就跳过」会让存量安装永远停在旧语义，故 wireHook 识别到此整段时原位
+// 重写为新段（用户手改过的旧段不含此整段文本，自然保留，符合本地适配神圣）。
+const HOOK_SEGMENT_LEGACY = `# --- 密钥泄漏护栏加购（install-hotspot-gate 接线，标记：${HOOK_MARKER}）---
+grroot="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+if command -v node >/dev/null 2>&1; then
+  node "$grroot/tools/guardrails/secret-scan.mjs" "$grroot" --staged || true
+fi
+`;
+
 function git(target, args) {
   const r = spawnSync('git', args, { cwd: target, encoding: 'utf8' });
   return r.status === 0 ? String(r.stdout || '').trim() : null;
@@ -59,7 +69,15 @@ function hookWired(hookFile) {
 
 function wireHook(target) {
   const hookFile = activeHookFile(target);
-  if (hookWired(hookFile)) return { wired: false, file: hookFile };
+  if (hookWired(hookFile)) {
+    const current = readFileSync(hookFile, 'utf8');
+    if (current.includes(HOOK_SEGMENT_LEGACY)) {
+      // 2026-09-25 两档分治升级：识别批 C 首发的恒警告整段，原位重写为新 fail-closed 段。
+      writeFileSync(hookFile, current.replace(HOOK_SEGMENT_LEGACY, HOOK_SEGMENT));
+      return { wired: true, upgraded: true, file: hookFile };
+    }
+    return { wired: false, file: hookFile };
+  }
   const fresh = !existsSync(hookFile);
   mkdirSync(path.dirname(hookFile), { recursive: true });
   const base = fresh ? '#!/bin/sh\n' : readFileSync(hookFile, 'utf8');
@@ -153,7 +171,7 @@ export function provisionGuardrails({ target, say, toolDir }) {
   const grDir = provisionFiles(target, toolDir, say);
   const hook = wireHook(target);
   say(hook.wired
-    ? `密钥护栏已接线（两档：高置信命中阻断提交，低置信警告进基线）：${path.relative(target, hook.file)}`
+    ? `密钥护栏已接线（两档：高置信命中阻断提交，低置信警告进基线）${hook.upgraded ? '——检测到恒警告旧段，已原位升级' : ''}：${path.relative(target, hook.file)}`
     : `密钥护栏：已接线，跳过（${path.relative(target, hook.file)}）`);
   provisionCi(target, grDir, toolDir, say);
   firstBaseline(target, grDir, say);

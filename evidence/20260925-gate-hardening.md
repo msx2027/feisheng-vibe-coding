@@ -27,6 +27,7 @@
 - 新增 `scripts/githooks/pre-commit.test.mjs`（零依赖 node 脚本；pre-commit 第 2 项与 verify 步骤共用同一实现，无第二 owner）。
 - `scripts/verify.ps1`：新增步骤 5d「提交关卡清单自检」（默认档 16 → **17 步**），头注覆盖清单同步。
 - `README.md`：静态门禁步数计数修正 15 → 17（原数字自 1c-3 加入后即过期，本批顺带订正）；徽章同步。
+- 新增 `tools/guardrails/secret-baseline.json`（空基线 `{"version":1,"entries":{}}`，随 550a208 落盘可审查；SKIP_PATH 已排除 tools/guardrails 防递归自扫描）与 `tools/guardrails/gitleaks.toml`（官方模板副本——本机日后装上 gitleaks 二进制时工厂自身提交扫描直接用官方规则集，不再缺配置降级 fallback）。
 - 逃生门成文于钩子内：`--no-verify` 须在提交说明注明原因（回流批 D 同款条款，工厂自身开始践行）。
 
 ### B1 工区守卫：worktree 集中 + 盘根防乱建
@@ -38,7 +39,7 @@
   - 环境变量 `FVC_WORKTREE_ROOT` / `FVC_DRIVE_ROOT_ALLOWLIST` 可覆盖（测试/异机）。
 - 新增 `scripts/guard-worktree-path.test.mjs`：9 用例（分词/目标提取/白名单内外/MSYS 形态/相对+cd 拒绝/盘根动词/重定向/包裹器/读取放行）。
 - 双宿主接线（本机，不入库，`.gitignore` 增补）：`.claude/settings.json`（Claude 宿主）+ `.zcode/config.json` 的 `hooks.events.PreToolUse`（ZCode 宿主，`enabled: true`）——两处均 matcher Bash → `node <repo>\scripts\guard-worktree-path.mjs`，timeout 10。实测教训（回流批 D 条款 7）：只登记一处宿主 = 对另一宿主完全不生效。
-- 与 2026-09-20 防漂移拍板的关系：被否决的是「文件写入面路径白名单」（曾误拦合法 TDD 流，commit e22a37d）；本守卫拦的是**命令目标**（worktree 越界/盘根乱建），fs-agent 实弹无 TDD 误拦记录。owner 2026-09-25 知悉该张力后仍拍板执行，本批按拍板落地；若未来出现误拦，降级路径 = 缩白名单或下线宿主接线（脚本入库不受影响），并在登记台账补记。
+- 与既往否决项的关系：2026-09-19 anti-bloat 批（commit e22a37d）否决的是「提交期预算/路径允许集阻断」（误拦会致 hook 被整体禁用），2026-09-20 防漂移拍板确认「阶段粒度是正确旋钮、不加工作中途拦截」（会话拍板，无独立 commit 留档）。本守卫拦的是**命令目标**（worktree 越界/盘根乱建），非文件写入面，fs-agent 实弹无 TDD 误拦记录。owner 2026-09-25 知悉该张力后仍拍板执行，本批按拍板落地；若未来出现误拦，降级路径 = 缩白名单或下线宿主接线（脚本入库不受影响），并在登记台账补记。
 
 ## 实弹验证
 
@@ -70,3 +71,6 @@
 - hook 与宿主接线均不热加载：本批接线对**新会话**生效；已开会话需重启才受工区守卫保护。
 - Codex 宿主无 pre-tool 事件不接线，靠「分支统一前缀 + `git worktree list --porcelain` 核查」兜底（fs-agent 同款口径）。
 - `verify.ps1` 若未来增删步骤，README 两处计数与徽章需同步（本次已把过期口径一并修正为 17）。
+- 恒警告时代（9-19 批 C 至本批前）基线里已吸收的**高置信**条目不会追溯阻断——两档的阻断只对 fresh 生效（棘轮设计使然，fs-agent 同语义）。需追溯清洗时：删掉基线中对应条目，下次提交即按高置信重新进入 fresh 并阻断。
+- 存量目标项目的旧恒警告接线段：安装器已支持识别旧段**原位升级**为两档段（marker 不变、重跑幂等、用户手改过的段不含旧整段文本会自然保留）；目标项目重跑一次 install-hotspot-gate --guardrails-only 即完成升级。
+- 交叉复核（2026-09-25，双子 Agent：代码逻辑+安全 / 治理一致性）总体判定 PASS（P0/P1 零项）；上述整改项即复核建议的落地，其余 P3 备忘（quoted-path 清单正则、基线损坏零发现时不重写、fallback/gitleaks rule ID 空间切换自愈）记录在案不改。
