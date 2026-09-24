@@ -17,3 +17,8 @@ _smoke/
 
 # 宿主工具自动生成的工作目录（空 memory/）
 .workbuddy-ai/
+
+# 宿主 hook 本机接线（守卫脚本 scripts/guard-worktree-path.mjs 入库，接线不入库；
+# 换机按 evidence/20260925-gate-hardening.md 的重挂手册重挂；ZCode 不读 .claude，两处都要挂）
+.claude/settings.json
+.zcode/config.json

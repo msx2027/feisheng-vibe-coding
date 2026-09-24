@@ -24,7 +24,7 @@
     - REFACTOR 只发生在全绿后，未增加新行为，整理后仍保持全绿
     - 原型、生成代码或配置文件的例外，已有写生产代码前的用户明确批准、替代验证、风险和恢复方案；无法自动化本身不构成例外资格
     - 无遗漏、无半成品、无“看起来对”的软性完成声明
-    - Critical / Important 已 reverified 或有用户明确 accepted-risk；Minor 已修复或明确 accepted-risk / deferred / rejected-with-reason
+    - Critical / Important 已 reverified 或有用户明确 accepted-risk；Minor 已修复或明确 accepted-risk / deferred / rejected-with-reason / 留证不修（注明理由并指认既有拍板或规范依据）
     - 输出证据：功能清单打勾 + 测试 / 手动验证清单 + finding ledger
 
     第三步：构建与静态验证

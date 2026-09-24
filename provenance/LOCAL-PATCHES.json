@@ -441,7 +441,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-18",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
-      "change": "反膨胀最小充分方案 v2（红队/YAGNI 双子代理交叉审计裁决版）落地，共 6 个文件：①需求文档模板新增「非目标（本期明确不做）」真源节（模板结构 + 完整示例 + 写作要点）；②开发计划模板 Phase 新增「不做边界/停止条件」字段（两个结构块 + 两个示例 + 写作要点）；③dev-planner 生成自检把粒度校准法阈值（交付 ≤5 项、关键文件 ≤10 个）与 Phase 总数 ≤10 升级为 fail-closed 计数判定，并修正「覆盖 Spec 全部功能」与非目标排除语义的矛盾表述及收尾引导语；④analysis-strategy 确认策略细粒度选项 10-15 → 8-10 并写明总数上限，消除与 Phase 上限的双真源冲突；⑤phase-completion 的 scope creep 检查改为对照交付清单与不做边界逐条核对，Spec Compliance 增加固定行「超出计划的内容：无 / <清单>」；⑥dev-builder 质量门槛增加「验收范围以当前 Phase 交付清单为准」条款。不改变任何技能触发条件、依赖授权与执行强度。",
+      "change": "反膨胀最小充分方案 v2（红队/YAGNI 双子代理交叉审计裁决版）落地，共 6 个文件：①需求文档模板新增「非目标（本期明确不做）」真源节（模板结构 + 完整示例 + 写作要点）；②开发计划模板 Phase 新增「不做边界/停止条件」字段（两个结构块 + 两个示例 + 写作要点）；③dev-planner 生成自检把粒度校准法阈值（交付 ≤5 项、关键文件 ≤10 个）与 Phase 总数 ≤10 升级为 fail-closed 计数判定，并修正「覆盖 Spec 全部功能」与非目标排除语义的矛盾表述及收尾引导语；④analysis-strategy 确认策略细粒度选项 10-15 → 8-10 并写明总数上限，消除与 Phase 上限的双真源冲突；⑤phase-completion 的 scope creep 检查改为对照交付清单与不做边界逐条核对，Spec Compliance 增加固定行「超出计划的内容：无 / <清单>」；⑥dev-builder 质量门槛增加「验收范围以当前 Phase 交付清单为准」条款。不改变任何技能触发条件、依赖授权与执行强度。 2026-09-25 追加：⑤phase-completion 的 Minor 处置清单补「留证不修」终态（注明理由并指认既有拍板/规范依据；fs-agent 057 审计出口先例回流，owner 拍板「都执行」），本文件 patchedSha256 随之更新。",
       "reason": "用户主诉：只给需求文档+原子实施方案时项目持续过度膨胀。双审计定位根因在生成层：Spec 模板无非目标节（全集信号）、计划无停止条件、粒度阈值仅是建议、全覆盖成功标准与排除语义互相矛盾。本补丁按最小充分版本只扩展现有文件，零新建脚本、零新增门禁层；随批附带减法（细粒度选项收紧到 8-10），符合零净增原则。审计裁决明确不做的：Phase 预算字段（与粒度校准法形成双真源）、提交期预算/路径允许集阻断（与 TDD 模板「关键文件不列测试文件」矛盾、误拦会导致 hook 被整体禁用）、质量档位体系（对既有质量门槛开后门，改为一条验收范围条款）。",
       "evidence": "evidence/20260918-anti-bloat-minimal.md",
       "verification": "verify.ps1 全门禁：1c 副本自洽（副本 == patchedSha256 且来源快照 == originalSha256）+ catalog 再生后语义比对 + runtime include 完整性全绿",
@@ -483,8 +483,8 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/references/phase-completion.md",
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "721c21e27d2cd4e17c882e7d53034e990d120521db7a85ffb22a39c01fdd805c",
-          "patchedSha256": "1016ae53380332cb3f664378b54bc3bc96b38af3443fcbe48efc5a0c7d234cd7",
-          "linesChanged": 1
+          "patchedSha256": "7ea29b4e2d62b8383972c5bef4ea7e5064ec0b5837db65e74848d7620e39c1bd",
+          "linesChanged": 2
         },
         {
           "path": "skills/product/dev-builder/references/development-rules.md",
@@ -578,7 +578,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-23",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
-      "change": "dev-builder/SKILL.md [按需加载 references] 表追加一行 references/multi-session-git.md（多会话共享仓库/工区时读取）。同时新增该 reference 文件（全新文件，快照无对应物）。本文件对快照的累积偏离 = 本登记此前记录的三行 retired-reference 改写（已随登记移交）+ 本次一行新表行。",
+      "change": "dev-builder/SKILL.md [按需加载 references] 表追加一行 references/multi-session-git.md（多会话共享仓库/工区时读取）。同时新增该 reference 文件（全新文件，快照无对应物）。本文件对快照的累积偏离 = 本登记此前记录的三行 retired-reference 改写（已随登记移交）+ 本次一行新表行。 2026-09-25 追加：[第一性原则] 增「方案冻结与状态措辞」条款（冻结是用户显式动作、冻结前不写实现代码、修完不合并等复核、状态封顶「已验证待安全审查」禁「已完成」），finding 闭环 Minor 处置补「留证不修」终态——fs-agent 2026-09-23 后新教训（055 全稿作废、057 审计不修留证先例）回流，owner 拍板「都执行」。",
       "reason": "fs-agent 实机教训回流（2026-09 多会话同仓互相踩脚 13 条，最大未覆盖主题）：现有技能只覆盖「冲突已发生后的解决」，缺共享工区预防纪律（写前核归属、逐文件 add、路径限定提交、show --stat 复核、merge-tree 预查、绿证据落已提交树）。完整新技能因分类门禁要求 sources 快照对应物而不可立，按 hotspot-governor/tools 先例落为现有已验收技能的新增 reference。owner 2026-09-23 会话拍板「同意」。",
       "evidence": "evidence/20260923-experience-backflow-batch-a.md",
       "verification": "build-canonical-catalog 再生 + verify.ps1 全绿；新增 reference 文件进 bundle 清单",
@@ -588,8 +588,8 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/dev-builder/SKILL.md",
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "47279c8a3ebfd0707dc0f1052ae48dc2dca341a14db6f5edd4359ac51c6cb8ef",
-          "patchedSha256": "eef170252d35b0a386b73b38496e5b54cd30d39e9cc1144f8af7573388e0e370",
-          "linesChanged": 4
+          "patchedSha256": "44423df18a216f4b6095f3059e24ad82d22b0825359caef6ee155cc274879b9b",
+          "linesChanged": 7
         }
       ]
     },

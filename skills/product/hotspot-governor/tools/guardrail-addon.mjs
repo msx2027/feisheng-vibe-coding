@@ -31,7 +31,11 @@ const GUARDRAIL_DIR_FILES = [...RUNNER_FILES, ...TEMPLATE_FILES, 'semgrep-ci.yml
 const HOOK_SEGMENT = `# --- 密钥泄漏护栏加购（install-hotspot-gate 接线，标记：${HOOK_MARKER}）---
 grroot="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
 if command -v node >/dev/null 2>&1; then
-  node "$grroot/tools/guardrails/secret-scan.mjs" "$grroot" --staged || true
+  node "$grroot/tools/guardrails/secret-scan.mjs" "$grroot" --staged || {
+    echo "错误：密钥泄漏护栏阻断本次提交（高置信命中，或无法完成验证）。" \\
+         "修复来源后重新提交；确需跳过用 git commit --no-verify，并在提交说明注明原因。" >&2
+    exit 1
+  }
 fi
 `;
 
@@ -139,17 +143,17 @@ function firstBaseline(target, grDir, say) {
     } catch { say('首检基线：已存在（无法解析，保留原样），跳过'); }
     return;
   }
-  say('—— 密钥首检基线（存量违规只警告一次并进基线，不阻断装配）——');
+  say('—— 密钥首检基线（存量违规吸收进基线；阻断只在提交期生效，安装期不拦历史存量）——');
   const scan = spawnSync(process.execPath, [path.join(grDir, 'secret-scan.mjs'), target], { stdio: 'inherit' });
   if (scan.status !== 0) say(`警告：首检基线脚本异常退出（${scan.status}），已按 fail-open 处理，不阻断装配`);
 }
 
 export function provisionGuardrails({ target, say, toolDir }) {
-  say('—— 密钥泄漏护栏加购（gitleaks/Semgrep 官方模板 + 基线棘轮 + 警告级）——');
+  say('—— 密钥泄漏护栏加购（gitleaks/Semgrep 官方模板 + 基线棘轮 + 两档分治）——');
   const grDir = provisionFiles(target, toolDir, say);
   const hook = wireHook(target);
   say(hook.wired
-    ? `密钥护栏已接线（警告级，不阻断提交）：${path.relative(target, hook.file)}`
+    ? `密钥护栏已接线（两档：高置信命中阻断提交，低置信警告进基线）：${path.relative(target, hook.file)}`
     : `密钥护栏：已接线，跳过（${path.relative(target, hook.file)}）`);
   provisionCi(target, grDir, toolDir, say);
   firstBaseline(target, grDir, say);

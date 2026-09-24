@@ -12,7 +12,7 @@ One public entry · One main route · Exactly one owner per rule
 ![phase](https://img.shields.io/badge/phase-controlled%20run-3F6212)
 ![runtime](https://img.shields.io/badge/skills-52%20runtime%20%2F%2082%20registered-0E7490)
 ![hosts](https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-7C3AED)
-![gates](https://img.shields.io/badge/static%20gates-verify.ps1%2015%20steps-16A34A)
+![gates](https://img.shields.io/badge/static%20gates-verify.ps1%2017%20steps-16A34A)
 ![runtime](https://img.shields.io/badge/PowerShell-7%20%7C%205.1-5391FE?logo=powershell&logoColor=white)
 
 **简体中文** · [English](#english) · [架构图 Architecture](#architecture)
@@ -71,7 +71,7 @@ User goal → one main route → conditional lens / one or more internal capabil
 | 来源技能登记 / runtime / 退役 / 排除 | 82 / **52** / 23 / 7 |
 | Runtime bundle | 432 文件（catalog 逐文件 sha256 自证；2026-09-18 门禁实测） |
 | 主路由 / Operation / Lens | 22 / 31 / 8 |
-| 静态门禁 | `verify.ps1` 默认 15 步（`-IncludeHostEvidence` / `-IncludePackage` 各 +1） |
+| 静态门禁 | `verify.ps1` 默认 17 步（`-IncludeHostEvidence` / `-IncludePackage` 各 +1） |
 | CI | GitHub Actions · `ubuntu-latest` · 全绿 |
 
 > [!WARNING]
@@ -201,7 +201,7 @@ A unified AI collaboration runtime package for software projects. Externally the
 | Registered / runtime / retired / excluded | 82 / **52** / 23 / 7 |
 | Runtime bundle | 432 files (per-file sha256 attested in the catalog; measured 2026-09-18) |
 | Main routes / operations / lenses | 22 / 31 / 8 |
-| Static gates | `verify.ps1`, 15 steps by default (`-IncludeHostEvidence` / `-IncludePackage` add 1 each) |
+| Static gates | `verify.ps1`, 17 steps by default (`-IncludeHostEvidence` / `-IncludePackage` add 1 each) |
 | CI | GitHub Actions · `ubuntu-latest` · green |
 
 > [!WARNING]

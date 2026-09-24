@@ -1,8 +1,18 @@
 #!/usr/bin/env node
-// 密钥泄漏护栏加购 · 目标项目侧扫描器（2026-09-19 批 C，install-hotspot-gate 投放）。
-// 执行语义：首检基线 + 棘轮——安装期首检把存量违规吸收进基线（不拦）；
-//   提交期新增违规 stdout 警告一次并吸收进基线；退出码恒 0，不做提交期硬阻断
-//   （9-18 否决项：误拦致 hook 被整体禁用）。
+// 密钥泄漏护栏加购 · 目标项目侧扫描器（2026-09-19 批 C，install-hotspot-gate 投放；
+//   2026-09-25 由「恒不阻断」升级为「两档分治」，owner 拍板；分档设计自 fs-agent
+//   2026-09-21 起的实弹运行回流——零误伤记录，证明 9-18 的顾虑可用分档解决）。
+// 执行语义（两档，2026-09-25 起）：
+//   高置信命中（AWS key / GitHub token / Slack token / 私钥头；gitleaks 官方引擎的发现全部）
+//     → 提交期阻断（退出码 1），且**不**吸收进基线。
+//     不吸收是必须的：一旦吸收，第二次提交即被当作存量放行，阻断形同虚设。
+//   低置信命中（通用赋值型，误报面大）→ stdout 警告一次并吸收进基线，不阻断（棘轮）。
+//   9-18 原决议「不做提交期硬阻断」的顾虑是**误报**而非「不该拦」，故不取消阻断，
+//   只把易误报的一类留在警告档；该决议自本版起被分档取代（owner 2026-09-25 拍板）。
+//   阻断只在提交期（--staged）生效：安装期首检的用途是把存量吸收进基线，
+//   历史密钥无法靠「拒绝这次提交」消除。
+// 未验证 ≠ 干净（fail-closed）：列不出暂存区/全仓（git 失败）或扫描器异常时一律阻断，
+//   不得静默当作「无发现」放行——原实现的 `|| exit 0` 与恒 0 退出正是该漏洞。
 // 基线：<root>/tools/guardrails/secret-baseline.json（自动生成，随项目提交可审查）。
 //   棘轮不变量：吸收必先警告；已修条目从基线剔除；修复后再犯 = 新警告（不得无警告回归）。
 //   本运行未覆盖到的文件不动其基线条目（--staged 只扫暂存区，不能误剔全仓条目）。
@@ -38,6 +48,17 @@ const FALLBACK_RULES = [
   },
 ];
 
+// 阻断分档（2026-09-25 owner 裁决）：下列规则命中即阻断提交，且不进基线。
+// 收紧/放宽只需在本集合增删 id——例如把 FALLBACK-GENERIC-SECRET-ASSIGNMENT 也列入
+// 即为「全部命中都拦」；反之移除某条即降回警告档。gitleaks 引擎的发现不受本表约束
+// （官方规则集整体计为高置信），见主流程 blocking 判定。
+const BLOCKING_RULES = new Set([
+  'FALLBACK-AWS-KEY',
+  'FALLBACK-GITHUB-TOKEN',
+  'FALLBACK-SLACK-TOKEN',
+  'FALLBACK-PRIVATE-KEY',
+]);
+
 function isPlaceholder(v) {
   if (/^(.)\1{19,}$/.test(v) || /^\d+$/.test(v)) return true;
   if (/^(?:your|my|example|sample|dummy|fake|placeholder|changeme|change-me|redacted|removed|todo|tbd|fixme|insert|replace)/i.test(v)) return true;
@@ -49,15 +70,17 @@ function git(root, args) {
   return r.status === 0 ? String(r.stdout || '') : null;
 }
 
+// 返回 null = 「列不出来」（git 命令失败）；与「列出来但是空的」（返回 []）必须区分——
+// 前者属于「未验证」，调用方须 fail-closed，不得当作无发现放行。
 function listStaged(root) {
   // 含 D（删除）：文件整删视为已修复，其基线条目应被棘轮剔除。
   const out = git(root, ['diff', '--cached', '--name-only', '-z', '--diff-filter=ACMRTD']);
-  return out ? [...new Set(out.split('\0').filter(Boolean))] : [];
+  return out === null ? null : [...new Set(out.split('\0').filter(Boolean))];
 }
 
 function listAll(root) {
   const out = git(root, ['ls-files', '-co', '-z', '--exclude-standard']);
-  return out ? [...new Set(out.split('\0').filter(Boolean))] : [];
+  return out === null ? null : [...new Set(out.split('\0').filter(Boolean))];
 }
 
 function posix(p) {
@@ -155,7 +178,14 @@ try {
   const baseline = loadBaseline(baselinePath);
 
   // 本运行覆盖的文件集合（非「有发现的文件」）——棘轮剔除的判定边界。
-  const files = (staged ? listStaged(root) : listAll(root)).map(posix).filter((f) => !SKIP_PATH.test(f));
+  const listed = staged ? listStaged(root) : listAll(root);
+  if (listed === null) {
+    console.log(`[secret-scan] 无法列出${staged ? '暂存区' : '全仓'}文件（git 命令失败）——`
+      + '未验证不等于干净，按 fail-closed 阻断提交。修复 git 环境后重试；'
+      + '确需跳过用 git commit --no-verify 并在提交说明注明原因。');
+    process.exit(1);
+  }
+  const files = listed.map(posix).filter((f) => !SKIP_PATH.test(f));
   const scope = new Set(files);
 
   let findings = [];
@@ -167,8 +197,18 @@ try {
   }
   if (engine === 'fallback') findings = fallbackScanFiles(root, files);
 
+  // 阻断只在提交期（--staged）生效。gitleaks 官方规则集整体计为高置信。
+  const isBlockingRule = engine === 'gitleaks' ? () => true : (f) => BLOCKING_RULES.has(f.rule);
   const fresh = findings.filter((f) => !baseline.entries[fingerprint(f)]);
-  for (const f of fresh) {
+  const blockers = staged ? fresh.filter(isBlockingRule) : [];
+  const blockerSet = new Set(blockers);
+  const warned = fresh.filter((f) => !blockerSet.has(f));
+
+  for (const f of blockers) {
+    console.log(`ERROR [${f.rule}] ${f.file}:${f.line} 疑似高置信密钥/凭据——阻断提交。`
+      + '请修掉来源后重新提交（本项不吸收进基线，不存在「再提交一次即放行」）。');
+  }
+  for (const f of warned) {
     console.log(`WARNING [${f.rule}] ${f.file}:${f.line} 疑似新增密钥/凭据（警告级：已吸收进基线，不阻断提交）`);
     baseline.entries[fingerprint(f)] = {
       rule: f.rule, file: f.file, line: f.line, absorbedAt: new Date().toISOString(),
@@ -182,14 +222,16 @@ try {
     if (scope.has(entry.file) && !seen.has(key)) { delete baseline.entries[key]; dropped += 1; }
   }
 
-  if (fresh.length > 0 || dropped > 0 || !existsSync(baselinePath)) {
+  if (warned.length > 0 || dropped > 0 || !existsSync(baselinePath)) {
     writeFileSync(baselinePath, `${JSON.stringify(baseline, null, 2)}\n`);
   }
   console.log(`[secret-scan] ${staged ? '暂存区' : '全仓'}扫描（引擎：${engine}）：`
-    + `新增疑似 ${fresh.length}（已警告并进基线），修复剔除 ${dropped}，`
-    + `基线存量 ${Object.keys(baseline.entries).length}。退出码 0（警告级，不阻断提交）。`);
-  process.exitCode = 0;
+    + `新增疑似 ${warned.length}（已警告并进基线），阻断 ${blockers.length}，修复剔除 ${dropped}，`
+    + `基线存量 ${Object.keys(baseline.entries).length}。`
+    + (blockers.length ? '退出码 1（高置信命中，阻断提交）。' : '退出码 0（无高置信命中）。'));
+  process.exitCode = blockers.length ? 1 : 0;
 } catch (error) {
-  console.log(`[secret-scan] 扫描器异常（fail-open，不阻断提交）：${error.message}`);
-  process.exitCode = 0;
+  // 未验证不等于干净：扫描器自身异常同样阻断（原实现此处 fail-open 放行）。
+  console.log(`[secret-scan] 扫描器异常，未验证不等于干净，按 fail-closed 阻断提交：${error.message}`);
+  process.exitCode = 1;
 }

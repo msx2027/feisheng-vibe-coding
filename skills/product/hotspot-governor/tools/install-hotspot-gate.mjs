@@ -6,14 +6,17 @@
 //
 // 密钥泄漏护栏加购（2026-09-19 批 C，guardrail-addon.mjs）：默认随装配一同装上——
 // gitleaks/Semgrep 官方模板投放（templates/，零自研）+ 密钥首检基线棘轮 +
-// pre-commit 警告级接线（不阻断提交）。降级矩阵与卸载语义见 guardrail-addon.mjs 文件头。
+// pre-commit 两档接线（2026-09-25 起：高置信命中阻断提交，低置信警告进基线）。
+// 降级矩阵与卸载语义见 guardrail-addon.mjs 文件头。
 //
 // 安全边界（fail-safe）：
 //   - 已存在但与本 bundle 不一致的模块一律跳过不覆盖（本地适配神圣，如 fs-agent 的 SCAN_ROOTS）；
 //   - pre-commit 只追加带标记的自包含段，不动既有内容；
 //   - 拒绝装回本分发包自身；
 //   - 首检基线允许存量超标（棘轮语义：只减不增），装配成功 ≠ 零热点；
-//   - 密钥护栏永远警告级（退出码恒 0），不做提交期硬阻断（9-18 否决项：误拦致 hook 被禁）。
+//   - 密钥护栏两档分治（2026-09-25 owner 拍板，取代 9-18「恒警告级」决议；fs-agent
+//     2026-09-21 起实弹运行零误伤）：高置信命中提交期阻断且不进基线，低置信警告进基线；
+//     分档口径见 secret-scan.mjs 头注释与 BLOCKING_RULES 集合。
 // 用法：node install-hotspot-gate.mjs <目标项目根> [--guardrails-only] [--uninstall]
 //   --guardrails-only  只装密钥护栏加购，不动 hotspot 主门禁（非 Node 栈等场景）
 //   --uninstall        只卸载密钥护栏加购写入段（hotspot 主门禁与用户自有 hook 不动）

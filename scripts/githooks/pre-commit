@@ -1,0 +1,46 @@
+#!/bin/sh
+# 工厂仓本地提交关卡（2026-09-25 接线）。
+# 此前 core.hooksPath 指向磁盘改名后的失效路径（F:\skiils工具\...），本地门禁长期空转，
+# push 前没有任何本地闸门；本文件恢复本地强制，接线：git config core.hooksPath scripts/githooks
+# （相对路径随仓库走，换机/换盘不再失效；fresh clone 需重跑该命令，见 README）。
+#
+# 检查清单是**单一真源**：下方「检查清单」声明块即「提交前必须通过的全部检查」。
+# 增删检查只改本块——scripts/githooks/pre-commit.test.mjs 解析同一段，断言
+# 「每条声明的脚本存在」「必需检查在列」「无放行后缀」，项数不靠手抄
+# （fs-agent N-16 同款防漂移：「恰好四项」硬编码在接入第 5 项后漂移成假红）。
+# 每一项 fail-closed：run_check 在子命令非零时立即阻断提交，不存在 || true 放行。
+#
+# 各检查口径：
+# 1) 密钥泄漏护栏（skills/product/hotspot-governor/tools/secret-scan.mjs）：
+#    两档分治——高置信命中阻断提交且不进基线，低置信警告一次并进基线（棘轮）；
+#    扫描器异常或 git 列不出暂存区 = 阻断（未验证 ≠ 干净）。
+# 2) 提交关卡清单自检：解析本文件清单块，断言声明与实现一致（防清单漂移成假绿/假红）。
+#
+# 逃生门：git commit --no-verify（须在提交说明注明原因）。
+root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+  echo "错误：无法确定仓库根目录（git rev-parse --show-toplevel 失败）。" \
+       "提交门禁无法定位检查脚本，已阻断本次提交。" >&2
+  echo "例外：确需跳过门禁时用 git commit --no-verify，并在提交说明中注明原因。" >&2
+  exit 1
+}
+if ! command -v node >/dev/null 2>&1; then
+  echo "错误：未找到 node（Node.js），提交门禁无法运行，已阻断本次提交。" >&2
+  echo "修复：安装 Node.js 并确认其在 PATH 中后重新提交。" >&2
+  echo "例外：确需跳过门禁时用 git commit --no-verify，并在提交说明中注明原因。" >&2
+  exit 1
+fi
+
+# 逐项执行并在失败时立即阻断；标签把失败点直接写进诊断，省去逐条比对输出。
+run_check() {
+  check_label="$1"
+  shift
+  "$@" || {
+    echo "错误：提交门禁未通过 —— $check_label" >&2
+    echo "修复：按上方该检查的输出处理后重新提交；确需跳过用 git commit --no-verify 并在提交说明注明原因。" >&2
+    exit 1
+  }
+}
+
+# ---- 检查清单（单一真源，测试解析本块；每行格式：run_check "<标签>" node <脚本> [参数]）----
+run_check "密钥泄漏护栏（高置信命中即阻断）" node "$root/skills/product/hotspot-governor/tools/secret-scan.mjs" "$root" --staged
+run_check "提交关卡清单自检（声明与实现一致）" node "$root/scripts/githooks/pre-commit.test.mjs" "$root"

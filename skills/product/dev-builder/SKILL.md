@@ -61,9 +61,11 @@ disable-model-invocation: true
     - 发现未计划或未实现缺口时，回写既有计划/Phase Task，重新进入 `RED-GREEN-REFACTOR`；任务胶囊、finding ledger 和 Review Receipt只留回执与证据，不另造真源。
     - 只有收敛检查确认无未计划或未实现缺口，才可标记完成。
 
+    **方案冻结与状态措辞**：实施方案未经用户明确「冻结」前不写实现代码；冻结后修订须重新拍板，不参考作废旧稿。修复收口后不自行合并，等用户复核（「修完不合并等复核」）。实现状态措辞封顶「已验证待安全审查」，禁写「已完成」——完成由用户确认产生。
+
     **实现者报告不等于完成**：无论由主 Agent 还是 implementer 实现，`DONE` / `DONE_WITH_CONCERNS` 只是输入。主 Agent必须检查有界 diff、实际运行的验证证据、已知限制和 finding ledger，再按 review profile 决定是否完成；子 Agent不得自行派发 Reviewer 或刷新 review clean。
 
-    **finding 闭环**：T2 及以上由主 Agent维护 finding ledger。Critical / Important 修复后必须交回对应审查方向 reverify，或由用户明确 accepted-risk；Minor 必须修复、accepted-risk、deferred 或 rejected-with-reason。相同类型 finding 连续两轮仍未消除时停止机械循环，诊断需求、计划、架构或验证设计根因。
+    **finding 闭环**：T2 及以上由主 Agent维护 finding ledger。Critical / Important 修复后必须交回对应审查方向 reverify，或由用户明确 accepted-risk；Minor 必须修复、accepted-risk、deferred、rejected-with-reason，或留证不修（注明不修理由并指认既有拍板/规范依据）。相同类型 finding 连续两轮仍未消除时停止机械循环，诊断需求、计划、架构或验证设计根因。
 
     **人工验收**：自动化不等于用户真实验收。页面、交互、CLI 人机流程、权限确认、端到端链路、发布安装等需要用户观察/操作的内容，交付前标记人工验收状态：`不适用 / 待用户验收 / 用户已确认 / 需回归复验`。没有用户明确确认，不得写成 `用户已确认`。
 

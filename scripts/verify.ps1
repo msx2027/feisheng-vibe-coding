@@ -36,6 +36,7 @@ Set-StrictMode -Version Latest
 #   - 发布 NOTICE 门禁
 #   - Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记）
 #   - collector 路径归属单测（宿主证据归属逻辑回归门；会向 gitignore 的 _smoke/ 追加测试日志）
+#   - 提交关卡清单自检（scripts/githooks/pre-commit 检查清单「声明 == 实现」，2026-09-25 接线）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
 #   - 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
 #   - 可选：发布候选包装配（-IncludePackage）
@@ -533,6 +534,16 @@ try {
         Add-Result -Step 'collector 路径归属单测' -Passed $true
     } catch {
         Add-Result -Step 'collector 路径归属单测' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5d) 提交关卡清单自检（本地 pre-commit 检查清单「声明 == 实现」的回归门，2026-09-25 接线）
+    try {
+        $global:LASTEXITCODE = 0
+        $hookTestOut = & node (Join-Path $repoRoot 'scripts/githooks/pre-commit.test.mjs') $repoRoot
+        if ($LASTEXITCODE -ne 0) { throw ('提交关卡清单自检失败（exit ' + $LASTEXITCODE + '）：' + ($hookTestOut -join '; ')) }
+        Add-Result -Step '提交关卡清单自检' -Passed $true
+    } catch {
+        Add-Result -Step '提交关卡清单自检' -Passed $false -Detail $_.Exception.Message
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）
