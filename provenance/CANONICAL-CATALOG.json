@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-28T17:10:09.8299484Z",
+  "generatedAt": "2026-09-28T17:23:55.3697871Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1191,7 +1191,7 @@
           },
           {
             "path": "skills/event/experience-elevator/tools/test-experience-governance-anchor.mjs",
-            "sha256": "b32c786561a2b32ad6fb276fbee082b0ce5a62378aee43f503540ebed7c78eb6"
+            "sha256": "8d80600caca09d80b9fbde7ad11b6527d1f8cd685f8272ee43ee239738f8efe0"
           },
           {
             "path": "skills/event/experience-elevator/tools/test-experience-governance-closure.mjs",

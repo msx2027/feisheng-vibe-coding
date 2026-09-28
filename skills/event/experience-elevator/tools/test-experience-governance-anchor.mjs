@@ -18,6 +18,19 @@ import {
 } from "./experience-managed-blocks.mjs";
 
 const repoRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+// 真包根：从本目录向上找 provenance/CANONICAL-CATALOG.json（2026-09-29 工具迁移后，
+// skillsRoot 必须指向满足发布布局校验（skills/INDEX.md + tools/init-target-runtime.mjs）的
+// 真包根，而不是工具所在的经验电梯目录）。
+const packageRoot = (() => {
+  let dir = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 8; i += 1) {
+    if (fs.existsSync(path.join(dir, "provenance", "CANONICAL-CATALOG.json"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error("向上 8 层未找到包根（provenance/CANONICAL-CATALOG.json）");
+})();
 const runtimeTool = path.join(repoRoot, "tools", "init-target-runtime.mjs");
 const constitutionPath = "docs/项目治理/宪法设计.md";
 const ledgerPath = "docs/项目治理/经验治理.md";
@@ -37,7 +50,7 @@ function read(root, file) {
 }
 
 function runRuntime(root, mode) {
-  return spawnSync(process.execPath, [runtimeTool, root, "--skills-root", repoRoot, mode, "--json"], {
+  return spawnSync(process.execPath, [runtimeTool, root, "--skills-root", packageRoot, mode, "--json"], {
     cwd: repoRoot,
     encoding: "utf8",
   });
