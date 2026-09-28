@@ -652,6 +652,24 @@
           "linesChanged": 2
         }
       ]
+    },
+    {
+      "id": "sliver-question-bank-ask-medium",
+      "snapshot": "sliver-core",
+      "appliedAt": "2026-09-28",
+      "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
+      "change": "Question Bank 的 How To Ask 节原位追加 4 条提问载体规则：①宿主暴露交互式选择控件时必须用控件提问，需用户作答的问题不得只留在正文；无该控件时才用编号文本，判定依据是本次会话实际可调用到的提问能力，不看宿主名称、不凭记忆假定；②每个此类问题给 2-4 个本项目现实会走的方向作为选项并按推荐排序，明确它们是不同方向而非该节上一条所禁的等权选项，非真二选择不用 yes/no 占位，保留自由作答；③控件与编号文本承载同一套内容（问题/现实方向/推荐答案），换载体不放宽 1-3 条阻塞问题上限、不取消推荐默认；④换载体不改变「只问查不到且答案会改变产品可见结果、成本、范围、停机、不可逆影响或重大取舍的事实」。原位追加，不新增节、不新增 owner、不改变路由与深度语义。",
+      "reason": "重复提问载体漂移：外部技能里 10 处硬性要求 `STOP and call the AskUserQuestion tool`（skills/checker/critique/SKILL.md:196、skills/ui/bolder/SKILL.md:44 等），而提问 owner 从未声明用哪种载体提问，本仓库自持的追问原语 skills/engineering/grilling/SKILL.md 又把问题写成 ❓Q1/❓Q2 编号正文，同一项目内两套问法并存、用户无法预期是点选还是打字。控制面此前只在 SKILL.md:35 第 5 步为 Studio 建立过「先探测宿主能力再决定」的先例，提问能力缺同等落点。规则只收在唯一提问 owner 一处，不复制到 runtime-adapter.md：该槽位被 claude adapter 整份覆盖（governance/sliver-core/packaging/adapters/claude/references/runtime-adapter.md:3），写进去对 Claude 宿主不可达，且会撞本项目「一份内容一个 owner、不复制规则」。",
+      "evidence": "evidence/20260928-question-medium-rule.md",
+      "verification": "原位追加 4 行（第 14-17 行），既有 10 条 How To Ask 规则逐字未动；围栏数 0/0 奇偶不变；question-bank.md 的禁语正则（不得让用户选 React/Vue/技术栈/框架/架构，及「你希望我优先选 AI 熟悉」）未命中——新增四条为英文且不含技术选型指使句；加载体积门实测归因：d0=67420、bounded_d1=74684 与本补丁无关（该集合只含 SKILL.md、runtime-adapter.md 与 4 个 owner，question-bank.md 不在其中），把本补丁 1159 字节全数移除后数字不变，属 HEAD 既有超标，另案登记；originalSha256 == 补丁前 governance/sliver-core/references/question-bank.md 实算（== catalog 原记录 5f1616a6）；patchedSha256 实算回填；sliver-core 树摘要经 annotation 通道重录 61137c15→75eb2715，fileCount 220 不变",
+      "files": [
+        {
+          "path": "references/question-bank.md",
+          "originalSha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8",
+          "patchedSha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab",
+          "linesChanged": 4
+        }
+      ]
     }
   ]
 }

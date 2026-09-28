@@ -63,7 +63,7 @@
       "name": "sliver-core",
       "path": "governance/sliver-core",
       "fileCount": 220,
-      "treeHash": "sha256:61137c15764b0e3e1452b702ed9ed7ff15695869a2fab0d5ffd9f63a613a6fcf",
+      "treeHash": "sha256:75eb27157671a77b8eb2620f43fe763dc61bb8ae06a0faa7f1f6789cc2e3bf35",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
@@ -109,6 +109,12 @@
           "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
           "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
           "patchId": "sliver-operating-law-declared-file-boundary"
+        },
+        {
+          "path": "references/question-bank.md",
+          "patchedSha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab",
+          "originalSha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8",
+          "patchId": "sliver-question-bank-ask-medium"
         }
       ],
       "importRecord": "provenance/SLIVER-IMPORT.json"
@@ -132,6 +138,12 @@
       "scope": "snapshots[sliver-core].treeHash + locallyPatchedPaths",
       "change": "批 A 补丁 sliver-operating-law-declared-file-boundary（Operating Law ordinary work 条原位追加半句 declared file boundary，1 行）后树摘要由 2650e940 更新为 61137c15；SKILL.md 同时以 runtime-import 通道登记 catalog 投影偏差（sliver-core-skill-md-projected-copy-boundary）。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），本修正在此登记，并与 LOCAL-PATCHES.json、实际文件 sha256 双重对账。",
       "evidence": "evidence/20260919-hardening-batch-a.md"
+    },
+    {
+      "at": "2026-09-28",
+      "scope": "snapshots[sliver-core].treeHash + locallyPatchedPaths",
+      "change": "补丁 sliver-question-bank-ask-medium（Question Bank 的 How To Ask 原位追加 4 条提问载体规则）后树摘要由 61137c15764b0e3e 更新为 75eb27157671a77b，fileCount 220 不变；本补丁只走 sliver-core 快照命名空间——question-bank.md 不是 SKILL-INVENTORY 导入事实行，无 catalog 投影偏差需按 runtime-import 通道另记（与先例 sliver-operating-law-declared-file-boundary 的双通道情形不同）。同批实测加载体积门：d0=67420/67000、bounded_d1=74684/74000 超标归因于 HEAD 既有内容（该集合仅含 sliver-core SKILL.md、references/runtime-adapter.md 与 4 个开发执行 owner，不含 question-bank.md；移除本补丁 1159 字节后数字不变），本文件不承担本补丁的体积影响，超标本身另案待 owner 拍板是否提预算或瘦身。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），沿用 2026-09-12 annotation 修订通道，并与 LOCAL-PATCHES.json、实际文件 sha256 双重对账。",
+      "evidence": "evidence/20260928-question-medium-rule.md"
     }
   ]
 }

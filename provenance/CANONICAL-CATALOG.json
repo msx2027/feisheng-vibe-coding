@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-24T23:20:20.5319977Z",
+  "generatedAt": "2026-09-28T05:15:49.7355522Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -2341,7 +2341,7 @@
           },
           {
             "path": "governance/sliver-core/references/question-bank.md",
-            "sha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8"
+            "sha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab"
           },
           {
             "path": "governance/sliver-core/references/risk-control-gates.md",

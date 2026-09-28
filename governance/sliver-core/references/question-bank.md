@@ -11,6 +11,10 @@ Use these candidate questions only after inspecting the project. They are not a 
 - If a question is hard for the user, give a recommended default and mark it `待确认`.
 - A foundation-blocking fact cannot be closed by that default. Help the user describe observable facts and keep the decision `blocked` until the answer is confirmed.
 - Do not give several equal options unless the user asks to compare.
+- When the Host exposes an interactive choice control, ask through it; never leave a question that needs a user answer as body text only. Use numbered text questions when that control is unavailable. Decide from the questioning capability actually callable in this session, not from the Host name or a remembered assumption about what the Host has.
+- For each such question give 2-4 concrete options standing for the directions this project would realistically take, ordered by your recommendation. They are distinct directions, not the co-equal choices the rule above forbids. Do not use yes/no placeholders unless the question is genuinely binary, and keep the free-form answer available.
+- The choice control and numbered text carry the same content: the question, the realistic directions, and the recommended answer. Changing the medium does not relax the 1-3 blocking-question limit above and does not remove the recommended default.
+- The medium does not change what is worth asking: still only ask a fact that is not discoverable and whose answer changes the visible product result, cost, scope, downtime, irreversible effect, or major trade-off.
 - End each question group with the exact product-visible decision needed before moving on.
 - Never ask a non-technical user to choose a framework, architecture pattern, database, migration strategy, or an "AI-familiar" technology preference. Translate technical uncertainty into the visible product consequence the answer depends on.
 
