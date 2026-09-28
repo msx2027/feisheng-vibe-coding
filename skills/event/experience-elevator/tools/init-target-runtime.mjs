@@ -581,6 +581,23 @@ function resolveExperienceLedgerPath(targetRoot) {
     : null;
 }
 
+// 清扫日志（contract v7 sweepJournal）：与台账同目录、同名去掉 .md 加「-清扫.md」。被清扫
+// 经验的 id 只存在于日志（重放幂等要求其事件留在 processedEvents），ledger-core 的绑定规则
+// 需要调用方把这些 id 传入（2026-09-29 契约对齐）。日志缺失 = 无清扫，返回空集。
+function readSweptExperienceIds(targetRoot, ledgerPath) {
+  const normalized = String(ledgerPath).split("\\").join("/");
+  const dir = normalized.includes("/") ? normalized.slice(0, normalized.lastIndexOf("/")) : "";
+  const base = (normalized.split("/").pop() || "").replace(/\.md$/u, "");
+  const journalRelative = `${dir ? dir + "/" : ""}${base}-清扫.md`;
+  const journalPath = path.join(targetRoot, journalRelative);
+  if (!fs.existsSync(journalPath)) return new Set();
+  const ids = new Set();
+  for (const match of fs.readFileSync(journalPath, "utf8").matchAll(/^## (EXP-\d+) ·/gmu)) {
+    ids.add(match[1]);
+  }
+  return ids;
+}
+
 function l1AnchorFailureState(targetRoot, currentRegistryInfo) {
   const ledgerPath = resolveExperienceLedgerPath(targetRoot);
   if (!ledgerPath) return null;
@@ -590,7 +607,7 @@ function l1AnchorFailureState(targetRoot, currentRegistryInfo) {
   }
   const content = fs.readFileSync(state.path, "utf8");
   try {
-    const ledger = parseLedger(content);
+    const ledger = parseLedger(content, readSweptExperienceIds(targetRoot, ledgerPath));
     if (ledger.vibeExperienceLedger !== "v2") throw new Error("L0 anchor validation requires ledger schema v2");
     assertL1RegistryAnchorMatches(ledger.l1RegistryAnchor, currentRegistryInfo, "l1RegistryAnchor");
     return null;

@@ -323,7 +323,11 @@ function assertEmbeddedConfirmationHistory(record, globalForExperience, where, r
   }
 }
 
-export function validateGovernedLedger(ledger, where = "validateGovernedLedger") {
+// sweptExperienceIds（可选，2026-09-29 契约对齐）：contract v7 的清扫（sweep，recorder govern）
+// 把经验移出台账、只存同目录「-清扫.md」外部日志，但事件按重放幂等要求留在 processedEvents。
+// 这些 id 不在 experiences∪archived 里，由调用方（init-target-runtime / experience-governance）
+// 从日志读出传入，绑定规则将其视为"存在于清扫日志"。本函数保持纯函数，不自行读文件。
+export function validateGovernedLedger(ledger, where = "validateGovernedLedger", sweptExperienceIds = []) {
   assertExactKeys(ledger, [
     "vibeExperienceLedger",
     "revision",
@@ -349,11 +353,13 @@ export function validateGovernedLedger(ledger, where = "validateGovernedLedger")
     if (knownExperienceIds.has(record.id)) throw new Error(`${where}: experience id 重复：${record.id}`);
     knownExperienceIds.add(record.id);
   }
+  const sweptIds = new Set(sweptExperienceIds);
+  const bindingIds = sweptIds.size > 0 ? new Set([...knownExperienceIds, ...sweptIds]) : knownExperienceIds;
   const eventById = new Map();
   for (const event of ledger.processedEvents) {
     assertValidEvent(event, `${where}.processedEvents`, true);
-    if (!knownExperienceIds.has(event.experienceId)) {
-      throw new Error(`${where}: processedEvents.experienceId 必须绑定现有经验`);
+    if (!bindingIds.has(event.experienceId)) {
+      throw new Error(`${where}: processedEvents.experienceId 必须绑定现有经验或已登记的清扫日志条目`);
     }
     if (eventById.has(event.eventId)) throw new Error(`${where}: processedEvents eventId 重复：${event.eventId}`);
     eventById.set(event.eventId, event);
@@ -364,7 +370,7 @@ export function validateGovernedLedger(ledger, where = "validateGovernedLedger")
     assertValidConsumedConfirmation(
       record,
       eventById,
-      knownExperienceIds,
+      bindingIds,
       receiptIds,
       confirmationHashes,
       `${where}.consumedConfirmations[${index}]`,
@@ -466,22 +472,22 @@ function parseLedgerSource(markdown) {
   return parsed;
 }
 
-export function parseLedger(markdown) {
+export function parseLedger(markdown, sweptExperienceIds = []) {
   const parsed = parseLedgerSource(markdown);
   if (parsed.vibeExperienceLedger === "v2") {
-    validateGovernedLedger(parsed, "parseLedger");
+    validateGovernedLedger(parsed, "parseLedger", sweptExperienceIds);
   } else {
     validateLegacyLedger(parsed, "parseLedger");
   }
   return parsed;
 }
 
-export function parseLedgerForAnchorAdoption(markdown) {
+export function parseLedgerForAnchorAdoption(markdown, sweptExperienceIds = []) {
   const parsed = parseLedgerSource(markdown);
   if (parsed.vibeExperienceLedger !== "v2") throw new Error("anchor adoption requires ledger schema v2");
   const anchorMissing = !Object.prototype.hasOwnProperty.call(parsed, "l1RegistryAnchor");
   if (anchorMissing) parsed.l1RegistryAnchor = null;
-  validateGovernedLedger(parsed, "parseLedgerForAnchorAdoption");
+  validateGovernedLedger(parsed, "parseLedgerForAnchorAdoption", sweptExperienceIds);
   return { ledger: parsed, anchorMissing };
 }
 

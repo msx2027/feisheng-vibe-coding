@@ -25,6 +25,7 @@ import {
   isAtThreshold,
   elevateExperience,
   removeExperience,
+  validateGovernedLedger,
 } from "./experience-ledger-core.mjs";
 
 function sha256(value) {
@@ -795,6 +796,30 @@ check("L0 达阈值可直接退役为空步骤 tombstone，未达阈值仍阻断
   assert.equal(retired.archived[0].status, "retired");
   assert.deepEqual(retired.archived[0].retirement.removed, []);
   assert.equal(retired.archived[0].confirmationHistory.length, 1);
+});
+
+// ---- A-04：被清扫经验的绑定（contract v7 sweepJournal 契约对齐，2026-09-29 fs-agent 实际事故回归）----
+// 清扫（recorder govern）把经验移出台账只存外部「-清扫.md」日志，事件按重放幂等要求留在
+// processedEvents。ledger-core 不知道日志，调用方从日志读出 id 集合传入；不带集合必须抛绑定
+// 错误，带了必须放行（fs-agent 清扫 150 条后块刷新被拦的真实场景）。
+check("swept 绑定：无清扫集合时 processedEvents 指向已清扫 id 必须抛绑定错误", () => {
+  const ledger = governedLedger({
+    processedEvents: [governedEvent({ eventId: "EVT-swept-01", experienceId: "EXP-009" })],
+  });
+  assert.throws(() => validateGovernedLedger(ledger, "t"), /必须绑定现有经验或已登记的清扫日志条目/);
+  assert.throws(() => parseLedger(serializeLedger(ledger)), /必须绑定现有经验或已登记的清扫日志条目/);
+});
+
+check("swept 绑定：传入清扫 id 集合后校验与往返解析必须放行", () => {
+  const ledger = governedLedger({
+    processedEvents: [governedEvent({ eventId: "EVT-swept-01", experienceId: "EXP-009" })],
+  });
+  validateGovernedLedger(ledger, "t", ["EXP-009"]);
+  const reparsed = parseLedger(serializeLedger(ledger), ["EXP-009"]);
+  assert.equal(reparsed.processedEvents[0].experienceId, "EXP-009");
+  // 传入集合不影响现有经验的事件正常绑定
+  const live = governedLedger();
+  validateGovernedLedger(live, "t", ["EXP-999"]);
 });
 
 console.log(`\n${passed} passed`);
