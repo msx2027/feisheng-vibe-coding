@@ -28,3 +28,22 @@
 - 路由、skill catalog、target truth 和 runtime projection 必须各有唯一 owner。
 - 发现重复入口、重复写入者、manifest drift、来源不明或宿主证据缺失时停止迁移。
 - 没有新鲜验证不得声明完成、可发布或宿主 Hook 已强制生效。
+- 新写入的文件**不得逐字复现密钥形态的字面量**（含假夹具与示例值）：只描述形态并指向 `git show`。
+  原因：`pre-commit` 的 `FALLBACK-{AWS-KEY,SLACK-TOKEN,PRIVATE-KEY}` 等高置信类目按设计**不进基线**，
+  新内容命中即硬阻断提交，而本仓库是 public 仓库，逐字形态本身就像泄漏。
+  已入库的存量走正规通道登记（`node skills/product/hotspot-governor/tools/secret-scan.mjs .` 全仓首检
+  → `tools/guardrails/secret-baseline.json`）；**不得**为此扩 `gitleaks.toml` 白名单或改扫描器——
+  那是本仓库唯一的机器化隐私防线，放宽的代价是永久的。判例与实测见 `evidence/20260928-eol-lf-landing.md` §4-1。
+
+## 保真树行尾规则
+
+- 三棵保真树（`sources/**`、`skills/**`、`governance/sliver-core/**`）的行尾**以已登记字节为准**，
+  不得为「统一排版」批量改写：门禁比对的是登记在 `provenance/` 里的逐文件 sha256 与树摘要，
+  改写行尾等于篡改已删除源项目的唯一可对账副本，且会让副本对账步（`verify.ps1` 的
+  `sourceSha256` 比对）整批判红。当前实测分布：`sources/vibe-coding-skills` 491 LF / 7 CRLF / 54 无行尾、
+  `sources/mattpocock-skills` 136 全 CRLF、`skills` 281 LF / 54 CRLF / 54 无行尾——CRLF 是上游原样，不是漂移。
+- 唯一例外已于 **2026-09-28 落地**：`governance/sliver-core/**` 整树归一为 LF（220 文件），
+  依据是同一内容 A/B 实测证明加载体积预算超标由 CRLF 造成、剥离后内容零差异，
+  且该树的登记可经 `provenance/PROVENANCE-INTEGRITY.json` 的 annotation 通道重录自证。
+  此例外**不外推**到另两棵树：它们不进任何体积预算（评测器的根目录只指向控制面），
+  收益为零而代价是不可逆的快照失真。实测与理由见 `evidence/20260928-eol-lf-landing.md` §8。

@@ -42,7 +42,7 @@ Set-StrictMode -Version Latest
 #   - 提交关卡清单自检（scripts/githooks/pre-commit 检查清单「声明 == 实现」，2026-09-25 接线）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
 #   - 文档数字与实测一致（README / 交接文档自称「catalog 实测」的计数逐条重算比对，2026-09-28 接线）
-#   - 文档步数与实际步数一致（末步自计：README 徽章与正文的默认档步数不得靠人抄）
+#   - 文档步数与实际步数一致（末步自计：README 徽章与正文、交接文档全部「默认 N 步 / 全开 N 步」自称不得靠人抄）
 #   - 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
 #   - 可选：发布候选包装配（-IncludePackage）
 #
@@ -477,7 +477,9 @@ try {
     #     但它此前没有被任何关卡调用（verify.ps1 无 python 步骤、CI 也无），预算超标只能靠人偶然跑到才发现。
     #     实测归因（LF 与 CRLF 两份副本 A/B，见 evidence/20260928-loading-budget-and-eol-root-cause.md）：
     #     自导入起真实内容增长只有 SKILL.md +67 字节，其余超标来自 governance/sliver-core 整树以 CRLF
-    #     落盘（同一内容 LF 副本实测 D0=66839 合规、有界 D1=74049）；该树 220 个文件当前全部纯 CRLF。
+    #     落盘（同一内容 LF 副本实测 D0=66839 合规、有界 D1=74049）。
+    #     2026-09-28 换行归一批已把该树 220 个文件落地为 LF（内容零差异，登记经 annotation 通道重录），
+    #     本步从此守的是「不得再退回 CRLF」；d0 预算同时撤销上一批的借道上调，回到上游原值 67000。
     #     本步把这条不变量变成机器门；缺 python3 直接失败，不静默跳过。
     try {
         $backboneRoot = Join-Path $repoRoot 'governance/sliver-core'
@@ -883,6 +885,30 @@ try {
         foreach ($stepClaim in @($stepBadgeMatch, $stepTableMatch)) {
             if ($stepClaim.Success -and [int]$stepClaim.Groups[1].Value -ne $defaultStepCount) {
                 $stepCountErrors += ('README 登记=' + [int]$stepClaim.Groups[1].Value + ' 实测默认档=' + $defaultStepCount)
+            }
+        }
+        # 交接文档的步数自 2026-09-28 起一并核对：同一份文档里「默认 21 步」与「默认 15 步」曾并存
+        # （入口速查与起点检查清单两处停在 2026-09-12 口径），而本步原先只锚 README。
+        # 口径：默认档取所有「默认 N 步」命中；全开档 = 默认档 + 两个可选步，取所有「全开 N 步」命中。
+        # 命中数为 0 同样判失败——改写文案不能把这条对账静默摘掉。
+        $stepHandoffPath = Join-Path $repoRoot 'docs/HANDOFF-NEXT.md'
+        if (-not (Test-Path -LiteralPath $stepHandoffPath -PathType Leaf)) {
+            throw "缺少交接文档: $stepHandoffPath"
+        }
+        $stepHandoffText = Get-Content -Raw -Encoding UTF8 -LiteralPath $stepHandoffPath
+        $fullOpenStepCount = $defaultStepCount + 2
+        $handoffDefaultMatches = @([regex]::Matches($stepHandoffText, '默认\s*\**(\d+)\s*\**步'))
+        $handoffFullMatches = @([regex]::Matches($stepHandoffText, '全开\s*\**(\d+)\s*\**步'))
+        if ($handoffDefaultMatches.Count -lt 1) { $stepCountErrors += '交接文档默认步数锚点未命中（改写文案请同步本步）' }
+        if ($handoffFullMatches.Count -lt 1) { $stepCountErrors += '交接文档全开步数锚点未命中（改写文案请同步本步）' }
+        foreach ($stepClaim in $handoffDefaultMatches) {
+            if ([int]$stepClaim.Groups[1].Value -ne $defaultStepCount) {
+                $stepCountErrors += ('交接文档登记=' + [int]$stepClaim.Groups[1].Value + ' 实测默认档=' + $defaultStepCount)
+            }
+        }
+        foreach ($stepClaim in $handoffFullMatches) {
+            if ([int]$stepClaim.Groups[1].Value -ne $fullOpenStepCount) {
+                $stepCountErrors += ('交接文档全开登记=' + [int]$stepClaim.Groups[1].Value + ' 实测全开=' + $fullOpenStepCount)
             }
         }
         if ($stepCountErrors.Count -gt 0) {
