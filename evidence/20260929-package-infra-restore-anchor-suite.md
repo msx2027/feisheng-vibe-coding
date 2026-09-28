@@ -27,3 +27,12 @@
 
 - `test-experience-governance-closure.mjs`（14 passed/52 failed）：其头部常量指向旧架构实物（`hooks/detect-feedback-signal.sh`、`codex-hooks/`、`.claude/hooks/` 镜像等 bash 世代文件，现行 adapters/ 架构已无对应物），须先做「旧世界套件重映射 vs 退役」的 owner 裁决才能修复，布局修复救不了它
 - init-target-runtime 裸调用（不带 --skills-root）的 DEFAULT 根在迁移后仍指向工具所在目录而非包根——文档化用法均显式传参故不受影响；如需裸调用可用，另行小批加祖先上溯（未纳入本批，避免扩散改动面）
+
+## closure 处置决策登记（2026-09-29 owner 拍板：分层复活）
+
+owner 在大白话体感讲解后三选一拍板「留金题修好」。决策内容与批次范围（下一批独立 Goal 执行，本节只登记）：
+
+- **退役组**（约 10 用例）：信号采集 wrapper/双镜像组——被测实物（`hooks/detect-feedback-signal.sh`、`codex-hooks/`、`.claude/hooks/`、`.codex/hooks/` 镜像、`tools/check-experience-ledger.mjs`）经实测全部不存在；其现行等价覆盖（采集/autoRecord/消化标记/幂等/凭据硬门禁）已由全绿的 `tests/test-vibe-hook-adapter.ps1` 承担。退役即删除这些用例与死路径常量。
+- **复活组**（约 40 用例）：升档确认凭据管线组——orchestrator replay/collision、畸形 confirmation/Unicode 伪装 transition 拒绝、canonical 档位冲突、L2→L3 checker 证据、L2 双投影、台账自定义路径越界、退役逆序 tombstone 等。重映射到迁移后真实位置（experience-governance/managed-blocks/ledger-core 在 `skills/event/experience-elevator/tools/`，recorder 在 `adapters/vibe-hooks/`；checker CLI 等价物须先核实是否迁移，缺失则该子组单独挂账）。
+- **预期与纪律**：重映射后会暴露迁移期沉淀的真语义漂移，当场修并逐条留痕；不动 orchestrator 本体语义；`tools/check-experience-ledger.mjs` 等缺失实物先查证再定，不凭记忆假设。
+- 入口：新会话独立 Goal，包仓库 main 直提（沿本日三批惯例），证据另立卷。
