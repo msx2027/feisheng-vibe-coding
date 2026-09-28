@@ -28,7 +28,28 @@ import {
 } from "./experience-managed-blocks.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_SKILLS_ROOT = path.dirname(SCRIPT_DIR);
+// DEFAULT 包根解析（2026-09-29 复活批遗留小批）：旧布局（tools/init-target-runtime.mjs）下
+// 脚本目录的上一级即包根；工具本体迁移到 skills/event/experience-elevator/tools/ 后该假设
+// 失效，改为向上找发布账本标记 provenance/CANONICAL-CATALOG.json（只存在于真包根）。
+// 旧布局行为保持不变（存在即优先）；两布局都未命中时回退旧行为，由 validateSkillsRoot
+// 给出明确报错（fail-closed 语义不变）。
+const DEFAULT_SKILLS_ROOT = (() => {
+  const legacyRoot = path.dirname(SCRIPT_DIR);
+  if (
+    fs.existsSync(path.join(legacyRoot, "skills", "INDEX.md")) &&
+    fs.existsSync(path.join(legacyRoot, "tools", "init-target-runtime.mjs"))
+  ) {
+    return legacyRoot;
+  }
+  let dir = SCRIPT_DIR;
+  for (let depth = 0; depth < 8; depth += 1) {
+    if (fs.existsSync(path.join(dir, "provenance", "CANONICAL-CATALOG.json"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return legacyRoot;
+})();
 export const TARGET_RUNTIME_BLOCK_VERSION = "22";
 const RUNTIME_REGISTRY_FILE = ".vibe-runtime.json";
 const RUNTIME_REGISTRY_VERSION = 1;

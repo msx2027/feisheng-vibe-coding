@@ -637,5 +637,24 @@ await check("adoption 拒绝除缺 anchor 外还有其他 schema 问题", () => 
   }
 });
 
+// ---- 裸调用（不带 --skills-root）的默认包根解析（2026-09-29 复活批遗留小批）----
+// 工具迁移到 skills/event/experience-elevator/tools/ 后，DEFAULT 根（脚本目录的上一级）
+// 指向经验电梯目录而非包根：不带 --skills-root 时发布布局校验必然拒绝。修复口径：
+// DEFAULT 向上找发布账本标记 provenance/CANONICAL-CATALOG.json（真包根），旧布局行为不变。
+await check("裸调用（无 --skills-root）默认根必须解析到真包根而非报 Invalid skills root", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "vibe-exp-bare-"));
+  try {
+    const probe = spawnSync(process.execPath, [runtimeTool, root, "--check", "--json"], {
+      cwd: packageRoot,
+      encoding: "utf8",
+      env: { ...process.env, VIBE_CODING_SKILLS_HOME: "" },
+    });
+    const combined = `${probe.stdout}\n${probe.stderr}`;
+    assert.doesNotMatch(combined, /Invalid skills root/u, `默认根解析失败: ${combined.slice(0, 300)}`);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed > 0) process.exitCode = 1;
