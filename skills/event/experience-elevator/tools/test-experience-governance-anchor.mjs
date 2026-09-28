@@ -656,5 +656,27 @@ await check("裸调用（无 --skills-root）默认根必须解析到真包根�
   }
 });
 
+// ---- 陈旧环境变量必须报出来源（2026-09-29 E2E finding F1）----
+// 长寿命宿主进程里残留的 VIBE_CODING_SKILLS_HOME（指向已删除路径）会让裸调用被
+// fail-closed 拒绝——行为正确，但报错不提该值来自环境变量，排查者会先怀疑硬编码。
+// 修复口径：env 来源的根校验失败时，错误信息必须点名环境变量并给出处置提示；
+// 不做静默回退（回退默认根 = 新增 fallback 层，违反操作法）。
+await check("陈旧 VIBE_CODING_SKILLS_HOME 触发的拒绝必须点名环境变量来源", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "vibe-exp-stale-env-"));
+  try {
+    const stale = path.join(root, "deleted-package");
+    const probe = spawnSync(process.execPath, [runtimeTool, root, "--check", "--json"], {
+      cwd: packageRoot,
+      encoding: "utf8",
+      env: { ...process.env, VIBE_CODING_SKILLS_HOME: stale },
+    });
+    const combined = `${probe.stdout}\n${probe.stderr}`;
+    assert.equal(probe.status, 2, `陈旧 env 应拒绝（退出码 2），实际: ${probe.status} ${combined.slice(0, 200)}`);
+    assert.match(combined, /VIBE_CODING_SKILLS_HOME/u, `报错必须点名环境变量来源: ${combined.slice(0, 300)}`);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed > 0) process.exitCode = 1;

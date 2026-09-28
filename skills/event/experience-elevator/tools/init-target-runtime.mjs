@@ -150,11 +150,16 @@ function writeJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function validateSkillsRoot(skillsRoot) {
+function validateSkillsRoot(skillsRoot, source = "默认根") {
   const required = ["skills/INDEX.md", "tools/init-target-runtime.mjs"];
   const missing = required.filter((item) => !fs.existsSync(path.join(skillsRoot, item)));
   if (missing.length > 0) {
-    throw Object.assign(new Error(`Invalid skills root: ${skillsRoot}. Missing: ${missing.join(", ")}`), {
+    // env 来源的坏根必须点名环境变量并给处置提示（2026-09-29 E2E finding F1）：
+    // 长寿命宿主进程里的陈旧 VIBE_CODING_SKILLS_HOME 是实测踩坑源。不做静默回退。
+    const envHint = source === "环境变量 VIBE_CODING_SKILLS_HOME"
+      ? `。该值来自环境变量 VIBE_CODING_SKILLS_HOME，疑似陈旧残留：请更正或清空它（长寿命宿主进程需重启才刷新），或用 --skills-root 显式指定本包根`
+      : "";
+    throw Object.assign(new Error(`Invalid skills root (来源: ${source}): ${skillsRoot}. Missing: ${missing.join(", ")}${envHint}`), {
       exitCode: 2,
     });
   }
@@ -179,10 +184,12 @@ function validateTargetRoot(targetRoot) {
 
 function resolveRoots(args) {
   const targetRoot = path.resolve(args.targetRoot || ".");
-  const configuredSkillsRoot = args.skillsRoot || process.env.VIBE_CODING_SKILLS_HOME || DEFAULT_SKILLS_ROOT;
+  const envSkillsRoot = process.env.VIBE_CODING_SKILLS_HOME;
+  const configuredSkillsRoot = args.skillsRoot || envSkillsRoot || DEFAULT_SKILLS_ROOT;
+  const skillsRootSource = args.skillsRoot ? "--skills-root 参数" : (envSkillsRoot ? "环境变量 VIBE_CODING_SKILLS_HOME" : "默认根");
   const skillsRoot = path.resolve(configuredSkillsRoot);
   validateTargetRoot(targetRoot);
-  validateSkillsRoot(skillsRoot);
+  validateSkillsRoot(skillsRoot, skillsRootSource);
   return { targetRoot, skillsRoot };
 }
 
