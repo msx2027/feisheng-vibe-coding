@@ -1,7 +1,7 @@
 {
   "schema": "feisheng-vibe-hook-adapter/v2",
   "owner": "runtime-projection",
-  "contractVersion": "v7 (2026-09-23 experience-backflow: ledger theme fields + classify action; elevation orchestrator shipped in skills/event/experience-elevator/tools; lineage v2 sedimentation → v3 auto-record → v4 autonomous → v5 hard-gate → v6 completion-credential)",
+  "contractVersion": "v7.1 (2026-09-28 check-slim + search: check outputs the ledger index only (revision/entryCount/themeStats/governance), full entry dump removed — 211 entries had made every check ≈47KB; new read-only search action (--theme / --keyword) is the on-demand retrieval and record-time dedup path; lineage v2 sedimentation → v3 auto-record → v4 autonomous → v5 hard-gate → v6 completion-credential → v7 experience-backflow)",
   "status": "enabled-experience-hard-gate-v1",
   "enablementScope": "experience autonomy with hard enforcement: (a) self-check duty — the session AI detects its own rework/mistakes and user-behavior proxies without any correction utterance, mints its own event identity and records via experience-recorder; (b) policy-based governance — the owner confirms a sweep POLICY once (policy fence in the ledger file), then the AI executes sweeps autonomously with a full audit journal and restorable entries; (c) Stop hard gate — the session may not end while captured correction signals are undigested, the session self-check acknowledgment is missing, or the close-out completion credential (verification/scope/findings, see stopCredential) is missing or malformed; the gate blocks with actionable instructions and fails open after 3 blocks per session (audited). Per-action user confirmation is still required for elevation (L1/L2/L3) and retirement; the recorder never does those.",
   "digestion": {
@@ -16,8 +16,8 @@
     "source": "adapters/vibe-hooks/experience-recorder.mjs",
     "installPath": ".feisheng/vibe-hooks/experience-recorder.mjs",
     "runtime": "node (zero third-party dependency)",
-    "actions": ["check", "record", "classify", "dismiss", "policy-add", "policy-list", "govern"],
-    "themes": "ledger v2 experience records may carry an optional theme field (fixed enum: git-concurrency / browser-verify / canvas-design / gate-ops / evidence-honesty / assertion-quality / decision-communication / env-platform; absent = unclassified). record accepts --theme for NEW experiences only; classify backfills/corrects an existing entry with expectedRevision CAS. check output aggregates themeStats (L0 counts per theme) with THEME_PROPOSAL_THRESHOLD=6 — a theme at threshold yields a PACKAGE-PROPOSAL signal only, never an automatic elevation; per-experience thresholds are unchanged",
+    "actions": ["check", "search", "record", "classify", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"],
+    "themes": "ledger v2 experience records may carry an optional theme field (fixed enum: git-concurrency / browser-verify / canvas-design / gate-ops / evidence-honesty / assertion-quality / decision-communication / env-platform; absent = unclassified). record accepts --theme for NEW experiences only; classify backfills/corrects an existing entry with expectedRevision CAS. Since v7.1 (2026-09-28) check outputs the INDEX ONLY (revision/entryCount/themeStats per THEME_PROPOSAL_THRESHOLD=6/governance) and never dumps entry details; --action search --theme <theme> / --keyword <word> returns entry details on demand — theme-first for record-time dedup, keyword (case-insensitive substring over summary+landing) as the cross-theme/unclassified fallback; per-experience thresholds are unchanged",
     "ledgerSource": "target .vibe-docs.json experienceGovernance path; fail-closed when missing/unregistered/not contract-whitelisted",
     "writes": "experience ledger fenced block + policy fence + sweep journal (ledger sibling 经验治理-清扫.md) + <dedupKey>.digested marker + dismissals.log + last-govern marker inside the state store",
     "neverDoes": ["elevate", "retire", "edit managed blocks", "store raw prompts", "write outside the whitelist", "sweep without a registered policy"]
@@ -117,7 +117,7 @@
     "docs/项目治理/经验治理-清扫.md"
   ],
   "governance": {
-    "model": "policy-based autonomy: owner confirms a sweep policy once (conversational attestation recorded with the policy), AI then sweeps autonomously per policy; every sweep is journaled and restorable",
+    "model": "policy-based autonomy: owner confirms a sweep policy once (conversational attestation recorded with the policy), AI then sweeps autonomously per policy; every sweep is journaled and restorable. Proposal duty (v7.1, 2026-09-29 ledger-budget anti-recurrence): when check reports dueForReview=true, entryCount>100, or no registered policy, the session AI must proactively run a governance review and, absent a policy, PROPOSE one to the owner (daysUnhit matched to project velocity — e.g. 3d for high-velocity, 30d otherwise; numbers are owner-confirmed, never autonomous)",
     "policyFence": "```json vibe-experience-policies (inside the ledger markdown file, outside the canonical ledger fence)",
     "policyFields": ["policyId", "type=sweep", "tier", "countBelow", "daysUnhit", "confirmedAt", "confirmedBy", "source"],
     "sweepJournal": "sibling of the registered ledger: <ledger-dir>/经验治理-清扫.md; full entry JSON + bound events + restore note",

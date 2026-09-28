@@ -296,6 +296,10 @@ try {
     $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'check')
     if ($r.ExitCode -ne 0) { throw "recorder check 应成功: $($r.Output)" }
     if ((Get-LastJsonLine -Text $r.Output).revision -ne 0) { throw 'check 应报 revision 0' }
+    # 5c-2a) check 瘦身守卫（治理账本预算防复发）：check 只出索引计数，禁止条目明细全量 dump
+    $checkSlim = Get-LastJsonLine -Text $r.Output
+    if ($null -eq $checkSlim.entryCount) { throw 'check 应含 entryCount 计数' }
+    if ($r.Output -match '"summary"') { throw 'check 不得输出条目明细（summary 字段泄漏）' }
     $occurredAt = $indexLine2.ts
     $r = Invoke-Recorder -RecorderArgs @((Join-Path $target2 '.'), '--action', 'record', '--event-id', $indexLine2.eventId, '--prompt-hash', $indexLine2.promptHash, '--occurred-at', $occurredAt, '--summary', '自动记账冒烟：日期字段格式纠错', '--expected-revision', '0', '--source-dedup-key', $indexLine2.dedupKey)
     if ($r.ExitCode -ne 0) { throw "recorder record 应成功: $($r.Output)" }
@@ -361,6 +365,18 @@ try {
     $checked = Get-LastJsonLine -Text $r.Output
     if ($checked.policies.Count -ne 1 -or -not $checked.governance.dueForReview) { throw "check 应含政策且 dueForReview=true: $($r.Output)" }
 
+    # 5d-2b) search 按需检索（check 瘦身配套）：keyword 命中、theme 空结果合法、无参与坏枚举拒绝
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'search', '--keyword', '老化')
+    if ($r.ExitCode -ne 0) { throw "search keyword 应成功: $($r.Output)" }
+    $searched = Get-LastJsonLine -Text $r.Output
+    if ($searched.matched -ne 1 -or $searched.experiences[0].id -ne 'EXP-001') { throw "search keyword 应命中 EXP-001: $($r.Output)" }
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'search', '--theme', 'env-platform')
+    if ($r.ExitCode -ne 0 -or (Get-LastJsonLine -Text $r.Output).matched -ne 0) { throw "search theme 空结果应成功: $($r.Output)" }
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'search')
+    if ($r.ExitCode -eq 0) { throw 'search 无参必须拒绝' }
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'search', '--theme', 'no-such-theme')
+    if ($r.ExitCode -eq 0) { throw 'search 坏枚举必须拒绝' }
+
     # 5d-3) 未登记政策执行 govern 必须拒绝；登记后清扫老化条目进日志
     $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'govern', '--policy-id', 'P-999')
     if ($r.ExitCode -eq 0) { throw '未登记政策的 govern 必须失败' }
@@ -380,10 +396,15 @@ try {
     $selfEventId = 'EVT-' + -join ((1..40) | ForEach-Object { 'c' })
     $checkOut = (Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'check')).Output
     $expectedRev = (Get-LastJsonLine -Text $checkOut).revision
-    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'record', '--event-id', $selfEventId, '--prompt-material', 'AI 自检：返工了一次日期格式', '--summary', '自检教训：日期格式先用 ISO', '--expected-revision', "$expectedRev")
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'record', '--event-id', $selfEventId, '--prompt-material', 'AI 自检：返工了一次日期格式', '--summary', '自检教训：日期格式先用 ISO', '--theme', 'env-platform', '--expected-revision', "$expectedRev")
     if ($r.ExitCode -ne 0) { throw "自造身份记录应成功: $($r.Output)" }
     $selfRecorded = Get-LastJsonLine -Text $r.Output
     if ($selfRecorded.experienceId -ne 'EXP-002' -or $selfRecorded.replay) { throw "自检记录结果异常: $($r.Output)" }
+    # 5d-4b) search theme 正向命中（EXP-002 已带主题）
+    $r = Invoke-Recorder -RecorderArgs @((Join-Path $target4 '.'), '--action', 'search', '--theme', 'env-platform')
+    if ($r.ExitCode -ne 0) { throw "search theme 应成功: $($r.Output)" }
+    $searched = Get-LastJsonLine -Text $r.Output
+    if ($searched.matched -ne 1 -or $searched.experiences[0].id -ne 'EXP-002') { throw "search theme 应命中 EXP-002: $($r.Output)" }
 
     # 5d-5) 清扫后重放旧事件（processedEvents 保留、experiences 已移除）：必须幂等成功并只消化
     #       源信号，不得因 find() 得 undefined TypeError 崩溃（P1 回归）

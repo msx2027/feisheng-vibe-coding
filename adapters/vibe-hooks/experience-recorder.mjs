@@ -86,7 +86,7 @@ function singleLine(value) {
 }
 
 // ---- CLI ----
-const VALUE_FLAGS = new Set(["--action", "--event-id", "--prompt-hash", "--prompt-material", "--occurred-at", "--summary", "--experience-id", "--expected-revision", "--source-dedup-key", "--reason", "--state-dir", "--policy-id", "--tier", "--count-below", "--days-unhit", "--confirmed-by", "--policy-source", "--session", "--finding", "--theme"]);
+const VALUE_FLAGS = new Set(["--action", "--event-id", "--prompt-hash", "--prompt-material", "--occurred-at", "--summary", "--experience-id", "--expected-revision", "--source-dedup-key", "--reason", "--state-dir", "--policy-id", "--tier", "--count-below", "--days-unhit", "--confirmed-by", "--policy-source", "--session", "--finding", "--theme", "--keyword"]);
 const argv = process.argv.slice(2);
 const opts = new Map();
 const positional = [];
@@ -104,13 +104,13 @@ for (let index = 0; index < argv.length; index++) {
 function argValue(name) {
   return opts.get(name);
 }
-const ACTIONS = ["check", "record", "classify", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"];
+const ACTIONS = ["check", "search", "record", "classify", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"];
 const optAction = opts.get("--action") || positional.find((item) => ACTIONS.includes(item));
 const targetRootArg = positional.find((item) => !ACTIONS.includes(item));
 const targetRoot = path.resolve(targetRootArg || process.cwd());
 
 if (!ACTIONS.includes(optAction)) {
-  fail("usage", "用法: experience-recorder.mjs <target-root> --action check|record|classify|dismiss|policy-add|policy-list|govern [选项]");
+  fail("usage", "用法: experience-recorder.mjs <target-root> --action check|search|record|classify|dismiss|policy-add|policy-list|govern [选项]");
 }
 
 // ---- 定位契约（与 recorder 同目录的安装态契约副本）与台账路径 ----
@@ -363,7 +363,7 @@ if (optAction === "check") {
     ledgerPath: ledgerRelative,
     revision: ledger.revision,
     thresholds: ledger.thresholds,
-    experiences: ledger.experiences.map((record) => ({ id: record.id, summary: record.summary, tier: record.tier, count: record.count, theme: record.theme ?? null })),
+    entryCount: ledger.experiences.length,
     themeStats,
     unclassifiedL0: unclassified,
     themeProposalThreshold: THEME_PROPOSAL_THRESHOLD,
@@ -374,7 +374,35 @@ if (optAction === "check") {
       lastGovernAt: marker ? marker.at : null,
       note: policyDoc.policies.length === 0 ? "未登记清扫政策：可向用户提议政策文本，经确认后 policy-add" : undefined,
     },
+    details: "条目明细不再随 check 全量输出；查重/召回用 --action search --theme <主题>（跨主题兜底 --keyword <词>）按需获取",
   });
+  process.exit(0);
+}
+
+// ---- search：条目明细按需检索（2026-09-28 check 瘦身配套；只读不写）----
+// 记账查重优先 --theme 同主题比对；--keyword 对 summary/landing 做不区分大小写子串兜底
+// （未分类条目与跨主题撞车靠 keyword 兜底覆盖）。
+if (optAction === "search") {
+  if (!fs.existsSync(ledgerPath)) fail("no-ledger", `台账文件不存在: ${ledgerRelative}`);
+  const theme = argValue("--theme");
+  const keyword = argValue("--keyword");
+  if (!theme && !keyword) fail("usage", "search 需要 --theme <主题枚举> 或 --keyword <关键词> 至少一个（记账查重先用 --theme，跨主题兜底用 --keyword）");
+  if (theme && !EXPERIENCE_THEMES.includes(theme)) fail("usage", `--theme 必须是固定枚举之一: ${EXPERIENCE_THEMES.join(" / ")}`);
+  if (keyword !== undefined && !singleLine(keyword)) fail("usage", "--keyword 必须是非空单行字符串");
+  const { ledger } = parseLedgerMarkdown(fs.readFileSync(ledgerPath, "utf8"));
+  validateLedger(ledger);
+  const needle = keyword ? keyword.toLowerCase() : null;
+  const matched = ledger.experiences
+    .filter((record) => {
+      if (theme && record.theme !== theme) return false;
+      if (needle) {
+        const haystack = `${record.summary}\n${record.landing ?? ""}`.toLowerCase();
+        if (!haystack.includes(needle)) return false;
+      }
+      return true;
+    })
+    .map((record) => ({ id: record.id, summary: record.summary, tier: record.tier, count: record.count, theme: record.theme ?? null }));
+  out({ ok: true, action: "search", revision: ledger.revision, matched: matched.length, experiences: matched });
   process.exit(0);
 }
 
