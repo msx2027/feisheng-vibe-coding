@@ -93,9 +93,14 @@
 
 本批开工前的 `git status` 只有我自己那份未跟踪证据文件；转换完成后工作区出现**另一会话留下的未跟踪文件** `evidence/20260928-machine-rule-mirror-sync.md`（内容不是本批产生）。本批按文件名精确暂存，未把它纳入提交，也未删除。
 
-## 6. 未验证项（一律 `UNVERIFIED`）
+## 6. 验证状态
 
-- **CI**：本批推送后由 GitHub `ubuntu-latest` 实跑，推送前不声明。
+已闭环：
+
+- **CI**：推送后 GitHub Actions `release-gate` run [`36418568960`](https://github.com/msx2027/feisheng-vibe-coding/actions/runs/36418568960) 对 `208f60c` 实跑，`ubuntu-latest`，job `static release gates` 用时 1m3s，结论 **success**（含发布包静态组装与上传步骤）。这是 LF 形态在 Linux runner 上的首次实测。
+
+仍未验证（一律 `UNVERIFIED`）：
+
 - **fresh clone 字节复现**：`.gitattributes` 对 `governance/sliver-core/**` 已打 `-text`，理论上任何 `core.autocrlf` 取值下 clone 都还原 LF，但本批未做 fresh clone 实测（演练副本是 clone 后改的，不是改完再 clone 验的）。
 - **混合状态**：`sources/**`、`skills/**` 两棵保真树仍是 CRLF，本批未动。门禁在混合状态下绿（上面第 2.3 条已实测），但「是否也把它们统一为 LF」的额外收益与代价未评估。
 - 残留 2 条红的根因（基线 git 对象缺失）不在本批能力范围内，未尝试恢复。
