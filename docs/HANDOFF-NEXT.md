@@ -17,7 +17,7 @@
 | D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `feisheng-vibe-coding` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
-| D4 | **门禁全绿** | `verify.ps1`（默认 15 步，2026-09-12 审计批口径；全开 17 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
+| D4 | **门禁全绿** | `verify.ps1`（默认 19 步，2026-09-28 数字对账批口径；全开 21 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
@@ -30,14 +30,14 @@
 ## 2. 一分钟现状（数字快照）
 
 - 仓库：`F:/skiils/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
-- 远端：`https://github.com/msx2027/feisheng-vibe-coding`（private）；`origin` 已挂，push 即触发 release-gate CI
+- 远端：`https://github.com/msx2027/feisheng-vibe-coding`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
-- 门禁：`verify.ps1` 默认 **15 步**（2026-09-12 审计批新增「退役引用扫描」与「collector 路径归属单测」；此前 13 步为退役清理批口径，CI 首绿时点为 12 步——步数随门禁演进，对账以 verify.ps1 实际输出为准）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 17 步）
-- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **422** 文件
+- 门禁：`verify.ps1` 默认 **19 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步，使 17→19；此前 12/13/15/17 均为历史口径——步数自本批起由末步自计核对，README 徽章与正文写错即红）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **21** 步）
+- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **451** 文件（catalog 重算，2026-09-28 实测）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **422 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明（2026-09-12）：**420** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**422** = 部署态 = 420 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移
+- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **453 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**451** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**453** = 部署态 = 451 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -112,17 +112,18 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口；默认 15 步，可选步另计；13 步为退役清理批历史口径）
+门禁（scripts/verify.ps1，单入口；默认 19 步，可选步另计；12/13/15/17 步为历史口径）
   1 catalog 同步 · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
   5 Vibe Hook 适配器安全契约（采集面 + Digest）
   6 Codex/Claude/宿主中性投影 · 5b 宿主证据门（-IncludeHostEvidence，2026-09-11 新增）
+  6b 文档数字与实测一致 · 8 文档步数与实际步数一致（2026-09-28 新增）
   7 发布包（-IncludePackage）
 
 投影（runtime-projection）
-  scripts/build-codex-runtime-projection.ps1    → 95 文件
-  scripts/build-claude-runtime-projection.ps1   → 93 文件
-  scripts/build-shared-runtime-projection.ps1   → 92 文件（宿主中性，无 overlay）
+  scripts/build-codex-runtime-projection.ps1    → 456 文件
+  scripts/build-claude-runtime-projection.ps1   → 454 文件
+  scripts/build-shared-runtime-projection.ps1   → 453 文件（宿主中性，无 overlay）
   scripts/runtime-projection-guard.ps1          共享门禁/计划/overlay/主体实现（唯一；三 writer 共用 Invoke-RuntimeProjection）
   packaging/runtime-projection.json             策略描述
 
@@ -590,7 +591,7 @@ OWNER-LEDGER/E1 有界路径剩余议题）；源项目归档、CI 上线、64 �
 ```text
 技能集合   82/82     全量登记（旧口径 82/83 的差 1 为翻译维护技能，已归入排除面）
 功能裁决   11/11 簇  已完成（duplicateGroups）
-交付runtime 52/82    52 条记录 / 420 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 422 = +根入口+manifest）
+交付runtime 52/82    52 条记录 / 451 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 453 = +根入口+manifest）
 路由绑定   51/51     admitted 技能全部唯一命中（validate-route-bindings）
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）

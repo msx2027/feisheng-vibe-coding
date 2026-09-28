@@ -38,6 +38,8 @@ Set-StrictMode -Version Latest
 #   - collector 路径归属单测（宿主证据归属逻辑回归门；会向 gitignore 的 _smoke/ 追加测试日志）
 #   - 提交关卡清单自检（scripts/githooks/pre-commit 检查清单「声明 == 实现」，2026-09-25 接线）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
+#   - 文档数字与实测一致（README / 交接文档自称「catalog 实测」的计数逐条重算比对，2026-09-28 接线）
+#   - 文档步数与实际步数一致（末步自计：README 徽章与正文的默认档步数不得靠人抄）
 #   - 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
 #   - 可选：发布候选包装配（-IncludePackage）
 #
@@ -60,6 +62,8 @@ if (-not (Test-Path -LiteralPath $provenanceModule -PathType Leaf)) {
 . $provenanceModule
 
 $results = @()
+# 来源快照实测文件数（步骤 3 填充，步骤 6b 消费）。
+$docSnapshotFiles = @{}
 $workRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('feisheng-verify-' + [guid]::NewGuid().ToString('N'))
 
 function Add-Result {
@@ -462,6 +466,13 @@ try {
         $integrity = Test-ProvenanceIntegrity -RepositoryRoot $repoRoot
         if ($integrity.ok) {
             $detail = (@($integrity.snapshots) | ForEach-Object { $_.name + '=' + $_.fileCount }) -join ', '
+            # 6b 的数字对账要用快照实测文件数（README 三方表里的 220/553/136 是同一个数）。
+            foreach ($integritySnapshot in @($integrity.snapshots)) {
+                $docSnapshotFiles[[string]$integritySnapshot.name] = [int]$integritySnapshot.fileCount
+            }
+            foreach ($integritySnapshot in @($integrity.snapshots)) {
+                $script:docSnapshotFiles[[string]$integritySnapshot.name] = [int]$integritySnapshot.fileCount
+            }
             Add-Result -Step '来源快照完整性' -Passed $true -Detail $detail
         } else {
             Add-Result -Step '来源快照完整性' -Passed $false -Detail (@($integrity.errors) -join '; ')
@@ -620,6 +631,8 @@ try {
         [pscustomobject]@{ StepName = 'Claude 静态投影 Build + Validate'; Builder = 'build-claude-runtime-projection.ps1' },
         [pscustomobject]@{ StepName = '宿主中性静态投影 Build + Validate'; Builder = 'build-shared-runtime-projection.ps1' }
     )
+    # 6b 的数字对账要用投影实测总数（安装态文件数不是 catalog 能算出来的），在此顺手留下。
+    $projectionTotals = @{}
     foreach ($projectionTarget in $projectionTargets) {
         $outputRoot = Join-Path $workRoot ('proj-' + [System.IO.Path]::GetFileNameWithoutExtension($projectionTarget.Builder).Replace('build-', '').Replace('-runtime-projection', ''))
         try {
@@ -633,10 +646,139 @@ try {
             }
             $validateParsed = ($validate.Output -join "`n") | ConvertFrom-Json
             if ($validateParsed.status -ne 'PASS') { throw ('validate status = ' + $validateParsed.status) }
+            $projectionTotals[[string]$projectionTarget.Builder] = [int]$validateParsed.fileCounts.total
             Add-Result -Step $projectionTarget.StepName -Passed $true
         } catch {
             Add-Result -Step $projectionTarget.StepName -Passed $false -Detail $_.Exception.Message
         }
+    }
+
+    # 6b) 文档数字与实测一致
+    #     README 与 docs/HANDOFF-NEXT.md 里有一批自称「catalog 实测」的计数。同一个 bundle 数字曾
+    #     同时以 432（README，2026-09-18 口径）与 422 / 420（交接文档，2026-09-12 口径）并存，而当下
+    #     真值需要重算：靠人肉订正已复发三次，投影落盘数（写死 95/93/92）离实测 456/454/453 更远。
+    #     规则：每条锚点必须命中，且命中的数字与重算值全等；锚点未命中同样判失败——否则改写一句
+    #     文案就能把对账静默摘掉。
+    try {
+        $docCatalog = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'provenance/CANONICAL-CATALOG.json') | ConvertFrom-Json
+        $docAcceptedStatuses = @($docCatalog.decisionPolicy.acceptedStatuses)
+        $docAccepted = @($docCatalog.records | Where-Object { $docAcceptedStatuses -contains $_.status })
+        $docBundleFiles = 0
+        $docFilesBySource = @{}
+        foreach ($docRecord in $docAccepted) {
+            $docRecordHasBundle = ($docRecord.PSObject.Properties.Name -contains 'bundle') -and ($null -ne $docRecord.bundle)
+            $docRecordFileCount = if ($docRecordHasBundle) { @($docRecord.bundle.files).Count } else { 1 }
+            $docBundleFiles += $docRecordFileCount
+            $docRecordSource = [string]$docRecord.source
+            if (-not $docFilesBySource.ContainsKey($docRecordSource)) { $docFilesBySource[$docRecordSource] = 0 }
+            $docFilesBySource[$docRecordSource] += $docRecordFileCount
+        }
+        $docRecordsTotal = @($docCatalog.records).Count
+        $docRuntimeRecords = @($docAccepted).Count
+        $docRetiredRecords = @($docCatalog.records | Where-Object { $_.readiness -eq 'retired' }).Count
+        $docOutRecords = @($docCatalog.records | Where-Object { @('excluded', 'compatibility') -contains $_.readiness }).Count
+        # 「控制面 1 + Matt 13 + Vibe 38」这条构成同样是算出来的，不写死——否则对账本身会变成第二个假数。
+        $docControlPlaneRecords = @($docAccepted | Where-Object { [string]$_.source -eq 'sliver-vibe-coding' }).Count
+        $docMattRecords = @($docAccepted | Where-Object { [string]$_.source -eq 'mattpocock-skills' }).Count
+        $docVibeRecords = @($docAccepted | Where-Object { [string]$_.source -eq 'vibe-coding-skills' }).Count
+        $docRegisteredSliver = @($docCatalog.records | Where-Object { [string]$_.source -eq 'sliver-vibe-coding' }).Count
+        $docRegisteredMatt = @($docCatalog.records | Where-Object { [string]$_.source -eq 'mattpocock-skills' }).Count
+        $docRegisteredVibe = @($docCatalog.records | Where-Object { [string]$_.source -eq 'vibe-coding-skills' }).Count
+        $docSnapshotSliver = $docSnapshotFiles['sliver-core']
+        $docSnapshotMatt = $docSnapshotFiles['mattpocock-skills']
+        $docSnapshotVibe = $docSnapshotFiles['vibe-coding-skills']
+        if ($null -eq $docSnapshotMatt -or $null -eq $docSnapshotSliver -or $null -eq $docSnapshotVibe) {
+            throw '来源快照文件数未获得（第 3 步未通过，先修它）'
+        }
+        $docSharedTotal = $projectionTotals['build-shared-runtime-projection.ps1']
+        if ($null -eq $docSharedTotal) { throw '宿主中性投影实测总数未获得（第 6 步未通过，先修它）' }
+
+        $docNumberRules = @(
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条\*\*来源技能全量登记定编'; Expect = @($docRecordsTotal) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条进入 runtime\*\*'; Expect = @($docRuntimeRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = 'runtime\*\*（(\d+) 文件）'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条退役\*\*'; Expect = @($docRetiredRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条排除/兼容\*\*'; Expect = @($docOutRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| Runtime bundle \| (\d+) 文件'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '安装态 (\d+) = \+根入口'; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '登记 / runtime / 退役 / 排除 \| (\d+) / \*\*(\d+)\*\* / (\d+) / (\d+)'; Expect = @($docRecordsTotal, $docRuntimeRecords, $docRetiredRecords, $docOutRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+)\*\* source skills fully registered'; Expect = @($docRecordsTotal) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) in runtime\*\*'; Expect = @($docRuntimeRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = 'in runtime\*\* \((\d+) files\)'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) retired\*\*'; Expect = @($docRetiredRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) excluded/compat\*\*'; Expect = @($docOutRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| Runtime bundle \| (\d+) files'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = 'installed projection (\d+) = \+ root entry'; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = 'Registered / runtime / retired / excluded \| (\d+) / \*\*(\d+)\*\* / (\d+) / (\d+)'; Expect = @($docRecordsTotal, $docRuntimeRecords, $docRetiredRecords, $docOutRecords) }
+            # 三方来源表：快照实测文件数 + 登记数 + 已接入数（中英各一份）
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| sliver-vibe-coding \| 控制面 \| `governance/sliver-core/`（(\d+) 文件） \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotSliver, $docRegisteredSliver, $docControlPlaneRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| vibe-coding-skills \| 产品 / UI / 事件 / checker \| `sources/vibe-coding-skills/`（(\d+) 文件） \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotVibe, $docRegisteredVibe, $docVibeRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| mattpocock-skills \| 工程原语 \| `sources/mattpocock-skills/`（(\d+) 文件） \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotMatt, $docRegisteredMatt, $docMattRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| sliver-vibe-coding \| Control plane \| `governance/sliver-core/` \((\d+) files\) \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotSliver, $docRegisteredSliver, $docControlPlaneRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| vibe-coding-skills \| Product / UI / events / checkers \| `sources/vibe-coding-skills/` \((\d+) files\) \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotVibe, $docRegisteredVibe, $docVibeRecords) }
+            [pscustomobject]@{ File = 'README.md'; Pattern = '\| mattpocock-skills \| Engineering primitives \| `sources/mattpocock-skills/` \((\d+) files\) \| (\d+) \| (\d+) \|'; Expect = @($docSnapshotMatt, $docRegisteredMatt, $docMattRecords) }
+            # 顶部徽章（URL 编码形态）同样是同一批数字的第二个落点
+            [pscustomobject]@{ File = 'README.md'; Pattern = 'badge/skills-(\d+)%20runtime%20%2F%20(\d+)%20registered'; Expect = @($docRuntimeRecords, $docRecordsTotal) }
+            # 运行时入口 SKILL.md 的「当前阶段」段：装到宿主上后这就是用户看到的现状，同样不许手抄
+            [pscustomobject]@{ File = 'SKILL.md'; Pattern = '(\d+) 条来源技能已登记'; Expect = @($docRecordsTotal) }
+            [pscustomobject]@{ File = 'SKILL.md'; Pattern = '已登记，\*\*(\d+) 条通过五道门禁进入 runtime\*\*（(\d+) 文件）'; Expect = @($docRuntimeRecords, $docBundleFiles) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+) 条记录\*\*'; Expect = @($docRecordsTotal) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+) 条 runtime 已接入\*\*'; Expect = @($docRuntimeRecords) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '（控制面 (\d+) \+ matt (\d+) \+ vibe (\d+)）'; Expect = @($docControlPlaneRecords, $docMattRecords, $docVibeRecords) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '/\*\*(\d+) 条 retired\*\*/'; Expect = @($docRetiredRecords) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '/\*\*(\d+) 条排除或兼容\*\*'; Expect = @($docOutRecords) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'runtime bundle 共 \*\*(\d+)\*\* 文件'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+)\*\* = catalog 登记的 runtime bundle 文件数'; Expect = @($docBundleFiles) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+)\*\* = 部署态 = '; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '`feisheng-vibe-coding` \*\*(\d+) 文件\*\*'; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '控制面包：\*\*(\d+) 文件\*\*'; Expect = @($docFilesBySource['sliver-vibe-coding']) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-codex-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($projectionTotals['build-codex-runtime-projection.ps1']) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-claude-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($projectionTotals['build-claude-runtime-projection.ps1']) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-shared-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '(\d+) 条记录 / (\d+) bundle 文件（控制面 (\d+) \+ Matt (\d+) \+ Vibe (\d+)'; Expect = @($docRuntimeRecords, $docBundleFiles, $docControlPlaneRecords, $docMattRecords, $docVibeRecords) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '部署态 (\d+) = \+根入口\+manifest'; Expect = @($docSharedTotal) }
+        )
+        $docNumberErrors = @()
+        $docNumberChecked = 0
+        $docFileTexts = @{}
+        foreach ($docRule in $docNumberRules) {
+            $docRuleFile = [string]$docRule.File
+            if (-not $docFileTexts.ContainsKey($docRuleFile)) {
+                $docFileTexts[$docRuleFile] = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot $docRuleFile)
+            }
+            $docRuleMatches = [regex]::Matches([string]$docFileTexts[$docRuleFile], [string]$docRule.Pattern, ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase))
+            if ($docRuleMatches.Count -eq 0) {
+                $docNumberErrors += ($docRuleFile + ' 锚点未命中（文案被改写？请恢复或同步本步锚点）: ' + [string]$docRule.Pattern)
+                continue
+            }
+            foreach ($docMatch in $docRuleMatches) {
+                if (($docMatch.Groups.Count - 1) -ne @($docRule.Expect).Count) {
+                    $docNumberErrors += ($docRuleFile + ' 锚点捕获组数与预期不符: ' + [string]$docRule.Pattern)
+                    continue
+                }
+                for ($docGroupIndex = 1; $docGroupIndex -lt $docMatch.Groups.Count; $docGroupIndex++) {
+                    $docNumberChecked++
+                    $docActual = [int]$docMatch.Groups[$docGroupIndex].Value
+                    $docExpectedValue = @($docRule.Expect)[$docGroupIndex - 1]
+                    if ($null -eq $docExpectedValue) {
+                        $docNumberErrors += ($docRuleFile + ' 实测值未获得（第 6 步未通过？）: ' + [string]$docRule.Pattern)
+                        continue
+                    }
+                    if ($docActual -ne [int]$docExpectedValue) {
+                        $docNumberErrors += ($docRuleFile + ' 登记=' + $docActual + ' 实测=' + [int]$docExpectedValue + ' 处: ' + $docMatch.Value.Trim())
+                    }
+                }
+            }
+        }
+        if ($docNumberErrors.Count -gt 0) {
+            Add-Result -Step '文档数字与实测一致' -Passed $false -Detail ((@($docNumberErrors | Select-Object -First 8)) -join '; ')
+        } else {
+            Add-Result -Step '文档数字与实测一致' -Passed $true -Detail (
+                'claims = ' + $docNumberChecked + ' records = ' + $docRecordsTotal + ' runtime = ' + $docRuntimeRecords +
+                ' bundle = ' + $docBundleFiles + ' installed = ' + $docSharedTotal)
+        }
+    } catch {
+        Add-Result -Step '文档数字与实测一致' -Passed $false -Detail $_.Exception.Message
     }
 
     # 7) 可选：发布候选包装配
@@ -653,6 +795,34 @@ try {
         } catch {
             Add-Result -Step '发布候选包装配' -Passed $false -Detail $_.Exception.Message
         }
+    }
+    # 8) 文档步数与实际步数一致（必须放在最后：它统计的就是「本脚本一共登记了几步」）
+    #    步数是这批数字里最后一个还在手抄的：README 徽章、README 正文、交接文档各写一遍，
+    #    每次增删门禁都得追着改（2026-09-12、2026-09-25 各补过一次）。还原口径：
+    #    已登记步数 - 本次真跑过的可选步 + 本步自身 = 默认档步数。
+    try {
+        $optionalStepsRun = 0
+        if ($IncludeHostEvidence) { $optionalStepsRun++ }
+        if ($IncludePackage) { $optionalStepsRun++ }
+        $defaultStepCount = (@($results).Count - $optionalStepsRun) + 1
+        $stepReadmeText = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'README.md')
+        $stepBadgeMatch = [regex]::Match($stepReadmeText, 'static%20gates-verify\.ps1%20(\d+)%20steps')
+        $stepTableMatch = [regex]::Match($stepReadmeText, '`verify\.ps1` 默认 (\d+) 步')
+        $stepCountErrors = @()
+        if (-not $stepBadgeMatch.Success) { $stepCountErrors += 'README 徽章步数锚点未命中（改写文案请同步本步）' }
+        if (-not $stepTableMatch.Success) { $stepCountErrors += 'README 正文步数锚点未命中（改写文案请同步本步）' }
+        foreach ($stepClaim in @($stepBadgeMatch, $stepTableMatch)) {
+            if ($stepClaim.Success -and [int]$stepClaim.Groups[1].Value -ne $defaultStepCount) {
+                $stepCountErrors += ('README 登记=' + [int]$stepClaim.Groups[1].Value + ' 实测默认档=' + $defaultStepCount)
+            }
+        }
+        if ($stepCountErrors.Count -gt 0) {
+            Add-Result -Step '文档步数与实际步数一致' -Passed $false -Detail ((@($stepCountErrors | Select-Object -First 4)) -join '; ')
+        } else {
+            Add-Result -Step '文档步数与实际步数一致' -Passed $true -Detail ('default = ' + $defaultStepCount + ' steps')
+        }
+    } catch {
+        Add-Result -Step '文档步数与实际步数一致' -Passed $false -Detail $_.Exception.Message
     }
 } finally {
     if (Test-Path -LiteralPath $workRoot) {
