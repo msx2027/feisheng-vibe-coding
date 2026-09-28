@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-28T05:56:05.8473178Z",
+  "generatedAt": "2026-09-28T11:38:12.6323121Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -2157,303 +2157,303 @@
         "files": [
           {
             "path": "governance/sliver-core/LICENSE",
-            "sha256": "481024f979e27e66458d0097465b32703f81b576d2ceac4b677e94022a78f7ec"
+            "sha256": "4a3ecd3e5633d974334d9499612056f186de0f6cccd66331f135347c1c7fb79d"
           },
           {
             "path": "governance/sliver-core/SKILL.md",
-            "sha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f"
+            "sha256": "d0f1f1ac6cc1db6cb945117d4a9e9d7bb8c72f10b60dde31f0703b7dca78ef51"
           },
           {
             "path": "governance/sliver-core/VERSION",
-            "sha256": "4ca8bbd3c595ee306226c6996b32b8d47a900217c55a7ed0cfc868ee444f34f1"
+            "sha256": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/AGENTS.md",
-            "sha256": "34b00dc6020ca07bca9af17dbb6dae58acaec2d0951e3ad7a0ba419cd2cf60c3"
+            "sha256": "ace1a590c9dfd78488b337305710d6e677bf1b9bff400aecec880af7d6a69f3c"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/dev-docs/README.md",
-            "sha256": "ba953dd3385a5030b9d7f77b92a51b2f6353d491b70e906b6b038baf762d6077"
+            "sha256": "12c493892a8745dcadcaaaf2da7748406d3ac872d9e97d6a37598077d94cb74b"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/dev-docs/acceptance.md",
-            "sha256": "84c5d984c9ca79486ee516c78ff63faacd6b4b3b3f7ff9d01ea96ea7feeacd2c"
+            "sha256": "3485e52e67b28e4149c24ddd7796d70fc976c0aa84c79c71ee6d9a594c1b5985"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/dev-docs/architecture.md",
-            "sha256": "5292aefecb865b1519fa0212a5bed93b4e32d9b3c510c3b81bfc72c288576af9"
+            "sha256": "e61a26f0527fc2f75c521ea7d8f787e07e0d393744cabcf01cdf194595821da9"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/dev-docs/current-state-audit.md",
-            "sha256": "1ae212426c45ca6e94448fd98e0419e0f78f70023fbe98de1773a2a9eeab39f8"
+            "sha256": "8b70f26f40f422be71d2d8fb661ddf289ab43c8a91c725955bf6284b5c700158"
           },
           {
             "path": "governance/sliver-core/assets/project-adoption/dev-docs/technical-selection.md",
-            "sha256": "0a3d7418231644b16f85d4fa22e294daeb09d5857a562ed6f6283ae6f810c5d4"
+            "sha256": "e1d42a49828b13bb8117075dbcff216b357bd7ef7950a8350c5e10c141935323"
           },
           {
             "path": "governance/sliver-core/assets/project-audit/audit-report.md",
-            "sha256": "39c104e9ad4bc7a7f3caf0a9ab441a65a44a7cbe3be0920476d9ff6bf0e36c45"
+            "sha256": "2e38de28766ddb2f76d3df491bbcb14b4c3b5a342d2f5ab56885478df7bda031"
           },
           {
             "path": "governance/sliver-core/assets/project-audit/audits-index.md",
-            "sha256": "631f0ba1db0691f537a40a275008153d63b7a4123ab59c4f1fe64237cabc2f35"
+            "sha256": "fa1d94f5929acbe83d008098a77f09ac99376a07fccaad3c15798318ed1c3b65"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/AGENTS.md",
-            "sha256": "588f07e64b9c791d2bc8e60f7080f528caf291389988d8c67adfc78efb6a9432"
+            "sha256": "4d21622528e52e7e5cc9245ce149ce920292cbcba68c31950e130b69ebd3dd69"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/dev-docs/README.md",
-            "sha256": "638b446679a70a9c60545f622fc681245b965bbfd1d0af945995afedd142d86c"
+            "sha256": "d1f137ab7279205d444ad7cce74be4134cb801a925ba2df1f2ba11df6e0ebd74"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/dev-docs/acceptance.md",
-            "sha256": "e8ee5daa5e36675de6d3bb22db4d83278193eb2ef8dbfa4f93035a3831b567b0"
+            "sha256": "681b800f04d19cc4bd66cf905dfccbbef12e1654fc1786ac7eca5e37901c4f83"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/dev-docs/architecture.md",
-            "sha256": "cd27b5350744cf33bbdc16133448c1dee17b74c512cbfb77b887306a36de3d97"
+            "sha256": "bfe80a322d12a09ca55db4431e58d4fa17595dbbe02ee70596e25cf60ae88766"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/dev-docs/project-brief.md",
-            "sha256": "f40d6398ea0418509a74e3d8ab062064de8b2108d271292b1501cc7e426a8a7d"
+            "sha256": "a6536c4f8c07f4f4f3af56600c8fc72c7762aadd3e561690283be3b04e842b23"
           },
           {
             "path": "governance/sliver-core/assets/project-bootstrap/dev-docs/technical-selection.md",
-            "sha256": "c77bc0b30c020aa2c0a4af7cd6b19795023c0efc0498f467a61992f74c3083e1"
+            "sha256": "b7d30500286cf6c02ae84fe4c302ac603602bdf2e54053cbe14c2064b68211e0"
           },
           {
             "path": "governance/sliver-core/assets/project-decision/adr.md",
-            "sha256": "c8032387c078c161346d008b3e7ff3aefad58af41b370d0f128a21deaeaaa5d2"
+            "sha256": "74dffc386ccec2a59ca87388c4484fefacbf47a73caf4a74877b26dc71ff39de"
           },
           {
             "path": "governance/sliver-core/assets/project-decision/decisions-index.md",
-            "sha256": "2bc4e14cc4f684cede53ddc3107ffb2becc9c827b335948f0c33a1b9623a87e8"
+            "sha256": "b051c29f5919dc8edbe44420eba2b4bfd0abeb13b1faebc05b363ca933115086"
           },
           {
             "path": "governance/sliver-core/assets/project-design/dev-docs/README.md",
-            "sha256": "6084b0eb15fca073024744abe6ebcf9dc2d75c4aa8cb98948f338b61555622bb"
+            "sha256": "f2c104e0ea27cae74efa260847f9ed74c48e8c364676ed1f4ac7117109714fe1"
           },
           {
             "path": "governance/sliver-core/assets/project-design/dev-docs/design/README.md",
-            "sha256": "d77c0903c74bd85fbdc0ec74db372616866bac7d23a68a342c16a70aa5900693"
+            "sha256": "8237bc6f24b7bc72faaa337d5a0ecd8508fa0e1e0583fe8ef7f53f811f6194aa"
           },
           {
             "path": "governance/sliver-core/assets/project-design/dev-docs/design/prototypes/_template/prototype.md",
-            "sha256": "4679fddf74bd8b59ec088d57db0b7efb425ffd0e3491f1e3e8c1e9b5018d54d1"
+            "sha256": "d27c78daa39e707568463f6e32849dc6eff2b2360b8074b633718c2f7e927e9b"
           },
           {
             "path": "governance/sliver-core/assets/project-feature/feature-truth.md",
-            "sha256": "a877d81ff0d87a85398c19a02e7184660aa0906ad0f43f7839b30600b2d6575e"
+            "sha256": "6575c00bba821d8569ffb85dd74753b1bd128c74402a89029d23c31d729a697b"
           },
           {
             "path": "governance/sliver-core/assets/project-feature/features-index.md",
-            "sha256": "bf733a93574a522269e5c4c5eed8b0d37a02e6aa90b8e00e7684e03767f8eb5d"
+            "sha256": "30810e82a458ead7a9e5cde683075500c82ed71b40b7f2f2e20d73870d9f2d34"
           },
           {
             "path": "governance/sliver-core/assets/project-stage/stage-truth.md",
-            "sha256": "1567515838bbe340d59851165af6ead795945ae41a77d72a085db9d5575ad6fb"
+            "sha256": "fb8b6ab648906e7a3d71301f05be2a9ca78f390450dc81dcd734d5a2def63d5e"
           },
           {
             "path": "governance/sliver-core/references/agent-constitution-template.md",
-            "sha256": "667614f5890b9d797f85ff1e1424f85cc3b4d9fca1e01aa7bb052faca113fd5e"
+            "sha256": "4976488aa2276b51c6b13ae6589dfb7f124d77117ab9d4a859f4562039f3b08f"
           },
           {
             "path": "governance/sliver-core/references/agent-constitution.md",
-            "sha256": "69dfee85400231d9920edb15a28208f22e2b038bb1eb37d40fbeab8e08293a1b"
+            "sha256": "9a757577f4c24011ec702da8905d255c6858d13db4a4b993053170cd0f73ced4"
           },
           {
             "path": "governance/sliver-core/references/architecture-patterns.md",
-            "sha256": "a4584a70a28a76fb18212ab1f52cbaf0b47a9e2c063ff14a87f630483a433579"
+            "sha256": "73419b195cd00daf6826fd4198075e117c8533fc630a516fd7e22d284040fbec"
           },
           {
             "path": "governance/sliver-core/references/audit-artifact.md",
-            "sha256": "93f41349a1f9f7d00054c243c9051c7f5f933e8c457b674cb1520151a7918f29"
+            "sha256": "d2896df164034437feeb1abf77b68d2fb7e4887d8131b1e01f5c497c6e48cc40"
           },
           {
             "path": "governance/sliver-core/references/backend-boundary.md",
-            "sha256": "6c84675d348ead988777f26e5bd307fa1bce6e33c6bf5e773ef4989a8d03d5fb"
+            "sha256": "0a379ce4078b85afa3ff92786b4f38d787632339271f427347292a178b2c19b8"
           },
           {
             "path": "governance/sliver-core/references/backend-skeleton.md",
-            "sha256": "6a7b87649d533afce7335ff79cb6bb16dafc6f5ddedfe935de138456eabddf27"
+            "sha256": "0c0259708f7093d4f6b6281808944b412739728cbb614591a04798ff6c831d1d"
           },
           {
             "path": "governance/sliver-core/references/beginner-failure-modes.md",
-            "sha256": "60bf3dbbe3890841fab4b108cd6eeef679a543d64471415082939f96f47e74d2"
+            "sha256": "c22cd01b9ba41ad22308e652032eb1d79a14f6a8bda2ea8886326f5eb645ae7e"
           },
           {
             "path": "governance/sliver-core/references/context-handoff.md",
-            "sha256": "0807f8f374cea9799884b88391dd5877eb1f872fc6580883c3d32b7a1b277857"
+            "sha256": "52e224e22d87f43e0f6f57324938779392aba198f588fa3cc086c9d02bf20e54"
           },
           {
             "path": "governance/sliver-core/references/database-design.md",
-            "sha256": "ae8fed6553291d6139c4f7e0a19addef8b1dac5794877cd8c6f2d34ce249dd36"
+            "sha256": "8125f3d8fde16215a5c8d667d84decac86b89de5049999f668b0b24e89238e00"
           },
           {
             "path": "governance/sliver-core/references/development-execution-core.md",
-            "sha256": "964ac7fed2dc94f187bcd4bac5499cfe83aea6122cf93f56a9cf5b618191b3ce"
+            "sha256": "710dd88bd65431182ee7a22f3c5ce0aabb89644942049744943a1e951f0d2075"
           },
           {
             "path": "governance/sliver-core/references/effect-recovery-gates.md",
-            "sha256": "e871d133d14956e6075e53466bd48e632bbe5cb4c3a5534075f653ac19f8f36c"
+            "sha256": "51240b3058f75f854e3d1d44fa57b6ecd4816d6268d12b8e077219968b855bed"
           },
           {
             "path": "governance/sliver-core/references/engineering-execution.md",
-            "sha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f"
+            "sha256": "e7a9f553a80c045c7f3016243dfa4cc173a8f512addd0ac01f3db76add26e5a4"
           },
           {
             "path": "governance/sliver-core/references/execution-liveness.md",
-            "sha256": "74b0e7284444ca104d18515471eeab0074a710649c38124e59c14391e711f78e"
+            "sha256": "f3ddc9a482eb84d3c77d308bd5ef1d75a4d466a042c56e712b646958adc38505"
           },
           {
             "path": "governance/sliver-core/references/formal-materialization.md",
-            "sha256": "23902ac967489adca60dbe80ad5d07b272bd161f6f60ee82190b9a306e9a439f"
+            "sha256": "ab628fdadd842bc637eb60c4eadd36b7b0cb7b583f6dd75fa0ac8acc05f363a4"
           },
           {
             "path": "governance/sliver-core/references/frontend-skeleton.md",
-            "sha256": "e02f0033a58084ad41560790549a3aab7ac118529b6469c85eb67cf2ee14516a"
+            "sha256": "19f8f9990f05dc529b04b11ba792b1a874916ccf49624887c0b69edfbe787c7b"
           },
           {
             "path": "governance/sliver-core/references/git-and-delivery.md",
-            "sha256": "1e31e1bfc1b3c451adaab2ce3dd32816084c16d7198fb9c13e2cb50f061e63cb"
+            "sha256": "52bdf1a988dfd3dcef3c0e6ced5215e4ab6269788db457b589e163a184ed8694"
           },
           {
             "path": "governance/sliver-core/references/monetization-and-entitlements.md",
-            "sha256": "2cb9b0e788ea984106b77266df85e6d4958efa6bbf6189e6c570d0c733354f4b"
+            "sha256": "2a94531629618d586f80fc5cdffc391bb887e0817c2cbf772631bb240b9417e1"
           },
           {
             "path": "governance/sliver-core/references/plan-artifact.md",
-            "sha256": "6376daea8bb8cd744166731ee5e0a0b609ff9e9c0e7053a0fbdee55268e4a476"
+            "sha256": "1f0a43528e5ac0017036e6eaae9a211dfd70d3f1f241654eb6e6d39709df03ac"
           },
           {
             "path": "governance/sliver-core/references/project-flow.md",
-            "sha256": "778f6caa75ae833eb2333644df737eebda4571c743f414d8c99a9e1214f26c88"
+            "sha256": "bc9aa0a1237ae9f9637a75ddada976991df8f809f983092df0152621b7fd8735"
           },
           {
             "path": "governance/sliver-core/references/project-intake.md",
-            "sha256": "260a43fc6c5842ab8a9b5c1d4a7cd0fa578aaa5c320053726f8d0a8bb77cff37"
+            "sha256": "cd6641c5c82aa6f2cb7a6c785868f6d8b1f7b37a60abbb67f52dbda6a4b8549e"
           },
           {
             "path": "governance/sliver-core/references/project-templates.md",
-            "sha256": "dfbf62b8cb9df784c255bd0ed06f957827be10b289ef06e98c6d13da999857bd"
+            "sha256": "220a9f983adf69776d2b29d914f166b33cb7c4da492305444991387bc4aff299"
           },
           {
             "path": "governance/sliver-core/references/question-bank.md",
-            "sha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab"
+            "sha256": "d92b4a864fcbf0a9b7d48c055e46dd9580ebdddb0c859624440909fe18e6f3c1"
           },
           {
             "path": "governance/sliver-core/references/risk-control-gates.md",
-            "sha256": "a1dd4f996ac85af4ecbedcb652df1ea573604f708ed5cd48cec36f11afa67c68"
+            "sha256": "8fb773b413095677353eedca0224f54f30f0675f7febc683e0b2624e23786b8c"
           },
           {
             "path": "governance/sliver-core/references/routes-backend.md",
-            "sha256": "d463a209de866d0f90421f40cc9cc60a995f443fb69d07051786e19f107ddcf6"
+            "sha256": "6f16ab4cb62e60164d898ba1e21e54fe0cd371352d7bdc6c8cbba09c293bff59"
           },
           {
             "path": "governance/sliver-core/references/routes-constitution.md",
-            "sha256": "34e5d2ab3e21c8a7c60320a21e1ece9e4b1e79cc1c321a481320b48f8175cc94"
+            "sha256": "703a784f9429fa61e7744d07349f036a826de903fdf002abeadd1ee7e74bd667"
           },
           {
             "path": "governance/sliver-core/references/routes-feature.md",
-            "sha256": "6ba8fe3cd2faa47732256a68a085b2706a762c0e181521c7ed687f5421c276a4"
+            "sha256": "a53bc0f838ae2caa2ae108985e6942e5e08c0b41c28ab140089f1da95d49c810"
           },
           {
             "path": "governance/sliver-core/references/routes-git.md",
-            "sha256": "0478a5a91d261b64ad2d401ccc38ee76e0d98cf84220ab3c4c04dc7e011bcfb6"
+            "sha256": "a6e9a083eaa779bdebf50cc0b8f54fec10956138db0c0754fb8bd06b8b7dc443"
           },
           {
             "path": "governance/sliver-core/references/routes-index.md",
-            "sha256": "1b44e3a84e7aae61629755935e484a75c0d8424422d1ecc3e2c1e3a0024206c2"
+            "sha256": "6a2f13f1697ac363a84c7986859bd0dd306fdfb0566e4da4afda4e8066f77a8d"
           },
           {
             "path": "governance/sliver-core/references/routes-intake.md",
-            "sha256": "c971b3cc54b12f63874446f82f1444751d7e4aad00f04d336e4bf0aae166e548"
+            "sha256": "1a97e11139f1d081b6ce64a7cea6a080ede3072f9e77b71b2d878bdcee8abbef"
           },
           {
             "path": "governance/sliver-core/references/routes-release.md",
-            "sha256": "6e1ce8870f2373f1bd98cf6b0d6b5b055e5eb9e9d3a649bdef7b18231b880a31"
+            "sha256": "93ce77cf930c42298f37681512a41bdf94c6b1f1e84d7c6ad0fbcfb6916b7701"
           },
           {
             "path": "governance/sliver-core/references/routes-rescue.md",
-            "sha256": "98911a0a6d7f055a6118b63c92a4fa93e3b1e76e82a72f1dfb2956e579d2b0a1"
+            "sha256": "97d17a57c46c931e9d8b0564821589178534a93217de0108db0d11837be336b1"
           },
           {
             "path": "governance/sliver-core/references/routes-validation.md",
-            "sha256": "a9b9b1c586ee6975d0a8845b63d7efabccdd35d6bddd468f886589dcea44f0da"
+            "sha256": "7f30a582e461fd4626b7e1f4cb95df4832c7ff42c572c879be870b9717558fbe"
           },
           {
             "path": "governance/sliver-core/references/runtime-adapter.md",
-            "sha256": "4c7b5db64a83865a947185b4fed61e5b64460be5239f9c4d77b028a73a039eff"
+            "sha256": "9b0fc2794f01365b50cf6ff8542cfbf32a6a6b1cc71976f2be5ef11abfde007f"
           },
           {
             "path": "governance/sliver-core/references/security.md",
-            "sha256": "190cb9d4421124cac542ad2f27ff8b8c8ff40e775eb26202fb17590986f29282"
+            "sha256": "914eaa3b20335b7913520cd93082d05cf172d0256b713c9eafa076a76e2cc8d1"
           },
           {
             "path": "governance/sliver-core/references/studio-execution.md",
-            "sha256": "a46ef3d83a5ef86324411e103ff7012408b221aab1c94893bb80a07a8e25d9d2"
+            "sha256": "cb673defea3133a6c9dbc8318f215e994ff8a588d2c1350adcfd594be9416f68"
           },
           {
             "path": "governance/sliver-core/references/task-decision-contract.md",
-            "sha256": "f224c62c42fe9462a765340bc1eecf54689c83889914b1dbfe5757c16f795fe4"
+            "sha256": "1ce41579dab18315787ae338810f3a5bfc0317d1018b48b8d37f06b028e0f638"
           },
           {
             "path": "governance/sliver-core/references/task-risk-gates.md",
-            "sha256": "05a4016cd37ef43a7fc240fe3ae68a68999b237de1e6efc2de15f2a5c9500350"
+            "sha256": "d21775013bb123aeb5e3a71533743a75e5c930106fc780ff0f4bd567c67a8736"
           },
           {
             "path": "governance/sliver-core/references/tech-stack.md",
-            "sha256": "67c5810cdcc9401e521c590830e1baae35e11a3ab8a99f2af259e3a8b0cafa70"
+            "sha256": "782022ba91623b9ce87f65c3c02a1e298515c28b36d2d823f497971bd1453c3c"
           },
           {
             "path": "governance/sliver-core/references/testing-execution-gates.md",
-            "sha256": "2e02e32a3d9b68031aee5e74dc4e2f235cbb6211ec4e64f6cbe00dfe7c71c1db"
+            "sha256": "5c19ab9364ae50d38e93f85df0f060f9f832e5047106ddfc996d935f1646c26b"
           },
           {
             "path": "governance/sliver-core/references/testing-strategy.md",
-            "sha256": "995664aa56daff1d92edaf7b4252a21961dbe38946d80f283b891e652362049b"
+            "sha256": "34162acff57945f7ffaffdbb6765a1612bb1f9a9fdd6160002c58cd1e0d712b1"
           },
           {
             "path": "governance/sliver-core/references/third-party-integration.md",
-            "sha256": "541d96e94c95a1e53f7646eb94c08b5d19fcce09249b78e3c040c8f08ba87acf"
+            "sha256": "3e00a982707c63f3929bc2c7f0763d32001e646843bc157406baf23fddbfe32a"
           },
           {
             "path": "governance/sliver-core/references/truth-capture.md",
-            "sha256": "4f67efb515cfc3d5fb3f7b01c6d65d075e7ea6ab98d350c905cc06812ea92d60"
+            "sha256": "a66def49954a743f3fa6eb5abd236fa1c28497988db11023dd5c350a492ebc05"
           },
           {
             "path": "governance/sliver-core/references/truth-resolution.md",
-            "sha256": "2c7bf0812d8267125e7af153c9a3d43ba61140b5910a1eb05ff89ba35f5535f6"
+            "sha256": "1a5d3406ae15ec2547af098c8616da9c3af4db013648e377d70596845a200b47"
           },
           {
             "path": "governance/sliver-core/references/ui-design-lifecycle.md",
-            "sha256": "f84352c367af9b43e93ce022c82b874cf86d53b10feaed593440345e5aeab3b9"
+            "sha256": "a9633d03e93f2789c20899c2055ae646b0198969ea166fc3a08745effe8868db"
           },
           {
             "path": "governance/sliver-core/scripts/check_project_guardrails.py",
-            "sha256": "1b55f26f2e10d2cb66a1cf942b954d1eb8522264f4db15b1ce3f83029726ea34"
+            "sha256": "3fd2c3d45788325f45f69953c53fe2d7530b3e07a1e4ee5219f46c6493a9099e"
           },
           {
             "path": "governance/sliver-core/scripts/migrate_stage_contract.py",
-            "sha256": "05fe2cd5f04dc90de74b212a4cefc53860c47f5b53170914ed42ca79a2548907"
+            "sha256": "8f303a2fd8741fc0d3fe61a5a7541a58ea9d8b966e4fbb932d96a901a4384e05"
           },
           {
             "path": "governance/sliver-core/scripts/runtime_decision_contract.py",
-            "sha256": "2b7dc4cc5f5ec61c8ecefca1e2609f2725af1a963567a2afb71ffaa8d9d0fd13"
+            "sha256": "cfb3ef25ae81c4654d231e4a58bb3918322c9dd2af1895c48b01497bf7970073"
           },
           {
             "path": "governance/sliver-core/scripts/runtime_governance_contract.py",
-            "sha256": "4966c680e01bbe53d2017ad5bdaf713bd291affe382c1ab8eb9ba15bd1818af8"
+            "sha256": "500f6ba5b101f2c0c224b8496e3471f5133ecb0fc5adda0730c027159d0d8bca"
           },
           {
             "path": "governance/sliver-core/scripts/stage_contract.py",
-            "sha256": "2655f85d26926c9103dae52b76891706f2701e63cdd61e2cda6a5d7a7b33fc71"
+            "sha256": "7d9060ffaa988b5e5900cba7fb719843a00e460aa4ce59565687ea790b5d51b5"
           },
           {
             "path": "governance/sliver-core/scripts/validation_support.py",
-            "sha256": "70f512855d5101ecf0418756a646a4665846e4ee648392d3a30f7008e82f5a2c"
+            "sha256": "957d561694264ae67a25563126150c225dc7280c15eb9ccd574c53981005a24f"
           }
         ],
         "excluded": []

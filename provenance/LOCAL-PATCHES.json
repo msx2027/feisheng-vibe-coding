@@ -31,19 +31,19 @@
         {
           "path": "assets/project-audit/audit-report.md",
           "originalSha256": "dcc25ed5361754957ff8c7924f4f1789f8c04614cc9cf6560dfc598b57167855",
-          "patchedSha256": "39c104e9ad4bc7a7f3caf0a9ab441a65a44a7cbe3be0920476d9ff6bf0e36c45",
+          "patchedSha256": "2e38de28766ddb2f76d3df491bbcb14b4c3b5a342d2f5ab56885478df7bda031",
           "linesChanged": 4
         },
         {
           "path": "assets/project-decision/adr.md",
           "originalSha256": "10821d1cd470205ff137034d14fd38f3bb7c9d4e120d5ffdb242fd02179bd281",
-          "patchedSha256": "c8032387c078c161346d008b3e7ff3aefad58af41b370d0f128a21deaeaaa5d2",
+          "patchedSha256": "74dffc386ccec2a59ca87388c4484fefacbf47a73caf4a74877b26dc71ff39de",
           "linesChanged": 4
         },
         {
           "path": "assets/project-feature/feature-truth.md",
           "originalSha256": "7dac5bfae82b88cb07011a6560ea85740bb2c791fdc7654051860231d3de442d",
-          "patchedSha256": "a877d81ff0d87a85398c19a02e7184660aa0906ad0f43f7839b30600b2d6575e",
+          "patchedSha256": "6575c00bba821d8569ffb85dd74753b1bd128c74402a89029d23c31d729a697b",
           "linesChanged": 4
         }
       ]
@@ -60,8 +60,8 @@
       "files": [
         {
           "path": "references/engineering-execution.md",
-          "originalSha256": "b7f30562cf2c020087414620c920220ee74d0953f876ea6064b80047b74734a1",
-          "patchedSha256": "b6c78417705e63017bf247534efe0aa197b7f187b90ef11772c463d363f86c2f",
+          "originalSha256": "79071c1d56fa32b230913cad71c4140587dbf7eb50c3ce7305dfbb282312b340",
+          "patchedSha256": "e7a9f553a80c045c7f3016243dfa4cc173a8f512addd0ac01f3db76add26e5a4",
           "linesChanged": 74
         }
       ]
@@ -528,8 +528,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
-          "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
+          "originalSha256": "86a54779954efa0aec366550cc501218d351791e5e06fa6d929318392a62b5b0",
+          "patchedSha256": "d0f1f1ac6cc1db6cb945117d4a9e9d7bb8c72f10b60dde31f0703b7dca78ef51",
           "linesChanged": 1
         }
       ]
@@ -548,7 +548,7 @@
           "path": "governance/sliver-core/SKILL.md",
           "snapshotPath": "governance/sliver-core/SKILL.md",
           "originalSha256": "35aebac362496b31ac27268f4e8277c37d69cb912d1d9fb58711ff54d3f2382c",
-          "patchedSha256": "39c046319ff4025404c59d622c71fc83cb553ee0d75b0eb89c7dc7fcd2c4e30f",
+          "patchedSha256": "d0f1f1ac6cc1db6cb945117d4a9e9d7bb8c72f10b60dde31f0703b7dca78ef51",
           "linesChanged": 1
         }
       ]
@@ -665,8 +665,8 @@
       "files": [
         {
           "path": "references/question-bank.md",
-          "originalSha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8",
-          "patchedSha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab",
+          "originalSha256": "a4491bd28284372d06b2aff56938e855cfdb996d89bd52b4be5c607a673d5e62",
+          "patchedSha256": "d92b4a864fcbf0a9b7d48c055e46dd9580ebdddb0c859624440909fe18e6f3c1",
           "linesChanged": 4
         }
       ]
@@ -676,16 +676,16 @@
       "snapshot": "sliver-core",
       "appliedAt": "2026-09-28",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
-      "change": "开发执行加载体积预算上调：development_loading_contract.d0_max_bytes 67000→68000，bounded_d1_max_bytes 74000→75000。只改这两个数字所在的 2 行，文件其余内容逐字节未动（87199 字节不变、CRLF 行计数 2477 不变），required/forbidden refs、marker、required_terms、conditional_refs 与 project_audit 契约全部原样。",
-      "reason": "预算超标长期静默：唯一 owner 是 governance/sliver-core/scripts/evaluate_execution_backbone.py，但 scripts/verify.ps1 无 python 步骤、.github/workflows/release-gate.yml 亦无，本仓任何关卡都不跑它，2026-09-10 导入后无人复查。实测归因把两个变量分开：①真实内容增长只有 references/… 之外的一项——SKILL.md 自导入 +67 字节，runtime-adapter.md、development-execution-core.md、task-risk-gates.md、testing-strategy.md、effect-recovery-gates.md、testing-execution-gates.md 五个内容零增长；②其余超标来自 sliver-core 保真树以 CRLF 落盘——上游生成 67000/74000 与 73 cases 那组数字时同一批文件是 LF，CRLF 使 6 个 D0 文件多 581 字节、加第 7 个文件多 634 字节。LF 副本实测 D0=66839（合规）、bounded D1=74049（仍超 49）；CRLF 工作树实测 67420/74684。同一根因另使 sliver-core 的 110 条 python 契约测试在 LF 副本红 3 条、在当前 CRLF 工作树红 18 条（多出的 15 条全是 fixture SHA-256 与 CRLF 字节不符）。是否把 sliver-core 恢复为 LF 属 owner 决策且涉及 220 个保真文件的重录，本补丁不动，只按当前真实字节上调预算并把该评测接进关卡；若日后恢复 LF，D0 可回 67000、bounded D1 仍需 75000。",
+      "change": "开发执行加载体积预算：只上调 development_loading_contract.bounded_d1_max_bytes 74000→75000（1 行）。d0_max_bytes 保持上游原值 67000——本条目 2026-09-28 曾一并把 d0 上调到 68000，那是用来盖住 CRLF 落盘的虚高字节；同日 owner 裁定把 governance/sliver-core 保真树换行恢复为 LF 后 d0 超标消失，撤销该项，只保留有界 D1 的真实上调。",
+      "reason": "预算超标的根因已由 A/B 实测分离（evidence/20260928-loading-budget-and-eol-root-cause.md、evidence/20260928-eol-lf-rehearsal.md）：真实内容增长只有 SKILL.md +67 字节，其余来自整树以 CRLF 落盘。LF 恢复后新鲜实测 UI_D0=66839（在 67000 预算内，余量 161），有界 D1=74049 仍超 74000 达 49 字节，故 75000 必须保留。同根因另使该树自带的 110 条 python 契约测试红数下降：CRLF 侧 failures=17（具名 16 个，其一含子测试计两次）、LF 侧 failures=2（两条同因：可信运行时基线 Git 对象 29695fe099c6b38c9b5c470abbb2e065fc1ff936 随源项目删除不可得，与换行无关）。环境口径订正：本条目旧文本与前一份证据写的「红 3 / 红 18」是默认 GBK 控制台下测的，其中 1 条为控制台解码噪声不是真失败；统一 UTF-8 环境（PYTHONUTF8=1 PYTHONIOENCODING=utf-8）下正确数为 2 / 17。登记哈希口径：换行恢复后本命名空间 7 个文件的 patchedSha256 与其中 4 个可反查历史 blob 的 originalSha256 一并重录为 LF 形态；3 个 assets/* 模板的 originalSha256 在本仓库全部历史 blob 中 CRLF/LF 两种形态均无可匹配版本，只能来自已删除的来源项目，保持原值不动。",
       "evidence": "evidence/20260928-loading-budget-and-eol-root-cause.md",
       "verification": "改动前后文件字节数同为 87199、CRLF 计数同为 2477、diff 只命中 2 行；evaluate_execution_backbone.py 复跑退出码 0 并打印 UI_D0=67420 / bounded_D1_UI=74684 / bounded_project_audit=60629（三项均在预算内）；scripts/verify.ps1 新增「控制面静态契约评测」步（1e），本机 pwsh 7 全 21 步全绿；originalSha256 fba190166acce08c… == 补丁前实算，patchedSha256 3b4c7fe0be1d247c… == 补丁后实算；sliver-core 树摘要经 annotation 通道重录 75eb2715→35a40ec4，fileCount 220 不变",
       "files": [
         {
           "path": "tests/execution-backbone-cases.json",
-          "originalSha256": "fba190166acce08c89782bc79354a2ac2d001cee224e5645ce6824cbaf13388d",
-          "patchedSha256": "3b4c7fe0be1d247cbe815a83989ac8e1d7cebf8e7e46edf0810402f73c13d3f1",
-          "linesChanged": 2
+          "originalSha256": "a00d313f4caff1029ef42a4aefce673bc6dce8c6cf8f4901322a3a5d7f44b3f8",
+          "patchedSha256": "3e1377d7a041db9191dc354d2c4ac5a4d775d0e67a68a3652d3ab98d857c6084",
+          "linesChanged": 1
         }
       ]
     }

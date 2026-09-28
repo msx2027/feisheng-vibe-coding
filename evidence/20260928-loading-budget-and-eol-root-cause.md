@@ -111,3 +111,19 @@ git revert <本批提交>            # 5 个入库文件一次还原
 # 5) pwsh -NoProfile -File scripts/build-canonical-catalog.ps1 -RepoRoot <repo>
 # 6) pwsh -NoProfile -File scripts/verify.ps1 -RepositoryRoot <repo>   # 预期回到 20/20
 ```
+
+---
+
+## 8. 追加订正（2026-09-28 同日换行归一批，owner 决定「做」）
+
+本文件上面几处结论已被同日下一批改变，按「原文不改、追加指针」的方式留账：
+
+1. **§1 与 §一句话结论：`d0_max_bytes` 67000→68000 已撤销。** 换行归一批把 `governance/sliver-core` 220 个保真文件恢复为 LF 后实测 `UI_D0=66839`，回到上游预算 67000 之内，该数字已回写；`bounded_d1_max_bytes` **仍是 75000**（实测 74049 仍超 49 字节，这部分是真需求，撤不掉）。所以本批正文里「按当前工作树真实字节上调」这句记录的是当时的真实字节，不再是现在的状态。
+2. **§3.2 表格的红数要加环境口径。** 「LF 红 3 / CRLF 红 18」是在默认 GBK 控制台测的，其中 1 条（`test_route_operation_delivery_projection_drift_fails_end_to_end`）是 Python 子进程输出解码崩溃造成的噪声、不是真失败。统一 UTF-8 环境（`PYTHONUTF8=1 PYTHONIOENCODING=utf-8`）下的正确数：**LF failures=2 / CRLF failures=17**（17 对应具名测试 16 个，其一含子测试计两次）。换行归一转绿的具名测试是 **14 个**，不是 15 个。
+3. **§3.2「残留 3 条红」现为 2 条**，且两条同因：`trusted runtime baseline Git object is unavailable: 29695fe099c6b38c9b5c470abbb2e065fc1ff936`。与换行无关，来源项目删除后不可恢复，故「把 110 条套件接进 CI」至今仍未达成。
+4. **§5 未验证项两条已闭环：**
+   - 「CI 能否跑通新步骤（ubuntu-latest 是否有 python3）」→ 已闭环：本批接线的 `1e)` 步在 GitHub `ubuntu-latest` 实跑通过（run `36385532091`，21/21）。
+   - 「那 15 条红在方案 A 下是否全部转绿」→ 已实测：LF 下具名转绿 14 个，残留 2 个属另一根因（第 3 条），方案 A 无法修掉。
+   - 仍开放：fresh clone 下 LF 是否被 `core.autocrlf` 改写；`sources/**`、`skills/**` 两棵树是否同步归一。
+5. **§6 回滚配方作废为本批的配方**（它回滚的是「CRLF 状态下上调预算」这件事，而该状态已不存在）。现在的回滚对象是换行归一批，配方见 `evidence/20260928-eol-lf-landing.md` §7。
+6. 换行归一的完整数字、账本改动清单、落地时的顺序坑（`git add` 之前跑门禁会得 20/21），见 `evidence/20260928-eol-lf-rehearsal.md`（演练）与 `evidence/20260928-eol-lf-landing.md`（落地）。
