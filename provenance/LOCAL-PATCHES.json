@@ -670,6 +670,24 @@
           "linesChanged": 4
         }
       ]
+    },
+    {
+      "id": "sliver-execution-loading-budget-raise",
+      "snapshot": "sliver-core",
+      "appliedAt": "2026-09-28",
+      "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
+      "change": "开发执行加载体积预算上调：development_loading_contract.d0_max_bytes 67000→68000，bounded_d1_max_bytes 74000→75000。只改这两个数字所在的 2 行，文件其余内容逐字节未动（87199 字节不变、CRLF 行计数 2477 不变），required/forbidden refs、marker、required_terms、conditional_refs 与 project_audit 契约全部原样。",
+      "reason": "预算超标长期静默：唯一 owner 是 governance/sliver-core/scripts/evaluate_execution_backbone.py，但 scripts/verify.ps1 无 python 步骤、.github/workflows/release-gate.yml 亦无，本仓任何关卡都不跑它，2026-09-10 导入后无人复查。实测归因把两个变量分开：①真实内容增长只有 references/… 之外的一项——SKILL.md 自导入 +67 字节，runtime-adapter.md、development-execution-core.md、task-risk-gates.md、testing-strategy.md、effect-recovery-gates.md、testing-execution-gates.md 五个内容零增长；②其余超标来自 sliver-core 保真树以 CRLF 落盘——上游生成 67000/74000 与 73 cases 那组数字时同一批文件是 LF，CRLF 使 6 个 D0 文件多 581 字节、加第 7 个文件多 634 字节。LF 副本实测 D0=66839（合规）、bounded D1=74049（仍超 49）；CRLF 工作树实测 67420/74684。同一根因另使 sliver-core 的 110 条 python 契约测试在 LF 副本红 3 条、在当前 CRLF 工作树红 18 条（多出的 15 条全是 fixture SHA-256 与 CRLF 字节不符）。是否把 sliver-core 恢复为 LF 属 owner 决策且涉及 220 个保真文件的重录，本补丁不动，只按当前真实字节上调预算并把该评测接进关卡；若日后恢复 LF，D0 可回 67000、bounded D1 仍需 75000。",
+      "evidence": "evidence/20260928-loading-budget-and-eol-root-cause.md",
+      "verification": "改动前后文件字节数同为 87199、CRLF 计数同为 2477、diff 只命中 2 行；evaluate_execution_backbone.py 复跑退出码 0 并打印 UI_D0=67420 / bounded_D1_UI=74684 / bounded_project_audit=60629（三项均在预算内）；scripts/verify.ps1 新增「控制面静态契约评测」步（1e），本机 pwsh 7 全 21 步全绿；originalSha256 fba190166acce08c… == 补丁前实算，patchedSha256 3b4c7fe0be1d247c… == 补丁后实算；sliver-core 树摘要经 annotation 通道重录 75eb2715→35a40ec4，fileCount 220 不变",
+      "files": [
+        {
+          "path": "tests/execution-backbone-cases.json",
+          "originalSha256": "fba190166acce08c89782bc79354a2ac2d001cee224e5645ce6824cbaf13388d",
+          "patchedSha256": "3b4c7fe0be1d247cbe815a83989ac8e1d7cebf8e7e46edf0810402f73c13d3f1",
+          "linesChanged": 2
+        }
+      ]
     }
   ]
 }

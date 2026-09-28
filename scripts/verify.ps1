@@ -25,10 +25,13 @@ Set-StrictMode -Version Latest
 #
 # 覆盖（步骤名以实际输出为准，编号随门禁演进而增删，对账勿依赖本文数字）：
 #   - catalog 与分类真源同步（重生成后语义比对）
+#   - 入库生成物为 pwsh 7 排版（catalog / inventory 的 JSON 缩进结构判据；语义比对对缩进不敏感，
+#     5.1 生成的入库文件体积近乎翻倍却能全绿——2026-09-28 实测 158,273 对 289,370 字节）
 #   - runtime include 内容完整性（bundle 逐文件 sha256 + 全局路径唯一性）
 #   - 导入副本与快照一致性（Vibe 逐文件白名单 + Matt 侧，含登记补丁双向核对）
 #   - 已登记补丁结构不变量（runtime-import 补丁的围栏奇偶 / frontmatter 键集 / 路径 token 结构比对）
 #   - 保真树换行可复现性（-text 且索引==工作树）
+#   - 控制面静态契约评测（governance/sliver-core 的开发执行 D0 / 有界 D1 加载体积预算，2026-09-28 接线）
 #   - 能力索引新鲜度（重生成后逐字节比对）
 #   - 来源快照完整性（聚合树摘要自证）
 #   - 路由绑定（admitted 在绑定 owner 唯一命中）
@@ -111,6 +114,36 @@ try {
         }
     } catch {
         Add-Result -Step 'catalog 与 SKILL-CLASSIFICATION.json 同步' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 1a) 入库 JSON 生成物的排版必须是 pwsh 7 的每层 2 空格缩进
+    #     为什么要单独一步：第 1 步把两边 JSON 解析后比语义，对缩进不敏感——谁用 Windows PowerShell 5.1
+    #     重生成并提交（5.1 为每层 4 空格），同一份数据落盘体积近乎翻倍（2026-09-28 实测
+    #     158,273 字节对 289,370 字节，解析后逐字段全等），而门禁全绿。生成器侧已加运行时闸门
+    #     （build-canonical-catalog.ps1 / build-skill-inventory.ps1 拒绝在 5.1 下写仓库内文件），
+    #     本步是对「闸门上线前已入库」与「绕过生成器手工改排版」的兜底。
+    #     判据取结构而非体积（体积上限会随记录数增长烂掉）：pwsh 7 必有缩进恰为 2 的行，
+    #     5.1 的缩进全为 4 的倍数、绝不会出现 2；只查两份由生成器产出的镜像，不查手记的登记表。
+    try {
+        $layoutFiles = @('provenance/CANONICAL-CATALOG.json', 'provenance/SKILL-INVENTORY.json')
+        $layoutErrors = @()
+        foreach ($layoutFile in $layoutFiles) {
+            $layoutText = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot $layoutFile)
+            $layoutIndentTwo = 0
+            foreach ($layoutLine in ($layoutText -split "`n")) {
+                if (($layoutLine.Length - $layoutLine.TrimStart(' ').Length) -eq 2) { $layoutIndentTwo++ }
+            }
+            if ($layoutIndentTwo -eq 0) {
+                $layoutErrors += ($layoutFile + ' 不是 pwsh 7 排版（无缩进 2 空格行，疑似 Windows PowerShell 5.1 生成的每层 4 空格；用 pwsh 重生成该文件）')
+            }
+        }
+        if (@($layoutErrors).Count -gt 0) {
+            Add-Result -Step '入库生成物为 pwsh 7 排版' -Passed $false -Detail ((@($layoutErrors | Select-Object -First 4)) -join '; ')
+        } else {
+            Add-Result -Step '入库生成物为 pwsh 7 排版' -Passed $true -Detail ('files = ' + (@($layoutFiles)).Count + ' (2-space indent)')
+        }
+    } catch {
+        Add-Result -Step '入库生成物为 pwsh 7 排版' -Passed $false -Detail $_.Exception.Message
     }
 
     # 1b) runtime include 内容完整性
@@ -437,6 +470,42 @@ try {
         }
     } catch {
         Add-Result -Step '保真树换行可复现性' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 1e) 控制面静态契约评测（开发执行加载体积预算；2026-09-28 接线）
+    #     为什么要接：`evaluate_execution_backbone.py` 是 D0/有界 D1 加载体积预算的唯一 owner，
+    #     但它此前没有被任何关卡调用（verify.ps1 无 python 步骤、CI 也无），预算超标只能靠人偶然跑到才发现。
+    #     实测归因（LF 与 CRLF 两份副本 A/B，见 evidence/20260928-loading-budget-and-eol-root-cause.md）：
+    #     自导入起真实内容增长只有 SKILL.md +67 字节，其余超标来自 governance/sliver-core 整树以 CRLF
+    #     落盘（同一内容 LF 副本实测 D0=66839 合规、有界 D1=74049）；该树 220 个文件当前全部纯 CRLF。
+    #     本步把这条不变量变成机器门；缺 python3 直接失败，不静默跳过。
+    try {
+        $backboneRoot = Join-Path $repoRoot 'governance/sliver-core'
+        $backboneScript = Join-Path $backboneRoot 'scripts/evaluate_execution_backbone.py'
+        if (-not (Test-Path -LiteralPath $backboneScript -PathType Leaf)) {
+            throw "缺少控制面评测脚本: $backboneScript"
+        }
+        $pythonCandidate = $null
+        foreach ($pythonName in @('python3', 'python')) {
+            $resolvedPython = Get-Command $pythonName -ErrorAction SilentlyContinue
+            if ($null -ne $resolvedPython) { $pythonCandidate = $resolvedPython.Source; break }
+        }
+        if ([string]::IsNullOrWhiteSpace($pythonCandidate)) {
+            throw '未找到 python3 / python，无法运行控制面静态契约评测（不得静默跳过）'
+        }
+        $global:LASTEXITCODE = 0
+        $backboneOutput = @(& $pythonCandidate -B $backboneScript $backboneRoot 2>&1 | ForEach-Object { [string]$_ })
+        $backboneExit = $LASTEXITCODE
+        $backboneLine = if (@($backboneOutput).Count -gt 0) { [string]($backboneOutput[-1]) } else { '' }
+        if ($backboneExit -ne 0) {
+            $detail = @($backboneOutput | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) -join ' | '
+            if ([string]::IsNullOrWhiteSpace($detail)) { $detail = '退出码 ' + $backboneExit + '，无输出' }
+            Add-Result -Step '控制面静态契约评测' -Passed $false -Detail $detail
+        } else {
+            Add-Result -Step '控制面静态契约评测' -Passed $true -Detail $backboneLine
+        }
+    } catch {
+        Add-Result -Step '控制面静态契约评测' -Passed $false -Detail $_.Exception.Message
     }
 
     # 2) 能力索引新鲜度

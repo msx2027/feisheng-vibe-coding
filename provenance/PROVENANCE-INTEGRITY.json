@@ -63,7 +63,7 @@
       "name": "sliver-core",
       "path": "governance/sliver-core",
       "fileCount": 220,
-      "treeHash": "sha256:75eb27157671a77b8eb2620f43fe763dc61bb8ae06a0faa7f1f6789cc2e3bf35",
+      "treeHash": "sha256:35a40ec4b9aa038108dac4ef4668a9f5847b70102bdd85862871bb8d80237b1c",
       "sourceRoot": "F:\\skiils工具\\sliver-vibe-coding",
       "sourceKind": "git-clean",
       "sourceRevision": "30c7cfb363c7ea58121e98edfd321c2cf396098e",
@@ -115,7 +115,8 @@
           "patchedSha256": "458b8863197a31c0596d435998fd739998748daf5a683d8364315ecf54addeab",
           "originalSha256": "5f1616a6c5df3f48639fd21326fa8b6f5008f35a7ceb168d73192365d34522e8",
           "patchId": "sliver-question-bank-ask-medium"
-        }
+        },
+        "{\"path\": \"tests/execution-backbone-cases.json\", \"patchedSha256\": \"3b4c7fe0be1d247cbe815a83989ac8e1d7cebf8e7e46edf0810402f73c13d3f1\", \"originalSha256\": \"fba190166acce08c89782bc79354a2ac2d001cee224e5645ce6824cbaf13388d\", \"patchId\": \"sliver-execution-loading-budget-raise\"}"
       ],
       "importRecord": "provenance/SLIVER-IMPORT.json"
     }
@@ -144,6 +145,12 @@
       "scope": "snapshots[sliver-core].treeHash + locallyPatchedPaths",
       "change": "补丁 sliver-question-bank-ask-medium（Question Bank 的 How To Ask 原位追加 4 条提问载体规则）后树摘要由 61137c15764b0e3e 更新为 75eb27157671a77b，fileCount 220 不变；本补丁只走 sliver-core 快照命名空间——question-bank.md 不是 SKILL-INVENTORY 导入事实行，无 catalog 投影偏差需按 runtime-import 通道另记（与先例 sliver-operating-law-declared-file-boundary 的双通道情形不同）。同批实测加载体积门：d0=67420/67000、bounded_d1=74684/74000 超标归因于 HEAD 既有内容（该集合仅含 sliver-core SKILL.md、references/runtime-adapter.md 与 4 个开发执行 owner，不含 question-bank.md；移除本补丁 1159 字节后数字不变），本文件不承担本补丁的体积影响，超标本身另案待 owner 拍板是否提预算或瘦身。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），沿用 2026-09-12 annotation 修订通道，并与 LOCAL-PATCHES.json、实际文件 sha256 双重对账。",
       "evidence": "evidence/20260928-question-medium-rule.md"
+    },
+    {
+      "at": "2026-09-28",
+      "scope": "snapshots[sliver-core].treeHash + locallyPatchedPaths",
+      "change": "补丁 sliver-execution-loading-budget-raise（tests/execution-backbone-cases.json 两个加载预算数字 67000→68000、74000→75000，2 行）后树摘要由 75eb2715 更新为 35a40ec4b9aa0381，fileCount 220 不变；同日两批（sliver-question-bank-ask-medium 与本补丁）之间树摘要未被其它写入改动。同批实测并留一条与本仓根因相关的账：sliver-core 保真树 220 个文件当前全部以 CRLF 落盘，而该树内部的 tests/foundation-live-behavior-cases.json 等契约里记录的 fixture SHA-256 是在 LF 字节上生成的——A/B 实测同一份 HEAD 内容的两份副本，LF 副本 evaluate_execution_backbone.py 报 D0=66839（在 67000 预算内）且 110 条 python 契约测试红 3 条，CRLF 工作树报 D0=67420、bounded D1=74684 且同一套件红 18 条；差异全部来自换行表示，内容零差异（按 CRLF 剥离后逐字节相同）。因此本条预算上调记录的是当前工作树的真实字节，若 owner 后续裁定把 governance/sliver-core 恢复为 LF，D0 预算应回落 68000→67000、bounded D1 仍需 75000。来源项目目录 F:\\skiils工具\\sliver-vibe-coding 已不存在（2026-09-28 实测），换行真源无法再与来源逐字节对账，本 annotation 即为唯一留账通道。来源归档后 record-provenance-integrity.ps1 按设计无法重跑（fail-closed 要求与来源逐字节比对），沿用 2026-09-12 annotation 修订通道，并与 LOCAL-PATCHES.json、实际文件 sha256 双重对账。",
+      "evidence": "evidence/20260928-loading-budget-and-eol-root-cause.md"
     }
   ]
 }

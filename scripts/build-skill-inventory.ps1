@@ -7,6 +7,17 @@
 
 $ErrorActionPreference = 'Stop'
 
+# 规范化运行时闸门：本脚本无条件写入库镜像 provenance/SKILL-INVENTORY.json，只允许 PowerShell 7 (pwsh) 运行。
+# Windows PowerShell 5.1 下 ConvertTo-Json 每层缩进 4 空格（pwsh 7 为 2 空格），且 Set-Content -Encoding UTF8
+# 会多写 3 字节 BOM（ef bb bf；2026-09-28 同内容实测：5.1 得 17 字节、7 得 14 字节；两者行尾同为 CRLF）。
+# 同一份数据落盘体积近乎翻倍，而门禁的 catalog 对账比的是解析后的语义，抓不到这种膨胀。
+# 口径与理由同 build-canonical-catalog.ps1 的同名闸门（2026-09-28 实测 158,273 → 289,370 字节）。
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    throw ('拒绝用 Windows PowerShell ' + $PSVersionTable.PSVersion.ToString() + ' 生成入库镜像: ' +
+        '5.1 的 JSON 每层 4 空格缩进外加 3 字节 BOM，会把入库文件体积推高近一倍且语义对账抓不到。' +
+        ' 请改用 PowerShell 7 重跑: pwsh -NoProfile -File scripts/build-skill-inventory.ps1 ...')
+}
+
 $sourceRoots = [ordered]@{
     'sliver-vibe-coding' = Join-Path $SourceRootBase 'sliver-vibe-coding'
     'vibe-coding-skills' = Join-Path $SourceRootBase 'vibe-coding-skills'

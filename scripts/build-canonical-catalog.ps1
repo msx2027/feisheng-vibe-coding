@@ -31,6 +31,21 @@ $outputPath = if ([string]::IsNullOrWhiteSpace($OutputPath)) {
     [System.IO.Path]::GetFullPath($OutputPath)
 }
 
+# 规范化运行时闸门：入库镜像只允许由 PowerShell 7 (pwsh) 落盘。
+# Windows PowerShell 5.1 能跑同一套逻辑、结果语义完全相同，但 ConvertTo-Json 的缩进是每层 4 空格
+# （pwsh 7 为 2 空格），同一份数据落盘体积近乎翻倍——2026-09-28 实测同一仓库同一时点
+# 158,273 字节（pwsh 7.6.3）对 289,370 字节（5.1.19041），逐字段解析后比对为全等。
+# 而第 1 步的 catalog 对账比的是解析后的语义，抓不到这种纯排版膨胀，所以拦在写入处而不是拦在比对处。
+# 写向仓库外（verify 的临时比对副本）不受此限，以保持「5.1 也能跑完整门禁」的双运行时口径。
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    $repoPrefix = $RepoRoot.TrimEnd([System.IO.Path]::DirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    if ($outputPath.StartsWith($repoPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw ('拒绝用 Windows PowerShell ' + $PSVersionTable.PSVersion.ToString() + ' 写入仓库内生成物: ' + $outputPath +
+            ' —— 5.1 的 JSON 缩进为每层 4 空格，会把入库镜像体积推高近一倍且语义对账抓不到。' +
+            ' 请改用 PowerShell 7 重跑: pwsh -NoProfile -File scripts/build-canonical-catalog.ps1 -RepoRoot "' + $RepoRoot + '"')
+    }
+}
+
 if (-not (Test-Path -LiteralPath $inventoryPath -PathType Leaf)) { throw "缺少 inventory: $inventoryPath" }
 if (-not (Test-Path -LiteralPath $classificationPath -PathType Leaf)) { throw "缺少 classification: $classificationPath" }
 

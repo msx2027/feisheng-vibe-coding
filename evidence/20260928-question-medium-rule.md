@@ -74,11 +74,13 @@ owner 提供外部仓库 `https://github.com/RobMitt/grill-me-skill`（`gh api`�
 
 ## 6. 未验证项
 
+> 后续（同日 2026-09-28）：本节第一条的「fresh session 里规则能否被模型稳定执行」已做 10 轮 A0 实测（基线 vs 新条款，`claude -p --strict-mcp-config`），测得推荐项排序与自由作答两项增量，无控件那一支已验证、**有控件那一支仍 `UNVERIFIED`**（本机无头会话不暴露该能力，真控件宿主不可脚本化）。详见 `evidence/20260928-question-medium-a0-behavior-test.md`。本节原文不改，保留当时口径。
+
 - 宿主真实行为未测：本宿主与各目标宿主（Codex / Claude / 通用）是否真的暴露交互式选择控件、控件容量上限、以及规则能否在 fresh session 里被模型稳定执行，均未实测。参照 `SKILL.md` 当前阶段声明，宿主 trust 与 Hook 强制生效一律 `UNVERIFIED`。
 - 那 10 处外部技能与新规则的实际行为是否已一致，未做 A/B 实测（本批只补控制面缺位，未改外部技能正文，它们各自的 `AskUserQuestion` 是宿主工具名硬绑定，非本仓库 owner）。
 - `grilling` 的按轮多题格式在**有**控件的宿主上是否应改用控件，本批不下结论：该文件是已登记的 Matt 原语副本（`SKILL-INVENTORY.json:647`），改它需另走快照补丁登记并做行为实测。
-- 体积门既存超标（§5）未修。
-- 生成器无「5.1 产物拒收」的机器门，本次靠人发现。
+- 体积门既存超标（§5）未修。→ 同日体积预算批已处理（预算按当前字节上调 + 评测接进 `verify.ps1` 第 1e 步），并测出超标主因是 sliver-core 整树以 CRLF 落盘，见 `evidence/20260928-loading-budget-and-eol-root-cause.md`。本节 §5 的两处书面结论（超标非本批引入、移除本补丁后数字不变）复查仍成立；被证伪的只是当时**对话里的口头分解**「六个 owner 文件净增 648 字节」——实测真实内容增长只有 SKILL.md +67 字节，其余 635 字节来自换行表示差异，本文件原文无需改动。
+- 生成器无「5.1 产物拒收」的机器门，本次靠人发现。→ 同日「规范化运行时批」已补成机器门：两份生成器在 Windows PowerShell 5.1 下拒绝写仓库内生成物，`verify.ps1` 新增第 1a 步以「入库 JSON 必须含缩进 2 空格行」作结构判据，见 `evidence/20260928-canonical-runtime-gate.md`；本行原文保留当时口径。
 
 ## 7. 撤法（单文件单条目回滚，未提交前）
 

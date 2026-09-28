@@ -17,8 +17,8 @@
 | D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `feisheng-vibe-coding` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
-| D4 | **门禁全绿** | `verify.ps1`（默认 19 步，2026-09-28 数字对账批口径；全开 21 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
-| D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行全部保持通过 |
+| D4 | **门禁全绿** | `verify.ps1`（默认 21 步，2026-09-28 口径；全开 23 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
+| D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行、控制面静态契约评测全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
 **注意**：D2/D3 曾是最大未知。2026-09-11 两轮实测后 **D2/D3 均已转绿**：owner 批准更新宿主全局路由块后，
@@ -32,7 +32,7 @@
 - 仓库：`F:/skiils/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 远端：`https://github.com/msx2027/feisheng-vibe-coding`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
-- 门禁：`verify.ps1` 默认 **19 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步，使 17→19；此前 12/13/15/17 均为历史口径——步数自本批起由末步自计核对，README 徽章与正文写错即红）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **21** 步）
+- 门禁：`verify.ps1` 默认 **21 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；此前 12/13/15/17/19 均为历史口径——步数自数字对账批起由末步自计核对，README 徽章与正文写错即红）；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **23** 步）
 - 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **451** 文件（catalog 重算，2026-09-28 实测）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
@@ -112,8 +112,8 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口；默认 19 步，可选步另计；12/13/15/17 步为历史口径）
-  1 catalog 同步 · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行
+门禁（scripts/verify.ps1，单入口；默认 21 步，可选步另计；12/13/15/17/19/20 步为历史口径）
+  1 catalog 同步 · 1a 入库生成物为 pwsh 7 排版（2026-09-28 新增） · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行 · 1e 控制面静态契约评测（2026-09-28 新增）
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
   5 Vibe Hook 适配器安全契约（采集面 + Digest）
   6 Codex/Claude/宿主中性投影 · 5b 宿主证据门（-IncludeHostEvidence，2026-09-11 新增）

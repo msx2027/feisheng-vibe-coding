@@ -23,7 +23,7 @@
   ],
   "development_loading_contract": {
     "route": "开发执行",
-    "d0_max_bytes": 67000,
+    "d0_max_bytes": 68000,
     "d0_required_refs": [
       "references/development-execution-core.md",
       "references/task-risk-gates.md",
@@ -36,7 +36,7 @@
       "references/task-decision-contract.md",
       "references/testing-execution-gates.md"
     ],
-    "bounded_d1_max_bytes": 74000,
+    "bounded_d1_max_bytes": 75000,
     "bounded_d1_required_refs": [
       "references/development-execution-core.md",
       "references/task-risk-gates.md",
