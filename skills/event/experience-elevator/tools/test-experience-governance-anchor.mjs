@@ -656,12 +656,12 @@ await check("裸调用（无 --skills-root）默认根必须解析到真包根�
   }
 });
 
-// ---- 陈旧环境变量必须报出来源（2026-09-29 E2E finding F1）----
-// 长寿命宿主进程里残留的 VIBE_CODING_SKILLS_HOME（指向已删除路径）会让裸调用被
-// fail-closed 拒绝——行为正确，但报错不提该值来自环境变量，排查者会先怀疑硬编码。
-// 修复口径：env 来源的根校验失败时，错误信息必须点名环境变量并给出处置提示；
-// 不做静默回退（回退默认根 = 新增 fallback 层，违反操作法）。
-await check("陈旧 VIBE_CODING_SKILLS_HOME 触发的拒绝必须点名环境变量来源", () => {
+// ---- 环境变量 VIBE_CODING_SKILLS_HOME 必须被无视（2026-09-29 E2E F1 第二批，owner 拍板删字条）----
+// 第一性原理：工具找包根，最可信信源是「脚本自己所在真包根」（代码不可能对自己撒谎），
+// 其次是显式 --skills-root；环境变量是他人张贴、会过时、不可见、进程/注册表两份会打架的
+// 字条——实测 F1（陈旧 env 让裸调用 fail-closed 拒绝）。修复口径：env 从解析链整体删除，
+// 无任何回退（回退 = 保留第二套指路系统）。块内「env 优先」文案同步删除，版本 22→23。
+await check("陈旧 VIBE_CODING_SKILLS_HOME 必须被无视——裸调用照常解析到真包根", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "vibe-exp-stale-env-"));
   try {
     const stale = path.join(root, "deleted-package");
@@ -671,8 +671,10 @@ await check("陈旧 VIBE_CODING_SKILLS_HOME 触发的拒绝必须点名环境变
       env: { ...process.env, VIBE_CODING_SKILLS_HOME: stale },
     });
     const combined = `${probe.stdout}\n${probe.stderr}`;
-    assert.equal(probe.status, 2, `陈旧 env 应拒绝（退出码 2），实际: ${probe.status} ${combined.slice(0, 200)}`);
-    assert.match(combined, /VIBE_CODING_SKILLS_HOME/u, `报错必须点名环境变量来源: ${combined.slice(0, 300)}`);
+    // 空目录 --check 报「块未装配」退出 1 是正常态；退出 2 = 根解析失败，才是 env 参与的证据
+    assert.notEqual(probe.status, 2, `陈旧 env 不得导致根解析失败: ${combined.slice(0, 300)}`);
+    assert.doesNotMatch(combined, /Invalid skills root/u, `陈旧 env 不得进入解析: ${combined.slice(0, 300)}`);
+    assert.ok(!combined.includes(stale), `输出不得引用陈旧 env 路径: ${combined.slice(0, 300)}`);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

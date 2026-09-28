@@ -50,7 +50,7 @@ const DEFAULT_SKILLS_ROOT = (() => {
   }
   return legacyRoot;
 })();
-export const TARGET_RUNTIME_BLOCK_VERSION = "22";
+export const TARGET_RUNTIME_BLOCK_VERSION = "23";
 const RUNTIME_REGISTRY_FILE = ".vibe-runtime.json";
 const RUNTIME_REGISTRY_VERSION = 1;
 const START_PREFIX = "<!-- vibe-coding-skills:target-runtime:start";
@@ -150,16 +150,11 @@ function writeJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function validateSkillsRoot(skillsRoot, source = "默认根") {
+function validateSkillsRoot(skillsRoot, source = "默认根（本包自证）") {
   const required = ["skills/INDEX.md", "tools/init-target-runtime.mjs"];
   const missing = required.filter((item) => !fs.existsSync(path.join(skillsRoot, item)));
   if (missing.length > 0) {
-    // env 来源的坏根必须点名环境变量并给处置提示（2026-09-29 E2E finding F1）：
-    // 长寿命宿主进程里的陈旧 VIBE_CODING_SKILLS_HOME 是实测踩坑源。不做静默回退。
-    const envHint = source === "环境变量 VIBE_CODING_SKILLS_HOME"
-      ? `。该值来自环境变量 VIBE_CODING_SKILLS_HOME，疑似陈旧残留：请更正或清空它（长寿命宿主进程需重启才刷新），或用 --skills-root 显式指定本包根`
-      : "";
-    throw Object.assign(new Error(`Invalid skills root (来源: ${source}): ${skillsRoot}. Missing: ${missing.join(", ")}${envHint}`), {
+    throw Object.assign(new Error(`Invalid skills root (来源: ${source}): ${skillsRoot}. Missing: ${missing.join(", ")}`), {
       exitCode: 2,
     });
   }
@@ -184,9 +179,11 @@ function validateTargetRoot(targetRoot) {
 
 function resolveRoots(args) {
   const targetRoot = path.resolve(args.targetRoot || ".");
-  const envSkillsRoot = process.env.VIBE_CODING_SKILLS_HOME;
-  const configuredSkillsRoot = args.skillsRoot || envSkillsRoot || DEFAULT_SKILLS_ROOT;
-  const skillsRootSource = args.skillsRoot ? "--skills-root 参数" : (envSkillsRoot ? "环境变量 VIBE_CODING_SKILLS_HOME" : "默认根");
+  // 2026-09-29 F1 第二批（owner 拍板删字条）：VIBE_CODING_SKILLS_HOME 从解析链整体删除。
+  // 环境变量是他人张贴、会过时、不可见、进程/注册表两份会打架的字条（E2E 实测陈旧值
+  // 阻断裸调用）；真包根由脚本自证（向上找发布账本标记），临时指向其他副本用 --skills-root。
+  const configuredSkillsRoot = args.skillsRoot || DEFAULT_SKILLS_ROOT;
+  const skillsRootSource = args.skillsRoot ? "--skills-root 参数" : "默认根（本包自证）";
   const skillsRoot = path.resolve(configuredSkillsRoot);
   validateTargetRoot(targetRoot);
   validateSkillsRoot(skillsRoot, skillsRootSource);
@@ -200,7 +197,7 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     `此块由 vibe-coding-skills 管理。项目自己的规则请写在本块外；需要刷新本块时，重新运行 \`init-target-runtime.mjs\`。`,
     ``,
     `- 运行时：${runtime} 会读取本项目根目录的 \`${entry}\`。`,
-    `- Skills 包位置：如果设置了 \`VIBE_CODING_SKILLS_HOME\` 就优先使用它；否则使用 \`<skills-root>\` 表示的本包根目录。`,
+    `- Skills 包位置：由本包根目录自证（工具自动定位，环境变量不参与）；如需临时指向其他副本，用 \`--skills-root\` 显式指定。`,
     `- 真源入口：先读 \`.vibe-docs.json\`，再按「当前任务显式角色 + 本轮预算」精准取读文档：集合文档先从 \`文档索引.md\` 选定文件，再精确取一份。\`resolve-target-doc-context.mjs\` 属旧代 resolver，未随本包分发：项目自备等价工具时按其输出执行，未自备时由协作方按同一口径人工执行（rg 定位 → 门面索引 → 单份正文）。启用 \`markdownGovernance\` 后，非生命周期 Markdown 先用 \`rg --files -g '*.md'\` 定位，再申请单份读取。只读取所需文档与 selector，不因进入 T2/T3 固定全文读取画像、需求、计划或契约。`,
     `- 项目画像：当前项目事实以 \`.vibe-docs.json.projectProfile\` 实际指向的文件为准（新项目默认 \`docs/项目治理/项目画像.md\`）；未在项目画像、源码、配置、命令输出或用户确认中出现的技术栈、命令、接口、schema 不得假设存在。`,
     `- 宪法设计：规则来源以 \`.vibe-docs.json.constitutionDesign\` 实际指向的文件为准（新项目默认 \`docs/项目治理/宪法设计.md\`）；缺少 evidence、owner map、停止条件或验证命令时，标记 \`未验证\`，不得声明接入完成。`,
