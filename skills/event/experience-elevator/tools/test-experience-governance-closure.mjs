@@ -11,16 +11,24 @@ import { renderHookSignal } from "./detect-experience-signal.mjs";
 import * as ledgerCore from "./experience-ledger-core.mjs";
 import { parseExperienceRegistry, registryInfoFromRegistry } from "./experience-managed-blocks.mjs";
 import { commitTargetTransactionPhases } from "./target-doc-transaction.mjs";
-import { resolveTrustedPowerShell } from "./trusted-git.mjs";
 
 const repoRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+// 真包根（2026-09-29 复活批）：工具迁移到 skills/event/experience-elevator/tools/ 后，
+// skillsRoot 必须指向满足发布布局校验（skills/INDEX.md + tools/init-target-runtime.mjs）的
+// 真包根；本目录下的 tools/*.mjs 模块路径则保持指向迁移后的真实位置。
+const packageRoot = (() => {
+  let dir = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 8; i += 1) {
+    if (fs.existsSync(path.join(dir, "provenance", "CANONICAL-CATALOG.json"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error("向上 8 层未找到包根（provenance/CANONICAL-CATALOG.json）");
+})();
 const signalTool = path.join(repoRoot, "tools", "detect-experience-signal.mjs");
 const ledgerChecker = path.join(repoRoot, "tools", "check-experience-ledger.mjs");
 const runtimeTool = path.join(repoRoot, "tools", "init-target-runtime.mjs");
-const claudeHook = path.join(repoRoot, "hooks", "detect-feedback-signal.sh");
-const claudeMirrorHook = path.join(repoRoot, ".claude", "hooks", "detect-feedback-signal.sh");
-const codexHook = path.join(repoRoot, "codex-hooks", "detect-feedback-signal.ps1");
-const codexMirrorHook = path.join(repoRoot, ".codex", "hooks", "detect-feedback-signal.ps1");
 
 let passed = 0;
 let failed = 0;
@@ -153,36 +161,6 @@ function runNode(script, args = [], options = {}) {
   });
 }
 
-function bashExecutable() {
-  const candidates = process.platform === "win32"
-    ? ["D:/Git/bin/bash.exe", "C:/Program Files/Git/bin/bash.exe"]
-    : ["bash"];
-  return candidates.find((candidate) => candidate === "bash" || fs.existsSync(candidate));
-}
-
-function runBash(script, input) {
-  const executable = bashExecutable();
-  assert.ok(executable, "找不到可执行 Bash");
-  return spawnSync(executable, [script], { cwd: repoRoot, encoding: "utf8", input });
-}
-
-function runPowerShell(script, input, cwd = repoRoot) {
-  const executable = resolveTrustedPowerShell(repoRoot);
-  assert.ok(executable, "找不到可用 PowerShell（pwsh 或 powershell）");
-  return spawnSync(executable, [
-    "-NoProfile",
-    "-ExecutionPolicy",
-    "Bypass",
-    "-Command",
-    "$utf8 = New-Object System.Text.UTF8Encoding($false); [Console]::InputEncoding = $utf8; $payload = [Console]::In.ReadToEnd(); & $env:VIBE_TEST_HOOK -HookInput $payload; exit $LASTEXITCODE",
-  ], {
-    cwd,
-    encoding: "utf8",
-    input,
-    env: { ...process.env, VIBE_TEST_HOOK: script },
-  });
-}
-
 function event(overrides = {}) {
   return {
     eventId: "EVT-001",
@@ -233,7 +211,7 @@ function setupGovernedTarget(target, ledger, rules = []) {
     l1RegistryAnchor: anchoredLedger.l1RegistryAnchor,
   };
   write(target, "docs/项目治理/经验治理.md", ledgerCore.renderLedgerMarkdown(bootstrapLedger));
-  const runtime = runNode(runtimeTool, [target, "--skills-root", repoRoot, "--write", "--json"]);
+  const runtime = runNode(runtimeTool, [target, "--skills-root", packageRoot, "--write", "--json"]);
   assert.equal(runtime.status, 0, runtime.stderr || runtime.stdout);
   write(target, "docs/项目治理/经验治理.md", ledgerCore.renderLedgerMarkdown(anchoredLedger));
 }
@@ -250,29 +228,10 @@ function minimalSignal(output) {
   return parsed.signal || parsed.hookSpecificOutput?.signal || null;
 }
 
-await check("源码与镜像双运行时 wrapper 都能实际调用仓库根统一 Node 信号入口", () => {
-  const bashSource = fs.readFileSync(claudeHook, "utf8");
-  const psSource = fs.readFileSync(codexHook, "utf8");
-  assert.doesNotMatch(bashSource, /\bjq\b/u, "Bash wrapper 不得依赖 jq");
-  const input = JSON.stringify({
-    prompt: "你又犯错了",
-    scope: "target-project",
-    messageId: "MSG-001",
-    occurredAt: "2026-07-23T09:59:00.000Z",
-  });
-  for (const script of [claudeHook, claudeMirrorHook]) {
-    const result = runBash(script, input);
-    assert.equal(result.status, 0, `${script}: ${result.stderr}`);
-    assert.notEqual(result.stdout.trim(), "", `${script}: wrapper 未输出 JSON；stderr=${result.stderr}`);
-    assert.equal(minimalSignal(result.stdout)?.scope, "target-project");
-  }
-  for (const script of [codexHook, codexMirrorHook]) {
-    const result = runPowerShell(script, input, os.tmpdir());
-    assert.equal(result.status, 0, `${script}: ${result.stderr}`);
-    assert.notEqual(result.stdout.trim(), "", `${script}: wrapper 未输出 JSON；stderr=${result.stderr}`);
-    assert.equal(minimalSignal(result.stdout)?.scope, "target-project");
-  }
-});
+// 退役（2026-09-29 复活批，owner 拍板「分层复活」）：原首用例「源码与镜像双运行时 wrapper
+// 都能实际调用仓库根统一 Node 信号入口」——被测实物（hooks/detect-feedback-signal.sh、
+// codex-hooks/*.ps1 及四份镜像）属旧 bash/双镜像架构，已随迁移退役不存在；其现行等价覆盖
+// （信号最小身份/幂等/回显保护）由本文件 signalTool 用例与 tests/test-vibe-hook-adapter.ps1 承担。
 
 await check("同一输入在 Claude/Codex 产生相同最小信号且不回显原 prompt", () => {
   const input = JSON.stringify({
@@ -491,7 +450,7 @@ await check("L1 registry 确定性生成 L2 双投影并记录同源 hash", () =
   try {
     const rules = [{ experienceId: "EXP-001", text: "修改全局 token 前必须取得用户确认。", status: "active" }];
     write(target, "docs/项目治理/宪法设计.md", `# 宪法设计\n\n${registryBlock(rules)}\n`);
-    const result = runNode(runtimeTool, [target, "--skills-root", repoRoot, "--write", "--json"]);
+    const result = runNode(runtimeTool, [target, "--skills-root", packageRoot, "--write", "--json"]);
     assert.equal(result.status, 0, result.stderr || result.stdout);
     const agents = fs.readFileSync(path.join(target, "AGENTS.md"), "utf8");
     const claude = fs.readFileSync(path.join(target, "CLAUDE.md"), "utf8");
@@ -521,7 +480,7 @@ await check("经验投影 managed block 冲突时 runtime 写入 fail closed", (
       "<!-- vibe-coding-skills:target-experience-projection:end -->",
       "",
     ].join("\n"));
-    const result = runNode(runtimeTool, [target, "--skills-root", repoRoot, "--write", "--json"]);
+    const result = runNode(runtimeTool, [target, "--skills-root", packageRoot, "--write", "--json"]);
     assert.notEqual(result.status, 0);
     assert.match(`${result.stdout}\n${result.stderr}`, /experience.*checksum|投影.*冲突|projection.*conflict/iu);
   } finally {
@@ -598,7 +557,7 @@ await check("orchestrator 要求 expectedRevision 为显式非负整数", async 
     for (const expectedRevision of [undefined, -1, 1.5, "1"]) {
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "record",
         expectedRevision,
         experienceId: "EXP-001",
@@ -617,7 +576,7 @@ await check("orchestrator 在 revision conflict 前识别完全相同 replay，�
     setupGovernedTarget(target, sampleLedger(), []);
     const request = {
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "record",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -647,7 +606,7 @@ await check("orchestrator 在任何新动作前拒绝畸形 confirmation 历史"
     const before = fs.readFileSync(ledgerPath, "utf8");
     assert.throws(() => module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "record",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -674,7 +633,7 @@ await check("orchestrator 在 replay 前拒绝畸形 archived tombstone", async 
     const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
     assert.throws(() => module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "record",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -726,7 +685,7 @@ await check("orchestrator replay 与 record 都拒绝全局 consumed 缺少内�
       const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         ...scenario.request,
       }), /confirmationHistory|confirmation|consumedConfirmations|一致|缺少/iu, scenario.name);
       for (const file of tracked) assert.equal(fs.readFileSync(path.join(target, file), "utf8"), before[file]);
@@ -767,7 +726,7 @@ await check("orchestrator replay 与 record 都拒绝 confirmation 未覆盖的�
       setupGovernedTarget(target, malformed, []);
       const tracked = ["docs/项目治理/经验治理.md", "AGENTS.md", "CLAUDE.md", ".vibe-runtime.json"];
       const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
-      assert.throws(() => module.executeExperienceAction({ targetRoot: target, skillsRoot: repoRoot, ...scenario.request }), /trajectory|confirmation|transition|一致|额外/iu);
+      assert.throws(() => module.executeExperienceAction({ targetRoot: target, skillsRoot: packageRoot, ...scenario.request }), /trajectory|confirmation|transition|一致|额外/iu);
       for (const file of tracked) assert.equal(fs.readFileSync(path.join(target, file), "utf8"), before[file]);
     } finally {
       fs.rmSync(target, { recursive: true, force: true });
@@ -806,7 +765,7 @@ await check("orchestrator replay 与 record 都拒绝 Unicode format 字符伪�
       setupGovernedTarget(target, malformed, []);
       const tracked = ["docs/项目治理/经验治理.md", "AGENTS.md", "CLAUDE.md", ".vibe-runtime.json"];
       const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
-      assert.throws(() => module.executeExperienceAction({ targetRoot: target, skillsRoot: repoRoot, ...scenario.request }), /trajectory|transition|canonical|format|Unicode/iu);
+      assert.throws(() => module.executeExperienceAction({ targetRoot: target, skillsRoot: packageRoot, ...scenario.request }), /trajectory|transition|canonical|format|Unicode/iu);
       for (const file of tracked) assert.equal(fs.readFileSync(path.join(target, file), "utf8"), before[file]);
     } finally {
       fs.rmSync(target, { recursive: true, force: true });
@@ -846,7 +805,7 @@ await check("orchestrator replay 与 record 都拒绝 active 档位和 canonical
       const tracked = ["docs/项目治理/经验治理.md", "AGENTS.md", "CLAUDE.md", ".vibe-runtime.json"];
       const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
       assert.throws(
-        () => module.executeExperienceAction({ targetRoot: target, skillsRoot: repoRoot, ...scenario.request }),
+        () => module.executeExperienceAction({ targetRoot: target, skillsRoot: packageRoot, ...scenario.request }),
         /trajectory|transition|tier|档位|最终|一致/iu,
       );
       for (const file of tracked) assert.equal(fs.readFileSync(path.join(target, file), "utf8"), before[file]);
@@ -864,7 +823,7 @@ await check("established runtime 缺任一 target-experience-projection 时 orch
     write(target, "AGENTS.md", removeProjection(fs.readFileSync(path.join(target, "AGENTS.md"), "utf8")));
     assert.throws(() => module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "record",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -887,7 +846,7 @@ await check("L2→L3 必须验证 checker 与真实 test/CI/Hook 注册并写入
     setupGovernedTarget(target, ledger, [{ experienceId: "EXP-001", text: "必须执行项目 checker。", status: "active" }]);
     assert.throws(() => module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "elevate",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -907,7 +866,7 @@ await check("L2→L3 必须验证 checker 与真实 test/CI/Hook 注册并写入
     for (const registrationFile of ["package.json", ".github/workflows/quality.yml", "hooks/check-experience.sh"]) {
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -923,7 +882,7 @@ await check("L2→L3 必须验证 checker 与真实 test/CI/Hook 注册并写入
       write(target, registrationFile, registrationContent);
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -948,7 +907,7 @@ await check("L2→L3 必须验证 checker 与真实 test/CI/Hook 注册并写入
       write(target, "package.json", `${JSON.stringify({ scripts: { fake: command } }, null, 2)}\n`);
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -965,7 +924,7 @@ await check("L2→L3 必须验证 checker 与真实 test/CI/Hook 注册并写入
     write(target, "hooks/check-experience.sh", hookRegistration);
     const result = module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "elevate",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1037,7 +996,7 @@ await check("解释器 basename 只接受大小写敏感的 lowercase canonical 
       write(target, "package.json", packageContent);
       const request = {
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1081,7 +1040,7 @@ await check("canonical command 分段保留引号内分号并识别引号外连�
       write(target, "package.json", packageContent);
       const result = module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1125,7 +1084,7 @@ await check("合法 checker segment 不得遮蔽前后非法 checker segment", a
       write(target, "package.json", packageContent);
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1169,7 +1128,7 @@ await check("复合命令拒绝缺少操作数的空 segment，但保留空行�
       write(target, "package.json", packageContent);
       const action = () => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1210,7 +1169,7 @@ await check("workflow 与 Hook 必须校验完整命令块，不能忽略非法�
       write(target, registrationFile, registrationContent);
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1262,7 +1221,7 @@ for (const [name, workflowContent] of [
       write(target, ".github/workflows/quality.yml", workflowContent);
       assert.throws(() => workflowStepModule.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1291,7 +1250,7 @@ await check("workflow registration 接受 canonical dash-only step mapping", asy
     write(target, ".github/workflows/quality.yml", workflowContent);
     const result = module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "elevate",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1322,7 +1281,7 @@ await check("workflow registration 保留 inline、dash-only、mapping、literal
     write(target, ".github/workflows/quality.yml", workflowContent);
     const result = module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "elevate",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1367,7 +1326,7 @@ await check("未加引号的单管道与中间单 ampersand 不得被合法 chec
       write(target, "package.json", packageContent);
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1423,7 +1382,7 @@ await check("package、workflow 与 Hook 保存同一执行块内全部 checker 
       write(target, surface.file, surface.content);
       const result = module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1482,7 +1441,7 @@ await check("L3 hardening 记录并退役同文件 checker 的完整 canonical m
       write(target, surface.file, surface.content);
       const elevated = module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "elevate",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1495,7 +1454,7 @@ await check("L3 hardening 记录并退役同文件 checker 的完整 canonical m
 
       const recorded = module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "record",
         expectedRevision: elevated.revision,
         experienceId: "EXP-001",
@@ -1503,7 +1462,7 @@ await check("L3 hardening 记录并退役同文件 checker 的完整 canonical m
       });
       const retired = module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "retire",
         expectedRevision: recorded.revision,
         experienceId: "EXP-001",
@@ -1649,7 +1608,7 @@ await check("L3 退役会 fresh 验证 hardening，拒绝伪路径、间接残�
       const retirement = scenario.replacement ? { registrationUpdates: scenario.replacement } : undefined;
       assert.throws(() => module.executeExperienceAction({
         targetRoot: target,
-        skillsRoot: repoRoot,
+        skillsRoot: packageRoot,
         action: "retire",
         expectedRevision: 1,
         experienceId: "EXP-001",
@@ -1700,7 +1659,7 @@ await check("L3 退役拒绝 stored match-set 少于当前 fresh match-set", asy
     const before = Object.fromEntries(tracked.map((file) => [file, fs.readFileSync(path.join(target, file), "utf8")]));
     assert.throws(() => module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "retire",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1738,7 +1697,7 @@ await check("L3 退役拒绝任意文件操作、伪步骤和漏更新，并按�
     write(target, "README.md", "must survive\n");
     const base = {
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "retire",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1816,7 +1775,7 @@ await check("L3 退役按 hardening type 确定性删除 exact package、workflo
 
     const result = module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "retire",
       expectedRevision: 1,
       experienceId: "EXP-001",
@@ -1843,7 +1802,7 @@ await check("orchestrator 以 expectedRevision 原子记录事件并发布 runti
     setupGovernedTarget(target, sampleLedger(), []);
     const result = module.executeExperienceAction({
       targetRoot: target,
-      skillsRoot: repoRoot,
+      skillsRoot: packageRoot,
       action: "record",
       expectedRevision: 1,
       experienceId: "EXP-001",

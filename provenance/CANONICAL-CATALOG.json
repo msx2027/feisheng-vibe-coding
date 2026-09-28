@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-28T17:23:55.3697871Z",
+  "generatedAt": "2026-09-28T17:44:08.7706524Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1158,6 +1158,10 @@
             "sha256": "50287abc560440ef8d54ad060619c166976c6b1d48d6b242c44d6bde7981d290"
           },
           {
+            "path": "skills/event/experience-elevator/tools/check-experience-ledger.mjs",
+            "sha256": "d489053427e9121a54edbc63f5309a0a4e613b2a7c39e6c68b0af68aa5bd4a96"
+          },
+          {
             "path": "skills/event/experience-elevator/tools/detect-experience-signal.mjs",
             "sha256": "30a2e8e2df55731b46ee76c43a467383b27f13847c16e0b1d3c681269a5c1543"
           },
@@ -1195,7 +1199,7 @@
           },
           {
             "path": "skills/event/experience-elevator/tools/test-experience-governance-closure.mjs",
-            "sha256": "d065ce9bc0c728f6e2ae61bfb83d73e3415eb9a3581617ea30aca77ba47a6110"
+            "sha256": "2d60dc2abefd9671e7cf87c515421bdfd2cf865b147ce3065d66b374460bd43b"
           },
           {
             "path": "skills/event/experience-elevator/tools/test-experience-ledger-core.mjs",

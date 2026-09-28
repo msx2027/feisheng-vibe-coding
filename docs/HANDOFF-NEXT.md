@@ -33,11 +33,11 @@
 - 远端：`https://github.com/msx2027/feisheng-vibe-coding`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
 - 门禁：`verify.ps1` 默认 **21 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；**同日换行归一批已把 `governance/sliver-core` 全部 220 个保真文件由 CRLF 恢复为 LF**（内容零差异，2,525,899→2,474,202 字节，树摘要 35a40ec4b9aa0381→f8f7a8171a30ddd3，`d0_max_bytes` 撤销回上游 67000 实测 66,839 合规、`bounded_d1_max_bytes` 保留 75000 因实测 74,049 仍超 49；该树自带 110 条 python 契约测试在统一 UTF-8 环境下 failures 17→2，残留 2 条同因基线 Git 对象 `29695fe0…` 随源项目删除不可得、与换行无关，故该套件仍不可接入 CI；数字与落地清单见 evidence/20260928-eol-lf-rehearsal.md 与 evidence/20260928-eol-lf-landing.md）；此前 12/13/15/17/19 均为历史口径——步数自数字对账批起由末步自计核对，写错即红；**同日附带修正把该自计门的锚点从 README 两处扩到「README 两处 + 交接文档全部『默认 N 步』与『全开 N 步』」**，命中数为 0 同样判红；扩锚点的原因是当场查出交接文档另有两处停在 2026-09-12 的 15/17 口径（入口速查与新会话起点清单），而原门抓不到；同批裁定**另两棵保真树不跟改行尾**（`sources/**` 与 `skills/**` 保持上游原样，收益为零而代价是不可逆的快照失真，实测依据见 evidence/20260928-eol-lf-landing.md §8-1，规则已写入根 `AGENTS.md`「保真树行尾规则」一节））；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **23** 步）
-- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **451** 文件（catalog 重算，2026-09-28 实测）
+- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **452** 文件（catalog 重算，2026-09-29 实测）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **453 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**451** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**453** = 部署态 = 451 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
+- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **454 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**452** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**454** = 部署态 = 452 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -121,9 +121,9 @@
   7 发布包（-IncludePackage）
 
 投影（runtime-projection）
-  scripts/build-codex-runtime-projection.ps1    → 456 文件
-  scripts/build-claude-runtime-projection.ps1   → 454 文件
-  scripts/build-shared-runtime-projection.ps1   → 453 文件（宿主中性，无 overlay）
+  scripts/build-codex-runtime-projection.ps1    → 457 文件
+  scripts/build-claude-runtime-projection.ps1   → 455 文件
+  scripts/build-shared-runtime-projection.ps1   → 454 文件（宿主中性，无 overlay）
   scripts/runtime-projection-guard.ps1          共享门禁/计划/overlay/主体实现（唯一；三 writer 共用 Invoke-RuntimeProjection）
   packaging/runtime-projection.json             策略描述
 
@@ -598,7 +598,7 @@ OWNER-LEDGER/E1 有界路径剩余议题）；源项目归档、CI 上线、64 �
 ```text
 技能集合   82/82     全量登记（旧口径 82/83 的差 1 为翻译维护技能，已归入排除面）
 功能裁决   11/11 簇  已完成（duplicateGroups）
-交付runtime 52/82    52 条记录 / 451 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 453 = +根入口+manifest）
+交付runtime 52/82    52 条记录 / 452 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 454 = +根入口+manifest）
 路由绑定   51/51     admitted 技能全部唯一命中（validate-route-bindings）
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）
