@@ -80,3 +80,13 @@ owner 2026-09-30 指令：项目统一为唯一称呼 `vibe-coding-skills`——
 - `scripts/invoke-vibe-hook-adapter.ps1:466` 横幅硬编码 v4 措辞（autonomous）与 contract.status（hard-gate）不一致——纯文案、无行为影响，非改名引入；
 - `node scripts/check-doc-governance.mjs` 直跑 exit 1（docs/archive 三处 E3/E6）——**2026-09-12 d238931 预存**，不在 verify 21 步内（verify 跑的是其契约测试 18/18），非本批回归；
 - 上一节第 5 条的宿主证据门（codex 0.154 快照暴露）裁决仍待 owner。
+
+## 快照暴露处置（2026-09-30 同日第四批，owner 指令「先去查」→ 查证即修）
+
+**查证路径**：官方文档 developers.openai.com/codex/skills 给出机制——`[[skills.config]]` 数组条目 `path` + `enabled = false` 可**按路径**禁用技能而无需删除（同文件既有条目用的是 `name` 形式，两种形式共存于同一数组）。二进制考古排除了 `disabled_skill_names`（属插件体系 core-plugins，管不到普通目录）。`codex -c` 支持临时配置覆盖 → **零副作用实测**：单条 path 禁用后 `debug prompt-input` 中 beginner-flow-guide 4→2，且消失的恰是 `sources/` 那条、`_quarantine` 条目原样保留——路径精确命中证明成立。
+
+**落地**（`~/.codex/config.toml`，备份 `%TEMP%\config.toml.bak-20260930-pre-shadow-disable`）：追加管理标记块 `# BEGIN/END vibe-coding-skills managed: disable sources/ snapshot shadow skills`，含 **127 条** `[[skills.config]]` path 禁用（`find sources -name SKILL.md` 全集 = sources 三树 81 + `_quarantine` 46；路径用实测命中的 junction 形式 `C:/Users/MSX/.codex/skills/vibe-coding-skills/sources/...`）。总数 128 = 既有 computer-use 1 条 + 新 127 条。
+
+**效果（全部实测）**：codex Available skills 256→**240**，`sources/` 条目清零、mattpocock 冒名命名空间条目清零、8 个影子名清零；正式面完整保留——统一包 50 条 + sliver 控制面 1 条，且同名冲突消失后描述字段恢复正常渲染（门控短语「仅当用户先明确调用 \`vibe-coding-skills\`…」直接进入模型可见文本，冲突态的空描述是历史副产品）。重采宿主证据：**model-visible=51（恰为 admitted 全集）/ installed-user-invoked-only=31 / not-installed=0**，82 records 总数守恒（55+27→51+31，4 个此前靠快照副本建立可见性的记录回归安装证据）。**`verify.ps1 -IncludeHostEvidence` 22/22 首次全绿**——上一节第 5 条待决项就此关闭；同名三副本的调用歧义一并消除。
+
+**维护性与边界**：sources/ 为冻结快照，127 条路径永久稳定、无需维护；回滚 = 删除标记块间内容或恢复备份文件；长会话需重启 codex 生效（`debug prompt-input` 每次新进程，已即时生效）。覆盖边界：本修复只针对 codex 0.154 深扫面；claude/zcode 为单层扫描、无此暴露（交叉复核批一/批二已证），无需同款处置。

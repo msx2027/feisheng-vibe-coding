@@ -1,7 +1,7 @@
 ﻿{
     "schema":  "feisheng-host-discovery-evidence/v1",
     "owner":  "provenance",
-    "capturedAt":  "2026-09-29T18:02:34.4340855Z",
+    "capturedAt":  "2026-09-29T19:28:14.5774648Z",
     "method":  "codex debug prompt-input (model-visible skill list) + host skill directory presence",
     "caveat":  "skills with disable-model-invocation are intentionally absent from the model-visible list; they are evidenced by installation instead",
     "codexSkillRoots":  {
@@ -16,12 +16,12 @@
                         },
     "counts":  {
                    "catalogRecords":  82,
-                   "modelVisible":  55,
-                   "installedUserInvokedOnly":  27,
+                   "modelVisible":  51,
+                   "installedUserInvokedOnly":  31,
                    "notInstalled":  0,
                    "otherOrUnknown":  0,
                    "legacyVisible":  0,
-                   "parsedModelVisibleEntries":  256
+                   "parsedModelVisibleEntries":  240
                },
     "records":  [
                     {
@@ -163,22 +163,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "beginner-flow-guide",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/beginner-flow-guide/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "bolder",
@@ -332,13 +326,6 @@
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
                                               "path":  "vibe-coding-skills/skills/engineering/codebase-design/SKILL.md",
                                               "via":  "unified-bundle"
-                                          },
-                                          {
-                                              "entryName":  "mattpocock-skills:codebase-design",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/codebase-design/SKILL.md",
-                                              "via":  "unified-bundle"
                                           }
                                       ],
                         "evidence":  "model-visible"
@@ -353,22 +340,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "codebase-memory-scout",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/codebase-memory-scout/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "code-review",
@@ -392,13 +373,6 @@
                                               "root":  "r0",
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
                                               "path":  "vibe-coding-skills/skills/engineering/code-review/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
-                                          {
-                                              "entryName":  "mattpocock-skills:code-review",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/code-review/SKILL.md",
                                               "via":  "unified-bundle"
                                           }
                                       ],
@@ -643,13 +617,6 @@
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
                                               "path":  "vibe-coding-skills/skills/engineering/diagnosing-bugs/SKILL.md",
                                               "via":  "unified-bundle"
-                                          },
-                                          {
-                                              "entryName":  "mattpocock-skills:diagnosing-bugs",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/diagnosing-bugs/SKILL.md",
-                                              "via":  "unified-bundle"
                                           }
                                       ],
                         "evidence":  "model-visible"
@@ -730,13 +697,6 @@
                                               "root":  "r0",
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
                                               "path":  "vibe-coding-skills/skills/engineering/domain-modeling/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
-                                          {
-                                              "entryName":  "mattpocock-skills:domain-modeling",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/domain-modeling/SKILL.md",
                                               "via":  "unified-bundle"
                                           }
                                       ],
@@ -833,22 +793,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "mattpocock-skills:git-guardrails-claude-code",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/misc/git-guardrails-claude-code/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "grilling",
@@ -1121,22 +1075,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "mattpocock-skills:migrate-to-shoehorn",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/misc/migrate-to-shoehorn/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "optimize",
@@ -1264,13 +1212,6 @@
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
                                           {
-                                              "entryName":  "mattpocock-skills:prototype",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/prototype/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
-                                          {
                                               "entryName":  "prototype",
                                               "root":  "r0",
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
@@ -1379,13 +1320,6 @@
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
                                           {
-                                              "entryName":  "mattpocock-skills:research",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/research/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
-                                          {
                                               "entryName":  "research",
                                               "root":  "r0",
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
@@ -1412,13 +1346,6 @@
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "mattpocock-skills:resolving-merge-conflicts",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/resolving-merge-conflicts/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
                                           {
                                               "entryName":  "resolving-merge-conflicts",
                                               "root":  "r0",
@@ -1466,22 +1393,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "mattpocock-skills:scaffold-exercises",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/misc/scaffold-exercises/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "setup-matt-pocock-skills",
@@ -1562,22 +1483,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "shape",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/shape/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "skill-builder",
@@ -1589,22 +1504,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "skill-builder",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/skill-builder/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "sliver-vibe-coding",
@@ -1643,22 +1552,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "target-constitution-setup",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/target-constitution-setup/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "target-runtime-setup",
@@ -1670,22 +1573,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "target-runtime-setup",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/target-runtime-setup/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "tdd",
@@ -1704,13 +1601,6 @@
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "mattpocock-skills:tdd",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/tdd/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          },
                                           {
                                               "entryName":  "tdd",
                                               "root":  "r0",
@@ -1752,16 +1642,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "test-automation",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/product/test-automation/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "to-questionnaire",
@@ -1857,16 +1753,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "typeset",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/ui/typeset/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "ui-styling",
@@ -1878,16 +1780,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "ui-styling",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/ui/ui-styling/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "ui-system-guardian",
@@ -1899,16 +1807,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "ui-system-guardian",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/product/ui-system-guardian/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "ui-ux-pro-max",
@@ -1920,16 +1834,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "ui-ux-pro-max",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/ui/ui-ux-pro-max/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "vibe-code-review",
@@ -1941,22 +1861,16 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  true,
+                        "modelVisibleInCodex":  false,
                         "visibleVia":  [
-                                           "unified-bundle"
+
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-                                          {
-                                              "entryName":  "code-review",
-                                              "root":  "r0",
-                                              "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/vibe-coding-skills/skills/code-review/SKILL.md",
-                                              "via":  "unified-bundle"
-                                          }
+
                                       ],
-                        "evidence":  "model-visible"
+                        "evidence":  "installed-in-shared-bundle"
                     },
                     {
                         "id":  "vibe-coding-skills",
@@ -2039,10 +1953,10 @@
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
                                           {
-                                              "entryName":  "mattpocock-skills:wizard",
+                                              "entryName":  "wizard",
                                               "root":  "r0",
                                               "rootPath":  "C:/Users/MSX/.codex/skills",
-                                              "path":  "vibe-coding-skills/sources/mattpocock-skills/skills/engineering/wizard/SKILL.md",
+                                              "path":  "vibe-coding-skills/skills/engineering/wizard/SKILL.md",
                                               "via":  "unified-bundle"
                                           }
                                       ],
@@ -2079,16 +1993,22 @@
                         "installedInSharedRoot":  false,
                         "installedInSharedBundle":  true,
                         "installedInCodexRoot":  false,
-                        "modelVisibleInCodex":  false,
+                        "modelVisibleInCodex":  true,
                         "visibleVia":  [
-
+                                           "unified-bundle"
                                        ],
                         "sharedRootEntryKind":  null,
                         "sharedRootEntryTarget":  null,
                         "visibleAs":  [
-
+                                          {
+                                              "entryName":  "writing-for-agents",
+                                              "root":  "r0",
+                                              "rootPath":  "C:/Users/MSX/.codex/skills",
+                                              "path":  "vibe-coding-skills/skills/engineering/writing-for-agents/SKILL.md",
+                                              "via":  "unified-bundle"
+                                          }
                                       ],
-                        "evidence":  "installed-in-shared-bundle"
+                        "evidence":  "model-visible"
                     },
                     {
                         "id":  "writing-fragments",
