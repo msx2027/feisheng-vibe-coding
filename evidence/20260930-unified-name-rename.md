@@ -90,3 +90,15 @@ owner 2026-09-30 指令：项目统一为唯一称呼 `vibe-coding-skills`——
 **效果（全部实测）**：codex Available skills 256→**240**，`sources/` 条目清零、mattpocock 冒名命名空间条目清零、8 个影子名清零；正式面完整保留——统一包 50 条 + sliver 控制面 1 条，且同名冲突消失后描述字段恢复正常渲染（门控短语「仅当用户先明确调用 \`vibe-coding-skills\`…」直接进入模型可见文本，冲突态的空描述是历史副产品）。重采宿主证据：**model-visible=51（恰为 admitted 全集）/ installed-user-invoked-only=31 / not-installed=0**，82 records 总数守恒（55+27→51+31，4 个此前靠快照副本建立可见性的记录回归安装证据）。**`verify.ps1 -IncludeHostEvidence` 22/22 首次全绿**——上一节第 5 条待决项就此关闭；同名三副本的调用歧义一并消除。
 
 **维护性与边界**：sources/ 为冻结快照，127 条路径永久稳定、无需维护；回滚 = 删除标记块间内容或恢复备份文件；长会话需重启 codex 生效（`debug prompt-input` 每次新进程，已即时生效）。覆盖边界：本修复只针对 codex 0.154 深扫面；claude/zcode 为单层扫描、无此暴露（交叉复核批一/批二已证），无需同款处置。
+
+## 收尾小事处置（2026-09-30 同日第五批，owner 逐项拍板：246 做掉、1 删、5 按 7 天线、3 不动、7 一并处理）
+
+1. **`E:\fs-agent\.feisheng\` 已删除**：删前复验整树恰 2 个文件（stop-credential-sess_1866f1a6 / sess_81cda66c，与批二核验清单一致）后 `rm -rf`。
+2. **fs-agent 三份文档旧口径已修**：`docs/项目治理/归位规范.md`（宿主目录清单×2、09-29 滚动注补 09-30 改名注、豁免清单、工具来源行加「创建时项目名」时点标注）、`AGENTS.md:129` 与 `CLAUDE.md:131` 活口径句改 `vibe-coding-skills`（前称标注；125/127 带日期历史行按裁定未动）。改后 `check-doc-index.mjs --fix` 刷新指纹（其 pre-commit 机制的正规流程，未改正文）→ 三查通过（12 份指纹一致、归位无越界）。
+3. **`E:\fs-agent-worktrees\080-pi-agent-core` 不动**（owner 裁决；合流时以主仓为准）。
+4. **`~/.codex/config.toml` 两条死信任条目已删**（`g:\feisheng` 无关条目 + 旧仓路径条目；备份 `%TEMP%\config.toml.bak-20260930-pre-dead-entries`；1197→1193 行；删后 `codex debug prompt-input` 复跑正常）。
+5. **`~/.claude/projects/` 旧名会话目录按 7 天线处置**：8 个旧名目录 mtime 全部为 2026-09-11（19 天前，超出 7 天线）→ 全删；`E--fs-agent` 为 fs-agent 现役会话存储（当日仍有写入）且不含旧名 → 保留。另查明 `G--FeiSheng/` 系 G 盘另一同名项目的会话存储，不属本仓改名范畴，不动。
+6. **adapter 横幅去硬编码**：`invoke-vibe-hook-adapter.ps1:466` v4 时期硬编码的 `enabled-experience-autonomous-v1` → 动态 `$($Contract.status)`（该函数契约对象必非空；测试仅断言「经验自动记账契约」字样）。hook 契约套件 PASS。已装项目存量横幅下次重装自然更新，不强制。
+7. **`docs/archive` 治理 3 error 消除**：根因是 `docs/archive/` 有卷无门面（E6 孤儿卷 + E3 散落同源）。新建门面 `docs/archive.md`（H1 含文件名词、E5 双向登记两卷、含 原位置/归档原因/日期 登记表），一处修复同时消 E3×2 与 E6。直跑 0 error exit 0（新增 2 条 W2 黄字系冻结卷未编号的诚实提醒，warn 级不阻断）；治理契约套件 fail 0；verify 21/21。
+
+**验证**：fs-agent 三查通过；codex 可启且技能清单不变（240 条）；本仓 check-doc-governance 0 error / 契约套件 fail 0 / hook 套件 PASS / verify 21/21。**至此本证据文件的遗留清单全部关闭**；知情项仅存 `G--FeiSheng`（他项目会话，不属范畴）。

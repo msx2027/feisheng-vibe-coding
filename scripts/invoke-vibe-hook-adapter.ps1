@@ -463,7 +463,7 @@ function Invoke-SessionStartHandler {
         exit 0
     }
     $contractText = @"
-【经验自动记账契约 enabled-experience-autonomous-v1】本项目已启用经验治理台账（$ledgerRelative）。
+【经验自动记账契约 $($Contract.status)】本项目已启用经验治理台账（$ledgerRelative）。
 1) 检测到纠错信号时 hook 会注入 autoRecord 路由；你必须在当前任务完成后立即自主处理，不需要等待用户再次指示。
 2) 自检义务（零触发词，不依赖用户说任何纠错词）：每个任务完成前自检——你自己的返工/重试、推翻重来的方案、修掉的自身错误、用户重复提出同一请求、用户手动改写或撤销你的产出、用户放弃你的方案转向他路，这些一律按纠错处理：可复用→立即自行记录；不可复用→不记（宁可漏记，不可滥记）。无新教训时用 --action selfcheck --session <sessionId> --finding none 留痕。
 3) 收工凭据义务（owner 授权 2026-09-19）：收工前把凭据 JSON 写入 .vibe-coding-skills/vibe-hook-state/stop-credential-<sessionId>.json，形状：{"verification":[{"command":"<实际执行的验证命令>","exitCode":0,"outputDigest":"<关键输出摘要>"}],"scope":{"declared":["<本任务声明的文件边界或来源声明>"],"outOfScope":[]},"findings":{"deferred":0,"rejectedWithReason":0}}。钩子只验存在与形状（字段齐、类型对），不重跑命令、不验真伪（真伪由 CI 独立复跑兜底）。scope.declared 声明源：dev-builder 流 = dev-plan「不做边界/停止条件」字段；普通任务 = Sliver Operating Law 的 declared file boundary（收工时与实际 diff 对照）。此义务由 Stop 硬门禁强制：未消化信号、未自检留痕或凭据缺失/形状不对任一存在即拦截并给出处理指令（每会话最多拦截 3 次，超限放行并留痕）。收工流程一律静默完成：凭据与自检的写入、验证命令的运行过程不得在最终回复中复述或打卡式罗列（✓✓ 清单、粘贴命令输出、文件清单等均属流程复述），最终回复只向用户报告任务结果与异常（必要结果一句话为主）；用户追问或出现异常时才展开细节。
