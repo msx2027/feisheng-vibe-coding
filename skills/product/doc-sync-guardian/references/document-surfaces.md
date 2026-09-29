@@ -38,4 +38,4 @@
 - endpoint、service、public entry、server action、fetch wrapper、IPC / event 或 schema → `接口契约.md`
 - UI 包、组件、variant、token、theme、迁移删除或 `check-ui-reuse` → UI 治理文档、包 README 与复审证据
 - review profile、finding 状态、复审 round 或用户风险裁决 → 当前 `审查台账.md` 或 Task / Phase 的 `Finding Ledger`；Phase 收口同步 Phase ledger 与两个 Review Receipt
-- Skill / Agent / Hook / Tool / 主控规则 → 上游真源、对应 `SKILL.md` / Agent、模块索引、README、manifest 与镜像
+- Skill / Agent / Hook / Tool / 主控规则 → 真源、对应 `SKILL.md` / Agent、模块索引、README、manifest 与镜像

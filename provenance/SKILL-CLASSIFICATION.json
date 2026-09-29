@@ -55,13 +55,13 @@
   "reasonsByStatus": {
     "accepted-primitive": "已验收工程原语；进入 runtime 静态投影",
     "adapter-candidate": "已审查、待适配器与行为 smoke；未进入 runtime",
-    "blocked-unclassified-working-tree": "来源工作树半改名且未提交，未获上游/维护者确认",
+    "blocked-unclassified-working-tree": "来源工作树半改名且未提交，未获源项目/维护者确认",
     "compatibility-alias": "兼容入口别名；不得拥有项目级路由",
     "retired-alias": "别名已退役：宿主侧旧入口已删除，数据层状态补齐到与事实一致；保留记录供审计，不得再激活",
     "compatibility-selector": "兼容选择器；不得拥有项目级路由",
     "control-plane": "唯一项目级控制面（Sliver）",
     "event-only-source-only": "仅限结构化事件调用；需宿主事件契约与独立审查",
-    "excluded-in-progress": "上游 in-progress；不进入正式运行包",
+    "excluded-in-progress": "源项目 in-progress；不进入正式运行包",
     "source-only-checker": "专项 checker；Sliver 拥有验收门，未进入 runtime",
     "source-only-primitive": "来源专用工程原语；未验收",
     "source-only-product-or-checker": "产品/checker 来源专用；逐技能审计与许可证映射已完成，待宿主行为 smoke",
@@ -105,8 +105,8 @@
     "clarify": "语义审查于 2026-09-11 随能力定批评次完成（内容级逐技能评估）；domain 由 unreviewed 修正为 checker（impeccable 族 UX 文案专项）",
     "vibe-coding-skills": "旧总入口别名退役：宿主侧链接已于批次 10 删除（evidence/20260911-d2-green-t4-and-retirement.md），数据层状态补齐到与事实一致（证据: evidence/20260911-d2-green-t4-and-retirement.md）；retiredAt 2026-09-10",
     "ui-styling": "许可证缺口（IBMPlexSerif/InstrumentSerif OFL）已补齐，映射见 legal/fonts/NOTICE.md；仍待宿主行为 smoke",
-    "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
-    "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
+    "code-review": "内容取自已提交 revision 9fe7e7a3 的 blob（源项目工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
+    "tdd": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖源项目完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
     "sliver-vibe-coding": "Sliver 是唯一项目级控制面，拥有 route / truth / 验收门",
     "domain-modeling": "只维护目标项目 glossary/ADR，写入受 target-truth 约束（见 evidence/20260910-matt-primitive-adoption.md）",
     "diagnosing-bugs": "仅提供诊断反馈环纪律，不声明项目级写入权（见 evidence/20260910-matt-primitive-adoption.md）",
@@ -185,7 +185,7 @@
         "handoff",
         "claude-handoff"
       ],
-      "rule": "上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属上游 in-progress，仅在完成独立行为验收后才可用。"
+      "rule": "上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属源项目 in-progress，仅在完成独立行为验收后才可用。"
     },
     {
       "id": "doc-authoring",
@@ -197,7 +197,7 @@
         "writing-fragments",
         "doc-sync-guardian"
       ],
-      "rule": "写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属上游 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。"
+      "rule": "写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属源项目 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。"
     },
     {
       "id": "skill-governance",
@@ -210,7 +210,7 @@
         "target-runtime-setup",
         "setup-ts-deep-modules"
       ],
-      "rule": "技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属上游 in-progress 不得启用。"
+      "rule": "技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属源项目 in-progress 不得启用。"
     },
     {
       "id": "clarification-and-grilling",
@@ -875,7 +875,7 @@
     },
     "requireDeclaredForRuntime": true
   },
-  "canonicalNamingPolicy": "canonical id 由本仓库决定。上游未提交的工作树改名只作为事实记录，不采用、也不等待上游确认；不采用工作树内容是因为其意图不可证，而不是因为命名冲突。",
+  "canonicalNamingPolicy": "canonical id 由本仓库决定。源项目未提交的工作树改名只作为事实记录，不采用、也不等待源项目确认；不采用工作树内容是因为其意图不可证，而不是因为命名冲突。",
   "runtimePromotionPolicy": {
     "note": "进入 runtime 投影（readiness=accepted）必须同时满足以下条件；缺一即保持 source-only（fail-closed）",
     "requires": [
@@ -890,7 +890,7 @@
       "evidence/20260910-vibe-checker-promotion.md"
     ],
     "structuralPrerequisite": "accepted 记录的 path 必须位于 sources/ 之外（一等导入位置），否则无法进入投影：scripts/runtime-projection-guard.ps1 明确禁止把 sources 段带进运行时 bundle。Vibe 技能的导入约定：accepted 记录必须声明 sourceDir，由 scripts/import-vibe-skills.ps1 从快照导入到 skills/checker/<id>/（派生来源登记在 provenance/VIBE-IMPORTS.json），catalog 生成器据此改写 path。许可证侧同批完成策略化：vibePerSkill.families[].runtimeEligible 是逐族策略真源，scripts/validate-release-notices.ps1 读它而不是硬编码 source 级 flag；缺字段即 fail-closed。",
-    "runtimeIneligibilityPolicy": "runtimeEligible=false 的许可证族不得进入 runtime：vibe-original-* 族的上游是 private 分发包，未逐技能授予许可证文本，属「来源/许可证未通过」而非「待办」。解除需要上游逐技能许可证声明或独立法律审查，并同步改本文件的分类真源。",
+    "runtimeIneligibilityPolicy": "runtimeEligible=false 的许可证族不得进入 runtime：vibe-original-* 族的源项目是 private 分发包，未逐技能授予许可证文本，属「来源/许可证未通过」而非「待办」。解除需要源项目逐技能许可证声明或独立法律审查，并同步改本文件的分类真源。",
     "bundlePolicy": {
       "note": "runtime 单位策略（数据真源；由 build-canonical-catalog.ps1 写入 catalog.bundlePolicy，投影门禁与 verify 读生成物而不重定义）：定义一条记录进入投影时到底带哪些文件。catalog 里的 bundle 字段只出现在 acceptedStatuses 记录上，它是该记录的 runtime 文件白名单（逐文件 sha256）。",
       "directoryScope": "path 形如 skills/<group>/<id>/SKILL.md 的记录是「已物理导入的技能目录」，以整个目录为 runtime 单位（目录名必须等于 canonical id，否则生成器 fail-closed）。其余记录（如控制面 governance/sliver-core/SKILL.md）保持单文件单位 —— 那棵树的其余部分不是技能内容（含 hooks / packaging / tests），绝不能整体投影。",

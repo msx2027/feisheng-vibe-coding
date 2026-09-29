@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 结构棘轮门禁自动装配器（2026-09-17，owner 预授权：入口技能启动动作调用）。
 // 用途：对目标项目一次性装齐 check-hotspots 门禁——拷模块、按项目布局扩扫描根、
-// 接 pre-commit 棘轮、跑首检基线。宿主加载 feisheng-vibe-coding 后由启动动作执行，
+// 接 pre-commit 棘轮、跑首检基线。宿主加载 vibe-coding-skills 后由启动动作执行，
 // 用户无需逐次开口；重复调用幂等（已装齐 = 零改动退出）。
 //
 // 密钥泄漏护栏加购（2026-09-19 批 C，guardrail-addon.mjs）：默认随装配一同装上——
@@ -126,7 +126,7 @@ function inventory(target) {
   const rows = [];
   rows.push(['AGENTS.md 运行时承诺', existsSync(path.join(target, 'AGENTS.md')), '']);
   rows.push(['.vibe-runtime.json（AGENTS/CLAUDE 块）', existsSync(path.join(target, '.vibe-runtime.json')), '']);
-  rows.push(['vibe-hooks 纠错信号（.feisheng）', existsSync(path.join(target, '.feisheng', 'vibe-hooks', 'install-manifest.json')),
+  rows.push(['vibe-hooks 纠错信号（.vibe-coding-skills）', existsSync(path.join(target, '.vibe-coding-skills', 'vibe-hooks', 'install-manifest.json')),
     '可用分发包 scripts/install-vibe-hooks.ps1 安装']);
   return rows;
 }

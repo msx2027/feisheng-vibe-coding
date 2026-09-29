@@ -316,7 +316,7 @@ function Get-ProjectionPlan {
     $filePlan += [pscustomobject]@{
         id = 'project-entry'
         kind = 'project-entry'
-        source = 'feisheng-vibe-coding'
+        source = 'vibe-coding-skills'
         sourceRevision = $null
         relativePath = $entryPath
         sourcePath = $sourceEntryPath

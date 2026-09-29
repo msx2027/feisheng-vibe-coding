@@ -250,7 +250,7 @@ function Get-ExplicitBundlePlan {
     }
 
     # 路径来源有两种：bundlePaths 直接列举，或 bundlePathsFrom 从某个 manifest 的指定 key 读。
-    # 后者用于「上游自己定义了自己的 runtime 包」的情况（控制面）：清单只存一份，避免两边漂移。
+    # 后者用于「源项目自己定义了自己的 runtime 包」的情况（控制面）：清单只存一份，避免两边漂移。
     $explicitPaths = @()
     if ($Entry.PSObject.Properties.Name -contains 'bundlePathsFrom') {
         $spec = $Entry.bundlePathsFrom
@@ -480,14 +480,14 @@ foreach ($row in @($inventory.skills)) {
     }
 
     # 结构前提门禁（fail-closed）：accepted 的 Vibe 记录必须声明 sourceDir，
-    # 且必须等于上游 skills/ 下的目录名（= inventory 的 canonicalCandidate），
+    # 且必须等于源项目 skills/ 下的目录名（= inventory 的 canonicalCandidate），
     # 否则物理导入位置无法与快照目录一一对应。
     if ($source -eq 'vibe-coding-skills' -and $readiness -eq 'accepted') {
         if (-not ($entry.PSObject.Properties.Name -contains 'sourceDir') -or [string]::IsNullOrWhiteSpace([string]$entry.sourceDir)) {
             throw "accepted 的 Vibe 记录必须声明 sourceDir: skill '$id'"
         }
         if ([string]$entry.sourceDir -ne $candidate) {
-            throw "accepted 的 Vibe 记录 sourceDir 必须等于上游目录名: skill '$id' sourceDir='$($entry.sourceDir)' 上游目录='$candidate'"
+            throw "accepted 的 Vibe 记录 sourceDir 必须等于源项目目录名: skill '$id' sourceDir='$($entry.sourceDir)' 源项目目录='$candidate'"
         }
     }
 

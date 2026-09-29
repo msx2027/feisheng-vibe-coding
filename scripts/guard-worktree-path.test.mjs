@@ -14,7 +14,7 @@ import {
 
 const REPO = path.dirname(fileURLToPath(import.meta.url)); // scripts/
 const ROOT = path.dirname(REPO); // 仓库根
-const WT = 'F:\\skiils\\feisheng-vibe-coding-worktrees';
+const WT = 'F:\\skiils\\vibe-coding-skills-worktrees';
 
 test('tokenize：引号内为一个 token，不保留引号', () => {
   assert.deepEqual(tokenize('git worktree add "F:/a b/c" -b x'), ['git', 'worktree', 'add', 'F:/a b/c', '-b', 'x']);
@@ -35,7 +35,7 @@ test('extractWorktreeTargets：add 取第一位置参数，-b 取值旗标不消
 
 test('decideWorktreeCommand：白名单内放行（含 MSYS 形态）', () => {
   assert.equal(decideWorktreeCommand({ command: `git worktree add ${WT}\\topic`, cwd: ROOT }).allow, true);
-  assert.equal(decideWorktreeCommand({ command: 'git worktree add /f/skiils/feisheng-vibe-coding-worktrees/topic', cwd: ROOT }).allow, true);
+  assert.equal(decideWorktreeCommand({ command: 'git worktree add /f/skiils/vibe-coding-skills-worktrees/topic', cwd: ROOT }).allow, true);
 });
 
 test('decideWorktreeCommand：占根本身 / 白名单外 / 相对路径+cd 拒绝', () => {

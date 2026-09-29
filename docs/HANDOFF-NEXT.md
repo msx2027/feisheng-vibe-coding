@@ -1,4 +1,4 @@
-# 交接必读：feisheng-vibe-coding 目标准完成手册
+# 交接必读：vibe-coding-skills 目标准完成手册
 
 > 这是**唯一**的交接入口（取代并覆盖本文件的历史版本）。`docs/archive/HANDOFF.md` 是历史留档（2026-09-12 移入 docs/archive/），冲突时以本文为准。
 > 本文自包含：新会话读完即可接手，不需要任何对话历史。请用 goal 模式按第 9 节推进到第 8 节定义的「完成」。
@@ -8,13 +8,13 @@
 
 ## 1. 最终目标（Definition of Done）
 
-**目标**：`feisheng-vibe-coding` 可以被用户直接用起来 —— 用户只说自然语言，不需要知道任何内部名词。
+**目标**：`vibe-coding-skills` 可以被用户直接用起来 —— 用户只说自然语言，不需要知道任何内部名词。
 
 **完成 = 下面 6 条全部可验证通过**：
 
 | # | 验收项 | 判定方式（必须是新鲜证据） |
 |---|---|---|
-| D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `feisheng-vibe-coding` 一个我们的目录；无重复/旧入口 |
+| D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `vibe-coding-skills` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
 | D4 | **门禁全绿** | `verify.ps1`（默认 21 步，2026-09-28 口径；全开 23 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
@@ -29,15 +29,15 @@
 
 ## 2. 一分钟现状（数字快照）
 
-- 仓库：`F:/skiils/feisheng-vibe-coding`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
-- 远端：`https://github.com/msx2027/feisheng-vibe-coding`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
+- 仓库：`F:/skiils/vibe-coding-skills`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
+- 远端：`https://github.com/msx2027/vibe-coding-skills`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
-- 门禁：`verify.ps1` 默认 **21 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；**同日换行归一批已把 `governance/sliver-core` 全部 220 个保真文件由 CRLF 恢复为 LF**（内容零差异，2,525,899→2,474,202 字节，树摘要 35a40ec4b9aa0381→f8f7a8171a30ddd3，`d0_max_bytes` 撤销回上游 67000 实测 66,839 合规、`bounded_d1_max_bytes` 保留 75000 因实测 74,049 仍超 49；该树自带 110 条 python 契约测试在统一 UTF-8 环境下 failures 17→2，残留 2 条同因基线 Git 对象 `29695fe0…` 随源项目删除不可得、与换行无关，故该套件仍不可接入 CI；数字与落地清单见 evidence/20260928-eol-lf-rehearsal.md 与 evidence/20260928-eol-lf-landing.md）；此前 12/13/15/17/19 均为历史口径——步数自数字对账批起由末步自计核对，写错即红；**同日附带修正把该自计门的锚点从 README 两处扩到「README 两处 + 交接文档全部『默认 N 步』与『全开 N 步』」**，命中数为 0 同样判红；扩锚点的原因是当场查出交接文档另有两处停在 2026-09-12 的 15/17 口径（入口速查与新会话起点清单），而原门抓不到；同批裁定**另两棵保真树不跟改行尾**（`sources/**` 与 `skills/**` 保持上游原样，收益为零而代价是不可逆的快照失真，实测依据见 evidence/20260928-eol-lf-landing.md §8-1，规则已写入根 `AGENTS.md`「保真树行尾规则」一节））；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **23** 步）
+- 门禁：`verify.ps1` 默认 **21 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；**同日换行归一批已把 `governance/sliver-core` 全部 220 个保真文件由 CRLF 恢复为 LF**（内容零差异，2,525,899→2,474,202 字节，树摘要 35a40ec4b9aa0381→f8f7a8171a30ddd3，`d0_max_bytes` 撤销回源项目原值 67000 实测 66,839 合规、`bounded_d1_max_bytes` 保留 75000 因实测 74,049 仍超 49；该树自带 110 条 python 契约测试在统一 UTF-8 环境下 failures 17→2，残留 2 条同因基线 Git 对象 `29695fe0…` 随源项目删除不可得、与换行无关，故该套件仍不可接入 CI；数字与落地清单见 evidence/20260928-eol-lf-rehearsal.md 与 evidence/20260928-eol-lf-landing.md）；此前 12/13/15/17/19 均为历史口径——步数自数字对账批起由末步自计核对，写错即红；**同日附带修正把该自计门的锚点从 README 两处扩到「README 两处 + 交接文档全部『默认 N 步』与『全开 N 步』」**，命中数为 0 同样判红；扩锚点的原因是当场查出交接文档另有两处停在 2026-09-12 的 15/17 口径（入口速查与新会话起点清单），而原门抓不到；同批裁定**另两棵保真树不跟改行尾**（`sources/**` 与 `skills/**` 保持源项目原样，收益为零而代价是不可逆的快照失真，实测依据见 evidence/20260928-eol-lf-landing.md §8-1，规则已写入根 `AGENTS.md`「保真树行尾规则」一节））；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **23** 步）
 - 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **452** 文件（catalog 重算，2026-09-29 实测）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `feisheng-vibe-coding` **454 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**452** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**454** = 部署态 = 452 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
+- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `vibe-coding-skills` **454 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**452** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**454** = 部署态 = 452 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -177,7 +177,7 @@ Sliver 的 `governance/sliver-core/packaging/runtime-manifest.json` 用 `targets
 | 11 | `6161ddc`..`7c33764` | 闭环批 + T6 解锁：27+2 能力接入（39 条/399 文件）、D2/D3 转绿留档、Hook 契约 v2 解锁 | `evidence/20260911-loop-closure-batch.md`、`evidence/20260911-t6-hook-unlock.md` |
 | 12 | 本批 | **治理对齐批**：AGENTS.md 决策写入规则修正、README/SKILL 阶段刷新、Hook 正名（采集面）+ Digest 消化状态机、宿主证据门（verify 5b）+ collector 伪影修复、retired readiness + 退役工具 + `vibe-coding-skills` 别名试点退役、遗留链接清点（64 条） | `evidence/20260911-governance-alignment.md` |
 | 13 | 本批 | **能力定批评次**：35 技能全部定编（10+3 接入 / 22 退役），event 分组 + 事件三件套轻量接入，三源链接清零（共享根 147→112），投影 422 文件 | `evidence/20260911-capability-finalization.md` |
-| 14 | 本批 | **终态收尾批**：三源项目归档并删除本体（`_archive/` 三个 zip 全等校验）、AGENTS.md/HANDOFF 规则文本对齐「源已归档」事实、SOURCE-INVENTORY/BASELINE 补归档终态、挂远端 `msx2027/feisheng-vibe-coding` 并首次真跑 CI、遗留清单四项收尾（collector 单测 / verify 5b readiness 校验 / OWNER-LEDGER 对齐 / 有界 D1 路径裁决） | `evidence/20260911-source-archive-and-ci.md`、`evidence/20260911-matt-source-dirty-state.md` |
+| 14 | 本批 | **终态收尾批**：三源项目归档并删除本体（`_archive/` 三个 zip 全等校验）、AGENTS.md/HANDOFF 规则文本对齐「源已归档」事实、SOURCE-INVENTORY/BASELINE 补归档终态、挂远端 `msx2027/vibe-coding-skills` 并首次真跑 CI、遗留清单四项收尾（collector 单测 / verify 5b readiness 校验 / OWNER-LEDGER 对齐 / 有界 D1 路径裁决） | `evidence/20260911-source-archive-and-ci.md`、`evidence/20260911-matt-source-dirty-state.md` |
 
 ---
 
@@ -203,7 +203,7 @@ Sliver 的 `governance/sliver-core/packaging/runtime-manifest.json` 用 `targets
 ### 7.1 布局
 
 - `~/.claude/skills` 是**junction** → `F:\skiils\_adapters\shared\skills`（宿主技能根，176 条【历史时点 2026-09-10；2026-09-12 实测 112 条，见 §13 检查清单】；2026-09-11 退役 4 个重名链接，见 `evidence/20260911-d2-green-t4-and-retirement.md`）
-- 我们的包：`.../shared/skills/feisheng-vibe-coding`，**401 文件**【历史时点；2026-09-12 实测 422 文件 / 52 技能，含控制面】
+- 我们的包：`.../shared/skills/vibe-coding-skills`，**401 文件**【历史时点；2026-09-12 实测 422 文件 / 52 技能，含控制面】
 - `~/.codex/skills` 只有 `.system`（Codex 通过 junction 根读取同一目录）
 - 已退役的 8 个旧条目**不在**这个根里了；它们的源仓库仍在原处（可回滚，见 `evidence/20260910-host-install-and-discovery.md` 第 8 节表格）
 
@@ -232,7 +232,7 @@ model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留�
   `codex debug prompt-input` 完整输出显示包内 53 条技能描述逐条进入模型可见输入（YAML 引号转义归一后 53/53 全等；
   根入口 description 674 字符未被截断）。证据：`evidence/20260911-codex-skill-description-context.md`
 - ~~发布 CI **从未在真实 GitHub runner 跑过**（本地已等价复现 fresh clone 情形）~~ **已转绿（2026-09-11）**：
-  仓库已挂远端 `msx2027/feisheng-vibe-coding`（private），`.github/workflows/release-gate.yml` 已真实运行；
+  仓库已挂远端 `msx2027/vibe-coding-skills`（private），`.github/workflows/release-gate.yml` 已真实运行；
   运行链接与结论见 `evidence/20260911-source-archive-and-ci.md`。CI 按设计**不带 `-IncludeHostEvidence`**（无宿主环境）
 - 宿主侧对 `assets/` 模板的实际使用 —— 未验证（`agents/openai.yaml` 只属宿主专属投影，共享根已不含）
 
@@ -269,7 +269,7 @@ model-visible（`visibleVia=unified-bundle`）；顶层目录态另记录遗留�
   （中英文触发语句都在）；原先无法验证的「`-p` 会话里描述是否在决策时可见」已用 `codex debug prompt-input` 实测转绿
   （53/53 全等，见 §9.10），因此维持现有 description，不做无依据改写。
 - ⏸️ owner 决定项：更新 `~/.claude/CLAUDE.md`（及镜像 `C:\Users\MSX\AGENTS.md`）的「Skills 路由规则」块，
-  把统一入口 `feisheng-vibe-coding` 立为项目级请求的第一路由——这是 D2 转绿的关键一步（建议文案已给 owner）。
+  把统一入口 `vibe-coding-skills` 立为项目级请求的第一路由——这是 D2 转绿的关键一步（建议文案已给 owner）。
 
 ### 9.4 T4【已完成 2026-09-11】**阶段 2 收尾**：`tdd` / `code-review`
 
@@ -337,7 +337,7 @@ GA 批后遗留（按优先级）：
 |---|---|---|---|
 | 1 | 沉淀消费三技能迁移批次 | ⏸️ 未动 | 需许可证族决策 + statusPolicy + 绑定变更 |
 | 2 | 64 个源仓库链接退役口径 | ✅ **已完成** | 三源链接清零（回滚记录 `evidence/20260911-retire-{29,35}-rollback.json`） |
-| 3 | 挂远端让 CI 真跑 | ✅ **已完成** | `msx2027/feisheng-vibe-coding`（private），运行链接见 `evidence/20260911-source-archive-and-ci.md` |
+| 3 | 挂远端让 CI 真跑 | ✅ **已完成** | `msx2027/vibe-coding-skills`（private），运行链接见 `evidence/20260911-source-archive-and-ci.md` |
 | 4a | OWNER-LEDGER 结构性议题 | ✅ **已对齐** | Sliver 实体已登记、裁决 owner 落点已补、skill-catalog path 已指向 `SKILL-CLASSIFICATION.json` |
 | 4b | SOURCE-INVENTORY 状态停格 | ✅ **已对齐** | 补「归档终态」记录，与 AGENTS.md 口径一致 |
 | 4c | LOCAL-PATCHES owner 字段悬空 | ✅ **已对齐** | owner 字段改为 "provenance-integrity"（ledger 已含） |
@@ -364,7 +364,7 @@ owner 审计后拍板：29 个「已接入统一包但旧链接还在」的链�
 - 重采宿主证据：52 条 admitted 仍全部经统一包 model-visible（零能力丢失；39 为定编前历史值）；门禁当时 14/14（现 17/17，口径见 §2）
 - 剩余 35 个链接 = 35 个未接入技能的现役服务，待 owner 按下方路线第 2 步逐个「接入或退役」
 
-**源项目终态路线（owner 已批终态 = 只保留 feisheng-vibe-coding 一个文件夹）**：
+**源项目终态路线（owner 已批终态 = 只保留 vibe-coding-skills 一个文件夹）**：
 1. ✅ 29 链接退役（D1 批）
 2. ✅ 35 技能全部定编（能力定批评次：13 接入 + 22 退役，裁决表见 `evidence/20260911-capability-finalization.md`）
    → 剩余 35 个源链接已全部退役（回滚记录 `evidence/20260911-retire-35-rollback.json`，2026-09-12 迁入），**三源链接清零**，投影重装 422 文件
@@ -429,7 +429,7 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
   `snapshot = runtime-import`（一等副本偏离来源快照，同时登记 `originalSha256` 与 `patchedSha256`，完全可逆）
 - **门禁同步收紧而非放宽**：`verify.ps1` 1c 与 `build-canonical-catalog.ps1` 两处副本自洽校验改为
   「未登记即失败、登记需双哈希吻合、登记过期也失败」；并新增步骤 **1c-2「导入副本与快照一致性（Matt）」**，
-  补上 Matt 侧此前缺失的逐文件副本覆盖（用 `SKILL-INVENTORY.json` 按 `(source, sha256)` 还原上游路径）
+  补上 Matt 侧此前缺失的逐文件副本覆盖（用 `SKILL-INVENTORY.json` 按 `(source, sha256)` 还原源项目路径）
 - 验证：`verify -IncludeHostEvidence -IncludePackage` = **15/15**（本机）；**4 条反例**（已登记文件再改 / 未登记文件改动 /
   登记过期 / Matt 侧未登记改动）全部按设计失败并逐字节还原；修后扫描 579 文件，**残留悬空引用 0 处**；
   共享根重装 422 文件（`validated=true`）后宿主包内复扫同样 0 命中
@@ -446,7 +446,7 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
 - **已删除的源项目不是工作对象**（归档 zip 已由 owner 于 2026-09-12 删除，不留冷存副本）：不得从任何外部副本/缓存/备份解包回去当来源、不得在其上做迁移
 - **共享根里与本项目无关的 83 个链接和 28 个目录不要动**；本项目相关的源仓库链接已于 2026-09-11 全部退役
   （三源链接清零，回滚记录 `evidence/20260911-retire-{29,35}-rollback.json`）
-- 本仓库**自持，不依靠任何上游**：不产出上游 issue，不等上游确认；差异只作事实记录
+- 本仓库**自持，不依靠任何外部仓库**：不产出外部 issue，不等外部确认；差异只作事实记录
 - **不手工编辑生成物**；改分类/裁决只改 `provenance/SKILL-CLASSIFICATION.json`
 - 不把 Vibe 的 `.claude/`/`.agents/`/`.codex/` 镜像当源码或运行时内容
 - 不把混合第三方许可证并成根许可证；不改许可证族策略去迁就某个技能
@@ -500,7 +500,7 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
 34. **副本补丁是两个命名空间，不要混用**：`snapshot = <快照名>` 是快照树补丁（path 相对快照根）；
     一等副本（`skills/**`）必须用 `snapshot = runtime-import`（path 相对仓库根，另带 `snapshotPath`）。
     副本路径写进快照命名空间会被快照校验误读成「快照本身应等于 patchedSha256」而直接失败
-35. **Matt 侧副本检查依赖 `SKILL-INVENTORY.json` 的 `(source, sha256)` 唯一命中**来还原上游路径
+35. **Matt 侧副本检查依赖 `SKILL-INVENTORY.json` 的 `(source, sha256)` 唯一命中**来还原源项目路径
     （Matt 的 `skills/engineering`、`skills/productivity` 与目的地分组不同名，不能按路径猜）；
     命中 0 或 >1 条都按失败处理，不允许静默跳过
 36. **保真树换行类改动必须先 `git add` 再跑门禁**（2026-09-28 换行归一批实测）：门禁 1d)「保真树换行可复现性」
@@ -546,20 +546,20 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
 
 ```powershell
 # 一键全套门禁（提交后必须重跑）
-pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -IncludePackage
+pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -IncludePackage
 
 # 宿主投递（干跑 / 安装 / 卸载）
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -DryRun
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -Force
-pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -Uninstall
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -DryRun
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -Force
+pwsh -NoProfile -File 'scripts/install-runtime-projection.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -Uninstall
 
 # 改 vendored 内容（顺序不能反）
 # 1. 改 governance/sliver-core/**  2. 登记 LOCAL-PATCHES.json（originalSha256 + patchedSha256）
-pwsh -NoProfile -File 'scripts/record-provenance-integrity.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding'
-pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/record-provenance-integrity.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills'
+pwsh -NoProfile -File 'scripts/build-canonical-catalog.ps1' -RepoRoot 'F:\skiils\vibe-coding-skills'
 
 # 新增 runtime 技能后的路由绑定（门禁 3b 会强制）
-pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding'
+pwsh -NoProfile -File 'scripts/validate-route-bindings.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills'
 
 # 唯一可信的验收方式
 git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/verify.ps1' -IncludePackage
@@ -570,10 +570,10 @@ git clone <repo> <新目录>; cd <新目录>; pwsh -NoProfile -File 'scripts/ver
 ## 13. 新会话起点检查清单
 
 ```powershell
-cd F:/skiils/feisheng-vibe-coding
+cd F:/skiils/vibe-coding-skills
 git log --oneline -3                      # 终态收尾批（2026-09-11）之后的提交
 git status --porcelain                    # 应为空
-pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\feisheng-vibe-coding' -IncludeHostEvidence -IncludePackage
+pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -IncludeHostEvidence -IncludePackage
                                           # 应为 23/23（默认 21 步 + 宿主证据 + 包装配；2026-09-28 口径，15/17 与 12/13 均为历史口径）
 ls 'F:/skiils/_adapters/shared/skills' | wc -l     # 应为 143（2026-09-28 实测；141 为 2026-09-18 口径、112 为 2026-09-11 定编批口径，后续新增技能未回写本清单）
 ls -d 'F:/skiils/sliver-vibe-coding' 'F:/skiils/vibe-coding-skills' 'F:/skiils/mattpocock-skills'
@@ -593,7 +593,7 @@ OWNER-LEDGER/E1 有界路径剩余议题）；源项目归档、CI 上线、64 �
 |---|---|---|---|
 | sliver-vibe-coding | 1 | **1** | 控制面（22 主路由 + 8 lens 是 `references/*.md`，非独立技能） |
 | vibe-coding-skills | 46 | **33** | 2026-09-11 闭环批后：checker 4 + product 13（含 dev-builder 编码主手）+ ui 16 已接入；13 个留待后续（Hook 驱动 3、MCP 依赖 2、语义未审 3、真源重叠 2、职能重叠 1、边缘 1、别名 1 已于 GA 批退役）；许可证族经 owner 豁免（自用） |
-| mattpocock-skills | 35 | **5** | 4 个原语 + code-review（checker）已接入（2026-09-11）；10 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（上游 in-progress）；6 个 user-tool；1 compat |
+| mattpocock-skills | 35 | **5** | 4 个原语 + code-review（checker）已接入（2026-09-11）；10 个 source-only-primitive；7 个 adapter-candidate；6 个 excluded（源项目 in-progress）；6 个 user-tool；1 compat |
 
 ```text
 技能集合   82/82     全量登记（旧口径 82/83 的差 1 为翻译维护技能，已归入排除面）

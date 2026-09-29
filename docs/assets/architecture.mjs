@@ -122,7 +122,7 @@ function runtimeSVG(th) {
   // 标题
   b += T(70, 42, '运行时架构', { size: 16, fill: th.ink, w: 700 });
   b += T(178, 42, 'RUNTIME ARCHITECTURE', { size: 10, fill: th.ink3, w: 600, ls: 2 });
-  b += T(1090, 42, 'feisheng-vibe-coding', { size: 10.5, fill: th.ink3, ff: MONO, anchor: 'end' });
+  b += T(1090, 42, 'vibe-coding-skills', { size: 10.5, fill: th.ink3, ff: MONO, anchor: 'end' });
 
   // 用户
   b += card({ x: 390, y: 62, w: 380, h: 48, fill: th.userBg, stroke: th.userBorder, r: 24, shadow: true, lines: [
@@ -139,7 +139,7 @@ function runtimeSVG(th) {
   b += chip(936, 178, 118, 32, 'Codex', { bg: th.codexBg, border: th.codexBorder, ink: th.codexInk });
   b += card({ x: 310, y: 164, w: 430, h: 62, fill: th.card, stroke: th.entryBorder, r: 12, shadow: true, lines: [
     { t: '唯一入口 Single entry', dy: 26, size: 13, fill: th.ink, w: 700 },
-    { t: 'feisheng-vibe-coding · SKILL.md', dy: 46, size: 11.5, fill: th.ink2, ff: MONO },
+    { t: 'vibe-coding-skills · SKILL.md', dy: 46, size: 11.5, fill: th.ink2, ff: MONO },
   ] });
   b += line(580, 250, 580, 272, { stroke: th.arrow, marker: 'm-ink' });
 

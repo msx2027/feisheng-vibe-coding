@@ -166,7 +166,7 @@ const ledgerPath = ledgerRelative ? path.resolve(targetRoot, ledgerRelative) : "
 
 // ---- 状态目录（消化标记 / dismissals 审计）----
 let stateDir = argValue("--state-dir");
-if (!stateDir) stateDir = path.join(targetRoot, ".feisheng", "vibe-hook-state");
+if (!stateDir) stateDir = path.join(targetRoot, ".vibe-coding-skills", "vibe-hook-state");
 stateDir = path.resolve(stateDir);
 
 function writeDigestMarker(dedupKey) {

@@ -6,7 +6,7 @@
 - **autoRecord 闭环（契约 `enabled-experience-auto-record-v1` 起）**：
   Hook 捕获纠错信号（UserPromptSubmit）→ 以 `hookSpecificOutput.additionalContext` 注入结构化
   autoRecord 路由（eventId / signalType / scope / promptHash / occurredAt / 记录命令模板）→
-  会话 AI 自主判断是否可复用 → 调用目标项目 `.feisheng/vibe-hooks/experience-recorder.mjs`
+  会话 AI 自主判断是否可复用 → 调用目标项目 `.vibe-coding-skills/vibe-hooks/experience-recorder.mjs`
   落账 L0（ledger v2：revision CAS、eventId 幂等重放/collision、原子写）。
   SessionStart 注入常备记账契约 + 未消化提醒。记录与 dismiss 都会自动消化源信号。
 - **零触发词自检（`enabled-experience-autonomous-v1` 起）+ 硬门禁（`enabled-experience-hard-gate-v1` 起）**：

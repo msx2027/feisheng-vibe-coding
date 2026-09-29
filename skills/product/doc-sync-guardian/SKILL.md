@@ -1,6 +1,6 @@
 ---
 name: doc-sync-guardian
-description: '仅当用户先明确调用 `feisheng-vibe-coding` 总入口并指定 `doc-sync-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当代码、Skill、Hook、脚本、命令、目录结构或工作流规则发生变化，需要同步更新相关文档并阻止文...'
+description: '仅当用户先明确调用 `vibe-coding-skills` 总入口并指定 `doc-sync-guardian`，或由该总入口按指定路由到本 Skill 时使用；不得根据用户自然语言独立触发；当代码、Skill、Hook、脚本、命令、目录结构或工作流规则发生变化，需要同步更新相关文档并阻止文...'
 user-invocable: false
 disable-model-invocation: true
 ---
@@ -199,7 +199,7 @@ disable-model-invocation: true
             - 每项漂移对应哪个真实文件变化
 
         第四步：补文档并验证
-            - 优先补最上游源头文档
+            - 优先补最源头的文档
             - 再补用户可见说明
             - 运行最小必要验证
 

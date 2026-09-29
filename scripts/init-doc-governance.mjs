@@ -102,7 +102,7 @@ if (!existsSync(hooksDir)) {
   const hookFile = join(hooksDir, 'pre-commit');
   const block = [
     '',
-    '# 文档命名与归位治理（feisheng-vibe-coding init-doc-governance 接线）',
+    '# 文档命名与归位治理（vibe-coding-skills init-doc-governance 接线）',
     'if command -v node >/dev/null 2>&1; then',
     '  doc_root="$(git rev-parse --show-toplevel 2>/dev/null)" && \\',
     '    node "$doc_root/tools/check-doc-governance.mjs" --root "$doc_root" || exit 1',

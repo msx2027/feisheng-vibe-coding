@@ -23,7 +23,7 @@ ui 16 / event 3）的权威快照是生成物 `docs/CAPABILITY-INDEX.md`，真�
 
 - 快照里**未被定编为 `accepted-*`** 的条目：`retired`（23 条，逐条理由与证据指针见
   `provenance/SKILL-CLASSIFICATION.json` 的 `reasonsById`；需要时可从 `sources/` 快照捞回）
-  与 `excluded`/`compat`（上游 in-progress 或仅作兼容登记）。改分类只改 `SKILL-CLASSIFICATION.json`。
+  与 `excluded`/`compat`（源项目 in-progress 或仅作兼容登记）。改分类只改 `SKILL-CLASSIFICATION.json`。
 - Hook 相关资产：**纠错信号采集面已启用**（SessionStart 待消化提醒 + UserPromptSubmit 采集 +
   runner `-Mode Digest` 消化标记）；治理门禁事件（PreToolUse / PostToolUse / Stop）仍禁用归控制面。
   契约见 `adapters/vibe-hooks/contract.json`。

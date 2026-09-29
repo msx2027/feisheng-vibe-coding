@@ -60,7 +60,7 @@ jobs:
       - name: Upload static candidate package (not a release)
         uses: actions/upload-artifact@v7
         with:
-          name: feisheng-vibe-coding-static-candidate
-          path: ${{ runner.temp }}/feisheng-vibe-coding-ci-*.zip
+          name: vibe-coding-skills-static-candidate
+          path: ${{ runner.temp }}/vibe-coding-skills-ci-*.zip
           if-no-files-found: error
           retention-days: 14

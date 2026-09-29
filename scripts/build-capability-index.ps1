@@ -146,7 +146,7 @@ $lines += ''
 $lines += '## 阻塞'
 $lines += ''
 if ($blocked.Count -eq 0) {
-    $lines += '（当前无阻塞项。早先因上游未提交改名而被阻塞的 `tdd`、`code-review` 已按「内容取已提交 revision、命名由本仓库决定」解除。）'
+    $lines += '（当前无阻塞项。早先因源项目未提交改名而被阻塞的 `tdd`、`code-review` 已按「内容取已提交 revision、命名由本仓库决定」解除。）'
 } else {
     $lines += '| id | 来源 | 域 | 原因 |'
     $lines += '|---|---|---|---|'

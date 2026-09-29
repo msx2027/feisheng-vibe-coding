@@ -90,7 +90,7 @@ $claudeDirs = Get-DirectoryNames -Root $ClaudeSkillsRoot
 $codexDirs = Get-DirectoryNames -Root $CodexSkillsRoot
 
 # 统一包内的嵌套技能（skills/<group>/<id>）：顶层目录查不到，用 bundle 相对路径判定
-$bundleRoot = Join-Path $ClaudeSkillsRoot 'feisheng-vibe-coding'
+$bundleRoot = Join-Path $ClaudeSkillsRoot 'vibe-coding-skills'
 $bundleIsInstalled = Test-Path -LiteralPath $bundleRoot -PathType Container
 
 function Test-InstalledInSharedBundle {
@@ -136,7 +136,7 @@ function Find-VisibleMatches {
             # 而非空字符串在 PowerShell 里是真值，条件会恒真（本仓库真实踩过：82 条记录全部误匹配）。
             $isSuffixMatch = $entry.path.ToLowerInvariant().EndsWith('/' + $suffix.ToLowerInvariant(), [System.StringComparison]::OrdinalIgnoreCase)
             if ($isSuffixMatch) {
-                $startsBundle = $entry.path.ToLowerInvariant().StartsWith('feisheng-vibe-coding/', [System.StringComparison]::OrdinalIgnoreCase)
+                $startsBundle = $entry.path.ToLowerInvariant().StartsWith('vibe-coding-skills/', [System.StringComparison]::OrdinalIgnoreCase)
                 $via = if ($startsBundle) { 'unified-bundle' } else { 'legacy' }
                 $attributed += [pscustomobject]@{ entry = $entry; via = $via }
                 break
@@ -177,7 +177,7 @@ foreach ($record in @($catalog.records | Sort-Object id)) {
     $sharedRootEntryKind = $null
     $sharedRootEntryTarget = $null
     if ($inClaude) {
-        if ($dir -eq 'feisheng-vibe-coding') {
+        if ($dir -eq 'vibe-coding-skills') {
             $sharedRootEntryKind = 'unified-bundle'
         } else {
             $item = Get-Item -LiteralPath (Join-Path $ClaudeSkillsRoot $dir) -Force -ErrorAction SilentlyContinue

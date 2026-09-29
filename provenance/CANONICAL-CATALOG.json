@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-28T20:41:13.6426625Z",
+  "generatedAt": "2026-09-29T17:33:09.8780660Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -17,7 +17,7 @@
         "files": [
           {
             "path": "skills/ui/adapt/SKILL.md",
-            "sha256": "1b8777af3776ab54ddbecf7554ca01044e3aa996b4d2b7531e3c7234a567df1e"
+            "sha256": "82c247cb56f5848fd925a16bc8ea381e5ba863836aadae48f312b79df63134a3"
           }
         ],
         "excluded": []
@@ -43,7 +43,7 @@
         "files": [
           {
             "path": "skills/ui/animate/SKILL.md",
-            "sha256": "b2cee7a112ef6e4bb652a11c42979a4286c3ad14bcc6282a000f959eaad00c13"
+            "sha256": "a5ad08839100f08ee9ef834d0fb94e118abd08b50ec97c965c53db6616a1000b"
           }
         ],
         "excluded": []
@@ -69,7 +69,7 @@
         "files": [
           {
             "path": "skills/product/architecture-foundation/SKILL.md",
-            "sha256": "eba9d241969c1040a2dc6eeed8ff2bbbb7cdd8ca518547bc80933e53827116f4"
+            "sha256": "c4f3671dce746e317aff6bc57382decc5d68d50640fa9e883d36339794f65dec"
           },
           {
             "path": "skills/product/architecture-foundation/references/foundation-dimensions.md",
@@ -113,7 +113,7 @@
         "files": [
           {
             "path": "skills/checker/audit/SKILL.md",
-            "sha256": "42c5164ebb385a2305f43bccb5c1bc9932a3300cebb0cbd48ecc78c9107bc528"
+            "sha256": "c73e38d6de2f7df108c21b356fe1a05003947bf49880144b9537f544a0a97f7b"
           }
         ],
         "excluded": []
@@ -153,7 +153,7 @@
         "files": [
           {
             "path": "skills/ui/bolder/SKILL.md",
-            "sha256": "6af16d542f43f92c87de163a0cb5ec7a8a3e781925a0797cf85b123470522cec"
+            "sha256": "12881916d4a53ffe96c4de76d9a1e2288f169d2fe5026ca7d75003dfaa44ce4e"
           }
         ],
         "excluded": []
@@ -179,7 +179,7 @@
         "files": [
           {
             "path": "skills/ui/brand/SKILL.md",
-            "sha256": "dcbf8009b29b335c5498af408c81d6be7adad32a61af6a67f934f3801dd5f08b"
+            "sha256": "5edf51ecedf9d526a945d48048baa1c0a07ebe236ed7a86363c7f013cb197561"
           },
           {
             "path": "skills/ui/brand/references/approval-checklist.md",
@@ -269,7 +269,7 @@
         "files": [
           {
             "path": "skills/product/bug-fixer/SKILL.md",
-            "sha256": "9988e84a9585c87ea345ef5fc8e11963c21375ebd8f05bcf72d6190b4754f6ec"
+            "sha256": "335d7971d672394d03fb7de4023c8ba6a983b0ca5f3c5c72a66480bd5ccefeca"
           }
         ],
         "excluded": []
@@ -295,7 +295,7 @@
         "files": [
           {
             "path": "skills/checker/clarify/SKILL.md",
-            "sha256": "2294aa41bf77dd20e345fb28684ce70c34e0cc4f3a901aca6a89accd0b97e08d"
+            "sha256": "69a975485176752e989f18821e8267a606d2fd8a334df772facfacedc78f30cb"
           }
         ],
         "excluded": []
@@ -321,7 +321,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "124e2d74701cbf0ae284786b6fcbac245685048fb9190acfbdd4da087c794d53",
       "writeAuthority": []
     },
@@ -350,7 +350,7 @@
       "domain": "checker",
       "readiness": "accepted",
       "status": "accepted-checker",
-      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（上游工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（源项目工作树有一个未提交的 mattpocock-code-review 改名，其 plugin manifest 未同步，故不采用）；canonical id 由本仓库决定；Sliver 拥有验收门。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（包内文件可读可执行、路由委派可达，见 evidence/20260911-trigger-behavior-and-entry-fix.md）",
       "sourceSha256": "44ef0f3afc5c82b6d35d428d169652af4c3043e8c0f1245f83b022848851a903",
       "writeAuthority": [
         "none"
@@ -419,7 +419,7 @@
         "files": [
           {
             "path": "skills/ui/colorize/SKILL.md",
-            "sha256": "e320706c2d3ab282ab6743ad12b58827680a70ab5f553e48d78ece3076c5f6b2"
+            "sha256": "187d6e6edf24cda182b7d791af0208aa932d2962727615de9fbe2129c4461812"
           }
         ],
         "excluded": []
@@ -445,7 +445,7 @@
         "files": [
           {
             "path": "skills/checker/critique/SKILL.md",
-            "sha256": "072069119beaeb377fbd98cc6e7eafa8de1a5c5d80168a7933302b441f58aebf"
+            "sha256": "d16b07047d4c86203ba61e9de25bd47fe88280974c7635640c5d000bf9cd8f60"
           },
           {
             "path": "skills/checker/critique/reference/cognitive-load.md",
@@ -483,7 +483,7 @@
         "files": [
           {
             "path": "skills/ui/delight/SKILL.md",
-            "sha256": "bfcbe9666db2c9c62329d2b47c72cc31178d618d6838a8d54026d28e0c1a0100"
+            "sha256": "dfed53ef2904c01dc63b49158986e1af2efd763d659d7b711985fff9920bd54b"
           }
         ],
         "excluded": []
@@ -509,7 +509,7 @@
         "files": [
           {
             "path": "skills/product/design-brief-builder/SKILL.md",
-            "sha256": "8fb5ffc68dfa856767e8cddb88070a4c05db8f0dd0d4094c3f95db3686539991"
+            "sha256": "2eefae58bc7c1dcd4b823e4eafd782a7e71ec33b85d76126137f3a65c3a8b181"
           },
           {
             "path": "skills/product/design-brief-builder/templates/design-brief-template.md",
@@ -539,7 +539,7 @@
         "files": [
           {
             "path": "skills/product/design-maker/SKILL.md",
-            "sha256": "8407f4be29f3e296fa59c345959de0577e0c9ae3c9d4d0b694984734f54c1830"
+            "sha256": "02600fe2db8fa0d046008032f71552a42a2e10c0b6acbc2cf067a364ffeeba74"
           },
           {
             "path": "skills/product/design-maker/references/pencil-pitfalls.md",
@@ -569,7 +569,7 @@
         "files": [
           {
             "path": "skills/ui/design-system/SKILL.md",
-            "sha256": "5c5b1690f30604553b92db6cba9392b5375a8fde915eee5dfa3bbf5d218ec530"
+            "sha256": "282babfcb4cee93c49016bb7f1e5225f7e997848c9b387af554af1c7e2a1ca0a"
           },
           {
             "path": "skills/ui/design-system/references/component-specs.md",
@@ -639,7 +639,7 @@
         "files": [
           {
             "path": "skills/product/dev-builder/SKILL.md",
-            "sha256": "44423df18a216f4b6095f3059e24ad82d22b0825359caef6ee155cc274879b9b"
+            "sha256": "a60f029942595b6e02ee36e30346082d8d0305df730de58affcd906e7e317bed"
           },
           {
             "path": "skills/product/dev-builder/references/anti-rationalization.md",
@@ -925,7 +925,7 @@
         "files": [
           {
             "path": "skills/product/dev-planner/SKILL.md",
-            "sha256": "016728f88339b2d8ba7d27851f5d061b95249df94ab5602969465dff0337a8a3"
+            "sha256": "c30b017f2b53d5ce2b20ab6f47e9dc9e307db77b10cf89c05e40f09a4281618e"
           },
           {
             "path": "skills/product/dev-planner/references/analysis-dimensions.md",
@@ -1018,7 +1018,7 @@
         "files": [
           {
             "path": "skills/ui/distill/SKILL.md",
-            "sha256": "02ada57b88705f1532a45f308377e2c890e6b167dc2cef6062e070eb0ae59f50"
+            "sha256": "c74c55bd1e048d5ac5048b404f88acdbad211d753124f0e0f4e8ee7e5b2dbdfb"
           }
         ],
         "excluded": []
@@ -1044,11 +1044,11 @@
         "files": [
           {
             "path": "skills/product/doc-sync-guardian/SKILL.md",
-            "sha256": "4bc831fb4cebd810e7f2c5b7e09312c76d6b0457382a80d5755dd7ee34ced6a8"
+            "sha256": "3ef6ea22dc88d16127f8490244c3bcb5b52a76f80589879c30a6e8727cd1c9d6"
           },
           {
             "path": "skills/product/doc-sync-guardian/references/document-surfaces.md",
-            "sha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e"
+            "sha256": "a0fc2f0ed4dd018fa5541c73e9201546badb10e6c2a179177b67bd4b5f89de5c"
           },
           {
             "path": "skills/product/doc-sync-guardian/references/markdown-governance.md",
@@ -1147,7 +1147,7 @@
         "files": [
           {
             "path": "skills/event/experience-elevator/RUNTIME-NOTES.md",
-            "sha256": "1c117aa31e98261a259d4bdb9771aa8670fac3d6c820d0b3c03912dff0f87486"
+            "sha256": "e30da801e10cc1a8961cc27d0aa865fe0bcd3d0b8f64add544398f89cbfc799d"
           },
           {
             "path": "skills/event/experience-elevator/SKILL.md",
@@ -1367,7 +1367,7 @@
         "files": [
           {
             "path": "skills/checker/harden/SKILL.md",
-            "sha256": "9326d751e588e96121c2b26ebec8f066c478018fdd0dde89457952696a6d8891"
+            "sha256": "5c61c790d5f499a0c6a08f16c7b963072ccd07b354bae315510612a8b47369a3"
           }
         ],
         "excluded": []
@@ -1393,7 +1393,7 @@
         "files": [
           {
             "path": "skills/product/hotspot-governor/SKILL.md",
-            "sha256": "34c1f8695755c007d4c79dd403aeeb6b592534192ac187506eabeda1069c01ae"
+            "sha256": "2b8538a71ce258874a537a5cd79919c69bc00931ef028b9b67a1cddcfde478a2"
           },
           {
             "path": "skills/product/hotspot-governor/tools/check-hotspots.mjs",
@@ -1437,7 +1437,7 @@
           },
           {
             "path": "skills/product/hotspot-governor/tools/install-hotspot-gate.mjs",
-            "sha256": "c62e0038fcbe581a1dd88a5da9a07dde00d0ad40472d63b13b53103b430ea64f"
+            "sha256": "924b1495c35beb3e80b74bc932ede26036058c7a586a78d0a7683481edc56634"
           },
           {
             "path": "skills/product/hotspot-governor/tools/safe-target-fs.mjs",
@@ -1491,7 +1491,7 @@
           },
           {
             "path": "skills/ui/impeccable/SKILL.md",
-            "sha256": "501ee160474953f670059d848868efa38fc93e30fad5ebbc0f495a72b8d39a34"
+            "sha256": "1e0fd9983d37c09717d5385587d0c185e301a5be61657f373dd1aa7715bd7198"
           },
           {
             "path": "skills/ui/impeccable/reference/color-and-contrast.md",
@@ -1585,7 +1585,7 @@
         "files": [
           {
             "path": "skills/ui/layout/SKILL.md",
-            "sha256": "7abcdb93a90542f3418c0512abe6c42a157c82bbbda07c869bb2ed97934cf75a"
+            "sha256": "00b65ae42c08e9935d8f9aeb1c92fc5f5b659935a4f925c050401319f76a616d"
           }
         ],
         "excluded": []
@@ -1611,7 +1611,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "5e71c9237b71b92cac024e2c39cf327fa39a434a32c2a21d691cf538b4bd9186",
       "writeAuthority": []
     },
@@ -1639,7 +1639,7 @@
         "files": [
           {
             "path": "skills/checker/optimize/SKILL.md",
-            "sha256": "6c0e53b4e6b25ec333de675f4b478646ed4e08b36283b462e789fb11a2a63d63"
+            "sha256": "a30162f5d56cc9b5f868e031ed911700ff40bba2bd975339dc116c39b732ec02"
           }
         ],
         "excluded": []
@@ -1665,7 +1665,7 @@
         "files": [
           {
             "path": "skills/ui/overdrive/SKILL.md",
-            "sha256": "0d20452650574564f991a698511ccb244623150ccfe4a60e928d05e74aee3bf1"
+            "sha256": "384a7e063939f398d70ae9626033200c9f1eca866db9717a95cb37cc8576e537"
           }
         ],
         "excluded": []
@@ -1691,7 +1691,7 @@
         "files": [
           {
             "path": "skills/ui/polish/SKILL.md",
-            "sha256": "f26474117d05fe0b3323eff9ed015060a58d7feb07cf740dfca98dba886678a6"
+            "sha256": "a6e2ac02862057b6dfe4c7d4a8f17d480cf6ffa711032c8b44e8c2e405742b8f"
           },
           {
             "path": "skills/ui/polish/references/browser-acceptance.md",
@@ -1721,7 +1721,7 @@
         "files": [
           {
             "path": "skills/product/product-spec-builder/SKILL.md",
-            "sha256": "382eff88d4b26615a2a9e230cf25aef3264a67396c14d2bfd2187e3de49637da"
+            "sha256": "d05cf65b243d38fe3973fce33c6307d4b0db8892eb723c3cf646585cec26238c"
           },
           {
             "path": "skills/product/product-spec-builder/references/conversation-strategy.md",
@@ -1830,7 +1830,7 @@
         "files": [
           {
             "path": "skills/ui/quieter/SKILL.md",
-            "sha256": "bca12c31b1f917f891b9bd4705fb57f726a0fc0aa71c6710f5418bfb1adbb3ec"
+            "sha256": "12b3c296d5c2961f37891a88307712c9a4a5c03740563b728023c499c31739d1"
           }
         ],
         "excluded": []
@@ -1856,7 +1856,7 @@
         "files": [
           {
             "path": "skills/product/release-builder/SKILL.md",
-            "sha256": "d182e6beb49e56e9291e66e7c38b41988b1302f5a6189dc471b5ead9993f556a"
+            "sha256": "1f7616ecf61a3c3bf99ee14b303304b1e51af58a5bdf51dc32f0093d58bc5374"
           }
         ],
         "excluded": []
@@ -1882,7 +1882,7 @@
         "files": [
           {
             "path": "skills/product/requirements-test-designer/SKILL.md",
-            "sha256": "4835b035d859432e5bbfa7e0595cd4451d0e28231af72f53f7b291c34bd1a154"
+            "sha256": "02de1b4c6cfbc31b25a7c27b8673ecb88bfe8ed4c9a5632ae237503c531cb901"
           },
           {
             "path": "skills/product/requirements-test-designer/references/api-contract-checklist.md",
@@ -2034,7 +2034,7 @@
         "files": [
           {
             "path": "skills/product/rule-harvester/SKILL.md",
-            "sha256": "2a7a73307e31d89d869e83d6feabeb0a43be39fddb3c41926058177f196c8bc6"
+            "sha256": "a3a3aadc77fa09df5160b664a4ae40a73afccf9e567624339b90704935bd8310"
           }
         ],
         "excluded": []
@@ -2119,7 +2119,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "5209335c065f0c70fe0f17d4319e5a3903b108e20b28b0a74f141039496ba0b7",
       "writeAuthority": []
     },
@@ -2536,7 +2536,7 @@
       "domain": "primitive",
       "readiness": "accepted",
       "status": "accepted-primitive",
-      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖上游完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
+      "reason": "内容取自已提交 revision 9fe7e7a3 的 blob（不采用工作树未提交改名）；canonical id 由本仓库决定，不依赖源项目完成改名。2026-09-11 接入：宿主行为 smoke 已由统一入口链路实测补齐（同 code-review 证据）",
       "sourceSha256": "c675017606d3e4e86d3eca679b3c7ea1bc67665d0b23ae9ea2e1ce7112e97b24",
       "writeAuthority": [
         "none"
@@ -2566,7 +2566,7 @@
         "files": [
           {
             "path": "skills/product/test-automation/SKILL.md",
-            "sha256": "9062d24c2c6166013890219ca94d26574156670e86b43d6c12a54997a27560fc"
+            "sha256": "db20c145d8bebaacdfe464c1b85dd827f62c07bc8692decee476a2b300a48b77"
           },
           {
             "path": "skills/product/test-automation/references/framework-selection.md",
@@ -2660,7 +2660,7 @@
         "files": [
           {
             "path": "skills/ui/typeset/SKILL.md",
-            "sha256": "8b8cddf67c58863443abd419143d7de161462b8cc7a2a0c125617beec2ddeba2"
+            "sha256": "38d08ba0d1aee8c7b98790f45e736678bae72b9a903a01b0815ed30ef7d9698a"
           }
         ],
         "excluded": []
@@ -2690,7 +2690,7 @@
           },
           {
             "path": "skills/ui/ui-styling/SKILL.md",
-            "sha256": "8fee54119e6d7fc506de8e66ce64441783e32da3b6653f341f6966b5da5c174a"
+            "sha256": "5d41668df70b3b00656b06baed8a08539b67d4dbb3ede21a71d711f0f22cf007"
           },
           {
             "path": "skills/ui/ui-styling/canvas-fonts/ArsenalSC-OFL.txt",
@@ -3080,7 +3080,7 @@
         "files": [
           {
             "path": "skills/product/ui-system-guardian/SKILL.md",
-            "sha256": "8ef6cc301d826a8ea87ed553bc8768813ae4481e22da70cc02b3c461fe002380"
+            "sha256": "0cc78518d7fab13b94bceec8a0e625aa836c296e1c266d41ce8e7f6b0e970375"
           },
           {
             "path": "skills/product/ui-system-guardian/references/audit-rules.md",
@@ -3114,7 +3114,7 @@
         "files": [
           {
             "path": "skills/ui/ui-ux-pro-max/SKILL.md",
-            "sha256": "eb3fb82bda7424f0d4a5ca51402e6984696cbf78aff3f64b1d422e5f0f197c37"
+            "sha256": "7122d04d0558a20240832de1c89af83665c3f3663c133baa975d68b43c95fd7a"
           },
           {
             "path": "skills/ui/ui-ux-pro-max/data/_sync_all.py",
@@ -3379,7 +3379,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "a2938105d06c433a3a6dd14cfc97f0b7bd7e642846af45b60474cf89141d1f0a",
       "writeAuthority": []
     },
@@ -3428,7 +3428,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "91d0c454480148491edf19843cf58df6d0ea2173cbcad478819c0c3b907258df",
       "writeAuthority": []
     },
@@ -3442,7 +3442,7 @@
       "domain": "in-progress",
       "readiness": "excluded",
       "status": "excluded-in-progress",
-      "reason": "上游 in-progress；不进入正式运行包",
+      "reason": "源项目 in-progress；不进入正式运行包",
       "sourceSha256": "167605204f191bf4d61993385d51dc5f1eb863da442fae11439c3a9d44a44962",
       "writeAuthority": []
     }
@@ -3536,7 +3536,7 @@
         "handoff",
         "claude-handoff"
       ],
-      "rule": "上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属上游 in-progress，仅在完成独立行为验收后才可用。"
+      "rule": "上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属源项目 in-progress，仅在完成独立行为验收后才可用。"
     },
     {
       "id": "doc-authoring",
@@ -3548,7 +3548,7 @@
         "writing-fragments",
         "doc-sync-guardian"
       ],
-      "rule": "写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属上游 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。"
+      "rule": "写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属源项目 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。"
     },
     {
       "id": "skill-governance",
@@ -3561,7 +3561,7 @@
         "target-runtime-setup",
         "setup-ts-deep-modules"
       ],
-      "rule": "技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属上游 in-progress 不得启用。"
+      "rule": "技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属源项目 in-progress 不得启用。"
     },
     {
       "id": "clarification-and-grilling",

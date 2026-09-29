@@ -679,7 +679,7 @@ try {
                     # 影子入口：非 admitted 技能不得从统一包内可见（遗留源链接暴露不算，那是阶段 5 口径）
                     if ($null -eq $er) { continue }  # 非 admitted 缺证据记录不算违规（影子检查无从做起）
                     foreach ($v in @($er.visibleAs)) {
-                        if ([string]$v.path -like 'feisheng-vibe-coding/*') {
+                        if ([string]$v.path -like 'vibe-coding-skills/*') {
                             $gateViolations += ([string]$record.id + ' (非 admitted 但从统一包内可见: ' + [string]$v.path + ')')
                             break
                         }
@@ -801,7 +801,7 @@ try {
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'runtime bundle 共 \*\*(\d+)\*\* 文件'; Expect = @($docBundleFiles) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+)\*\* = catalog 登记的 runtime bundle 文件数'; Expect = @($docBundleFiles) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '\*\*(\d+)\*\* = 部署态 = '; Expect = @($docSharedTotal) }
-            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '`feisheng-vibe-coding` \*\*(\d+) 文件\*\*'; Expect = @($docSharedTotal) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '`vibe-coding-skills` \*\*(\d+) 文件\*\*'; Expect = @($docSharedTotal) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '控制面包：\*\*(\d+) 文件\*\*'; Expect = @($docFilesBySource['sliver-vibe-coding']) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-codex-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($projectionTotals['build-codex-runtime-projection.ps1']) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-claude-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($projectionTotals['build-claude-runtime-projection.ps1']) }

@@ -1,12 +1,12 @@
 {
   "schema": "feisheng-vibe-hook-adapter/v2",
   "owner": "runtime-projection",
-  "contractVersion": "v7.1 (2026-09-28 check-slim + search: check outputs the ledger index only (revision/entryCount/themeStats/governance), full entry dump removed — 211 entries had made every check ≈47KB; new read-only search action (--theme / --keyword) is the on-demand retrieval and record-time dedup path; lineage v2 sedimentation → v3 auto-record → v4 autonomous → v5 hard-gate → v6 completion-credential → v7 experience-backflow)",
+  "contractVersion": "v8 (2026-09-30 state-dir rename: target state store .feisheng/ → .vibe-coding-skills/ — 项目统一唯一称呼 vibe-coding-skills（owner 2026-09-30 指令）；存量目标迁移 = 状态目录改名后重跑 install-vibe-hooks.ps1 -Force；幂等键与事件语义零变化（eventNamespace 与 dedup key 材料不动，存量 .digested 标记继续有效；schema 标识 feisheng-vibe-hook-adapter/v2 为线协议常量随之保留）；lineage v2 sedimentation → v3 auto-record → v4 autonomous → v5 hard-gate → v6 completion-credential → v7 experience-backflow → v7.1 check-slim + search → v8 state-dir rename)",
   "status": "enabled-experience-hard-gate-v1",
   "enablementScope": "experience autonomy with hard enforcement: (a) self-check duty — the session AI detects its own rework/mistakes and user-behavior proxies without any correction utterance, mints its own event identity and records via experience-recorder; (b) policy-based governance — the owner confirms a sweep POLICY once (policy fence in the ledger file), then the AI executes sweeps autonomously with a full audit journal and restorable entries; (c) Stop hard gate — the session may not end while captured correction signals are undigested, the session self-check acknowledgment is missing, or the close-out completion credential (verification/scope/findings, see stopCredential) is missing or malformed; the gate blocks with actionable instructions and fails open after 3 blocks per session (audited). Per-action user confirmation is still required for elevation (L1/L2/L3) and retirement; the recorder never does those.",
   "digestion": {
     "mode": "Digest",
-    "markerStore": "target-repository/.feisheng/vibe-hook-state/<dedupKey>.digested",
+    "markerStore": "target-repository/.vibe-coding-skills/vibe-hook-state/<dedupKey>.digested",
     "dedupKeyValidation": "strict 40-char lowercase hex (prevents path injection via crafted index lines); entries without a valid dedupKey are digested by the Digest maintenance command via a legacy content-hash marker (legacy-<sha256(line) first 40 hex>.digested) inside the same state store, so legacy/corrupt rows can no longer stay pending forever",
     "semantics": "maintenance command invoked after a session digests the signals; SessionStart then reminds only about pending (undigested) entries; the recorder auto-digests the source signal on successful record/dismiss",
     "consumptionSkillsAdmitted": true,
@@ -14,7 +14,7 @@
   },
   "recorder": {
     "source": "adapters/vibe-hooks/experience-recorder.mjs",
-    "installPath": ".feisheng/vibe-hooks/experience-recorder.mjs",
+    "installPath": ".vibe-coding-skills/vibe-hooks/experience-recorder.mjs",
     "runtime": "node (zero third-party dependency)",
     "actions": ["check", "search", "record", "classify", "dismiss", "selfcheck", "policy-add", "policy-list", "govern"],
     "themes": "ledger v2 experience records may carry an optional theme field (fixed enum: git-concurrency / browser-verify / canvas-design / gate-ops / evidence-honesty / assertion-quality / decision-communication / env-platform; absent = unclassified). record accepts --theme for NEW experiences only; classify backfills/corrects an existing entry with expectedRevision CAS. Since v7.1 (2026-09-28) check outputs the INDEX ONLY (revision/entryCount/themeStats per THEME_PROPOSAL_THRESHOLD=6/governance) and never dumps entry details; --action search --theme <theme> / --keyword <word> returns entry details on demand — theme-first for record-time dedup, keyword (case-insensitive substring over summary+landing) as the cross-theme/unclassified fallback; per-experience thresholds are unchanged",
@@ -45,7 +45,7 @@
     "path": "scripts/invoke-vibe-hook-adapter.ps1",
     "singleRunner": true,
     "sourceRunnerExecution": false,
-    "targetInstallPath": ".feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1",
+    "targetInstallPath": ".vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1",
     "installer": "scripts/install-vibe-hooks.ps1"
   },
   "eventNamespace": "feisheng.vibe",
@@ -86,7 +86,7 @@
   },
   "stopCredential": {
     "introduced": "contractVersion v6 (2026-09-19 v2-hardening batch B, owner-authorized)",
-    "carrier": "target-repository/.feisheng/vibe-hook-state/stop-credential-<sessionId>.json, written by the session AI before session end (inside the already-whitelisted state store; sessionId sanitized by the same rules as the self-check ack)",
+    "carrier": "target-repository/.vibe-coding-skills/vibe-hook-state/stop-credential-<sessionId>.json, written by the session AI before session end (inside the already-whitelisted state store; sessionId sanitized by the same rules as the self-check ack)",
     "schema": {
       "verification": "array with at least 1 entry: { command: non-empty string, exitCode: number, outputDigest: non-empty string } — the commands actually run to verify this session's work",
       "scope": "object: { declared: non-empty string array, outOfScope: string array (may be empty) }",
@@ -100,7 +100,7 @@
   "idempotency": {
     "required": true,
     "key": "sha256(eventNamespace,eventName,sessionId,prompt) truncated to the first 40 lowercase hex chars (Claude Code UserPromptSubmit payload has no event_id/tool_use_id)",
-    "stateStore": "target-repository/.feisheng/vibe-hook-state/",
+    "stateStore": "target-repository/.vibe-coding-skills/vibe-hook-state/",
     "retentionSeconds": 600
   },
   "failurePolicy": {
@@ -112,7 +112,7 @@
   },
   "writeWhitelist": [
     ".claude/feedback/FEEDBACK-INDEX.md",
-    ".feisheng/vibe-hook-state/",
+    ".vibe-coding-skills/vibe-hook-state/",
     "docs/项目治理/经验治理.md",
     "docs/项目治理/经验治理-清扫.md"
   ],

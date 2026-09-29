@@ -224,7 +224,7 @@ $releaseManifestPath = Join-Path $packageRootFull 'RELEASE-MANIFEST.json'
 $releaseManifest | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 -LiteralPath $releaseManifestPath
 
 # 5) zip（内置 Compress-Archive，不安装新依赖）
-$zipName = 'feisheng-vibe-coding-' + $Label + '.zip'
+$zipName = 'vibe-coding-skills-' + $Label + '.zip'
 $zipPath = Join-Path (Split-Path -Parent $packageRootFull) $zipName
 if (Test-Path -LiteralPath $zipPath) {
     Remove-Item -LiteralPath $zipPath -Force

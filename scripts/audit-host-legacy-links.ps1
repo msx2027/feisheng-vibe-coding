@@ -15,7 +15,7 @@ Set-StrictMode -Version Latest
 # 只读清点宿主技能根的顶层条目形态（阶段 5「旧入口退役」口径的输入，不删除任何东西）。
 #
 # 分类：
-#   unified-bundle   我们的统一包目录（feisheng-vibe-coding）
+#   unified-bundle   我们的统一包目录（vibe-coding-skills）
 #   reparse-link     junction/symlink：target 指向三个源仓库 → source-repo-link；其它 → other-link
 #   directory        普通目录（不是链接）
 #
@@ -39,7 +39,7 @@ foreach ($item in @(Get-ChildItem -LiteralPath $rootFull -Force)) {
             }
         }
     }
-    if ($item.PSIsContainer -and $item.Name -eq 'feisheng-vibe-coding') { $kind = 'unified-bundle' }
+    if ($item.PSIsContainer -and $item.Name -eq 'vibe-coding-skills') { $kind = 'unified-bundle' }
     $entries += [ordered]@{
         name = $item.Name
         kind = $kind

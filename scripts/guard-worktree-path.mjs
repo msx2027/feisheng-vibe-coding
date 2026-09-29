@@ -4,7 +4,7 @@
 // ZCode 宿主挂 .zcode/config.json 的 hooks.events.PreToolUse（实测：ZCode 不读 .claude/settings.json，
 // 只登记一处 = 对另一宿主完全不生效）。本机接线不入库（.gitignore），换机按 evidence 重挂手册重挂。
 // 规则一：本项目会话里的 `git worktree add / move` 目标只允许建在
-//   F:\skiils\feisheng-vibe-coding-worktrees 下（worktree 集中一处，不再散落失联）。
+//   F:\skiils\vibe-coding-skills-worktrees 下（worktree 集中一处，不再散落失联）。
 // 规则二：对任意盘根一级的创建/改动/删除做白名单校验——只放行 skiils（项目区）、tmp（会话临时区）。
 // 判定原则：识别出越界目标 → exit 2 + stderr 指明规则（fail-closed）；
 // stdin 解析失败 / 非 Bash 工具 / 识别不了的写形态 → exit 0 静默放行（fail-open，不瘫痪会话）。
@@ -18,7 +18,7 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const WHITELIST_ROOT = 'F:\\skiils\\feisheng-vibe-coding-worktrees';
+export const WHITELIST_ROOT = 'F:\\skiils\\vibe-coding-skills-worktrees';
 
 /** 近似 bash 的分词：引号内为一个 token（闭合后继续并入，不保留引号），空白分隔。 */
 export function tokenize(command) {

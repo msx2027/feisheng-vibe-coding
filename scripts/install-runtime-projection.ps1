@@ -11,7 +11,7 @@ param(
     [string]$InstallRoot = '',
 
     [Parameter(Mandatory = $false)]
-    [string]$Name = 'feisheng-vibe-coding',
+    [string]$Name = 'vibe-coding-skills',
 
     [Parameter(Mandatory = $false)]
     [switch]$DryRun,

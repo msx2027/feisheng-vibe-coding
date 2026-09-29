@@ -118,7 +118,7 @@ try {
     Assert-IndexLineCount 3
 
     # 4c) 幂等过期：把标记时间戳改到保留期之前 → 同一输入允许再次记录
-    $marker = Get-ChildItem -LiteralPath (Join-Path $target '.feisheng/vibe-hook-state') -Filter '*.ok' | Select-Object -First 1
+    $marker = Get-ChildItem -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hook-state') -Filter '*.ok' | Select-Object -First 1
     if ($null -eq $marker) { throw '幂等标记缺失' }
     $marker.LastWriteTime = (Get-Date).AddMinutes(-11)
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'UserPromptSubmit' -HookInput $payload -Target $target
@@ -160,7 +160,7 @@ try {
     $r = Invoke-Runner -Mode 'Digest' -Target $target
     if ($r.Output -notmatch [regex]::Escape('DIGEST: marked=0 already=2 legacy=0 legacyAlready=3')) { throw "Digest 幂等计数不符: $($r.Output)" }
     # 负面断言：状态目录之外不得出现任何 .digested 文件（恶意 dedupKey 不得逃逸）
-    $escaped = @(Get-ChildItem -LiteralPath $target -Recurse -Force -Filter '*.digested' | Where-Object { $_.FullName -notlike ((Join-Path $target '.feisheng/vibe-hook-state') + '*') })
+    $escaped = @(Get-ChildItem -LiteralPath $target -Recurse -Force -Filter '*.digested' | Where-Object { $_.FullName -notlike ((Join-Path $target '.vibe-coding-skills/vibe-hook-state') + '*') })
     if ($escaped.Count -gt 0) { throw ("digested 标记出现在状态目录之外: " + (@($escaped | ForEach-Object { $_.FullName }) -join '; ')) }
 
     # 5) 安装 / 卸载 / 回滚 + 契约篡改必须 fail-closed
@@ -175,8 +175,8 @@ try {
     $settingsInstalled = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.claude/settings.json') | ConvertFrom-Json
     $foreignKept = @(@($settingsInstalled.hooks.SessionStart) | Where-Object { $null -ne $_.PSObject.Properties['unknownShape'] })
     if (@($foreignKept).Count -ne 1) { throw '安装器破坏了用户既有 hook 条目' }
-    if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'))) { throw '安装副本缺失' }
-    if (-not (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/install-manifest.json'))) { throw '安装清单缺失' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1'))) { throw '安装副本缺失' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hooks/install-manifest.json'))) { throw '安装清单缺失' }
 
     # 安装器拒绝重复安装（无 -Force）
     $global:LASTEXITCODE = 0
@@ -188,8 +188,8 @@ try {
     # 契约篡改必须 fail-closed（status 翻回禁用态后，安装态 runner 拒绝工作）
     $tamperDir = Join-Path $work 'tamper'
     New-Item -ItemType Directory -Force -Path $tamperDir | Out-Null
-    Copy-Item -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1') -Destination $tamperDir -Force
-    $tamperContract = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.feisheng/vibe-hooks/contract.json') | ConvertFrom-Json
+    Copy-Item -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1') -Destination $tamperDir -Force
+    $tamperContract = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hooks/contract.json') | ConvertFrom-Json
     $tamperContract.status = 'defined-disabled-pending-gates'
     $tamperContract | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $tamperDir 'contract.json')
     $global:LASTEXITCODE = 0
@@ -202,7 +202,7 @@ try {
     $global:LASTEXITCODE = 0
     $uninstOut = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File $installer -TargetRoot $target -RepositoryRoot $repoRoot -Uninstall 2>&1
     if ($LASTEXITCODE -ne 0) { throw "卸载应成功，exit=$LASTEXITCODE" }
-    if (Test-Path -LiteralPath (Join-Path $target '.feisheng/vibe-hooks')) { throw '卸载后安装副本残留' }
+    if (Test-Path -LiteralPath (Join-Path $target '.vibe-coding-skills/vibe-hooks')) { throw '卸载后安装副本残留' }
     if (-not (Test-Path -LiteralPath $feedbackIndex)) { throw '卸载不得删除经验数据' }
     $settingsAfter = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $target '.claude/settings.json') | ConvertFrom-Json
     if ($null -ne $settingsAfter.PSObject.Properties['hooks'] -and $null -ne $settingsAfter.hooks) {
@@ -306,7 +306,7 @@ try {
     $recorded = Get-LastJsonLine -Text $r.Output
     if ($recorded.experienceId -ne 'EXP-001' -or $recorded.revision -ne 1 -or $recorded.replay) { throw "record 结果异常: $($r.Output)" }
     if (-not $recorded.digestMarked) { throw 'record 应自动消化源信号' }
-    if (-not (Test-Path -LiteralPath (Join-Path $target2 ".feisheng/vibe-hook-state/$($indexLine2.dedupKey).digested"))) { throw '消化标记未落盘' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target2 ".vibe-coding-skills/vibe-hook-state/$($indexLine2.dedupKey).digested"))) { throw '消化标记未落盘' }
     # 台账外人工区必须原样保留
     if ((Get-Content -Raw -Encoding UTF8 -LiteralPath $ledgerPath2) -notmatch '人工登记区') { throw '台账围栏外人工区被破坏' }
     # 重放（同 payload 同 occurredAt）→ no-op
@@ -415,7 +415,7 @@ try {
     $replayed = Get-LastJsonLine -Text $r.Output
     if (-not $replayed.replay -or -not $replayed.swept) { throw "重放已清扫经验结果异常: $($r.Output)" }
     if ($null -ne $replayed.count -or $null -ne $replayed.tier) { throw "重放已清扫经验不应返回计数/档位: $($r.Output)" }
-    if (-not (Test-Path -LiteralPath (Join-Path $target4 ".feisheng/vibe-hook-state/$oldHex.digested"))) { throw '清扫后重放未消化源信号' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target4 ".vibe-coding-skills/vibe-hook-state/$oldHex.digested"))) { throw '清扫后重放未消化源信号' }
 
     # 5e) Stop 硬门禁：自检留痕 + 未消化信号拦截 + 封顶放行（fail-open audited）
     function Get-BlockReason {
@@ -426,7 +426,7 @@ try {
         return ((@($line)[0] | ConvertFrom-Json).reason)
     }
     $gateTarget = $target2
-    $gateState = Join-Path $gateTarget '.feisheng/vibe-hook-state'
+    $gateState = Join-Path $gateTarget '.vibe-coding-skills/vibe-hook-state'
 
     # 5e-1) 无未消化信号 + 未自检留痕 + 无凭据 → 拦截，理由含 selfcheck 指令与收工凭据指令
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-gate","stop_hook_active":false}' -Target $gateTarget
@@ -478,13 +478,13 @@ try {
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-cold","stop_hook_active":false}' -Target $target5
     if ($r.ExitCode -ne 0) { throw "冷启动 Stop 应 exit 0: $($r.Output)" }
     if ($null -eq (Get-BlockReason -Text $r.Output)) { throw '状态目录缺失时 Stop 门禁静默失效（应输出 block 拦截）' }
-    if (-not (Test-Path -LiteralPath (Join-Path $target5 '.feisheng/vibe-hook-state/stop-gate-s-cold.json'))) { throw '拦截计数器未落盘（状态目录未创建）' }
+    if (-not (Test-Path -LiteralPath (Join-Path $target5 '.vibe-coding-skills/vibe-hook-state/stop-gate-s-cold.json'))) { throw '拦截计数器未落盘（状态目录未创建）' }
 
     # 5f-2) 状态目录不可用（同名文件占位）→ fail-open 放行，但异常必须留审计（TEMP 兜底）
     $target6 = Join-Path $work 'target6'
     New-Item -ItemType Directory -Force -Path (Join-Path $target6 '.git') | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $target6 '.feisheng') | Out-Null
-    Set-Content -LiteralPath (Join-Path $target6 '.feisheng/vibe-hook-state') -Value 'not-a-dir'
+    New-Item -ItemType Directory -Force -Path (Join-Path $target6 '.vibe-coding-skills') | Out-Null
+    Set-Content -LiteralPath (Join-Path $target6 '.vibe-coding-skills/vibe-hook-state') -Value 'not-a-dir'
     $tempAudit = Join-Path ([System.IO.Path]::GetTempPath()) 'stop-gate-audit.log'
     $auditBefore = if (Test-Path -LiteralPath $tempAudit) { (Get-Item -LiteralPath $tempAudit).Length } else { 0 }
     $r = Invoke-Runner -Mode 'Invoke' -EventName 'Stop' -HookInput '{"session_id":"s-blocked","stop_hook_active":false}' -Target $target6
@@ -495,7 +495,7 @@ try {
     # 5g) 收工凭据回归（v2 加固批 B，独立沙箱 target7）：缺失→block；形状不对→block；齐备→放行；封顶保持
     $target7 = Join-Path $work 'target7'
     New-Item -ItemType Directory -Force -Path (Join-Path $target7 '.git') | Out-Null
-    $credState7 = Join-Path $target7 '.feisheng/vibe-hook-state'
+    $credState7 = Join-Path $target7 '.vibe-coding-skills/vibe-hook-state'
     $credPath7 = Join-Path $credState7 'stop-credential-s-cred.json'
     $validCred7 = '{"verification":[{"command":"node adapters/vibe-hooks/experience-recorder.mjs . --action check","exitCode":0,"outputDigest":"revision=0"}],"scope":{"declared":["docs/需求变更.md"],"outOfScope":[]},"findings":{"deferred":1,"rejectedWithReason":2}}'
 
@@ -535,8 +535,8 @@ try {
         (Join-Path $target '.git'),
         (Join-Path $target '.claude/feedback'),
         (Join-Path $target '.claude/settings.json'),
-        (Join-Path $target '.feisheng/vibe-hook-state'),
-        (Join-Path $target '.feisheng/vibe-hooks')
+        (Join-Path $target '.vibe-coding-skills/vibe-hook-state'),
+        (Join-Path $target '.vibe-coding-skills/vibe-hooks')
     )
     $violations = @()
     foreach ($file in @(Get-ChildItem -LiteralPath $target -Recurse -Force -File)) {

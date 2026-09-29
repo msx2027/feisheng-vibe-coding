@@ -86,17 +86,17 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 
 ## 阻塞
 
-（当前无阻塞项。早先因上游未提交改名而被阻塞的 `tdd`、`code-review` 已按「内容取已提交 revision、命名由本仓库决定」解除。）
+（当前无阻塞项。早先因源项目未提交改名而被阻塞的 `tdd`、`code-review` 已按「内容取已提交 revision、命名由本仓库决定」解除。）
 
 ## 兼容与排除
 
 - `ask-matt`（mattpocock-skills，compatibility）：兼容选择器；不得拥有项目级路由
-- `claude-handoff`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `loop-me`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `setup-ts-deep-modules`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `writing-beats`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `writing-fragments`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
-- `writing-shape`（mattpocock-skills，excluded）：上游 in-progress；不进入正式运行包
+- `claude-handoff`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
+- `loop-me`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
+- `setup-ts-deep-modules`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
+- `writing-beats`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
+- `writing-fragments`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
+- `writing-shape`（mattpocock-skills，excluded）：源项目 in-progress；不进入正式运行包
 
 ## 已退役
 
@@ -137,12 +137,12 @@ runtime 单位策略：`directory` = 以 `skills/<group>/<id>/` 整个导入目�
 | `architecture` | `architecture` | `architecture-foundation`、`improve-codebase-architecture`**（已退役）**、`codebase-design`、`domain-modeling` | 架构能力分工：新项目/架构变化用 architecture-foundation 建基线，寻找深化机会用 improve-codebase-architecture，设计模块接口/seam 用 codebase-design 的共享词汇，领域建模与 ADR 用 domain-modeling（写入受 target-truth 约束）。均不拥有项目路由或第二份真源。 |
 | `bug-rescue` | `bug-rescue` | `bug-fixer`、`diagnosing-bugs` | Vibe bug-fixer 管分级修复流程与专项检查，Matt diagnosing-bugs 管诊断反馈回路纪律；两者都不得改写 Sliver 的 route/depth/truth，也不得跳过验收门。 |
 | `clarification-and-grilling` | `target-truth` | `clarify`、`grilling`、`grill-me`**（已退役）**、`grill-with-docs`**（已退役）**、`to-questionnaire`**（已退役）**、`wait-what`**（已退役）** | 澄清与追问都服务于 target-truth 的需求清晰化：文本/标签不清用 clarify，对计划做持续追问用 grilling/grill-me，追问中要落 ADR/术语用 grill-with-docs，无法自答的决策转问卷用 to-questionnaire，要求对方复述用 wait-what。它们只产出澄清结果，不拥有 spec 真源。 |
-| `context-and-handoff` | `context-handoff` | `codebase-memory-scout`**（已退役）**、`handoff`、`claude-handoff` | 上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属上游 in-progress，仅在完成独立行为验收后才可用。 |
-| `doc-authoring` | `doc-authoring` | `writing-for-agents`、`writing-shape`、`writing-beats`、`writing-fragments`、`doc-sync-guardian` | 写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属上游 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。 |
+| `context-and-handoff` | `context-handoff` | `codebase-memory-scout`**（已退役）**、`handoff`、`claude-handoff` | 上下文交接是同一条能力：用 codebase-memory-scout 做代码图侦查与影响面分析，用 handoff 产出交接文档交给下一个代理；claude-handoff 属源项目 in-progress，仅在完成独立行为验收后才可用。 |
+| `doc-authoring` | `doc-authoring` | `writing-for-agents`、`writing-shape`、`writing-beats`、`writing-fragments`、`doc-sync-guardian` | 写作类技能按对象分工：为 agent 写文档/AGENTS.md/skill 用 writing-for-agents（唯一已审查原语），writing-shape/writing-beats/writing-fragments 属源项目 in-progress 不得启用；doc-sync-guardian 只在代码/规则变更后同步项目文档，不拥有 target-truth。 |
 | `git-and-release` | `git-release` | `resolving-merge-conflicts`、`git-guardrails-claude-code`**（已退役）**、`release-builder` | git 与发布能力：解决 merge/rebase 冲突用 resolving-merge-conflicts，加破坏性 git 命令护栏用 git-guardrails-claude-code，打包/部署/上线用 release-builder。发布授权与验收门仍归 Sliver，release-builder 不得自任发布真源。 |
 | `project-entry` | `route-catalog` | `vibe-coding-skills`**（已退役）**、`ask-matt` | 别名可激活或选择入口，但不得拥有项目路由；唯一项目入口是 Sliver（governance/sliver-core/SKILL.md），route-catalog 是其路由 owner。 |
 | `review-and-test` | `validation-gate` | `vibe-code-review`**（已退役）**、`code-review`、`audit`、`critique`、`harden`、`tdd`、`test-automation`、`requirements-test-designer` | 专项 review/test 方法只产出 findings 或测试结果，不拥有验收门。review：需要双轴代码审查用 code-review（Matt），需要 Vibe 专项代码检查用 vibe-code-review，质量/可访问性/性能等专项检查用 audit/critique/harden。test：需要测试方法学（red-green-refactor）用 tdd，需要把需求/验收标准翻译成用例用 requirements-test-designer，需要接入自动化与 E2E 用 test-automation。Sliver（validation-gate）拥有最终验收门。 |
-| `skill-governance` | `skill-catalog` | `skill-builder`**（已退役）**、`rule-harvester`、`wizard`、`target-constitution-setup`**（已退役）**、`target-runtime-setup`**（已退役）**、`setup-ts-deep-modules` | 技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属上游 in-progress 不得启用。 |
+| `skill-governance` | `skill-catalog` | `skill-builder`**（已退役）**、`rule-harvester`、`wizard`、`target-constitution-setup`**（已退役）**、`target-runtime-setup`**（已退役）**、`setup-ts-deep-modules` | 技能/规则/宿主事实的治理都收敛到 skill-catalog：新建技能用 skill-builder，规则归位用 rule-harvester，目标项目宪法/运行时事实用 target-constitution-setup/target-runtime-setup，只有人能做的手动流程脚手架用 wizard；setup-ts-deep-modules 属源项目 in-progress 不得启用。 |
 | `truth-and-planning` | `target-truth` | `product-spec-builder`、`dev-planner`、`to-spec`**（已退役）**、`to-tickets`**（已退役）**、`wayfinder`**（已退役）** | 计划与 spec 适配器只能投影到 target-truth，不得产生第二份 spec 真源。需求产物用 product-spec-builder，阶段计划用 dev-planner，把对话转 spec/tickets 用 to-spec/to-tickets，跨 session 的大块工作规划用 wayfinder。 |
 | `ui-quality` | `ui-quality` | `design-maker`、`design-brief-builder`、`ui-ux-pro-max`、`impeccable`、`design-system`、`layout`、`polish`、`prototype` | UI 原技能各自独立、不复制正文；先做设计简报（design-brief-builder）再出稿（design-maker），视觉方向/色彩/字体用 ui-ux-pro-max 与 impeccable，token/组件用 design-system，布局/间距/收尾用 layout/polish，一次性原型验证用 prototype。profile 只组合调用，不产生第二套设计真源。 |
 

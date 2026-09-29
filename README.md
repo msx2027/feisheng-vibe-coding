@@ -8,7 +8,7 @@
 一个公开入口 · 一个主路由 · 每条规则只有一个 owner
 One public entry · One main route · Exactly one owner per rule
 
-[![release-gate](https://github.com/msx2027/feisheng-vibe-coding/actions/workflows/release-gate.yml/badge.svg)](https://github.com/msx2027/feisheng-vibe-coding/actions/workflows/release-gate.yml)
+[![release-gate](https://github.com/msx2027/vibe-coding-skills/actions/workflows/release-gate.yml/badge.svg)](https://github.com/msx2027/vibe-coding-skills/actions/workflows/release-gate.yml)
 ![phase](https://img.shields.io/badge/phase-controlled%20run-3F6212)
 ![runtime](https://img.shields.io/badge/skills-52%20runtime%20%2F%2082%20registered-0E7490)
 ![hosts](https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-7C3AED)
@@ -56,7 +56,7 @@ User goal → one main route → conditional lens / one or more internal capabil
 
 ### 这是什么
 
-统一的软件项目 AI 协作运行包：对外**只有一个项目级入口** `feisheng-vibe-coding`，对内把三个源项目的能力按职责合并 —— **Sliver** 管项目级治理控制面（路由、深度、风险、授权、真源、验收），**Matt** 管工程原语（TDD、调试、领域建模、review），**Vibe** 管产品/UI、事件沉淀与宿主适配。用户只说自然语言，入口经控制面选定唯一主路由，按需调用内部能力，并以新鲜证据完成验证。
+统一的软件项目 AI 协作运行包：对外**只有一个项目级入口** `vibe-coding-skills`，对内把三个源项目的能力按职责合并 —— **Sliver** 管项目级治理控制面（路由、深度、风险、授权、真源、验收），**Matt** 管工程原语（TDD、调试、领域建模、review），**Vibe** 管产品/UI、事件沉淀与宿主适配。用户只说自然语言，入口经控制面选定唯一主路由，按需调用内部能力，并以新鲜证据完成验证。
 
 ### 当前状态（2026-09-11 闭环后受控运行）
 
@@ -123,7 +123,7 @@ pwsh scripts/verify.ps1 -RepositoryRoot <repo>
 ### 目录结构
 
 ```text
-feisheng-vibe-coding/
+vibe-coding-skills/
 ├─ governance/            # 项目级控制面（Sliver：路由/深度/风险/授权/验收）
 │  └─ sliver-core/        # 控制面协议 SKILL.md + references + assets
 ├─ skills/                # 一等技能（只接入通过五门禁的能力）
@@ -187,7 +187,7 @@ node scripts/init-doc-governance.mjs <目标项目根>
 
 ### What is this
 
-A unified AI collaboration runtime package for software projects. Externally there is **exactly one project-level entry**: `feisheng-vibe-coding`. Internally it merges capabilities from three source projects by responsibility — **Sliver** owns the project governance control plane (routing, depth, risk, authorization, truth, acceptance), **Matt** owns engineering primitives (TDD, debugging, domain modeling, review), and **Vibe** owns product/UI, event sedimentation, and host adapters. The user speaks natural language only; the entry selects one main route through the control plane, invokes internal capabilities on demand, and closes with verification backed by fresh evidence.
+A unified AI collaboration runtime package for software projects. Externally there is **exactly one project-level entry**: `vibe-coding-skills`. Internally it merges capabilities from three source projects by responsibility — **Sliver** owns the project governance control plane (routing, depth, risk, authorization, truth, acceptance), **Matt** owns engineering primitives (TDD, debugging, domain modeling, review), and **Vibe** owns product/UI, event sedimentation, and host adapters. The user speaks natural language only; the entry selects one main route through the control plane, invokes internal capabilities on demand, and closes with verification backed by fresh evidence.
 
 ### Current status (controlled run since 2026-09-11 closure)
 
@@ -254,7 +254,7 @@ pwsh scripts/verify.ps1 -RepositoryRoot <repo>
 <summary><strong>Repository layout</strong></summary>
 
 ```text
-feisheng-vibe-coding/
+vibe-coding-skills/
 ├─ governance/            # Project control plane (Sliver: routing/depth/risk/authz/acceptance)
 │  └─ sliver-core/        # Control-plane protocol SKILL.md + references + assets
 ├─ skills/                # First-class skills (only gate-passing capabilities are admitted)

@@ -63,7 +63,7 @@ function Find-VisibleMatches {
             # 正确写法：先赋布尔变量
             $isSuffixMatch = $entry.path.ToLowerInvariant().EndsWith('/' + $suffix.ToLowerInvariant(), [System.StringComparison]::OrdinalIgnoreCase)
             if ($isSuffixMatch) {
-                $startsBundle = $entry.path.ToLowerInvariant().StartsWith('feisheng-vibe-coding/', [System.StringComparison]::OrdinalIgnoreCase)
+                $startsBundle = $entry.path.ToLowerInvariant().StartsWith('vibe-coding-skills/', [System.StringComparison]::OrdinalIgnoreCase)
                 $via = if ($startsBundle) { 'unified-bundle' } else { 'legacy' }
                 $attributed += [pscustomobject]@{ entry = $entry; via = $via }
                 break
@@ -109,8 +109,8 @@ Assert-Equal 'non-sources suffix' 'skills/checkers/code-review/SKILL.md' $s2[0]
 Write-Output "`n--- Test: Find-VisibleMatches exact suffix match ---"
 $record = [pscustomobject]@{ path = 'skills/checkers/code-review/SKILL.md'; id = 'code-review' }
 $entries = @(
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/checkers/code-review/SKILL.md'; entryName = 'code-review'; root = 'r1'; rootPath = '/shared/skills' }
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/checkers/ui-audit/SKILL.md'; entryName = 'ui-audit'; root = 'r1'; rootPath = '/shared/skills' }
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/checkers/code-review/SKILL.md'; entryName = 'code-review'; root = 'r1'; rootPath = '/shared/skills' }
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/checkers/ui-audit/SKILL.md'; entryName = 'ui-audit'; root = 'r1'; rootPath = '/shared/skills' }
 )
 $matches = @(Find-VisibleMatches -Record $record -VisibleEntries $entries)
 Assert-True 'exact match finds 1' ($matches.Count -eq 1)
@@ -123,8 +123,8 @@ Write-Output "`n--- Test: name collision defense ---"
 $vibeRecord = [pscustomobject]@{ path = 'skills/checkers/code-review/SKILL.md'; id = 'vibe-code-review' }
 $mattRecord = [pscustomobject]@{ path = 'skills/mattpocock-code-review/SKILL.md'; id = 'mattpocock-code-review' }
 $entries = @(
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/checkers/code-review/SKILL.md'; entryName = 'code-review'; root = 'r1'; rootPath = '/shared/skills' },
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/mattpocock-code-review/SKILL.md'; entryName = 'mattpocock-code-review'; root = 'r1'; rootPath = '/shared/skills' }
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/checkers/code-review/SKILL.md'; entryName = 'code-review'; root = 'r1'; rootPath = '/shared/skills' },
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/mattpocock-code-review/SKILL.md'; entryName = 'mattpocock-code-review'; root = 'r1'; rootPath = '/shared/skills' }
 )
 $vibeMatches = @(Find-VisibleMatches -Record $vibeRecord -VisibleEntries $entries)
 $mattMatches = @(Find-VisibleMatches -Record $mattRecord -VisibleEntries $entries)
@@ -149,7 +149,7 @@ Assert-Equal 'legacy via' 'legacy' $matches[0].via
 Write-Output "`n--- Test: boolean string coercion bug regression ---"
 $record = [pscustomobject]@{ path = 'skills/checkers/code-review/SKILL.md'; id = 'code-review' }
 $entries = @(
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/checkers/ui-audit/SKILL.md'; entryName = 'ui-audit'; root = 'r1'; rootPath = '/shared/skills' }
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/checkers/ui-audit/SKILL.md'; entryName = 'ui-audit'; root = 'r1'; rootPath = '/shared/skills' }
 )
 $buggyMatches = @(Find-VisibleMatches-BUGGY -Record $record -VisibleEntries $entries)
 $correctMatches = @(Find-VisibleMatches -Record $record -VisibleEntries $entries)
@@ -160,7 +160,7 @@ Assert-True 'CORRECT version does NOT match different path' ($correctMatches.Cou
 Write-Output "`n--- Test: partial prefix must not match ---"
 $record = [pscustomobject]@{ path = 'skills/ui/ui-audit/SKILL.md'; id = 'ui-audit' }
 $entries = @(
-    [pscustomobject]@{ path = 'feisheng-vibe-coding/skills/ui/ui-audit-v3/SKILL.md'; entryName = 'ui-audit-v3'; root = 'r1'; rootPath = '/shared/skills' }
+    [pscustomobject]@{ path = 'vibe-coding-skills/skills/ui/ui-audit-v3/SKILL.md'; entryName = 'ui-audit-v3'; root = 'r1'; rootPath = '/shared/skills' }
 )
 $matches = @(Find-VisibleMatches -Record $record -VisibleEntries $entries)
 Assert-True 'partial name (ui-audit-v3 vs ui-audit) must NOT match' ($matches.Count -eq 0)

@@ -27,10 +27,10 @@ Set-StrictMode -Version Latest
 # Vibe Hook 适配器安装/卸载（目标项目侧，多宿主）。
 #
 # 装什么：
-#   <target>/.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1  自包含 runner 副本（记录 SHA）
-#   <target>/.feisheng/vibe-hooks/contract.json                 契约副本（记录 SHA）
-#   <target>/.feisheng/vibe-hooks/experience-recorder.mjs       经验台账记录器（记录 SHA；需 Node）
-#   <target>/.feisheng/vibe-hooks/install-manifest.json         安装清单（回滚与审计依据）
+#   <target>/.vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1  自包含 runner 副本（记录 SHA）
+#   <target>/.vibe-coding-skills/vibe-hooks/contract.json                 契约副本（记录 SHA）
+#   <target>/.vibe-coding-skills/vibe-hooks/experience-recorder.mjs       经验台账记录器（记录 SHA；需 Node）
+#   <target>/.vibe-coding-skills/vibe-hooks/install-manifest.json         安装清单（回滚与审计依据）
 #   宿主注册（按 -HostAdapter 选择）：
 #     claude → <target>/.claude/settings.json  SessionStart + UserPromptSubmit
 #     zcode  → <target>/.zcode/config.json     hooks.events 两事件 + enabled:true（合并保留 mcp 等）
@@ -69,7 +69,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $targetFull '.git'))) { throw "Targe
 
 # 防呆：不把钩子装进统一包自己
 if ($targetFull.TrimEnd('\', '/') -eq $repoRoot.TrimEnd('\', '/')) {
-    throw '拒绝把 Vibe Hook 适配器安装到 feisheng-vibe-coding 仓库自身。'
+    throw '拒绝把 Vibe Hook 适配器安装到 vibe-coding-skills 仓库自身。'
 }
 
 $sourceRunner = Get-ContainedPath -Root $repoRoot -RelativePath 'scripts/invoke-vibe-hook-adapter.ps1'
@@ -98,10 +98,17 @@ function Test-HasProperty {
 function Test-RunnerMarkedGroup {
     # 用户既有 hook 组的形状不可信（组可能缺 hooks 键、条目可能缺 command 键）：
     # StrictMode 下直接取 $_.command 会崩掉整个安装/卸载。属性存在性先行，任何形状都安全。
+    # 兼容清理：v8 状态目录改名（.feisheng → .vibe-coding-skills）前的旧注册也算自家安装，
+    # 否则存量目标升级时旧条目残留成重复 hook（2026-09-30 fs-agent 实测）。
     param($Group)
     if ($null -eq $Group -or -not (Test-HasProperty -Object $Group -Name 'hooks')) { return $false }
+    $markers = @($runnerMarker)
+    if ($legacyRunnerMarker) { $markers = @($markers + $legacyRunnerMarker) }
     foreach ($h in @($Group.hooks)) {
-        if ($null -ne $h -and (Test-HasProperty -Object $h -Name 'command') -and ([string]$h.command -like ('*' + $runnerMarker + '*'))) { return $true }
+        if ($null -eq $h -or -not (Test-HasProperty -Object $h -Name 'command')) { continue }
+        foreach ($m in $markers) {
+            if ([string]$h.command -like ('*' + $m + '*')) { return $true }
+        }
     }
     return $false
 }
@@ -124,8 +131,8 @@ function Write-JsonAtomic {
     Move-Item -LiteralPath $tmp -Destination $Path -Force
 }
 
-$installDir = Get-ContainedPath -Root $targetFull -RelativePath '.feisheng/vibe-hooks'
-$stateDir = Get-ContainedPath -Root $targetFull -RelativePath '.feisheng/vibe-hook-state'
+$installDir = Get-ContainedPath -Root $targetFull -RelativePath '.vibe-coding-skills/vibe-hooks'
+$stateDir = Get-ContainedPath -Root $targetFull -RelativePath '.vibe-coding-skills/vibe-hook-state'
 $targetRunner = Join-Path $installDir 'invoke-vibe-hook-adapter.ps1'
 $targetContract = Join-Path $installDir 'contract.json'
 $targetRecorder = Join-Path $installDir 'experience-recorder.mjs'
@@ -135,6 +142,9 @@ $zcodeConfigPath = Join-Path $targetFull '.zcode/config.json'
 $codexHooksPath = Join-Path $targetFull '.codex/hooks.json'
 
 $runnerMarker = [string]$targetRunner   # 注册去重标记：宿主注册命令里含 runner 绝对路径
+# v8 改名前的旧 runner 绝对路径（仅用于升级时清理旧注册；新安装永不产生）
+$legacyRunnerMarker = [string]$targetRunner.Replace('\.vibe-coding-skills\', '\.feisheng\')
+if ($legacyRunnerMarker -eq [string]$targetRunner) { $legacyRunnerMarker = $null }
 
 $hookCommandBase = 'powershell -NoProfile -ExecutionPolicy Bypass -File "' + $targetRunner + '" -Mode Invoke -RepositoryRoot "' + $installDir + '" -TargetRoot "' + $targetFull + '" -Event {EVENT}'
 $commandByEvent = @{}
@@ -168,7 +178,7 @@ function Register-ClaudeHost {
         $matcher = $matcherByEvent[$eventName]
         if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
         if (Test-HasProperty -Object $settings.hooks -Name $eventName) {
-            $existing = @($settings.hooks.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
+            $existing = @(@($settings.hooks.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) })
             $settings.hooks.$eventName = @($existing + @($group))
         } else {
             $settings.hooks | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
@@ -199,7 +209,7 @@ function Register-ZcodeHost {
         $matcher = $matcherByEvent[$eventName]
         if (-not [string]::IsNullOrWhiteSpace($matcher)) { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value $matcher }
         if (Test-HasProperty -Object $config.hooks.events -Name $eventName) {
-            $existing = @($config.hooks.events.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
+            $existing = @(@($config.hooks.events.$eventName) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) })
             $config.hooks.events.$eventName = @($existing + @($group))
         } else {
             $config.hooks.events | Add-Member -MemberType NoteProperty -Name $eventName -Value @($group)
@@ -224,7 +234,7 @@ function Register-CodexHost {
         $group = [pscustomobject]@{ hooks = @($entry) }
         if ($eventName -eq 'SessionStart') { $group | Add-Member -MemberType NoteProperty -Name 'matcher' -Value 'startup|resume' }
         if (Test-HasProperty -Object $hooks.hooks -Name $snake) {
-            $existing = @($hooks.hooks.$snake) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) }
+            $existing = @(@($hooks.hooks.$snake) | Where-Object { -not (Test-RunnerMarkedGroup -Group $_) })
             $hooks.hooks.$snake = @($existing + @($group))
         } else {
             $hooks.hooks | Add-Member -MemberType NoteProperty -Name $snake -Value @($group)
@@ -314,7 +324,7 @@ $recorderSha = Get-Sha256 -Path $sourceRecorder
 if ($DryRun) {
     [pscustomobject]@{
         status = 'DRY-RUN'; target = $targetFull; hosts = $selectedHosts
-        wouldInstall = @('.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1', '.feisheng/vibe-hooks/contract.json', '.feisheng/vibe-hooks/experience-recorder.mjs', '.feisheng/vibe-hooks/install-manifest.json')
+        wouldInstall = @('.vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1', '.vibe-coding-skills/vibe-hooks/contract.json', '.vibe-coding-skills/vibe-hooks/experience-recorder.mjs', '.vibe-coding-skills/vibe-hooks/install-manifest.json')
         wouldRegister = $contractEnabledEvents
         runnerSha256 = $runnerSha; contractSha256 = $contractSha; recorderSha256 = $recorderSha
     } | ConvertTo-Json -Compress
@@ -347,9 +357,9 @@ $manifest = [ordered]@{
     hosts = $selectedHosts
     events = $contractEnabledEvents
     files = @(
-        [ordered]@{ path = '.feisheng/vibe-hooks/invoke-vibe-hook-adapter.ps1'; sha256 = $runnerSha }
-        [ordered]@{ path = '.feisheng/vibe-hooks/contract.json'; sha256 = $contractSha }
-        [ordered]@{ path = '.feisheng/vibe-hooks/experience-recorder.mjs'; sha256 = $recorderSha }
+        [ordered]@{ path = '.vibe-coding-skills/vibe-hooks/invoke-vibe-hook-adapter.ps1'; sha256 = $runnerSha }
+        [ordered]@{ path = '.vibe-coding-skills/vibe-hooks/contract.json'; sha256 = $contractSha }
+        [ordered]@{ path = '.vibe-coding-skills/vibe-hooks/experience-recorder.mjs'; sha256 = $recorderSha }
     )
     writeWhitelist = @($contract.writeWhitelist)
     rollback = 'scripts/install-vibe-hooks.ps1 -TargetRoot <target> -Uninstall'
