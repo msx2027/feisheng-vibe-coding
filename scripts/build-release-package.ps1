@@ -158,7 +158,7 @@ foreach ($relative in @($noticeFiles.Keys | Sort-Object)) {
 
 # 4) NOTICE.txt + RELEASE-MANIFEST.json
 $noticeLines = @()
-$noticeLines += 'Feisheng Vibe Coding release package NOTICE'
+$noticeLines += 'vibe-coding-skills release package NOTICE'
 $noticeLines += ('Label: ' + $Label)
 $noticeLines += ('Source revision: ' + $sourceRevision)
 $noticeLines += ('Canonical catalog SHA-256: ' + $catalogSha256)

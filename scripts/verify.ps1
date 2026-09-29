@@ -67,7 +67,7 @@ if (-not (Test-Path -LiteralPath $provenanceModule -PathType Leaf)) {
 $results = @()
 # 来源快照实测文件数（步骤 3 填充，步骤 6b 消费）。
 $docSnapshotFiles = @{}
-$workRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('feisheng-verify-' + [guid]::NewGuid().ToString('N'))
+$workRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('vibe-verify-' + [guid]::NewGuid().ToString('N'))
 
 function Add-Result {
     param(

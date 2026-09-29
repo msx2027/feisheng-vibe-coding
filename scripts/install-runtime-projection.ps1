@@ -140,7 +140,7 @@ if (Test-Path -LiteralPath $targetPath) {
 }
 
 # 2) 构建到仓库外的全新临时目录（builder 强制如此）
-$stageRoot = Join-Path $env:TEMP ('feisheng-install-' + [guid]::NewGuid().ToString('N'))
+$stageRoot = Join-Path $env:TEMP ('vibe-install-' + [guid]::NewGuid().ToString('N'))
 $projectionRoot = Join-Path $stageRoot 'projection'
 try {
     New-Item -ItemType Directory -Force -Path $stageRoot | Out-Null

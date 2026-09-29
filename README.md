@@ -1,6 +1,6 @@
 <div align="center">
 
-# Feisheng Vibe Coding
+# vibe-coding-skills
 
 **统一的软件项目 AI 协作运行包**
 **A unified AI collaboration runtime package for software projects**

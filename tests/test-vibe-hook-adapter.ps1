@@ -32,7 +32,7 @@ $runner = Join-Path $repoRoot 'scripts/invoke-vibe-hook-adapter.ps1'
 # 跨平台：Linux CI 只有 pwsh，Windows 可能有 powershell（PS 5.1）或 pwsh（PS 7）
 $pwshExe = if (Get-Command 'pwsh' -ErrorAction SilentlyContinue) { 'pwsh' } else { 'powershell' }
 
-$work = Join-Path ([System.IO.Path]::GetTempPath()) ('feisheng-hook-test-' + [guid]::NewGuid().ToString('N'))
+$work = Join-Path ([System.IO.Path]::GetTempPath()) ('vibe-hook-test-' + [guid]::NewGuid().ToString('N'))
 $target = Join-Path $work 'target'
 New-Item -ItemType Directory -Force -Path (Join-Path $target '.git') | Out-Null
 New-Item -ItemType Directory -Force -Path (Join-Path $target '.claude/feedback') | Out-Null

@@ -1,4 +1,4 @@
-# Feisheng Vibe Coding 仓库规则
+# vibe-coding-skills 仓库规则
 
 ## Owner 规则
 
