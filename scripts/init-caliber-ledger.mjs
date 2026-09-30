@@ -4,7 +4,10 @@
 // 用法：node scripts/init-caliber-ledger.mjs <目标项目根> [--force]
 //
 // 行为（只新增/追加，绝不覆盖项目已有的账本、规则与钩子正文）：
-//   1) 复制 check-caliber-ledger.mjs（本脚本同目录）到 <目标>/tools/（已存在则跳过，--force 才覆盖）；
+//   1) 复制执行器 CLI 与判定核（check-caliber-ledger.mjs ＋ caliber-ledger-core.mjs，本脚本同目录）
+//      到 <目标>/tools/（各自已存在则跳过，--force 才覆盖）。两个文件必须一起走：CLI 里是
+//      `import "./caliber-ledger-core.mjs"`，只发一个文件等于给目标项目一个跑不起来的执行器；
+//      拆文件的动机是下游项目的 300 行生产文件结构门禁（单文件 390 行会拦下目标项目的接线提交）；
 //   2) 由 caliber-ledger.example.json 生成 <目标>/tools/caliber-ledger.json 空账本
 //      （含 conventions 入账规矩；已存在则保留不动——账本内容是项目的，不是本包的）；
 //   3) 接线 pre-commit 跑 --staged：优先 core.hooksPath，其次 .git/hooks/pre-commit；
@@ -31,23 +34,26 @@ if (!existsSync(target)) {
   process.exit(2);
 }
 
-const checkerSrc = join(selfDir, 'check-caliber-ledger.mjs');
+const executorFiles = ['check-caliber-ledger.mjs', 'caliber-ledger-core.mjs'];
 const exampleSrc = join(selfDir, 'caliber-ledger.example.json');
-if (!existsSync(checkerSrc) || !existsSync(exampleSrc)) {
-  console.error(`✗ 找不到执行器或空账本模板（${checkerSrc} / ${exampleSrc}）`);
+const missing = executorFiles.filter((f) => !existsSync(join(selfDir, f)));
+if (missing.length > 0 || !existsSync(exampleSrc)) {
+  console.error(`✗ 找不到执行器（${missing.join('、') || '齐'}）或空账本模板（${exampleSrc}）`);
   process.exit(2);
 }
 
 const toolsDir = join(target, 'tools');
 mkdirSync(toolsDir, { recursive: true });
 
-// 1) 复制执行器
-const checkerDest = join(toolsDir, 'check-caliber-ledger.mjs');
-if (existsSync(checkerDest) && !force) {
-  console.log('· 已存在，跳过：tools/check-caliber-ledger.mjs（--force 覆盖）');
-} else {
-  copyFileSync(checkerSrc, checkerDest);
-  console.log('✓ 已复制：tools/check-caliber-ledger.mjs');
+// 1) 复制执行器（CLI ＋ 判定核，见头注「两个文件必须一起走」）
+for (const f of executorFiles) {
+  const dest = join(toolsDir, f);
+  if (existsSync(dest) && !force) {
+    console.log(`· 已存在，跳过：tools/${f}（--force 覆盖）`);
+  } else {
+    copyFileSync(join(selfDir, f), dest);
+    console.log(`✓ 已复制：tools/${f}`);
+  }
 }
 
 // 2) 空账本（内容归项目所有，绝不用 --force 覆盖已有条目）

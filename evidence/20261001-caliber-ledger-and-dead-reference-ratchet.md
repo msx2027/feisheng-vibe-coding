@@ -110,6 +110,7 @@ owner 批准「现在刷宿主投影」后，先跑 `-DryRun`，被脚本自带�
 - ~~下游项目账本尚无真实接入例证~~ —— **已闭环（2026-10-01 同日，见 §8）**：fs-agent 已接上执行器（升级硬化版＋14 例测试＋三模式实跑全绿），并另接一道它原来没有的文档脚本死引用棘轮。
 - 25 处存量死引按各自登记的收口法分批消化，棘轮只保证不新增。
 - 8 个未评审上游脚本按边界 1 明确不做（owner 裁决），不属本批遗留。
+- 本包没有生产文件行数门禁，下发工具「尺寸是否适配下游」这一项只能靠真实消费者接线时才暴露（§9 是本批第一次抓到）。若要常驻，需要在本包补一道等价的结构检查——不属本批边界，留给 owner 单独拍板。
 - 受管块（`target-runtime` v23）引用的六个工具只存在于 `sources/` 快照——**本包自身**的下游可见缺陷，处置三条路见 §8b，待 owner 拍板，本批只登记不越权改模板。
 
 ## 8. 下游实接（owner 令「接 fs-agent」，2026-10-01）
@@ -144,6 +145,18 @@ owner 批准「现在刷宿主投影」后，先跑 `-DryRun`，被脚本自带�
 - 直接 `sh tools/githooks/pre-commit`（七项门禁全跑，只读不提交）→ **exit 0**，输出「口径账本：4 条目断言全绿」＋「文档脚本死引用检查：… 命中 50 处（未登记 0 处、基线存量 50 处）」＋ 钩子口径的一行存量摘要（明细收进 `why` 字段，避免每次提交刷 18 行）。
 - 钩子里**没有代跑 git 暂存**：`--staged` 只读 `git diff --cached --name-only` 列触达文档，非仓库环境下 fail-closed 非零并点名原因（有回归例）。
 - 突变试验（现场跑完即清，不留文件）：① 新造 `tools/definitely-not-a-real-tool.mjs`＋`nope-checker.mjs` 两处假引用 → 立即红 2 条；② 临时登记进基线 → 转绿并计入存量；③ 删掉载体文档但保留登记 → 报「基线登记已过期（载体文件不存在）」仍红。三态行为与棘轮设计一致。
-- fs-agent 侧**未提交**：该项目工作树另有 3 处在途文件（`docs/调研档案.md` 及 097／098 两卷），不混提；是否连工具一并提交由 owner 令下再动。
+- fs-agent 侧提交结果见 §9（owner 令「提交，推送」后落地，只提工具不含在途文档）。
 - 该项目文档面（`docs/执行计划/执行光标.md` 的新门禁登记行）**刻意未写**：受管文档改动必须同批跑 `check-doc-index --fix` 刷指纹，会与他线在途文档搅在一起；登记落点改为本节与该项目钩子头注（钩子清单是它自己定义的单一真源）。
 
+
+## 9. 提交时被下游门禁反噬：本包下发的执行器自己超行（owner 令「提交，推送」，同日闭环）
+
+- **首刀实拦**：fs-agent 的 `sh tools/githooks/pre-commit` 对暂存面跑结构棘轮，报 2 个 BLOCKER——`tools/check-caliber-ledger.mjs` 400 行、`tools/check-doc-script-refs.mjs` 366 行，超该项目 `tools/hotspot-policy.mjs` 的 `LIMITS.productionFileLines = 300`。棘轮口径是「存量只减不增」：HEAD 里 290 行的旧版被顶上去即算新增，新建文件无基线直接判红。该项目唯一的例外通道 `tools/hotspot-exceptions.json` 只收 sha 锁定的 `.rs` 类型别名，JS 侧无绕道；走 `--no-verify` 等于逃掉该仓唯一结构防线，不走。
+- **修法按职责拆，不压薄断言迁就行数**：下游新增 `tools/caliber-ledger-core.mjs`（键名白名单／glob 归一／条目预编译／扫描器／暂存面解析）与 `tools/doc-script-refs-core.mjs`（盘上索引＋四条放行面判定），两个 CLI 只留装载、扫描面装配、基线对账与输出。核内不碰 `console` 与退出码，畸形与坏正则一律 throw 成品诊断行、由 CLI 逐行落 stderr——诊断文案与退出语义逐字照旧，回归钉全在。拆后 231／239（账本）与 247／148（死引），热区 blockers=0。
+- **这条才是本批的真产物**：本包下发给每个下游的执行器 `scripts/check-caliber-ledger.mjs` 单文件 390 行，而下游普遍有 300 行生产文件门禁——第一个真实消费者恰好在「接线提交」这一步被自己的门禁拦下，边界 3「所有下游项目开箱可用」当场不成立。本包自身不带行数门禁（`verify.ps1` 无此步），所以这道毛病在本包内永远测不出来，只有实接才暴露；与 §8b 的受管块快照死名同属「只有下游才能发现的病灶」这一类。
+- **上游同批拆**（毛病不留在下发面）：新建 `scripts/caliber-ledger-core.mjs`，`scripts/check-caliber-ledger.mjs` 瘦身为 223 行；`scripts/init-caliber-ledger.mjs` 改为一次复制**两个**文件——CLI 里是 `import "./caliber-ledger-core.mjs"`，只发一个文件等于给下游一个跑不起来的执行器——并把缺文件诊断改成列出缺哪个、头注写明两文件必须同批走及其动机。
+- 同源性自证：脚本比对两仓 body（从首个 `import` 行起）→ 账本 CLI 与判定核均报「逐字同源」，差异只在头注的署名与动机段。
+- 下游接线演练（隔离临时仓，跑完即删）：`node scripts/init-caliber-ledger.mjs <tmp>` → 两文件＋空账本＋新建 pre-commit 全绿；在临时仓里 `git add -A && git commit` 让接好的钩子真跑一遍 → 输出「口径账本：零条目，未登记任何口径，放行」且提交成功；目标项目内 `node tools/check-caliber-ledger.mjs --root . --report` exit 0。
+- 验证：本包 `node --test tests/test-check-caliber-ledger.mjs` **36/36**、本包账本 4 条目全绿；下游三套 **38/38**、七项钩子 exit 0（测试文件 313／452 行只落 WARN 线，不阻断）。
+- 提交与推送：本包 `04c867f`（§8／8b／8c 证据）与上游拆分同批；下游 `bd3bece7`（工具十件，逐名 stage，绕开在途 `docs/调研档案.md` 与 097／098 两卷，未用 `git add -A`）；两仓均已 push origin/main。
+- 未做（如实）：本包 `scripts/check-skill-references.mjs`（188 行）不拆——没有门禁逼它，为拆而拆只增维护面；下游文档面登记仍未写（理由见 §8c 末条）。
