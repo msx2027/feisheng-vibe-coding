@@ -160,3 +160,25 @@ owner 批准「现在刷宿主投影」后，先跑 `-DryRun`，被脚本自带�
 - 验证：本包 `node --test tests/test-check-caliber-ledger.mjs` **36/36**、本包账本 4 条目全绿；下游三套 **38/38**、七项钩子 exit 0（测试文件 313／452 行只落 WARN 线，不阻断）。
 - 提交与推送：本包 `04c867f`（§8／8b／8c 证据）与上游拆分同批；下游 `bd3bece7`（工具十件，逐名 stage，绕开在途 `docs/调研档案.md` 与 097／098 两卷，未用 `git add -A`）；两仓均已 push origin/main。
 - 未做（如实）：本包 `scripts/check-skill-references.mjs`（188 行）不拆——没有门禁逼它，为拆而拆只增维护面；下游文档面登记仍未写（理由见 §8c 末条）。
+
+## 9b. 拆分后的两路对抗复核（owner 老规矩：完工前 ≥2 路子代理交叉查）
+
+复核口径：一路查「拆分是否行为保真＋有没有别处仍按单文件假设引用」，一路查「新文件是否漏进本包的清单／投影／登记面」。结论与处置逐条如实登记：
+
+**查实的伪问题（不做，理由写清）**：
+- 「新文件漏收进下发清单」——不成立。根 `scripts/` 从不进运行时投影（投影 include 只由 catalog 的 bundle 驱动，收录范围是 `skills/**` 与 `governance/sliver-core/**`；`packaging/runtime-projection.json` 还明文拒绝再存第三份文件清单），`provenance/LOCAL-PATCHES.json` 登记的 41 个文件里没有根 `scripts/` 的任何一条，`verify.ps1` 23 步里没有「枚举 scripts/ 文件数」这种门。早有同形先例：`scripts/init-doc-governance.mjs` 的 CLI＋共享模块就是多文件复制，而 `doc-gov-shared.mjs` 在所有清单里零命中。
+- 「`SKILL.md` 依赖块只列 CLI 没列判定核」——不改。依赖块语义是「本技能要运行什么」，技能确实只调 CLI；真要手工只拷一个文件，执行时是 `Cannot find module` 的**当场炸响**，不是静默放行，属可自暴露的误用。动 `skills/**` 要连带重录 `patchedSha256`（保真树补丁登记），为一个不会静默的失败付漂移成本不值。
+
+**查实并已修的四处（都是本刀自己带的毛病）**：
+1. 基线 JSON 坏掉走裸堆栈：`tools/check-doc-script-refs.mjs` 的 `JSON.parse` 未包 try，而头注承诺「基线畸形非零并点名」——现包成诊断行「基线文件不可读或 JSON 畸形 ＋ 修复：恢复到上个提交的基线版本」，并补回归例（坏基线必须非零且不是堆栈）。
+2. 排除面计数打印 `undefined`：`isExcluded` 认「exclude 整项就是文件名」，而计数键只用 `startsWith(面/)` 匹配，找不到键名 → 汇总行出「排除面：undefined 1」。改为两处用同一判定，并在窄面例里加 `doesNotMatch(/undefined/)` 钉。
+3. 核内 12 个导出无人消费（`ALLOWED_KEYS`／`compileRegex`／`assertKnownKeys`／`normalizeGlob`／`globToRegExp`／`SYSTEM_COMMANDS`／`EXTS`／`SCRIPT_TOKEN`／`SKIP_DIRS`／`splitStem`／`stripLeadingCjk`／`familyExists`）：两仓测试都只从 CLI 入口子进程整跑，导出它们只凭空扩公共面。全部收回为模块内私有，并把核内头注那句「两侧各自可独立测」改成实话（契约由 CLI 入口守住，拆内部函数不带来可独立测的好处）。
+4. 「零条目先于 skipDirs 校验」这条拆法要件**没有任何回归钉**——核内注释把它当拆两步的理由，两仓测试却都没覆盖；谁把两步合回一次校验，测试仍全绿，而「还没登记口径的项目」会被坏 skipDirs 连带判红，正好挡在接线第一步。补钉两仓各一条（空账本＋`skipDirs: "dist"` 必须 exit 0 并打印零条目），本包用例由 36 → 37。
+
+**查实并补的接线缺口**：fs-agent 的 `tools/verify-project.mjs` 步骤表里没有死引用检查——它只活在 pre-commit 的 `--staged`。owner 边界 2 明写「两层都要：定期报告 ＋ 提交拦已入账项」，全量档不跑它＝定期报告那半永远看不见。已补 `docs:scriptrefs` 步进步骤表快慢两档共用段（fast／full 都常驻，毫秒级），位置在 `caliber:ledger` 之后不打乱既有按位解构。
+
+**第三条门禁（同一条命令连续三次被拦，每次都是真问题，无一次绕）**：补完那一步，`planVerifySteps` 函数体达 106 行，触该项目 `LIMITS.functionLines = 100` 的 BLOCKER——前两条是文件行数、这条是函数行数，拆文件不解决它。修法是把「fast 与 full 共用的那一段步骤」抽成独立函数 `coreSharedSteps(rootDir)`，编排函数只留按档拼装；顺手删掉该段里从未使用的 `workerDir` 局部量。抽后 `verify-project.mjs` 222 行、各函数都在线内，步骤顺序复验不变（fast 8 步、full 20 步，`docs:scriptrefs` 紧随 `caliber:ledger`）。本包自身没有行数与函数长度门（`verify.ps1` 无此步），这三条只能由真实下游逼出来——与 §9 那条同因。
+
+**数字口径澄清（防后来人误读 git）**：复核按 git 取「拆前」基线时发现，`bd3bece7~1` 里 `tools/check-caliber-ledger.mjs` 是 **290 行的硬化前旧版**，被门禁报的 400 行属于**当时暂存面的工作树版本**（＝上游 390 行 ＋ 下游头注 10 行），从未单独入过 git；366 行那个尺寸同理只存在于暂存面。§9 说的「下发执行器单文件 390 行」才是 git 里可复现的那个数。
+
+**复核实跑数（新鲜）**：fs-agent 四套 58/58（账本 16、死引 15、verify-project 编排 17、钩子语义 10）；本包 `node --test tests/test-check-caliber-ledger.mjs` 37/37、账本 4 条目全绿、`verify.ps1` 24/24。两仓 body 逐字同源自证复跑：账本 CLI 与判定核均「逐字同源」。

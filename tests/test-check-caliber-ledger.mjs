@@ -319,6 +319,16 @@ test('skipDirs 写成非数组 → 判畸形（配置意图不许无声落空）
   assert.match(r.out, /skipDirs 必须是字符串数组/);
 });
 
+// 判定顺序钉：账本根校验 → 零条目放行 → skipDirs → 条目预编译。执行器拆成「判定核＋CLI」时最容易被
+// 顺手把两步合成一次校验（看着更整洁），合回去就让「还没登记口径」的项目连带坏 skipDirs 一起变红，
+// 把新接线的第一步挡在门外——与既有「零条目放行」语义相反。此钉保证合回去会红。
+test('零条目先于 skipDirs 校验：空账本＋坏 skipDirs 仍放行（顺序不许合并）', () => {
+  w('tools/caliber-ledger.json', JSON.stringify({ schemaVersion: 1, skipDirs: 'dist', entries: [] }));
+  const r = run();
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /零条目/);
+});
+
 // ---------- 挂账与 --report ----------
 
 test('pendingMirrors 挂账常驻示众且本身不阻断', () => {

@@ -23,7 +23,7 @@ export class LedgerError extends Error {
 
 // 键名白名单：写错的键（mirrors→mirror、require→requrie）在 JSON 里没有语义，会被当成
 // 「这条目没有这道断言」——门就这样少装一道且全绿。未知键一律判畸形，不静默忽略。
-export const ALLOWED_KEYS = {
+const ALLOWED_KEYS = {
   ledger: ["schemaVersion", "description", "skipDirs", "conventions", "entries"],
   entry: ["id", "title", "origin", "rule", "note", "truth", "mirrors", "scans", "pendingMirrors"],
   truth: ["path", "anchorRegex", "note"],
@@ -32,7 +32,7 @@ export const ALLOWED_KEYS = {
   pending: ["path", "why"],
 };
 
-export function compileRegex(source, where) {
+function compileRegex(source, where) {
   try {
     return new RegExp(source, "m");
   } catch (err) {
@@ -43,7 +43,7 @@ export function compileRegex(source, where) {
   }
 }
 
-export function assertKnownKeys(obj, allowed, where, ledgerRel) {
+function assertKnownKeys(obj, allowed, where, ledgerRel) {
   const unknown = Object.keys(obj).filter((k) => !allowed.includes(k));
   if (unknown.length === 0) return;
   throw new LedgerError([
@@ -52,13 +52,13 @@ export function assertKnownKeys(obj, allowed, where, ledgerRel) {
   ]);
 }
 
-export function normalizeGlob(glob) {
+function normalizeGlob(glob) {
   // 反斜杠与 `./` 前缀都会让「同一个面」在 include／exclude／自跳三处对不上：
   // 实测 `./docs/**` 会让 exclude 整批失效、账本自跳失效而把自己判红，Windows 写法更静默。
   return glob.replace(/\\/g, "/").replace(/^\.\//, "");
 }
 
-export function globToRegExp(glob, where) {
+function globToRegExp(glob, where) {
   const re = glob
     .split("/")
     .map((seg) =>
