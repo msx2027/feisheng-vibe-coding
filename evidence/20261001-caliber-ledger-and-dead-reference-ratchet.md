@@ -107,6 +107,43 @@ owner 批准「现在刷宿主投影」后，先跑 `-DryRun`，被脚本自带�
 ## 7. 残留与待办
 
 - 本机宿主布局与投影形态的分工已写进交接文档：本机走 junction 直读仓库（改动即时生效，无需安装），投影安装留给「要一份去控制面以外内容的干净副本」的场合。若哪天要把本机也切成投影安装位，得先把那条 junction 用 `rmdir` 摘掉再装——顺序反了就是一次删仓库操作。
-- 下游项目账本尚无真实接入例证：init 接线器已就位，第一个消费者是 fs-agent，接完才知道模板是否真开箱可用。
+- ~~下游项目账本尚无真实接入例证~~ —— **已闭环（2026-10-01 同日，见 §8）**：fs-agent 已接上执行器（升级硬化版＋14 例测试＋三模式实跑全绿），并另接一道它原来没有的文档脚本死引用棘轮。
 - 25 处存量死引按各自登记的收口法分批消化，棘轮只保证不新增。
 - 8 个未评审上游脚本按边界 1 明确不做（owner 裁决），不属本批遗留。
+- 受管块（`target-runtime` v23）引用的六个工具只存在于 `sources/` 快照——**本包自身**的下游可见缺陷，处置三条路见 §8b，待 owner 拍板，本批只登记不越权改模板。
+
+## 8. 下游实接（owner 令「接 fs-agent」，2026-10-01）
+
+**接法**：`E:\fs-agent` 侧新增 `tools/check-doc-script-refs.mjs`（本包 `scripts/check-skill-references.mjs` 的**判定面变体**，不是复制）＋ `tools/doc-script-ref-baseline.json`（存量基线）＋ `tools/check-doc-script-refs.test.mjs`（14 例行为契约），并接进该项目 `tools/githooks/pre-commit` 第 7 项（`--staged`，同步扩 `pre-commit.test.mjs` 的 REQUIRED_CHECKS）。
+
+**为什么是变体而不是复制**：本项目文档不写 `<skills仓库>/…` 占位符，直接写 `tools/x.mjs`、`worker/test/x.mjs`。故把「带仓内目录前缀的路径必须存在」升为 R1 主判据；R2 收窄为**只认本仓根占位符**（`<仓库根>/`、`<项目根>/`）。首版曾把 `<skills-root>/tools/x.mjs` 也剥前缀按本仓判，实测即误报——那是治理包的工具，本仓没有是对的。同理新增「跨仓占位符不判」一条并把两条误报登记从基线里删掉。
+
+**三条放行面（都是实测逼出来的，不是设计时想到的）**：
+1. **族名放行**：该项目文档惯按最长短语指一族测试（写 `worker/test/migration-safety.test.mjs`，盘上实为 `migration-safety-{success,failure}.test.mjs`）。首跑 6 处此类命中全属这一形。放行条件收紧为「同目录存在 以该词干 + `-` 开头、扩展尾一致 的文件」，计数打印，不做静默放宽。
+2. **通配碎片不判**：`hotspot-*.test.mjs` 被正则截出 `.test.mjs` 碎片，首跑刷出 66 条假命中。只认紧贴名字的**单**星号为通配——Markdown 加粗 `**pre-commit.test.mjs**` 前两位都是星号，那是真名字必须照判（此条有回归例）。
+3. **中文散文粘连**：正文里 `……各自合规的validate.mjs` 被连成一个 token。回退顺序＝原形 → 剥词首中文 → 取词尾中文之后一段，三形都不在盘上才判死；`docs/需求文档/**` 这类真含中文的段名不受影响（只在原形判不成立时才回退）。
+4. **窄面不许判过期**：`--scope` 缩面时，被挡在面外的基线条目一度全部判「登记过期」，一次性假红 40 条。改为：文件在扫描面外且仍在盘上＝不判（计入「不在本轮扫描面」打印）；载体文件已不存在＝照判过期——「没看」不等于「没有了」。
+
+**扫描面（三面排除，跳过量一律打印）**：`docs/**.md` 除 `docs/历史归档`（时点事实，改写＝伪造）、`docs/调研档案`（外部代码叙述面：调研卷里的 `tools/delegate_tool.py` 是**别人仓**的路径，首段恰好与本仓 `tools/` 同名）、`docs/项目治理/验收证据`（跑完即删的 `debug-*.mjs`／`.tmp-*-acceptance.mjs` 属当轮存证）＋ 根 `AGENTS.md`／`CLAUDE.md`／`文档索引.md`。实跑量：扫 82 个文档，排除 70／38／172。
+
+## 8b. 顺带抓到的本包缺陷：受管块引用六个只存在于快照的脚本（未修，需 owner 拍板）
+
+接入过程中逐条给 fs-agent 的存量定 `why`，实测出**本包自己的**病灶：
+
+- fs-agent 的 `AGENTS.md`／`CLAUDE.md` 受管块（`vibe-coding-skills:target-runtime` **version=23**，checksum `e15269e0…`）正文引用六个脚本：`check-markdown-governance.mjs`、`build-target-doc-index.mjs`、`resolve-target-doc-context.mjs`、`setup-target-hooks.mjs`、`check-target-doc-precommit.mjs`、`check-ui-reuse.mjs`。
+- 六个名字在本包**只存在于 `sources/vibe-coding-skills/tools/` 保真快照**，`tools/` 与 `scripts/` 的 live 树里没有（逐个 find 实测）。按本包 AGENTS 迁移规则，快照「只读、不可执行、永不下发」——即受管块在教每一个下游项目去跑本包根本不下发的工具。
+- 同块引用的 `init-target-runtime.mjs` 确实存在（`tools/init-target-runtime.mjs`），属正当跨仓引用，两者必须在收口时分开处理。
+- **本包的检查器抓不到它**：`scripts/check-skill-references.mjs` 的扫描面是 `skills/**/*.md` ＋ 根 `SKILL.md`，而这些名字写在 `skills/event/experience-elevator/tools/init-target-runtime.mjs` 的模板字符串里（.mjs 不在扫描面），且是裸脚本名而非 `<skills仓库>/…` 形态。这是本包死引用门的第二个真实盲区（第一个是棘轮只判脚本基名不判 .md 路径，已在 §6c 登记）。
+- 范围澄清（不夸大也不缩小）：这六个名字**不止**受管块有——本包自有技能正文同样在引用它们（`dev-builder`、`bug-fixer`、`dev-planner`、`ui-system-guardian` 等），已按 §7 的 25 处存量逐条登记；受管块的特殊性只在于它随 `--write` 下发到**每一个下游项目**，所以同一处错会被复制 N 份。
+- **未修理由**：动受管块＝动模板＋checksum＋全部下游项目的 AGENTS/CLAUDE 再刷一遍，属跨项目批量改动，按边界须 owner 单独拍板；本批只登记与给出处置选项（改文案指向现行工具 ／ 把这六件重新落进 live 树 ／ 明确标注为「旧代契约维持」并让下游文档不必再引其命令形态）。
+- fs-agent 侧的处置：这六个名字的命中按「上游受管块死引、本仓不得手改」逐条登记进它的基线（`why` 字段写明实探结果），既不沉默放行也不越权代改。
+
+## 8c. 下游实接的验证（全部新鲜跑，2026-10-01）
+
+- `node --test tools/check-doc-script-refs.test.mjs tools/check-caliber-ledger.test.mjs tools/githooks/pre-commit.test.mjs` → **38/38 全绿**（检查器 14 例、口径账本 14 例、提交钩子 10 例）。
+- 直接 `sh tools/githooks/pre-commit`（七项门禁全跑，只读不提交）→ **exit 0**，输出「口径账本：4 条目断言全绿」＋「文档脚本死引用检查：… 命中 50 处（未登记 0 处、基线存量 50 处）」＋ 钩子口径的一行存量摘要（明细收进 `why` 字段，避免每次提交刷 18 行）。
+- 钩子里**没有代跑 git 暂存**：`--staged` 只读 `git diff --cached --name-only` 列触达文档，非仓库环境下 fail-closed 非零并点名原因（有回归例）。
+- 突变试验（现场跑完即清，不留文件）：① 新造 `tools/definitely-not-a-real-tool.mjs`＋`nope-checker.mjs` 两处假引用 → 立即红 2 条；② 临时登记进基线 → 转绿并计入存量；③ 删掉载体文档但保留登记 → 报「基线登记已过期（载体文件不存在）」仍红。三态行为与棘轮设计一致。
+- fs-agent 侧**未提交**：该项目工作树另有 3 处在途文件（`docs/调研档案.md` 及 097／098 两卷），不混提；是否连工具一并提交由 owner 令下再动。
+- 该项目文档面（`docs/执行计划/执行光标.md` 的新门禁登记行）**刻意未写**：受管文档改动必须同批跑 `check-doc-index --fix` 刷指纹，会与他线在途文档搅在一起；登记落点改为本节与该项目钩子头注（钩子清单是它自己定义的单一真源）。
+
