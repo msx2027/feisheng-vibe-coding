@@ -16,7 +16,7 @@
 # 2026-09-28 换行归一批之后，上面第二例的 governance/sliver-core 已整树落地为 LF（220 个文件，
 # 内容零差异，登记经 provenance/PROVENANCE-INTEGRITY.json 的 annotation 通道重录），因此它现在
 # 与 sources/vibe-coding-skills 同侧：autocrlf=true 会把它的 LF 检出成 CRLF 而判红。本文件的结论不变，
-# 只是失效的那一侧从「两棵树」变成「一棵树」（sources/mattpocock-skills 仍是上游 CRLF，未改、不打算改，
+# 只是失效的那一侧从「两棵树」变成「一棵树」（sources/mattpocock-skills 仍是源项目原样 CRLF，未改、不打算改，
 # 理由见 evidence/20260928-eol-lf-landing.md §8-1）。
 #
 # `-text` means "no end-of-line conversion in either direction", so the committed blob is

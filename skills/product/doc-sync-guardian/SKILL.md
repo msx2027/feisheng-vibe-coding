@@ -8,17 +8,11 @@ disable-model-invocation: true
     层级：L3 / 关键 Skill
     模块：文档同步与防漂移
     依赖：
-    - `DOC-MAP.md`
-    - `TERMINOLOGY-AND-NAMING.md`
-    - `Product-Spec.md`
-    - `DEV-PLAN.md`
     - `skills/INDEX.md`
-    - `hooks/INDEX.md`
-    - `codex-hooks/INDEX.md`
-    - `tools/INDEX.md`
-    - `tools/init-target-task-context.mjs`
     - `tools/init-target-runtime.mjs`
-    - `skills/code-review/references/review-profiles.md`
+    - `scripts/check-doc-governance.mjs`
+    - `scripts/check-caliber-ledger.mjs`
+    - `scripts/init-caliber-ledger.mjs`
     输出：
     - 受影响文档面、同步动作、验证结果
 
@@ -35,6 +29,8 @@ disable-model-invocation: true
 
     可选：
     - `DOC-MAP.md` → 有则优先确认全局地图和模块入口是否需要更新
+    - 目标项目术语真源（`TERMINOLOGY-AND-NAMING.md` 或 `docs/需求文档/` 下的术语与命名规范卷）→ 有则口径变更先改它
+    - 目标项目模块索引面（`skills/INDEX.md`、`hooks/INDEX.md`、`codex-hooks/INDEX.md`、`tools/INDEX.md` 等，按项目实际存在的目录）→ 有新增能力时同步对应索引
     - 目标项目需求文档 → 优先用 `.vibe-docs.json` 的 `productSpec`，新项目默认 `docs/需求文档.md`；legacy `Product-Spec.md` 只作为读取迁移输入
     - 目标项目开发计划 → 优先用 `.vibe-docs.json` 的 `devPlan`，新项目默认 `docs/项目治理/开发计划.md`；legacy `DEV-PLAN.md` 只作为读取迁移输入
     - 目标项目当前执行光标 → 优先用 `.vibe-docs.json` 的 `currentExecution`，新项目默认 `docs/plans/执行光标.md`
@@ -58,9 +54,9 @@ disable-model-invocation: true
     - 缺少可选文档时，不阻塞执行，但必须明确指出哪些持久化文件还不存在
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于文档面 reference）**：存在 `.vibe-docs.json` 时先解析 schema v2、`documentIndex/documents/loadPolicy`，根据 Git diff / 用户点名范围计算受影响 role，再调用 `resolve-target-doc-context.mjs`；默认只读取 `documentIndex` 和受影响 role 的 selector，不遍历全部生命周期文档。never 默认禁止；只有用户明确要求迁移、归档或冷历史审计时，才可使用 `--allow-never --reason <具体理由>`，并在报告列出访问的冷文档。
+    **目标项目上下文加载协议（优先级高于文档面 reference）**：存在 `.vibe-docs.json` 时先解析 schema v2、`documentIndex/documents/loadPolicy`，根据 Git diff / 用户点名范围计算受影响 role，再按 manifest 里登记的相对路径**直接读取**——默认只读 `documentIndex` 和受影响 role 的 selector，不遍历全部生命周期文档（本包不下发 resolver，按清单路径读就是省读取的全部收益来源）。`loadPolicy` 标 `never` 的文档默认禁止；只有用户明确要求迁移、归档或冷历史审计，人工确认后才读，并在报告列出访问过的冷文档。
 
-    **索引与漂移收口**：同步后运行 `build-target-doc-index.mjs --write`、`check-target-doc-drift.mjs --quick --strict` 和 `check-lifecycle-doc-budget.mjs --strict`；无动作归档不得报告为已完成。`document-surfaces.md` 只生成候选 role，不授权全文读取。
+    **索引与漂移收口**：同步后必须跑本包真有的两道门——`node <skills仓库>/scripts/check-caliber-ledger.mjs --root <目标项目根> --report` 看已入账口径的全貌（镜像失步／退休词禁出／锚点失效），再接 `node <skills仓库>/scripts/init-doc-governance.mjs <目标项目根>` 接线、跑目标项目自己的 `tools/check-doc-governance.mjs --root <目标项目根>` 核命名与归位。目标项目若另有文档索引指纹或体积预算门禁，按其 README 登记的命令一并跑。无动作归档不得报告为已完成。`document-surfaces.md` 只生成候选 role，不授权全文读取。
 
     **影响驱动**：先判断“这次改动改变了什么行为”，再判断“哪些文档必须跟着变”。
 
@@ -72,7 +68,7 @@ disable-model-invocation: true
     - 新目标项目需求、设计、计划、执行光标、人工验收和 Phase 明细都必须写入四字中文 `.md`
     - 正文中出现的 `Product-Spec.md`、`DEV-PLAN.md`、`Design-Brief.md`、`plans/CURRENT-EXECUTION.md` 是 legacy 角色名；新目标项目必须解析到 `docs/需求文档.md`、`docs/项目治理/开发计划.md`、`docs/设计简报.md`、`docs/plans/执行光标.md`
     - 任务胶囊目录是可选的单任务上下文容器，不替代 `.vibe-docs.json`；不把不存在的 `会话记录.md` 或胶囊文件提前写入 manifest
-    - 同步后运行 `node <skills仓库>/tools/check-target-doc-names.mjs <目标项目根目录> --require-existing`
+    - 同步后运行 `node <skills仓库>/scripts/check-doc-governance.mjs --root <目标项目根>`：门面 H1 含文件名词、正文不重名、归位与导航双向核对由它判（未接线先用 `node <skills仓库>/scripts/init-doc-governance.mjs <目标项目根>`）
 
     **术语源头优先**：新增或替换术语、口径、变量名映射时，先补 `TERMINOLOGY-AND-NAMING.md`、`Product-Spec.md` 和 `DEV-PLAN.md`，再补 Skill、README 和索引。
 
@@ -94,12 +90,14 @@ disable-model-invocation: true
     ├── SKILL.md
     └── references/
         ├── document-surfaces.md
-        └── markdown-governance.md
+        ├── markdown-governance.md
+        └── caliber-ledger.md
     ```
 
 [按需加载 references]
     - `references/document-surfaces.md`：已确认需要同步 / 审计，需要把行为变化映射到具体持久化文档时读取。
     - `references/markdown-governance.md`：Markdown 治理、分卷、备份、链接、读取或迁移时读取；普通代码 / Skill 文档同步不加载。
+    - `references/caliber-ledger.md`：本批涉及词位 / 数字 / 状态说法的拍板或替换，或审计拿到账本红清单需要判读是否误伤时读取；入账规矩原文在目标项目账本里，不在本页。
 
 [输出风格]
     **语态**：
@@ -138,14 +136,14 @@ disable-model-invocation: true
     **第四步：验证**
     - 检查文档里提到的命令、文件路径、状态文件名是否真实存在
     - 检查 `.vibe-docs.json.manualAcceptance` 指向的文件是否存在；如果记录了 `用户已确认`，必须能看到用户明确确认范围和后续回归触发条件
-    - 检查 `.vibe-docs.json.interfaceContracts` 指向的文件是否存在；如果本轮新增或修改 API route、typed client path、fetch wrapper、service/public entry、server action、IPC / event 或 schema，运行 `node tools/check-api-contracts.mjs .` 或目标项目等价脚本；目标项目配置 `interfaceContractScanner` 时，文档证据需覆盖 scanner roots、event / publicEntry pattern、raw network allowlist 与统一 client 复用边界
-    - 检查启用的任务胶囊是否通过 `node <skills仓库>/tools/init-target-task-context.mjs <目标项目根目录> --check`
+    - 检查 `.vibe-docs.json.interfaceContracts` 指向的文件是否存在；如果本轮新增或修改 API route、typed client path、fetch wrapper、service/public entry、server action、IPC / event 或 schema，运行**目标项目自己的**接口契约门禁（存在则按其 README / 治理文档登记的命令跑），文档证据需覆盖 scanner roots、event / publicEntry pattern、raw network allowlist 与统一 client 复用边界；本包不下发该扫描器，缺失时明确说「未验证」而不是跳过
+    - 检查启用的任务胶囊：`任务状态.json` 与同目录的需求摘录／实现计划／研究记录是否齐全且与本批范围一致（本包不下发胶囊生成器，按 `references/document-surfaces.md` 的胶囊字段清单逐项人工核）
     - 检查 Critical / Important 是否为 `reverified` 或有用户明确 accepted-risk，Minor 是否已修复或明确裁决；检查 Review Receipt 的 diff 范围 / hash 与当前变更一致
     - 检查 target runtime managed block 是否通过 `node <skills仓库>/tools/init-target-runtime.mjs <目标项目根目录> --skills-root <skills仓库> --check`
     - 检查 UI / token / 组件变更是否同步目标项目设计令牌、组件盘点、复审报告、UI 治理报告和 UI 包 README；如执行 UI root 决策或迁移删除，确认已记录候选、取舍、unused 证明和 rollback；如目标项目有 `tools/check-ui-reuse.mjs` 或设计系统复用门禁，运行对应脚本
     - 如新增门禁或脚本，运行对应验证脚本
     - 如改了术语门禁顺序，确认口径为 `review -> minimal-quality -> structural -> terminology -> doc-sync`
-    - 如本次改动涉及术语、口径、命名规则或一致性校验，运行 `bash ./tools/test-terminology-consistency.sh`
+    - 如本次改动涉及术语、口径、命名规则或一致性校验，跑口径账本：`node <skills仓库>/scripts/check-caliber-ledger.mjs --root <目标项目根> --report` 看全貌，`--staged` 口径由目标项目的提交门禁执行（未接线的项目用 `node <skills仓库>/scripts/init-caliber-ledger.mjs <目标项目根>` 接线）；目标项目若另有术语一致性脚本，按其自己的路径跑
     - 记录本次已同步的文档面和残余限制
 
 [信息充足度判断]
@@ -179,10 +177,12 @@ disable-model-invocation: true
         第四步：执行验证
             - 运行相关脚本或最小 smoke test
             - 如改了 Skill、Hook 或主控文档，执行同步脚本
+            - 改动触到已入账口径时跑 `node <skills仓库>/scripts/check-caliber-ledger.mjs --root <目标项目根>`，红则同批补齐镜像，不留「改了真源、镜像还旧」过验收
 
     [工作流程（审计模式）]
-        第零步：文档体积预检
-            - 目标项目存在 `.vibe-docs.json` 时，先运行 `build-target-doc-index.mjs --check`，再运行 `check-lifecycle-doc-budget.mjs <目标根目录> --strict`
+        第零步：漂移预检
+            - 目标项目存在 `.vibe-docs.json` 时，先按 manifest 列出各文档面体积与装载策略；再运行 `node <skills仓库>/scripts/check-caliber-ledger.mjs --root <目标项目根> --report` 拿已入账口径的红清单，运行 `node <skills仓库>/scripts/check-doc-governance.mjs --root <目标项目根>` 拿命名与归位的 error 清单
+            - 目标项目若已接入自己的文档索引指纹或体积预算门禁，按其治理文档登记的命令补跑；本包不下发那些工具
             - 本分发包审计时，检查 `CLAUDE.md`、`AGENTS.md`、`DOC-MAP.md`、`README.md` 是否超出热路径合理体积（单文档 ~6k tokens 报警）
             - 有膨胀文档时：优先建议归档历史 Phase、已完成需求或老版本计划，而不是继续在同一文档里追加
 
@@ -191,16 +191,18 @@ disable-model-invocation: true
             - 从改动证据建立受影响 role 清单，不做无边界全仓遍历
 
         第二步：扫描文档层文件
-            - 调用 resolver 读取 `documentIndex` 与受影响 role 的 selector
+            - 按 `.vibe-docs.json` 的 `documentIndex` 与受影响 role 的 selector 读取
             - 找出缺项、旧命令、旧路径、旧流程
 
         第三步：列出漂移清单
             - 哪些文档落后了
             - 每项漂移对应哪个真实文件变化
+            - 第零步账本与治理检查的红项逐条并入本清单，不得只报「扫过了」
 
         第四步：补文档并验证
             - 优先补最源头的文档
             - 再补用户可见说明
+            - 新拍板且以后还会被再写出来的词位／数字，同批登记进口径账本
             - 运行最小必要验证
 
 [初始化]

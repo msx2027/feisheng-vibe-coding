@@ -1,0 +1,156 @@
+{
+  "schema": "vibe-coding-skills-skill-reference-baseline/v1",
+  "note": "技能正文死引用存量基线（25 处，去重 16 个工具名，2026-10-01 首跑登记）。只兜底「已知但未收口」，新增一律阻断；每条收口后必须删除本条，登记过期同样判红——基线不是永久免检牌。逐项归属的收口法见各条 why。",
+  "entries": [
+    {
+      "rule": "R1",
+      "file": "skills/product/architecture-foundation/SKILL.md",
+      "token": "<skills-root>/tools/architecture-foundation-policy.mjs",
+      "why": "源项目策略资产，从未准入本包。收口法：改为正文自述的判断标准，不指脚本。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/bug-fixer/SKILL.md",
+      "token": "resolve-target-doc-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/design-brief-builder/SKILL.md",
+      "token": "<skills仓库>/tools/check-target-doc-names.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/references/workflow-initialization.md",
+      "token": "<skills-root>/tools/setup-target-hooks.mjs",
+      "why": "源项目钩子安装器，本包对应实现是 install-vibe-hooks 与 init-target-runtime，路径与名字均不符。收口法：改指本包实际入口。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "<skills-root>/tools/init-target-task-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "<skills-root>/tools/render-project-scaffold.sh",
+      "why": "源项目脚手架工具，从未随技能准入本包；正文指令扑空。收口法：改为本包 init-target-runtime / init-doc-governance 可覆盖的动作描述。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "<skills-root>/tools/render-project-scaffold.sh",
+      "why": "源项目脚手架工具，从未随技能准入本包；正文指令扑空。收口法：改为本包 init-target-runtime / init-doc-governance 可覆盖的动作描述。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "<skills-root>/tools/resolve-target-doc-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "<skills仓库>/tools/check-target-doc-names.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "build-target-doc-index.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "check-target-doc-drift.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/dev-builder/SKILL.md",
+      "token": "update-target-task-state.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/dev-planner/SKILL.md",
+      "token": "<skills仓库>/tools/check-target-doc-names.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/dev-planner/SKILL.md",
+      "token": "check-api-contracts.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/dev-planner/SKILL.md",
+      "token": "resolve-target-doc-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R1",
+      "file": "skills/product/product-spec-builder/SKILL.md",
+      "token": "<skills仓库>/tools/check-target-doc-names.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/product-spec-builder/SKILL.md",
+      "token": "check-target-doc-names.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/product-spec-builder/templates/product-spec-template.md",
+      "token": "check-api-contracts.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/release-builder/SKILL.md",
+      "token": "resolve-target-doc-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/rule-harvester/SKILL.md",
+      "token": "check-constitution-rules.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/rule-harvester/SKILL.md",
+      "token": "constitution-rules.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/product/test-automation/SKILL.md",
+      "token": "resolve-target-doc-context.mjs",
+      "why": "源项目 .vibe-docs.json 生命周期文档工具族：快照里有但从未过本包来源与准入门禁，正文却仍教模型运行它。收口法与 doc-sync-guardian 同批（改指本包已有工具，或降为「目标项目若有则按其路径跑」的条件句）。"
+    },
+    {
+      "rule": "R2",
+      "file": "skills/product/ui-system-guardian/references/audit-rules.md",
+      "token": "tools/check-ui-reuse.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R2",
+      "file": "skills/product/ui-system-guardian/SKILL.md",
+      "token": "tools/check-ui-reuse.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    },
+    {
+      "rule": "R3",
+      "file": "skills/ui/ui-ux-pro-max/references/professional-ui-checklist.md",
+      "token": "check-ui-reuse.mjs",
+      "why": "按本包口径属目标项目自有工具，本包不拥有也不该拥有；但被写在依赖块或裸脚本名位置＝假依赖。收口法：改写为条件句并去掉包内路径形式。"
+    }
+  ]
+}

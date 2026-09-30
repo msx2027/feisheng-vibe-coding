@@ -19,6 +19,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# 子进程 stderr 是门禁的归因信源（口径账本与死引用检查把失败明细写在 stderr），不能被宿主的
+# 「原生命令错误即终止」偏好变成假红中断；此处显式取脚本编写时的默认语义，两版 PowerShell 一致。
+$PSNativeCommandUseErrorActionPreference = $false
 Set-StrictMode -Version Latest
 
 # 单入口验证器：一条命令跑完全部门禁 + 生成物新鲜度校验。
@@ -40,6 +43,9 @@ Set-StrictMode -Version Latest
 #   - Vibe Hook 适配器安全契约（v2：纠错信号采集两事件启用 + Digest 消化标记）
 #   - collector 路径归属单测（宿主证据归属逻辑回归门；会向 gitignore 的 _smoke/ 追加测试日志）
 #   - 提交关卡清单自检（scripts/githooks/pre-commit 检查清单「声明 == 实现」，2026-09-25 接线）
+#   - 口径账本执行器单测（scripts/check-caliber-ledger.mjs 四类断言行为契约，2026-10-01 接线）
+#   - 口径账本断言（本包自食：tools/caliber-ledger.json 禁出／镜像同步／真源锚点全量跑）
+#   - 技能正文死引用棘轮（scripts/check-skill-references.mjs：正文指向本包不存在的工具，新增即阻断）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
 #   - 文档数字与实测一致（README / 交接文档自称「catalog 实测」的计数逐条重算比对，2026-09-28 接线）
 #   - 文档步数与实际步数一致（末步自计：README 徽章与正文、交接文档全部「默认 N 步 / 全开 N 步」自称不得靠人抄）
@@ -90,6 +96,26 @@ function Invoke-Child {
     $global:LASTEXITCODE = 0
     $output = & $Script @Arguments
     return [pscustomobject]@{ Output = @($output); ExitCode = $LASTEXITCODE }
+}
+
+function Invoke-Node {
+    param(
+        [Parameter(Mandatory = $true)][string]$Script,
+        [string[]]$Arguments = @()
+    )
+    # Windows PowerShell 5.1 把 `node … 2>&1` 的 stderr 包成 ErrorRecord，而本脚本顶部是
+    # `$ErrorActionPreference = 'Stop'`：检查器**正当**的进度／存量提示行（如棘轮的已登记命中）
+    # 会让整条管道抛错，绿门被报成红门且 Detail 指向一条正常输出。CI 用 pwsh 看不到这个假失败，
+    # 但本脚本头部声明 5.1 可跑同一套，故此处临时降 Continue 收全两路输出，成败只认退出码。
+    $prevPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $global:LASTEXITCODE = 0
+        $output = & node $Script @Arguments 2>&1 | ForEach-Object { [string]$_ }
+        return [pscustomobject]@{ Output = @($output); ExitCode = $LASTEXITCODE }
+    } finally {
+        $ErrorActionPreference = $prevPreference
+    }
 }
 
 try {
@@ -292,8 +318,8 @@ try {
     # 1c-2) 一等副本与来源快照一致性（Matt 侧补充覆盖）
     #     VIBE-IMPORTS.json 有逐文件白名单，1c 直接用它；MATT-IMPORT.json（v2）只登记快照根、文件数与
     #     revision 来源，没有逐文件映射，所以 matt 副本此前**没有**副本↔快照覆盖（只被 catalog 的
-    #     记录级自洽校验间接覆盖一个文件）。这里用来源事实快照 SKILL-INVENTORY.json 把副本记录接回上游路径：
-    #     inventory 行按 (source, sha256) 唯一命中 → 上游目录 → 快照文件 = <snapshotRoot>/<上游相对路径>。
+    #     记录级自洽校验间接覆盖一个文件）。这里用来源事实快照 SKILL-INVENTORY.json 把副本记录接回源项目路径：
+    #     inventory 行按 (source, sha256) 唯一命中 → 源项目目录 → 快照文件 = <snapshotRoot>/<源项目相对路径>。
     #     语义与 1c 完全一致：已登记的本地补丁合法，未登记的偏差失败，登记过期（副本不再偏离）也失败。
     try {
         $mattImportRecordPath = Join-Path $repoRoot 'provenance/MATT-IMPORT.json'
@@ -331,7 +357,7 @@ try {
                 }
                 $upstreamCandidates = @($inventoryBySourceSha[$inventoryKey])
                 if ($upstreamCandidates.Count -ne 1) {
-                    $mattFailures += ($mattRecordPath + ' (无法唯一确定上游路径，命中 ' + $upstreamCandidates.Count + ' 条)')
+                    $mattFailures += ($mattRecordPath + ' (无法唯一确定源项目路径，命中 ' + $upstreamCandidates.Count + ' 条)')
                     continue
                 }
                 $upstreamDirectory = [string](Split-Path -Path $upstreamCandidates[0] -Parent)
@@ -479,7 +505,7 @@ try {
     #     自导入起真实内容增长只有 SKILL.md +67 字节，其余超标来自 governance/sliver-core 整树以 CRLF
     #     落盘（同一内容 LF 副本实测 D0=66839 合规、有界 D1=74049）。
     #     2026-09-28 换行归一批已把该树 220 个文件落地为 LF（内容零差异，登记经 annotation 通道重录），
-    #     本步从此守的是「不得再退回 CRLF」；d0 预算同时撤销上一批的借道上调，回到上游原值 67000。
+    #     本步从此守的是「不得再退回 CRLF」；d0 预算同时撤销上一批的借道上调，回到源项目原值 67000。
     #     本步把这条不变量变成机器门；缺 python3 直接失败，不静默跳过。
     try {
         $backboneRoot = Join-Path $repoRoot 'governance/sliver-core'
@@ -626,6 +652,38 @@ try {
         Add-Result -Step '提交关卡清单自检' -Passed $true
     } catch {
         Add-Result -Step '提交关卡清单自检' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5e) 口径账本执行器单测（scripts/check-caliber-ledger.mjs 的行为契约回归门，2026-10-01 接线）
+    #     覆盖：四类断言各自的红/绿、缺锚判畸形不退化恒绿、glob 与正则两种方言、CRLF 无锚禁出、
+    #     --staged 触达口径（改名含旧名）、非仓库目录降级不静默、--report 只汇总不阻断但坏账本仍非零。
+    try {
+        $caliberTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-check-caliber-ledger.mjs')
+        if ($caliberTest.ExitCode -ne 0) { throw ('口径账本执行器单测失败（exit ' + $caliberTest.ExitCode + '）：' + (($caliberTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
+        Add-Result -Step '口径账本执行器单测' -Passed $true -Detail (($caliberTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; ')
+    } catch {
+        Add-Result -Step '口径账本执行器单测' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5f) 口径账本断言·本包自食（tools/caliber-ledger.json 的禁出／镜像同步／真源锚点全量跑）
+    #     执行器有单测不等于账本绿：条目会被改真源的那批忘掉同步，本步把「本包吃自己的工具」变成机器门。
+    try {
+        $caliber = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-caliber-ledger.mjs') -Arguments @('--root', $repoRoot)
+        if ($caliber.ExitCode -ne 0) { throw ('口径账本断言未通过：' + (($caliber.Output | Where-Object { $_ -match '\[CAL-' } | Select-Object -First 3) -join '; ')) }
+        Add-Result -Step '口径账本断言（本包自食）' -Passed $true -Detail ($caliber.Output -join '; ')
+    } catch {
+        Add-Result -Step '口径账本断言（本包自食）' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5g) 技能正文死引用棘轮（scripts/check-skill-references.mjs：正文指向本包不存在的工具即红）
+    #     动机：doc-sync-guardian 曾把 9 处快照里的工具当本包工具下发，21 步老门一律看不见。
+    #     棘轮口径：新增未登记命中阻断；登记过的存量必须仍出现（基线不是永久免检牌），逐条带收口法。
+    try {
+        $refCheck = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-skill-references.mjs') -Arguments @('--root', $repoRoot)
+        if ($refCheck.ExitCode -ne 0) { throw ('技能正文死引用检查未通过：' + (($refCheck.Output | Where-Object { $_ -match 'R[123]' } | Select-Object -First 3) -join '; ')) }
+        Add-Result -Step '技能正文死引用棘轮' -Passed $true -Detail (($refCheck.Output | Select-Object -Last 1))
+    } catch {
+        Add-Result -Step '技能正文死引用棘轮' -Passed $false -Detail $_.Exception.Message
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）

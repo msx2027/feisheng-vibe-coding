@@ -41,7 +41,7 @@
   不得为「统一排版」批量改写：门禁比对的是登记在 `provenance/` 里的逐文件 sha256 与树摘要，
   改写行尾等于篡改已删除源项目的唯一可对账副本，且会让副本对账步（`verify.ps1` 的
   `sourceSha256` 比对）整批判红。当前实测分布：`sources/vibe-coding-skills` 491 LF / 7 CRLF / 54 无行尾、
-  `sources/mattpocock-skills` 136 全 CRLF、`skills` 281 LF / 54 CRLF / 54 无行尾——CRLF 是上游原样，不是漂移。
+  `sources/mattpocock-skills` 136 全 CRLF、`skills` 281 LF / 54 CRLF / 54 无行尾——CRLF 是源项目原样，不是漂移。
 - 唯一例外已于 **2026-09-28 落地**：`governance/sliver-core/**` 整树归一为 LF（220 文件），
   依据是同一内容 A/B 实测证明加载体积预算超标由 CRLF 造成、剥离后内容零差异，
   且该树的登记可经 `provenance/PROVENANCE-INTEGRITY.json` 的 annotation 通道重录自证。

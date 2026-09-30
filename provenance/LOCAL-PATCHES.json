@@ -171,7 +171,7 @@
       "snapshot": "runtime-import",
       "appliedAt": "2026-09-12",
       "sourceRevision": "逐文件登记：vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b（见 files[]）",
-      "change": "全链路审计批次：35 个已接入 SKILL.md 的 frontmatter description 门控短语把总入口写成已退役别名 vibe-coding-skills，改名为唯一公开入口 feisheng-vibe-coding（每文件 1 行）；并把已退役能力 shape 的 6 处 /shape 命令引用改为已接入等价物——checker/audit 与 checker/critique 的命令清单移除 /shape，impeccable/reference/craft.md 的流程步骤改为 /design-brief-builder。不改变触发语义（仍仅显式调用/控制面路由）、不新增能力、不放宽任何门禁。 2026-09-18 追加：product-spec-builder/SKILL.md 并入 anti-bloat 计划边界改动（核心流程摘要需求文档必备节清单加入非目标），patchedSha256 已随之更新。 2026-09-30 追加：项目统一改名为唯一称呼 vibe-coding-skills——总入口名与门控短语、状态目录 .feisheng→.vibe-coding-skills、叙事「上游」→「源项目」，patchedSha256 已随之重录。 2026-09-30 追加二：改名回唯一称呼 vibe-coding-skills 后，部分门控短语文件与快照重新字节一致，其补丁登记按「无偏离不登记」剪除；同批 document-surfaces.md 因「上游真源→真源」措辞改写新入登记。",
+      "change": "全链路审计批次：35 个已接入 SKILL.md 的 frontmatter description 门控短语把总入口写成已退役别名 vibe-coding-skills，改名为唯一公开入口 feisheng-vibe-coding（每文件 1 行）；并把已退役能力 shape 的 6 处 /shape 命令引用改为已接入等价物——checker/audit 与 checker/critique 的命令清单移除 /shape，impeccable/reference/craft.md 的流程步骤改为 /design-brief-builder。不改变触发语义（仍仅显式调用/控制面路由）、不新增能力、不放宽任何门禁。 2026-09-18 追加：product-spec-builder/SKILL.md 并入 anti-bloat 计划边界改动（核心流程摘要需求文档必备节清单加入非目标），patchedSha256 已随之更新。 2026-09-30 追加：项目统一改名为唯一称呼 vibe-coding-skills——总入口名与门控短语、状态目录 .feisheng→.vibe-coding-skills、叙事「上游」→「源项目」，patchedSha256 已随之重录。 2026-09-30 追加二：改名回唯一称呼 vibe-coding-skills 后，部分门控短语文件与快照重新字节一致，其补丁登记按「无偏离不登记」剪除；同批 document-surfaces.md 因「上游真源→真源」措辞改写新入登记。 2026-10-01 追加（口径账本与死引用批）：doc-sync-guardian 是三棵保真树里第一批被新门「技能正文死引用棘轮」抓出的技能——正文与 references 把源项目快照里的文档生命周期工具（resolver、build-target-doc-index、check-target-doc-drift、check-lifecycle-doc-budget、check-target-doc-names、check-api-contracts、test-terminology-consistency、check-markdown-governance、init-target-task-context、review-profiles 共 10 个本包不存在的工具名）当本包工具下发。本批把它们改指本包实际存在的工具（check-doc-governance、check-caliber-ledger、init-caliber-ledger、init-target-runtime）或降为「目标项目若有则按其路径跑」的条件句，并新增 references/caliber-ledger.md（全新文件，快照无对应物，不经补丁登记，同 pencil-pitfalls 先例）。三条登记项 patchedSha256 为重算值（linesChanged＝对快照的加＋删行数）：SKILL.md 22 加 20 删＝42、document-surfaces.md 2 加 1 删＝3（口径账本面一行＋原「上游真源」行改写）、markdown-governance.md 2 加 2 删＝4（本包检查器名 + 精确读取句去 resolver）；markdown-governance.md 此前与快照零偏离故从未登记，本批首次偏离即首次登记。 2026-10-01 追加二（两路交叉复核补漏）：复核批 A（机器面）查出执行器有四种「无声摘门」全绿放行（include 命中 0 文件、整块 scans 删掉、键名写错、entries 清空），复核批 B（登记面）查出本批收口不彻底——SKILL.md 依赖块仍留着只存在于快照的 `skills/engineering/code-review/references/review-profiles.md`（code-review 的 bundle 只有 SKILL.md，棘轮按设计不判 .md 路径故 0 命中＝掩盖）。已修：执行器对未知键／无断言面／空跑 glob 一律判畸形且 --report 也非零，glob 归一化 `./` 与反斜杠两种写法，单测由 30 增至 36；提交关卡自检把「口径账本在列」列为必需检查（原先只钉密钥护栏，实测删掉整行仍报全绿）；SKILL.md 该死依赖行删除并重录 sha；账本 include 补 `tools/**` 与 CAL-001 的 `.github/**`，并把 gitleaks.toml 与 legal/fonts 类「指真实外部上游」的正当用法按路径登记豁免（legal／tasks／evidence／provenance 属时点登记面，不覆盖是政策，旧名处只就地加括注指向现行名真源、不改史）。",
       "reason": "宿主可见的 description 是触发判断的输入：指向包内不存在的入口名（vibe-coding-skills 已 retired-alias，不在 bundle）会把可显式调用的技能判为不可达；/shape 指向 retired-unreviewed 记录，运行时正文引用会引导模型调用包内不存在的命令。28c8089 清理批的残留扫描把与英文单词同形的 id 剔除在扫描外，/shape 命令形态恰恰漏网；本次以「全量 retired id 的 /id 命令形态、剔除 sources/ 快照路径」为扫描口径补齐，并固化为门禁（scripts/validate-retired-references.ps1）。",
       "evidence": "evidence/20260912-chain-audit-and-closure.md",
       "verification": "verify.ps1 全量门禁复跑全绿（catalog 自洽、1b runtime include、1c/1c-2 副本一致性均消费本登记）；退役引用扫描 0 残留",
@@ -205,8 +205,8 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/doc-sync-guardian/SKILL.md",
           "sourceRevision": "635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "5bd7272fa432f93ca2bc23a57795fc1896d1dbbf962fded79239fac0f860f53c",
-          "patchedSha256": "3ef6ea22dc88d16127f8490244c3bcb5b52a76f80589879c30a6e8727cd1c9d6",
-          "linesChanged": 1
+          "patchedSha256": "9c3afab48684385eee7135a4dedc2a84b89dd1358d91eeb47eb03f6b7b70156d",
+          "linesChanged": 42
         },
         {
           "path": "skills/product/product-spec-builder/SKILL.md",
@@ -237,8 +237,16 @@
           "snapshotPath": "sources/vibe-coding-skills/skills/doc-sync-guardian/references/document-surfaces.md",
           "sourceRevision": "vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b",
           "originalSha256": "c0b0a3104fb300340cbe280fa8105f4c26b4e8f1dcff229e19171352eab9ab4e",
-          "patchedSha256": "a0fc2f0ed4dd018fa5541c73e9201546badb10e6c2a179177b67bd4b5f89de5c",
-          "linesChanged": 1
+          "patchedSha256": "5672a52704f86b52f1936cb9c26624c6fda50860ef7c1974a43d5e10aabae004",
+          "linesChanged": 3
+        },
+        {
+          "path": "skills/product/doc-sync-guardian/references/markdown-governance.md",
+          "snapshotPath": "sources/vibe-coding-skills/skills/doc-sync-guardian/references/markdown-governance.md",
+          "sourceRevision": "vibe-coding-skills 635c54f9abb091c1293de346407663ad6af0862b",
+          "originalSha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc",
+          "patchedSha256": "5721e9cfafd64d46b107ffdf3d5492d90f1eaa8fe72810e91f31a842e9181e2e",
+          "linesChanged": 4
         }
       ]
     },

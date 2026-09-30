@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-09-29T17:33:09.8780660Z",
+  "generatedAt": "2026-09-30T19:25:19.3114363Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -1044,15 +1044,19 @@
         "files": [
           {
             "path": "skills/product/doc-sync-guardian/SKILL.md",
-            "sha256": "3ef6ea22dc88d16127f8490244c3bcb5b52a76f80589879c30a6e8727cd1c9d6"
+            "sha256": "9c3afab48684385eee7135a4dedc2a84b89dd1358d91eeb47eb03f6b7b70156d"
+          },
+          {
+            "path": "skills/product/doc-sync-guardian/references/caliber-ledger.md",
+            "sha256": "2425c432d1f37a2a3eeabc0e4aaede61204d36e1b4f557ceb616cf5e3bcd579a"
           },
           {
             "path": "skills/product/doc-sync-guardian/references/document-surfaces.md",
-            "sha256": "a0fc2f0ed4dd018fa5541c73e9201546badb10e6c2a179177b67bd4b5f89de5c"
+            "sha256": "5672a52704f86b52f1936cb9c26624c6fda50860ef7c1974a43d5e10aabae004"
           },
           {
             "path": "skills/product/doc-sync-guardian/references/markdown-governance.md",
-            "sha256": "44ca6faa6400e761227cdc1f3bf2648989e57b8d455efd5b8c2cc5e1ccdbeefc"
+            "sha256": "5721e9cfafd64d46b107ffdf3d5492d90f1eaa8fe72810e91f31a842e9181e2e"
           }
         ],
         "excluded": []

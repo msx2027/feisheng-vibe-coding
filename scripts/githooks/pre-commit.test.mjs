@@ -3,7 +3,7 @@
 // 解析 scripts/githooks/pre-commit 的「检查清单」声明块，断言：
 //   ① 清单非空（空清单 = 提交关卡形同虚设）；
 //   ② 每条声明引用的脚本文件真实存在（改名/挪位后清单不漂成假红）；
-//   ③ 必需检查在列（密钥泄漏护栏）；
+//   ③ 必需检查在列（密钥泄漏护栏 + 口径账本断言）；
 //   ④ 清单行与 run_check 定义均无 `|| true` / `|| exit 0` 类放行后缀（fail-closed 不变量）。
 // 由两处消费：scripts/githooks/pre-commit 清单第 2 项（提交期）与
 // verify.ps1 步骤「提交关卡清单自检」（总验期）。
@@ -53,8 +53,16 @@ for (const line of declared) {
   }
 }
 
-if (!scriptTokens.some((token) => token.includes('secret-scan.mjs'))) {
-  failures.push('必需检查缺失：密钥泄漏护栏（secret-scan.mjs）不在清单中');
+const requiredChecks = [
+  { token: 'secret-scan.mjs', label: '密钥泄漏护栏' },
+  // 2026-10-01 交叉复核补：原先只钉 secret-scan，实测把清单第 3 行口径账本整条删掉，
+  // 本自检仍报「N 项声明全部可实现且 fail-closed」exit 0——提交门可以被无声摘走。
+  { token: 'check-caliber-ledger.mjs', label: '口径账本断言（同一事实的多副本）' },
+];
+for (const need of requiredChecks) {
+  if (!scriptTokens.some((token) => token.includes(need.token))) {
+    failures.push(`必需检查缺失：${need.label}（${need.token}）不在清单中`);
+  }
 }
 
 if (!/run_check\(\)\s*\{/.test(text)) {

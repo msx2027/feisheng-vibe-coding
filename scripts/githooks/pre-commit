@@ -15,6 +15,9 @@
 #    两档分治——高置信命中阻断提交且不进基线，低置信警告一次并进基线（棘轮）；
 #    扫描器异常或 git 列不出暂存区 = 阻断（未验证 ≠ 干净）。
 # 2) 提交关卡清单自检：解析本文件清单块，断言声明与实现一致（防清单漂移成假绿/假红）。
+# 3) 口径账本断言（scripts/check-caliber-ledger.mjs --staged）：同一事实的多副本禁出／镜像同步／
+#    真源锚点三类常驻断言全量跑（毫秒级），另按暂存面列出触达条目＝「改真源须同批同步镜像」的清单。
+#    账本 tools/caliber-ledger.json 是这些口径的唯一登记处；钩子只阻断＋列清单，不代改文件。
 #
 # 逃生门：git commit --no-verify（须在提交说明注明原因）。
 root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
@@ -44,3 +47,4 @@ run_check() {
 # ---- 检查清单（单一真源，测试解析本块；每行格式：run_check "<标签>" node <脚本> [参数]）----
 run_check "密钥泄漏护栏（高置信命中即阻断）" node "$root/skills/product/hotspot-governor/tools/secret-scan.mjs" "$root" --staged
 run_check "提交关卡清单自检（声明与实现一致）" node "$root/scripts/githooks/pre-commit.test.mjs" "$root"
+run_check "口径账本断言（禁出／镜像同步／锚点自检）" node "$root/scripts/check-caliber-ledger.mjs" --root "$root" --staged

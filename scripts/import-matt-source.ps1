@@ -15,7 +15,7 @@ Set-StrictMode -Version Latest
 #   - 工作树已改动的文件（源作者未提交的改动）：**不采用工作树内容**（意图不可证），
 #     改用**已提交 revision** 的 blob，并归一化到快照统一的换行约定。
 #     依据：实测 `git blob + LF->CRLF == 源工作树`（抽样 6/6 逐字节相等）。
-#   - canonical id 由本仓库决定，不依赖上游是否完成改名。
+#   - canonical id 由本仓库决定，不依赖源项目是否完成改名。
 
 $integrityModule = Join-Path $PSScriptRoot 'provenance-integrity.ps1'
 if (-not (Test-Path -LiteralPath $integrityModule -PathType Leaf)) {

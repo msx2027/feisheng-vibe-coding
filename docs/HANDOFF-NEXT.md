@@ -17,7 +17,7 @@
 | D1 | **单一入口**：宿主里由我们负责的技能**只有一个** | 宿主技能根里只有 `vibe-coding-skills` 一个我们的目录；无重复/旧入口 |
 | D2 | **自然语言能触发**：用户用中文说一句真实需求，宿主会加载我们的入口 | 全新会话实测（见 9.2），有可复现的命令与输出留存为证据 |
 | D3 | **能自动路由到对应能力**：入口按控制面选到正确路由，并实际用上对应技能 | 同上会话中可观察到「选了哪个路由 / 调用了哪个 provider」；不是推断 |
-| D4 | **门禁全绿** | `verify.ps1`（默认 21 步，2026-09-28 口径；全开 23 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
+| D4 | **门禁全绿** | `verify.ps1`（默认 24 步，2026-10-01 口径；全开 26 步）+ 可选步全绿；**fresh clone** 下同样全绿（`autocrlf` true/false × pwsh/PS5.1） |
 | D5 | **无回归** | 路由绑定、投影、NOTICE、来源快照完整性、保真树换行、控制面静态契约评测全部保持通过 |
 | D6 | **诚实** | 未验证项明确标注 `UNVERIFIED`，不用推断代替证据；不声称宿主 trust / Hook 已生效 |
 
@@ -32,12 +32,12 @@
 - 仓库：`F:/skiils/vibe-coding-skills`，分支 `main`，工作树干净，最新提交见 git log（本批末为证据提交）
 - 远端：`https://github.com/msx2027/vibe-coding-skills`（**public**，2026-09-28 经 `gh repo view` 核实；此前本行误记为 private——仓库公开，任何写入前按公开仓库的隐私标准自查）；`origin` 已挂，push 即触发 release-gate CI
 - 源项目：**本体与归档 zip 均已删除**（快照与 zip 校验通过后，zip 由 owner 于 2026-09-12 裁决删除，不留冷存副本）；`sources/` 快照为唯一内容真源与唯一可对账副本
-- 门禁：`verify.ps1` 默认 **21 步**（2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；**同日换行归一批已把 `governance/sliver-core` 全部 220 个保真文件由 CRLF 恢复为 LF**（内容零差异，2,525,899→2,474,202 字节，树摘要 35a40ec4b9aa0381→f8f7a8171a30ddd3，`d0_max_bytes` 撤销回源项目原值 67000 实测 66,839 合规、`bounded_d1_max_bytes` 保留 75000 因实测 74,049 仍超 49；该树自带 110 条 python 契约测试在统一 UTF-8 环境下 failures 17→2，残留 2 条同因基线 Git 对象 `29695fe0…` 随源项目删除不可得、与换行无关，故该套件仍不可接入 CI；数字与落地清单见 evidence/20260928-eol-lf-rehearsal.md 与 evidence/20260928-eol-lf-landing.md）；此前 12/13/15/17/19 均为历史口径——步数自数字对账批起由末步自计核对，写错即红；**同日附带修正把该自计门的锚点从 README 两处扩到「README 两处 + 交接文档全部『默认 N 步』与『全开 N 步』」**，命中数为 0 同样判红；扩锚点的原因是当场查出交接文档另有两处停在 2026-09-12 的 15/17 口径（入口速查与新会话起点清单），而原门抓不到；同批裁定**另两棵保真树不跟改行尾**（`sources/**` 与 `skills/**` 保持源项目原样，收益为零而代价是不可逆的快照失真，实测依据见 evidence/20260928-eol-lf-landing.md §8-1，规则已写入根 `AGENTS.md`「保真树行尾规则」一节））；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **23** 步）
-- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **452** 文件（catalog 重算，2026-09-29 实测）
+- 门禁：`verify.ps1` 默认 **24 步**（2026-10-01 口径账本批新增「口径账本执行器单测」「口径账本断言（本包自食）」「技能正文死引用棘轮」三步使 21→24——同一事实的多副本此前没有任何常驻断言，2026-09-30 统一改名批只能事后人工全仓审计且当场漏掉 `AGENTS.md` 一处；而负责防漂移的技能自己下发着快照里才有的脚本，21 步老门一律看不见。前三步分工：执行器四类断言的行为契约（36 单测，缺锚必须判畸形而非恒绿；交叉复核补上的三种「无声摘门」同样判红——include 面命中 0 文件而目录存在、键名写错如 `mirror` 少个 s、条目只有 truth 而既无 mirrors 又无 scans）、本包吃自己的工具（`tools/caliber-ledger.json` 四条常驻断言：唯一称呼／现行措辞「源项目」／状态目录名／源项目归档终态）、死引用棘轮（新增未登记命中即阻断，存量 25 处逐条带收口法，基线登记过期同样判红），详见 evidence/20261001-caliber-ledger-and-dead-reference-ratchet.md；2026-09-28 数字对账批新增「文档数字与实测一致」与「文档步数与实际步数一致」两步使 17→19；同日规范化运行时批再增「入库生成物为 pwsh 7 排版」一步使 19→20——生成物只许用 PowerShell 7 落盘，5.1 排版体积近乎翻倍而语义比对抓不到，实测 158,273 字节对 289,370 字节；同日体积预算批再增「控制面静态契约评测」一步使 20→21——`governance/sliver-core/scripts/evaluate_execution_backbone.py` 是开发执行 D0 / 有界 D1 加载体积预算的唯一 owner，却从未被任何关卡调用（verify.ps1 与 CI 都没有 python 步骤），2026-09-10 导入后无人复查；实测超标主因是这棵树以 CRLF 落盘（同一内容 LF 副本 D0=66839 合规），真实内容增长只有 SKILL.md +67 字节，详见 evidence/20260928-loading-budget-and-eol-root-cause.md；**同日换行归一批已把 `governance/sliver-core` 全部 220 个保真文件由 CRLF 恢复为 LF**（内容零差异，2,525,899→2,474,202 字节，树摘要 35a40ec4b9aa0381→f8f7a8171a30ddd3，`d0_max_bytes` 撤销回源项目原值 67000 实测 66,839 合规、`bounded_d1_max_bytes` 保留 75000 因实测 74,049 仍超 49；该树自带 110 条 python 契约测试在统一 UTF-8 环境下 failures 17→2，残留 2 条同因基线 Git 对象 `29695fe0…` 随源项目删除不可得、与换行无关，故该套件仍不可接入 CI；数字与落地清单见 evidence/20260928-eol-lf-rehearsal.md 与 evidence/20260928-eol-lf-landing.md）；此前 12/13/15/17/19/20/21 均为历史口径——步数自数字对账批起由末步自计核对，写错即红；**同日附带修正把该自计门的锚点从 README 两处扩到「README 两处 + 交接文档全部『默认 N 步』与『全开 N 步』」**，命中数为 0 同样判红；扩锚点的原因是当场查出交接文档另有两处停在 2026-09-12 的 15/17 口径（入口速查与新会话起点清单），而原门抓不到；同批裁定**另两棵保真树不跟改行尾**（`sources/**` 与 `skills/**` 保持源项目原样，收益为零而代价是不可逆的快照失真，实测依据见 evidence/20260928-eol-lf-landing.md §8-1，规则已写入根 `AGENTS.md`「保真树行尾规则」一节））；`-IncludeHostEvidence`（宿主证据门）与 `-IncludePackage`（发布包）各加 1 步（全开 **26** 步）
+- 分类：**82 条记录**，能力定编收口（2026-09-11）：**52 条 runtime 已接入**（控制面 1 + matt 13 + vibe 38）/**23 条 retired**/**7 条排除或兼容**；runtime bundle 共 **453** 文件（catalog 重算，2026-10-01 实测）
 - 路由：22 条主路由 / 31 个 operation / **8 个 lens**（`lens-catalog` 实测）
 - 路由绑定：**38/38**（每条已接入技能在路由 owner 里唯一命中，门禁步骤 `3b)` 强制）
 - 控制面包：**75 文件**（9 core_files + 44 references + 22 assets）
-- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 是它的 junction）**112 条**（2026-09-11 退役 29+35=64 个源仓库链接后：三源链接清零），其中我们的包 `vibe-coding-skills` **454 文件**（宿主中性投影，含控制面 + 全部 51 个技能）。口径说明：**452** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**454** = 部署态 = 452 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
+- 宿主（本机）：共享根 `F:\skiils\_adapters\shared\skills`（`~/.claude/skills` 与 `~/.agents/skills` 都是它的 junction）**143 条**（2026-10-01 实测；112 条是 2026-09-11 定编批的历史时点，指退役 29+35=64 个源仓库链接后的状态，此后新增技能未回写该数）。**本机宿主不是投影安装位**：共享根里的 `vibe-coding-skills` 实测是**一条回指仓库根 `F:\skiils\vibe-coding-skills` 的 junction**（无 `shared-projection-manifest.json`，穿透见 1882 个文件＝仓库工作树本体），所以宿主读到的永远是仓库现状，「等重装投影才生效」这类待办在本机不成立。投影形态本身另测：把安装根指向一个实体目录跑 `install-runtime-projection.ps1 -Force`，得到 `vibe-coding-skills` **455 文件**（DRY-RUN 与 INSTALLED 双跑均 `validated=true`；装后 `doc-sync-guardian/SKILL.md` 哈希与仓内全等、`references/caliber-ledger.md` 在场、被删的那条死依赖不在场——即内容已是最新，此前挂在交接文档里的「宿主内容待再刷」是误判，已作废）。同一次核查还暴露一条真实危险：拿默认根 `-InstallRoot ~/.claude/skills` 跑 `-Force`，安装位正是那条回指仓库的 junction，原脚本的下一步就是 `Remove-Item -Recurse`——放行等于删掉仓库本体连同未提交工作树；当场拦住它的是「目标必须带本仓库投影 manifest 标记」这道既有门，同批另补一道重解析点门（`Assert-PhysicalDirectory`，判 `Attributes -band ReparsePoint`，安装与卸载两路都过），使这类位置在任何 manifest 状态下都 fail-closed。口径说明：**453** = catalog 登记的 runtime bundle 文件数（逐文件 sha256 门禁对象）；**455** = 部署态 = 453 + 根入口 `SKILL.md` + `shared-projection-manifest.json`（仅存在于安装位）。两数并存不是漂移；自 2026-09-28 起这两个数连同投影实测总数由「文档数字与实测一致」步重算强制，历史值 420/422（2026-09-12 口径）与 README 历史值 432（2026-09-18 口径）已作废
 - 宿主触发实测（2026-09-11）：纯中文需求首动作即调用入口；「立项」路由全链路冒烟通过（问题库/模板接管新手访谈）；Codex 注入含根入口 + 控制面 + 38 个技能嵌套条目
 - Hook 状态（2026-09-11 治理对齐批口径）：**纠错信号采集面已启用**（SessionStart 只读待消化提醒 / UserPromptSubmit 纠错采集 / runner `-Mode Digest` 消化标记）；沉淀消费技能（三件套）未接入，不声称完整沉淀闭环；治理门禁事件（PreToolUse/PostToolUse/Stop）保持禁用归控制面；宿主 fresh-session 冒烟无仓库内留痕物，维持 `UNVERIFIED`
 - 存量：`evidence/` 44、`tasks/` 38、`scripts/` 24
@@ -50,14 +50,14 @@
 
 把三个**只读**来源项目统一成一个项目级入口，同时保留各自必要的分发边界：
 
-| 来源 | 归档 zip（2026-09-11 冷存） | 角色 | 状态 |
+| 来源 | 归档 zip 终态 | 角色 | 状态 |
 |---|---|---|---|
 | `sliver-vibe-coding` | zip 已删除（owner 裁决 2026-09-12） | 控制面：路由、任务深度、风险、授权、真源、测试、验收 | 已快照导入 `governance/sliver-core/`（220 文件） |
 | `vibe-coding-skills` | zip 已删除（owner 裁决 2026-09-12） | 产品/UI/专项 checker | 已快照（553 文件），46 条登记 |
 | `mattpocock-skills` | zip 已删除（owner 裁决 2026-09-12） | 工程原语（TDD、调试、领域建模、模块设计、review） | 已快照（136 文件），35 条登记 |
 
 **源项目本体已于 2026-09-11 归档后删除**（三个 zip 逐文件 sha256 + CRC 全等校验通过，见
-`evidence/20260911-source-archive-and-ci.md`）。归档 zip 是只读历史，不参与迁移；
+`evidence/20260911-source-archive-and-ci.md`）。归档 zip 亦已由 owner 于 2026-09-12 裁决删除，不留冷存副本；
 **仓库内 `sources/` 快照是唯一内容真源**（`governance/sliver-core/` + `sources/vibe-coding-skills` +
 `sources/mattpocock-skills`，逐文件 sha256 由 `verify.ps1` 步骤 3 强制自证）。
 
@@ -112,18 +112,19 @@
   docs/CAPABILITY-INDEX.md
   provenance/PROVENANCE-INTEGRITY.json
 
-门禁（scripts/verify.ps1，单入口；默认 21 步，可选步另计；12/13/15/17/19/20 步为历史口径）
+门禁（scripts/verify.ps1，单入口；默认 24 步，可选步另计；12/13/15/17/19/20/21 步为历史口径）
   1 catalog 同步 · 1a 入库生成物为 pwsh 7 排版（2026-09-28 新增） · 1b runtime include 内容完整性 · 1c 导入副本一致性 · 1d 保真树换行 · 1e 控制面静态契约评测（2026-09-28 新增）
   2 capability index 新鲜度 · 3 来源快照完整性 · 3b 路由绑定 · 4 NOTICE
   5 Vibe Hook 适配器安全契约（采集面 + Digest）
+  5c collector 路径归属单测 · 5d 提交关卡清单自检 · 5e 口径账本执行器单测 · 5f 口径账本断言（本包自食） · 5g 技能正文死引用棘轮（2026-10-01 新增后三项）
   6 Codex/Claude/宿主中性投影 · 5b 宿主证据门（-IncludeHostEvidence，2026-09-11 新增）
   6b 文档数字与实测一致 · 8 文档步数与实际步数一致（2026-09-28 新增）
   7 发布包（-IncludePackage）
 
 投影（runtime-projection）
-  scripts/build-codex-runtime-projection.ps1    → 457 文件
-  scripts/build-claude-runtime-projection.ps1   → 455 文件
-  scripts/build-shared-runtime-projection.ps1   → 454 文件（宿主中性，无 overlay）
+  scripts/build-codex-runtime-projection.ps1    → 458 文件
+  scripts/build-claude-runtime-projection.ps1   → 456 文件
+  scripts/build-shared-runtime-projection.ps1   → 455 文件（宿主中性，无 overlay）
   scripts/runtime-projection-guard.ps1          共享门禁/计划/overlay/主体实现（唯一；三 writer 共用 Invoke-RuntimeProjection）
   packaging/runtime-projection.json             策略描述
 
@@ -369,7 +370,7 @@ owner 审计后拍板：29 个「已接入统一包但旧链接还在」的链�
 2. ✅ 35 技能全部定编（能力定批评次：13 接入 + 22 退役，裁决表见 `evidence/20260911-capability-finalization.md`）
    → 剩余 35 个源链接已全部退役（回滚记录 `evidence/20260911-retire-35-rollback.json`，2026-09-12 迁入），**三源链接清零**，投影重装 422 文件
 3. ✅ 三源项目归档 + 规则文本对齐（本批）：三个源项目 zip 冷存 `F:\skiils\_archive\`
-   （逐文件 sha256 + CRC 全等校验通过），**本地源目录已删除**；AGENTS.md「不修改源项目」改写为
+   （逐文件 sha256 + CRC 全等校验通过），**本地源目录已删除**〔该批 zip 后由 owner 于 2026-09-12 裁决删除，不留冷存副本；此处按当时事实留痕，现行终态见 §1 与「已删除的源项目不是工作对象」边界〕；AGENTS.md「不修改源项目」改写为
    「源已归档、`sources/` 快照为唯一内容真源」；HANDOFF §10 两条边界按新事实改写。
    归档前状态证据：`evidence/20260911-matt-source-dirty-state.md`（matt 4 个脏文件如实记录）；
    批次证据：`evidence/20260911-source-archive-and-ci.md`。
@@ -525,7 +526,7 @@ owner 选择 **A**（登记本地补丁 + 逐条改写 + 门禁复跑），已�
 生成物（禁止手工编辑）
   provenance/CANONICAL-CATALOG.json / docs/CAPABILITY-INDEX.md / provenance/PROVENANCE-INTEGRITY.json
 门禁
-  scripts/verify.ps1                     单入口（默认 21 步；-IncludeHostEvidence / -IncludePackage 各 +1，全开 23 步）
+  scripts/verify.ps1                     单入口（默认 24 步；-IncludeHostEvidence / -IncludePackage 各 +1，全开 26 步）
   scripts/runtime-projection-guard.ps1   共享投影门禁 + 计划 + overlay 实现（唯一）
   scripts/validate-release-notices.ps1   NOTICE（逐族策略）
   scripts/validate-route-bindings.ps1    路由绑定（唯一命中 / 不得第二入口）
@@ -574,7 +575,7 @@ cd F:/skiils/vibe-coding-skills
 git log --oneline -3                      # 终态收尾批（2026-09-11）之后的提交
 git status --porcelain                    # 应为空
 pwsh -NoProfile -File 'scripts/verify.ps1' -RepositoryRoot 'F:\skiils\vibe-coding-skills' -IncludeHostEvidence -IncludePackage
-                                          # 应为 23/23（默认 21 步 + 宿主证据 + 包装配；2026-09-28 口径，15/17 与 12/13 均为历史口径）
+                                          # 应为 26/26（默认 24 步 + 宿主证据 + 包装配；2026-10-01 口径，15/17 与 12/13 均为历史口径）
 ls 'F:/skiils/_adapters/shared/skills' | wc -l     # 应为 143（2026-09-28 实测；141 为 2026-09-18 口径、112 为 2026-09-11 定编批口径，后续新增技能未回写本清单）
 ls -d 'F:/skiils/sliver-vibe-coding' 'F:/skiils/vibe-coding-skills' 'F:/skiils/mattpocock-skills'
                                           # 应全部 not found（源项目已归档删除）
@@ -598,7 +599,7 @@ OWNER-LEDGER/E1 有界路径剩余议题）；源项目归档、CI 上线、64 �
 ```text
 技能集合   82/82     全量登记（旧口径 82/83 的差 1 为翻译维护技能，已归入排除面）
 功能裁决   11/11 簇  已完成（duplicateGroups）
-交付runtime 52/82    52 条记录 / 452 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 454 = +根入口+manifest）
+交付runtime 52/82    52 条记录 / 453 bundle 文件（控制面 1 + Matt 13 + Vibe 38；部署态 455 = +根入口+manifest）
 路由绑定   51/51     admitted 技能全部唯一命中（validate-route-bindings）
 许可证策略 9 族全显式 4 族 runtimeEligible=true、5 族 false
 交付宿主   1 个入口   Claude 已确认（+1）；Codex 会额外列出包内 9 个 SKILL.md（用户决定不改）

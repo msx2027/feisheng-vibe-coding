@@ -42,3 +42,5 @@ audit-rules.md + references/workflow.md）内无 LICENSE/NOTICE，且
 
 > 2026-09-18 路径备注：声明中上游路径 `F:\skiils工具\vibe-coding-skills` 所在根目录已改名 `F:\skiils`，
 > 且 vibe-coding-skills 已退役并入 feisheng-vibe-coding；本声明的审计证据、sourceCommit 与结论不受影响，原文按审计时点保留。
+> 〔2026-09-30 反向统一：唯一现行称呼回到 `vibe-coding-skills`，`feisheng-vibe-coding` 转为退役别名。上行是 2026-09-18
+> 时点的记录，不代表现行名；现行名真源见仓库根 `SKILL.md` 与 `tools/caliber-ledger.json` CAL-001。〕

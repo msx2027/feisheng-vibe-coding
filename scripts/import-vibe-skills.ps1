@@ -16,10 +16,10 @@ Set-StrictMode -Version Latest
 #
 # 设计：数据驱动，不维护第二份技能清单
 #   - 输入真源：provenance/SKILL-CLASSIFICATION.json 中 source=vibe-coding-skills 且 readiness=accepted 的记录。
-#   - 每条 accepted 记录必须声明 `sourceDir`（上游 skills/ 下的目录名），否则 fail-closed。
+#   - 每条 accepted 记录必须声明 `sourceDir`（源项目 skills/ 下的目录名），否则 fail-closed。
 #   - 只复制内容，不判断该不该接受；「该不该接受」只由分类真源决定。
-#   - 复制源是快照 sources/vibe-coding-skills/skills/<sourceDir>/（不是上游项目），
-#     这样导入不依赖上游可用性，且与快照 SHA 闭包对齐。
+#   - 复制源是快照 sources/vibe-coding-skills/skills/<sourceDir>/（不是源项目本体），
+#     这样导入不依赖源项目可用性，且与快照 SHA 闭包对齐。
 #   - 导入后逐文件复核 SHA-256，并把派生来源（源路径 + 源 SHA + revision）写入
 #     provenance/VIBE-IMPORTS.json。导入内容从此是仓库一等内容，可被下游门禁/投影使用。
 #

@@ -10,10 +10,10 @@
 
 ## 检查、备份与删除
 
-- 每次新建、改写、移动或拆分 Markdown 后，交付前运行 `check-markdown-governance.mjs`。检查器只报告并拦截问题，不自行拆分、移动、合并或删除。
+- 每次新建、改写、移动或拆分 Markdown 后，交付前运行 `node <skills仓库>/scripts/check-doc-governance.mjs --root <目标项目根>`（目标项目已接入时改跑其自己的 `tools/check-doc-governance.mjs`；接线用 `node <skills仓库>/scripts/init-doc-governance.mjs <目标项目根>`）。它判命名与 H1、空目录残留、正文重名、散落文件、门面导航双向核对、孤儿卷目录与归档候选；只报告与拦截，不自行拆分、移动、合并或删除。**上述 token 体积阈值本检查器不判**，仍靠人工按上一条自行拆卷。
 - 备份目录登记到 `archiveDirectories` 后不参与日常扫描和读取。用户删除或移出备份后，同步删除目录登记及所有指向该路径的项目内 Markdown 链接。
 - 只有用户明确授权迁移、写入已停止、正文完整迁入可定位目标、门面 / 链接 / 索引已验证、源文件不再含需求 / 设计 / 决议、没有并发写入且留有审计记录时，才可删除冗余源文件。
 
 ## 精确读取
 
-先读取小导航页，再从中选择一份正文，通过 `resolve-target-doc-context.mjs --markdown <项目相对路径>` 精确申请；禁止遍历同名目录或全文恢复所有分卷。
+先读取小导航页，再从中选择一份正文，按 `.vibe-docs.json` 的 `documentIndex` 与受影响 role 的 selector 登记的相对路径精确打开；禁止遍历同名目录或全文恢复所有分卷。

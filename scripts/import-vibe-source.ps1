@@ -1,7 +1,7 @@
 ﻿# 历史引导工具（bootstrap）：从外部检出生成 sources/vibe-coding-skills 快照。
-# 三个源项目已于 2026-09-11 归档冷存并删除本地源目录，快照已存在时本脚本直接 throw，
-# 正常流程下不再重跑；如需灾备重建，先按 provenance/SOURCE-INVENTORY.json 的归档终态记录
-# 恢复对应源项目检出，再以 -SourceRoot 指向它。
+# 三个源项目本体与归档 zip 均已删除（不留冷存副本，owner 2026-09-12 裁决），快照已存在时本脚本直接 throw，
+# 正常流程下不再重跑。源目录**不可恢复**，也不得从任何外部副本／缓存／备份解包回去当来源
+# （根 AGENTS.md「迁移规则」）；灾备重建的唯一依据是仓库内 sources/ 快照与 provenance/ 逐文件 sha256 登记。
 param(
     [Parameter(Mandatory = $true)]
     [string]$TargetRoot,

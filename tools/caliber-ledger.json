@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "description": "口径账本：本仓库自持的同事实多副本登记面（2026-10-01 立账，本包吃自己的工具）。病：词位／目录名／状态常被写进多处（README、AGENTS、交接文档、技能正文、契约、脚本注释），没人登记「这事实有几份、谁是真源」，改一处其余变陈旧＝口径漂移；2026-09-30 统一改名批就是事后靠人工全仓审计才收口，且当场漏掉 AGENTS.md 一处。本账本把「会复发」的口径逐条钉住，由 scripts/check-caliber-ledger.mjs 常驻断言，提交时不一致即拦。",
+  "skipDirs": ["node_modules", ".git", "target", "dist", "build", ".tmp"],
+  "conventions": [
+    "入账前先自问：能否单源化／生成化（改由一个真源在运行时解析，或由生成器 --fix 再生）？能则做生成器，不入账——账本只兜底「实在要有两份」的场景，否则等于给镜像续命。",
+    "只入「会复发」的口径：这个词／这个数字以后还会被再写出来的（宣传词、价格、界面文案、跨卷数字）才入；一次性笔误不入账。",
+    "断言只钉存在、不钉数目——行内计数是书写时点的快照，随登记自然增长，逐轮追刷属无底洞且必然再次漂移。数字与现状不符不构成口径漂移，只有「该行自称现行／实测于某日而实际失实」才算。",
+    "每条必带锚点自检（truth.anchorRegex）：真源挪位或改名时锚点先响。缺锚的钉子会退化成恒匹配，等于一盏永远绿的哑灯，比没钉更危险，执行器对此判畸形。",
+    "拍板即入账：用户拍板新词位／新数字的同一批，执行会话顺手登记条目，origin 写明拍板来源与日期。不要留到「下次统一补」——那时已经没有上下文。",
+    "分工边界：用户可见面的字面词位／数字归本账本；其它专用对账（设计稿术语、接口扫描等）由项目自己的工具负责，账本不重复钉；行为语义归测试；纯状态描述类仍靠偶发审计抽检——大扫描降频为抽检，不宣称消灭。",
+    "豁免与挂账分清楚：历史材料引用旧词是正当的，登记进 scans.exclude 并写明理由，不是删史；但「自称现行却仍是旧口径」的活体漂移要登记进 pendingMirrors 常驻示众，归属相关批次修净，修净后必须删除该挂账与本豁免。豁免不得庇护活体漂移。",
+    "提交钩子里本账只阻断＋列出触达清单，由会话内补齐镜像后重新提交——钩子内没有 AI 运行时，不可能自己改文件。",
+    "两种方言别混：include 与 exclude 是 glob 方言（** 只作整段通配，精确路径直接写）；truth.anchorRegex、mirrors.require／forbid、scans.forbid 是正则。forbid 建议用无锚子串——行尾锚 $ 会对 CRLF 文件里的 \\r 失配，造成静默漏检。"
+  ],
+  "entries": [
+    {
+      "id": "CAL-001",
+      "title": "唯一称呼·vibe-coding-skills（退役别名 feisheng-vibe-coding 禁出）",
+      "origin": "owner 2026-09-30 指令「统一唯一称呼 vibe-coding-skills」（仓库名＝宿主技能名＝状态目录名同一），落地与裁决见 evidence/20260930-unified-name-rename.md；2026-10-01 入账。",
+      "rule": "对外唯一称呼＝vibe-coding-skills。旧别名 feisheng-vibe-coding 已退役，活文档与代码面不得再写出来；线协议常量（eventNamespace feisheng.vibe、schema feisheng-vibe-hook-adapter/v2、feisheng-local-patches/v1、feisheng-runtime-projection/v1）是协议标识不属本条口径，不在扫描面。",
+      "truth": {
+        "path": "SKILL.md",
+        "anchorRegex": "^name: vibe-coding-skills"
+      },
+      "mirrors": [
+        { "path": "README.md", "require": ["^# vibe-coding-skills"] }
+      ],
+      "scans": [
+        {
+          "name": "活文档与代码面",
+          "include": ["README.md", "AGENTS.md", "SKILL.md", ".gitattributes", "docs/**", "skills/**", "scripts/**", "adapters/**", "tests/**", ".github/**", "tools/**"],
+          "exclude": ["docs/archive/**"],
+          "forbid": ["feisheng-vibe-coding"],
+          "note": "provenance／evidence／tasks／legal 是**按历史时点登记的登记面**，不进 include 是政策不是遗漏：LOCAL-PATCHES 的 change 串与 evidence／tasks 批次记录按历史定性引用旧别名，属正当留痕（改史＝销毁改名过程的唯一证据）；legal／ui-system-guardian 的 2026-09-18 声明同样按时点保留，只在原句下加括注指向现行名真源。docs/archive/** 为冻结历史交接文档，同理由 exclude 豁免而非删除。"
+        }
+      ]
+    },
+    {
+      "id": "CAL-002",
+      "title": "现行措辞·三个来源写「源项目」不再写「上游」",
+      "origin": "owner 2026-09-30 改名批裁定「活文档叙事『上游』→『源项目』」（见 evidence/20260930-unified-name-rename.md §活文档措辞）；同批漏改 AGENTS.md 保真树行尾一节，2026-10-01 入账并修净。",
+      "rule": "指代三个已删除来源（vibe-coding-skills／mattpocock-skills／sliver-core）一律写「源项目」，活文档与代码注释不得再写「上游」——源项目本体与归档均已删除，「上游」暗示还有一个在维护的上游，是本轮改名要消灭的核心误导。",
+      "truth": {
+        "path": "README.md",
+        "anchorRegex": "三个源项目"
+      },
+      "scans": [
+        {
+          "name": "活文档与代码面",
+          "include": ["README.md", "AGENTS.md", "SKILL.md", ".gitattributes", "docs/**", "skills/**", "scripts/**", "adapters/**", "tests/**", ".github/**", "tools/**"],
+          "exclude": ["docs/archive/**", "skills/product/hotspot-governor/**", "tools/guardrails/gitleaks.toml"],
+          "forbid": ["上游"],
+          "note": "hotspot-governor 与 tools/guardrails/gitleaks.toml 豁免同一理由：那里的「上游」指 gitleaks／semgrep 官方仓库——那是仍在维护的真实外部上游，不是三个已删除的源项目，语义不同，不属本条口径（legal/fonts 的字体许可证同理指三方字体项目官方仓库，而 legal/** 整体按下一条属时点登记面、不在 include）。provenance／evidence／tasks 是登记面：note／change／reason 字段按历史定性保留当时措辞，不改史。"
+        }
+      ]
+    },
+    {
+      "id": "CAL-003",
+      "title": "目标项目状态目录·.vibe-coding-skills/（旧名 .feisheng 禁出）",
+      "origin": "owner 2026-09-30 指令随统一改名一并处理（contract v7.1→v8，lineage 续写；存量目标 E:\\fs-agent 与 F:\\skiils\\sess-find 已实测迁移），见 evidence/20260930-unified-name-rename.md；2026-10-01 入账。",
+      "rule": "目标项目状态目录唯一现行名＝.vibe-coding-skills/。旧名 .feisheng 只允许出现在两处正当登记位：安装器的 v8 前兼容清理实现与契约 contractVersion 的 lineage 串；其它任何面把它当现行名写出即漂移。",
+      "truth": {
+        "path": "adapters/vibe-hooks/contract.json",
+        "anchorRegex": "stateStore.*target-repository/\\.vibe-coding-skills/vibe-hook-state/"
+      },
+      "mirrors": [
+        { "path": "adapters/vibe-hooks/contract.json", "require": ["\\.vibe-coding-skills/vibe-hooks/"] },
+        { "path": "scripts/install-vibe-hooks.ps1", "require": ["\\.vibe-coding-skills/vibe-hooks/"] },
+        { "path": "adapters/vibe-hooks/experience-recorder.mjs", "require": ["\\.vibe-coding-skills", "vibe-hook-state"] }
+      ],
+      "scans": [
+        {
+          "name": "活文档与代码面",
+          "include": ["README.md", "AGENTS.md", "SKILL.md", ".gitattributes", "docs/**", "skills/**", "scripts/**", "adapters/**", "tests/**", ".github/**", "tools/**"],
+          "exclude": ["docs/archive/**", "adapters/vibe-hooks/contract.json", "scripts/install-vibe-hooks.ps1"],
+          "forbid": ["\\.feisheng"],
+          "note": "两处豁免是正当实现不是漂移：contract.json 的 contractVersion 串记录 v7.1→v8 改名 lineage（删了就没有改名证据），install-vibe-hooks.ps1 必须认识旧名才能清理 v8 前的旧注册。修净条件不适用——它们是永久兼容面；若日后旧名兼容逻辑整体退役，须同时删除本豁免并让该文件回到扫描面。"
+        }
+      ]
+    },
+    {
+      "id": "CAL-004",
+      "title": "源项目归档终态·快照是唯一副本，不存在冷存 zip",
+      "origin": "owner 2026-09-12 裁决删除归档 zip 不留冷存（根 AGENTS.md「迁移规则」；校验记录 evidence/20260911-source-archive-and-ci.md）；2026-10-01 入账，同批修净 SKILL.md／交接文档两处表头与正文／import-vibe-source.ps1 头注共四处现行措辞。",
+      "rule": "三个源项目的终态＝本体与归档 zip 均已删除，仓库内 sources/ 快照是唯一内容真源与唯一可对账副本。活文档不得把「冷存 zip／归档 zip 是只读历史」写成现状——该措辞会诱导去外部副本解包回查，正是 AGENTS.md 明令禁止的工作对象。",
+      "truth": {
+        "path": "AGENTS.md",
+        "anchorRegex": "不留冷存副本"
+      },
+      "mirrors": [
+        { "path": "docs/HANDOFF-NEXT.md", "require": ["不留冷存副本"] },
+        { "path": "provenance/SOURCE-INVENTORY.json", "require": ["唯一内容真源"] }
+      ],
+      "scans": [
+        {
+          "name": "活文档与代码面（只禁陈旧框法，不禁裸词「冷存」）",
+          "include": ["README.md", "AGENTS.md", "SKILL.md", ".gitattributes", "docs/**", "skills/**", "scripts/**", "adapters/**", "tests/**", ".github/**", "tools/**"],
+          "exclude": ["docs/archive/**", "provenance/**"],
+          "forbid": ["归档冷存", "（2026-09-11 冷存）", "归档 zip 是只读历史", "恢复对应源项目检出"],
+          "note": "为什么不钉裸词「冷存」：现行正确口径本身就写作「不留冷存副本」，钉裸词会把真源句子一并判红，或逼得把真源句也豁免掉——那等于一盏只会误伤的灯。故只钉三种陈旧框法的字面。docs/HANDOFF-NEXT.md 第 372 行那条 2026-09-11 批次记录（zip 冷存 F:\\skiils\\_archive\\）按历史定性保留不删史，同批已就地加注终态说明；provenance/SOURCE-INVENTORY.json 的 note 字段同理由 exclude 豁免（登记面按当时口径留痕，其终态由 mirrors 钉存在）。"
+        }
+      ]
+    }
+  ]
+}

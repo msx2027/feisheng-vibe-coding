@@ -81,6 +81,9 @@ $installRootTarget = $null
 if ($null -ne $installRootItem -and ($installRootItem.PSObject.Properties.Name -contains 'Target') -and $installRootItem.Target) {
     $installRootTarget = [string](@($installRootItem.Target)[0])
 }
+# 输出里的 installRootResolved：根存在才解析，不存在就回填报的绝对路径本身——
+# DryRun 的意义正是在装机之前先看，为一个还没建的目录抛「找不到路径」等于把预演变成只能预演已装过的机器。
+$installRootResolved = if (Test-Path -LiteralPath $installRootFull) { (Resolve-Path -LiteralPath $installRootFull).Path } else { $installRootFull }
 
 function Get-ManifestMarker {
     param([Parameter(Mandatory = $true)][string]$Directory)
@@ -107,11 +110,26 @@ function Test-IsOurInstallMarker {
     return ($null -ne $Marker -and ($Marker.PSObject.Properties.Name -contains 'schema') -and $knownManifestSchemas -contains [string]$Marker.schema)
 }
 
+# 安装位必须是实体目录：目标若是重解析点（junction／符号链接），下面的 Remove-Item -Recurse 会穿透到它
+# 指向的真实目录树。本机实测共享根里的 `vibe-coding-skills` 就是**回指仓库根本身**的 junction——
+# 一旦放行，「重装投影」等于把仓库本体连同未提交工作树一起删掉。用 Attributes 判而不判 LinkType：
+# 后者按 PowerShell 版本对 junction 有的给值有的给空，判空即放行等于没有这道门。
+function Assert-PhysicalDirectory {
+    param([Parameter(Mandatory = $true)][string]$Directory)
+    $item = Get-Item -LiteralPath $Directory -Force -ErrorAction SilentlyContinue
+    if ($null -eq $item) { return }
+    if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+        $linkTarget = if ($item.PSObject.Properties.Name -contains 'Target') { (@($item.Target) -join ', ') } else { '未知' }
+        throw "拒绝处理：$Directory 是重解析点（指向 $linkTarget），不是投影安装位。摘链接请单独用 rmdir（只删重解析点）；-Recurse 递归删除会穿透删掉它指向的真实目录树。"
+    }
+}
+
 if ($Uninstall) {
     if (-not (Test-Path -LiteralPath $targetPath -PathType Container)) {
         [pscustomobject]@{ status = 'SKIPPED'; reason = 'not-installed'; installPath = $targetPath } | ConvertTo-Json -Depth 6 -Compress
         exit 0
     }
+    Assert-PhysicalDirectory -Directory $targetPath
     $marker = Get-ManifestMarker -Directory $targetPath
     if (-not (Test-IsOurInstallMarker -Marker $marker)) {
         throw "拒绝卸载：$targetPath 不带本仓库任何投影形态的标记（不是我们的安装）。"
@@ -123,6 +141,7 @@ if ($Uninstall) {
 
 # 1) 目标占用检查
 if (Test-Path -LiteralPath $targetPath) {
+    Assert-PhysicalDirectory -Directory $targetPath
     $existing = Get-ManifestMarker -Directory $targetPath
     if (-not $Force) {
         throw "安装目标已存在，拒绝覆盖: $targetPath（要替换请加 -Force）"
@@ -162,7 +181,7 @@ try {
         [pscustomobject]@{
             status = 'DRY-RUN'; targetHost = $TargetHost
             manifestName = $manifestName; manifestSchema = $manifestSchema; replacesSchema = $existingSchema
-            installRoot = $installRootFull; installRootResolved = (Resolve-Path -LiteralPath $installRootFull).Path
+            installRoot = $installRootFull; installRootResolved = $installRootResolved
             installRootTarget = $installRootTarget
             installPath = $targetPath; fileCount = $expectedFiles; manifestSha256 = $manifestSha
             sourceRevision = [string]$build.sourceRevision
@@ -192,7 +211,7 @@ try {
         manifestSchema = $manifestSchema
         replacesSchema = $existingSchema
         installRoot = $installRootFull
-        installRootResolved = (Resolve-Path -LiteralPath $installRootFull).Path
+        installRootResolved = $installRootResolved
         installRootTarget = $installRootTarget
         installPath = $targetPath
         fileCount = $installedCount

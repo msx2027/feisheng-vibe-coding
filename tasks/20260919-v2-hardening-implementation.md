@@ -99,7 +99,7 @@
 ### B5 回归 + 投装 + 冒烟
 
 1. `pwsh tests/test-vibe-hook-adapter.ps1`：新增用例——凭据缺失→block；形状不对→block；齐备→放行；3 次封顶→fail-open 保持。
-2. 各已装目标项目重跑 `pwsh scripts/install-vibe-hooks.ps1`（副本在目标 `.feisheng/vibe-hooks/`）。
+2. 各已装目标项目重跑 `pwsh scripts/install-vibe-hooks.ps1`（副本在目标 `.feisheng/vibe-hooks/`）。〔2026-09-30 起该状态目录改名 `.vibe-coding-skills/vibe-hooks/`；本行是当时时点的执行记录，现行名见 `tools/caliber-ledger.json` CAL-003。〕
 3. **每目标项目**重取 fresh-session 冒烟证据（`contract.json` enablePrerequisites 明文要求），未取证前该目标项目状态报 `UNVERIFIED`。
 4. 证据：`evidence/<执行日>-hardening-batch-b.md`（授权记录 + 用例清单 + 各目标冒烟凭证）。
 

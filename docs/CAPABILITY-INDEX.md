@@ -32,7 +32,7 @@
 | `dev-planner` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 9 |
 | `diagnosing-bugs` | mattpocock-skills | primitive | accepted-primitive | none | `directory` | 2 |
 | `distill` | vibe-coding-skills | ui | accepted-ui | none | `directory` | 1 |
-| `doc-sync-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 3 |
+| `doc-sync-guardian` | vibe-coding-skills | product-or-checker | accepted-product | none | `directory` | 4 |
 | `domain-modeling` | mattpocock-skills | primitive | accepted-primitive | target-project-docs | `directory` | 3 |
 | `evolution-engine` | vibe-coding-skills | event | accepted-event | none | `directory` | 2 |
 | `experience-elevator` | vibe-coding-skills | event | accepted-event | none | `directory` | 16 |

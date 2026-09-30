@@ -383,7 +383,7 @@ function Get-ExpectedDirectories {
 # 宿主 overlay 契约（唯一实现，两个投影 builder 共用）。
 #
 # Sliver 用 packaging/runtime-manifest.json 的 targets.<host>.overlay_files 声明「哪个适配文件装到哪个路径」。
-# 本仓库**不复制也不改写**这张映射：复制会在上游改契约时静默漂移。
+# 本仓库**不复制也不改写**这张映射：复制会在源项目改契约时静默漂移。
 #
 # **落点基准**：Sliver 的 overlay 目标路径是相对「运行时 bundle 根」的（即 Sliver 自己 SKILL.md 所在目录）。
 # 证据：SKILL.md:145「Every published bundle contains exactly one fixed startup host slot at
