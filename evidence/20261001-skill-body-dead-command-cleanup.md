@@ -659,7 +659,7 @@ owner 的四项对应本文 §5 三层更深问题 + §4b 末条 + 上一批（`
 
 - `:53` `TARGET_RUNTIME_BLOCK_VERSION` `"23"` → `"24"`（契约文本变更信号；机制原生支持升版：存量块下次
   `--check` 即报待刷新，`--upgrade` 换新，无迁移代码）。
-- `:278` UI 复用条：原句把 `check-ui-reuse.mjs` 与 `ui-system-guardian` 并列为「硬拦执行口径」，改为
+- `:278` UI 复用条：原句「UI / token 复用**硬拦以** \`check-ui-reuse.mjs\` 与 \`ui-system-guardian\` **为执行口径**」，改为
   口径以本包 `ui-system-guardian` 为准、机器化扫描按**目标项目自备**的门禁脚本执行（写明常见位置
   `tools/check-ui-reuse.mjs`、该脚本不随本包分发、项目内已有则按其用法跑、**未自备时不得声称「已安装」**、
   改按 `ui-system-guardian` 清单人工核对并留证据）。「待生效」从句逐字保留。
@@ -712,6 +712,14 @@ owner 的四项对应本文 §5 三层更深问题 + §4b 末条 + 上一批（`
 「渲染落盘且自校验通过」的凭据）；落盘文本实测：`AGENTS.md` 与 `CLAUDE.md` 的 marker 均为 `version=24`，
 新句「未自备时不得声称「已安装」」各命中 1 次，旧「硬拦执行口径」措辞两份文件各 **0 次**。
 
+> **这条读数当时是空判，2026-10-02 落地批实测订正**：v23 的原句写法是「UI / token 复用**硬拦以** `check-ui-reuse.mjs`
+> 与 `ui-system-guardian` **为执行口径**」，全仓任何版本里都不存在连写的「硬拦执行口径」这五个字——
+> 拿它当「旧措辞已消失」的证据，等于用一个从来没出现过的字符串证明一件事，**0 次是恒真的**。
+> 可复算的正确配对（`git -C E:\fs-agent show HEAD:AGENTS.md` 对 v23，工作树对 v25）：
+> `为执行口径` 每份文件 v23 **1 次** → v25 **0 次**；`硬拦` 每份 v23 **3 次** → v25 **2 次**（余下两条是块外/别的条款：
+> 第 74 行「结构阈值真源…硬拦以 `check-hotspots.mjs`」——该脚本在 fs-agent 真实存在，不属本次谎报面；
+> 第 134 行「隔离工区位置门禁」在 managed block（第 3–106 行）之外）；`check-ui-reuse` v23/v24 各 1 次 → v25 **0 次**。
+
 这一步把初稿里那句**预测**换成实测，并如实记它**错了**：初稿写「两处一起改，改完 `--write` 一步即可」，
 实测是**四处**才到 `failures 0`——「本批跑不出来」与「改一处就够」都是没跑过的话。
 它同时钉住两句结论：**卡点在下游数据、不在本包模板**（本包模板侧 `--check` 的三条 pending 全程正常），
@@ -727,6 +735,10 @@ owner 的四项对应本文 §5 三层更深问题 + §4b 末条 + 上一批（`
 （登记哈希要改成 canonical 值），比删字段更侵入，不是本包单方面能替它定的口径。
 **要刷就得先由 owner 授权把上面四处一起改到那条账本**；四处改完的副本已实测 `--write` 一步成功，
 命令与读数见上表，可直接照抄到真树。
+
+> **后续状态（2026-10-02，见 §10）**：owner 令「现在改＋刷 v24」，真树四处已改、块已刷；
+> 但刷完之后去跑**下游自己的门禁**，抓出本批 v24 措辞自带的一处新死路径，块文本已再收口为 **v25**。
+> 本节上面那段「marker 均为 `version=24`」是当时的真实读数，现在过期。
 
 ### 9-② 棘轮扩面：三条新判据落地 + 脚手架死脚本位改条件执行体
 
@@ -830,6 +842,12 @@ Node `v24.21.0` 下在 `"type":"module"` 的包里跑 `node -e "require('fs')…
 
 ### 9-新查实（不修，登记并给复现口径）：受管块生成器本体不在任何登记与比对面内
 
+> **本节标题的定性写重了，2026-10-02 订正（正文按原样保留）**：该文件并非「不在任何比对面内」——它的 sha256 由
+> `provenance/CANONICAL-CATALOG.json` 的 `bundle.files` 逐文件钉住，`verify.ps1` 步 `1b` 覆盖全部 accepted 记录的 bundle 文件；
+> 落地批改 `:53`／`:278` 后步 1b 当场判红并逼出 catalog 再生，实证它**在**比对面内。本节真正成立的只有
+> 「不在步 `1c` 的 VIBE-IMPORTS 条目内、不在 LOCAL-PATCHES 两套命名空间内」，即**与快照原文的分叉没有来源级对账**。
+> 读数与订正见 §10-3。
+
 这条是执行 ① 时复算出来的，与本批四项都无关，但它落在「**受管块向全下游复制承诺**」这条链上唯一的
 **无凭据改动面**，所以必须写在这里：
 
@@ -920,3 +938,341 @@ Node `v24.21.0` 下在 `"type":"module"` 的包里跑 `node -e "require('fs')…
   门禁「文档数字与实测一致」步末轮读数 `claims = 77 records = 82 runtime = 52 bundle = 453 installed = 455`。
 - 隐私：`secret-scan` 与 pre-commit 两档扫描按 §7 口径未动基线（本批新增文本不含密钥形态字面量，
   门禁内 `secret-scan` 步在末轮整跑中为绿）。
+
+## 10. v24 落地实测（2026-10-02 owner 令「现在改＋刷 v24」）：落地时抓出 v24 自己带的新死路径，块文本再收口为 v25
+
+owner 一句话拍板「现在改＋刷 v24」，即授权把 §9-① 那四处改到 `E:\fs-agent` 的真账本并重刷受管块。
+本节全部是**真树读数**，不沿用 §9-① 的隔离副本数。
+
+### 10-1 账本四处（按字段路径记，仍不记行号——那份账本各线共享）
+
+| 位置 | 改法 |
+| --- | --- |
+| `experiences[EXP-257].trajectory[1]` | 去掉整段括号注释，收成契约要求的裸形态 `2026-09-30 升档 L0→L1` |
+| `experiences[EXP-257].confirmationHistory[0].confirmationMaterial` | 删除（本包从未定义过该字段） |
+| `experiences[EXP-257].confirmation.confirmationMaterial` | 删除（同上） |
+| 上述两处的 `confirmationHash` | `sha256:7e8d23af…` → `sha256:b77b5d52…` |
+| `consumedConfirmations` | 追加 `CONF-20260930-001`（10 个 canonical 键、canonical 顺序），数组 3 → 4 |
+
+改前改后在同一条命令里现算复验（不凭记忆）：7 个 canonical 字段的 sha256 =
+`sha256:b77b5d523f5c54ce676568813502120291db06244ea0446c5de6dc472c1a60a2`；
+旧登记值 `sha256:7e8d23af…` 恰等于**对 `confirmationMaterial` 那条材料串本身**取 sha256——
+§9-① 推出的根因在真树上复算成立。改后校验：`check-experience-ledger.mjs .` →
+`{"ok":true,"status":"pass","message":"台账校验通过: docs/项目治理/经验治理.md"}`。
+
+`--check` 由 `changes 3 / failures 1` 变 `changes 3 / failures 0`（三条 pending＝两份受管块＋runtime registry），
+`--write` → 三文件 `written`、exit 0，复跑 `--check` → `changes 0 / failures 0 / ok true`；
+marker 当时为 `version=24`，AGENTS `checksum=sha256:7fc25284…`、CLAUDE `checksum=sha256:46c10067…`。
+**中间态读数不可复算声明（本轮三路复核之账本修复路指出的口径漏洞）**：上面 `changes 3 / failures 1`、`version=24` 与那两个 checksum
+是 v24 的一次性落地态——v24 块文本已被 v25 覆盖，下游与本包两侧现在都只能读到 v25，**没有任何命令能重跑出这四个值**；
+它们只能由「v24 确随 `883c198` 入库」这条间接证据支撑（`git -C . show 883c198:skills/event/experience-elevator/tools/init-target-runtime.mjs`
+→ `:53 = "24"`、`:278` 含 `tools/check-ui-reuse.mjs` 路径形态）。同段的 `命中 50／未登记 2`（10-2）与 `24/26`（10-3）同理。
+受管块一改就得刷下游指纹：`node tools/check-doc-index.mjs --fix` 重录 `.vibe-docs.json` 的 manifest 指纹与
+`文档索引.md` 的索引行，复跑三查通过。**到这一步 §9-① 的演练就算照抄完了，而它不够——见 10-2。**
+
+### 10-2 演练没跑的那一步：下游自己的门禁把 v24 判红
+
+`E:\fs-agent` 的 `tools/check-doc-script-refs.mjs` 实跑 **exit 1**，四条红（当次读数：命中 50 处、未登记 2 处、基线存量 48 处）：
+
+- `✗ AGENTS.md:88`／`✗ CLAUDE.md:88` 死引·**R1 未登记新增**：`tools/check-ui-reuse.mjs`
+- `✗ 基线登记已过期：R3|AGENTS.md|check-ui-reuse.mjs`／`R3|CLAUDE.md|…`（该死引实际不存在，请删除此条）
+
+根因是**形状换了判据**：v23 那句写的是裸脚本名 `check-ui-reuse.mjs`，落在下游 R3 判据里、早已作为「上游模板死引」
+被它的基线收下（登记理由原文：「收口归上游，本仓不手改受管正文」）；v24 我把它改写成路径形态
+`tools/check-ui-reuse.mjs`，同一下游门的 R1 判据不认既有基线，于是**未登记新增 2 条＋原基线登记过期 2 条**同时冒出来。
+定性要如实：**本批第 ① 项没治错病，是把一处谎报换成了另一处死引用**——旧句谎称有个把它「硬拦以…为执行口径」的脚本，
+新句仍然指向一个本包不下发、目标项目大概率也不存在的脚本路径。
+
+**这条差别值得钉成规矩**（下一句）：受管块正文与本包技能正文落在**不同的对账表面**上。
+
+- **落点规矩**：凡会被写进目标仓库的下发件（managed block、脚手架模板及其 `package.json.template`），
+  正文里**不得出现本包不下发的具体脚本路径或脚本名**；要指位置就写成「项目自备的 X 门禁脚本——已自备的把真实路径
+  登记到本块之外的项目规则区再按该路径跑；未自备不得声称『已安装』或『已扫描』」。
+  这一面由**下游仓库自己的死引门禁**兜，本包棘轮兜不住：`scripts/check-skill-references.mjs` 只扫 `skills/**` 正文，
+  扫不到模板字符串注入到别人仓之后会发生什么（同一盲区此前已登记过：`.template` 整体不在扫描面，见本文
+  §9-复核查实但本批不修 第 3 条）。
+- **技能正文保持原样**：`skills/product/ui-system-guardian/references/workflow.md:66` 一类「常见位置
+  `tools/check-ui-reuse.mjs`……本分发包不随发该脚本」的写法继续保留——它由代理在本包内就地读，是给执行者的提示，
+  不进任何目标仓库的文档面。两者口径一致（都不谎称已安装），差别只在**是否随包注入他人仓库**。
+
+### 10-3 v25 修法与本包侧读数
+
+`:278` 去掉脚本名与路径，只留义务与激活路径，并把「本块不写它的路径」的理由就地写进句中（防后人把名字加回去）；
+`:53` 版本 **24 → 25**。为什么另起一个版本号而不沿用 24 改文本：24 已随本包提交 `883c198` 推送，
+版本号与块内文本必须一一对应，沿用会让「v24」指向两种内容——正是本包一直在防的那种多解口径。
+本包 `scripts/verify.ps1` 首跑 **24/26**，两条红：`catalog 与 SKILL-CLASSIFICATION.json 同步`（过期）与
+`runtime include 内容完整性`（`skills/event/experience-elevator/tools/init-target-runtime.mjs (sha 与登记不一致)`）；
+`pwsh -NoProfile -File scripts/build-canonical-catalog.ps1 -RepoRoot .` 再生后复跑 **26/26 全绿**
+（catalog 差异只有 `generatedAt` 与该文件一个 sha；records 82／bundle 453／installed 455 不变）。
+
+**顺带否证本包自己写下的一条断言**（原断言在 §9-新查实：「受管块生成器本体不在任何登记与比对面内」）——不实：
+该文件的 sha256 由 `provenance/CANONICAL-CATALOG.json` 的 `bundle.files` 逐文件钉住，步 `1b` 覆盖
+**所有 accepted 状态记录的 bundle 文件**（`verify.ps1:206` 对不在 `acceptedStatuses` 的记录直接 `continue`，
+所以不是字面意义的「整个 bundle」；本文件所在记录是 `accepted-event`，故在覆盖面内），
+本批改 `:53`／`:278` 后步 1b 当场判红就是实证。该断言真正剩下的覆盖面只有两条：① 它不在步 `1c` 遍历的
+`provenance/VIBE-IMPORTS.json` 的 318 个条目里（38 个 import 只含 3 个 `.mjs`）；② 它不在 `LOCAL-PATCHES.json`
+两套命名空间里——所以它与快照原文那 63 行分叉**没有行级／来源级对账**，只有整文件哈希级。HANDOFF 已按此订正。
+
+### 10-4 下游落地后的全套新鲜读数（写入之后重跑）
+
+- `init-target-runtime . --check` → `version 24 -> 25`、`changes 3 / failures 0`；`--write` → 三文件 `written`；
+  复跑 `--check` → `changes 0 / failures 0 / ok true`；marker 现为 `version=25`，
+  AGENTS `checksum=sha256:fea15f36…`、CLAUDE `checksum=sha256:44591e1d…`；`check-ui-reuse` 字面在两份文件各 **0 次**。
+- 按下游门自己的要求删掉那 2 条已失效的基线豁免（`tools/doc-script-ref-baseline.json`，删前后各解析一次并逐条比对：
+  只少那 2 条、无其它增删）。**该文件的条目数登记过三次数值，按时间序全记**：本批动手前 HEAD ＝ **38**；
+  我删 2 条后工作树 ＝ **36**（本节此前写的「37 → 36」是误记，复核按 HEAD 实测 38 订正——删 2 条不可能得 37→36）；
+  随后下游 HEAD 移动（他线 01:11 `060d2464` 新登记 2 条 → HEAD ＝ **40**），**最终正确落点＝ 40 − 2 ＝ 38**
+  （R3 35／R1 3），见 §10-10 第 1 条的那次当场补救。
+  `check-doc-script-refs.mjs` 在 HEAD 移动前 **exit 0**（未登记 0／基线存量 48）；移动后为 **exit 1**，
+  但两条红不是本批造成的，见 §10-10 第 2 条。
+- `check-doc-index` exit 0（其输出原文「12 份登记文档指纹一致」；口径说明：`.vibe-docs.json` 的 `documents.length = 13`，其中 1 项是 `文档索引.md` 自身、不入指纹比对，**12 与 13 不是漂移**）、`check-doc-governance` exit 0（0 error／3 warn 均为存量）、
+  `check-caliber-ledger` exit 0（4 条目断言全绿）、`contracts/test/**` → tests 100 / pass 100 / fail 0、
+  `frontend` 的 `tsc -b` exit 0、`git diff --check` exit 0、本包 `check-experience-ledger.mjs .` → `ok:true`。
+- `node tools/verify-project.mjs --fast` **未全绿**：`hotspots:test` exit 1，且它 fail-fast 挡住了后三步，
+  故上面三步是逐条单独跑的。**该红不是本次改动造成的**，证据链：断言是「`parseArgs` 豁免名单必须与仓库实际定义处
+  精确相等」，期望 3 项、实得 4 项，多出的是 `tools/check-style-families.mjs`（2026-10-01 commit `dbfd5c30` 由他线提交，
+  内含 `parseArgs` 定义）未登记进 `tools/hotspot-policy.mjs` 的 `DUPLICATE_HELPER_FILE_EXCEPTIONS`；
+  本次在 fs-agent 只触碰 6 个文件，对每个文件 `grep 'function parseArgs\|const parseArgs'` 零命中，
+  且 `tools/hotspot-policy.mjs` 未被本次改动（md5 `b8dcb16d…`）。修法归它那条线（补登记或改名复用），本包不代改、不代裁。
+- fs-agent 工作树最终 **6 项未提交**：`.vibe-docs.json`、`AGENTS.md`、`CLAUDE.md`、`docs/项目治理/经验治理.md`、
+  `tools/doc-script-ref-baseline.json`、`文档索引.md`。其中账本那份同时含他线在途改动
+  （`revision 511 → 512`、新 `processedEvents` 条目 `1cd50a2e-placeholder`／`EXP-077`、`EXP-077.count 3 → 4`）；
+  本次按字段路径**纯增量**改，改后复验 `EXP-077.count` 仍 4，未回退他线任何内容。
+  **未在 fs-agent 提交**（共享仓、他线在途，需单独指令）。
+- 上面这三行是**本轮三路复核时的快照，其中 `revision 仍 512` 一项已失效**：见 §10-7 第 1 条——那份账本有**并发写入者**，
+  本批复验时 `revision` 已自行涨到 **517**、新增 `EXP-330…EXP-333`；`文档索引.md` 与 `.vibe-docs.json` 的
+  `experienceGovernance` 行随之为 **53508（HEAD）→ 54151**、指纹 `7f3121946bb8… → cb8f3a369dba…`
+  （本节此前登记的 `→ 53492／29ad1bae5b7c…` 是并发写入到来前的一次性中间态，现不可复算，按上面的最终读数订正）。
+  **这条订正本身也已经被下一次写入作废**：见 §10-9 第 1 条——同一份账本又涨到 134 条，索引现为
+  `~54534`／`fa7a394cc06f…`。结论写死：**该文件的令牌数与指纹不可作为登记锚点，只能登记复算命令**。
+
+### 10-5 新查实（未修，待 owner 拍板）：受管块有第二个写入者，且它停在 v23
+
+`E:\fs-agent\.vibe-coding-skills\experience-tools\init-target-runtime.mjs:53` 仍是
+`TARGET_RUNTIME_BLOCK_VERSION = "23"`。该目录**不是软链也不是回指仓库的 junction**
+（`realpath` 自证：`E:\fs-agent\.vibe-coding-skills\experience-tools\init-target-runtime.mjs`），
+是 2026-09-29 从旧包名位置整包拷去的**项目自备副本，`ls -1` = 14 个文件**（13 个 `.mjs` ＋ 1 份本包没有的 `README.md`；本批原记「13 文件」是漏数 README，复核订正），且自带两处对上游 `experience-governance.mjs`／
+`experience-ledger-core.mjs` 的 swept 契约补丁，其 `README.md` 明写「上游包更新时以本副本为参照核对契约对齐情况」。
+
+- 后果：任何人在 fs-agent 里跑那份副本的 `--write`，两份门面会被**降级回 v23**——即重新写进本批第 ① 项刚收口掉的那句谎报
+  （`--check` 会以 `version 25 -> 23` 的 pending 出现，机制上它与正常升级完全同形，看不见就得靠人盯）。
+- 本包不代改该项目那份未入库的分叉副本（改了要替它重打它那两处补丁，属越界）。
+- 可收口的通用防线在**本包侧**：给 `planFile` 加降级硬拦——`block.version` 高于常量时判 `conflict`（fail）而不是
+  `pending update`，让陈旧副本无法把新块写回旧文本。这是 `AGENTS.md`「runtime 版本与入口保护」一条的真实缺位，
+  但它属新的授权面（动下发件核心判定＋要补契约测试），**登记待拍**，本批不擅自扩面。
+
+### 10-6 下游存量普查（本批新查实，未刷，待拍板）
+
+v24 那条死路径只到过 `E:\fs-agent`（唯一被刷到 24 的根），但 v23 那句谎报**在本机其他下游里还活着**。
+普查口径写清楚：`find` 深度上限 3、排除 `node_modules`、按 `.vibe-runtime.json` 定位受管根——**这是有界扫描，不是全盘穷举**。
+命中 4 个根（含 fs-agent）：
+
+| 根 | 块版本 | `check-ui-reuse` 字面 | 「硬拦以…为执行口径」谎报句 | 最近提交 | 本批是否动过 |
+| --- | --- | --- | --- | --- | --- |
+| `E:\fs-agent` | 23 → 24 → **25** | v23/v24 各 1 → v25 **0** | v23 有（`为执行口径` 每份 1 次）→ v25 **0** | 工作树 6 项未提交 | 是（本次唯一落地对象） |
+| `F:\skiils\sess-find` | 23 | `AGENTS.md`／`CLAUDE.md` 各 **1** | **仍在**（`AGENTS.md:88`） | `8251ce1` 2026-09-29 | 否（其工作树原有 3 项无关改动：`.gitignore`／`bin/sf.mjs`／`test/bin.test.mjs`） |
+| `G:\历史项目\deyy` | 21 | 各 **1** | **仍在**（`AGENTS.md:87`） | `f7b239ed` 2026-09-04 | 否（工作树干净，且属「历史项目」） |
+| `G:\历史项目\ddzj` | 3 | 0 | 无该句（v3 早于此条款，两个字面均 0） | — | 否 |
+
+- 建议口径（**等 owner 拍，不擅自动手**）：`sess-find` 是在会话目录里活跃使用的项目，按 ① 项同一收口刷到 v25 才有意义；
+  两个 `G:\历史项目\*` 属已归档项目，刷新＝改动归档交付面，收益为零而代价是给归档面写下新的时间戳，倾向不动。
+- **顺带查实的一条结构性缺位（未修，待拍板）**：本包**没有任何「下游清单」**，也没有任何门检查「哪些根停在哪个版本」。
+  所以上表只能靠一次人工磁盘普查得到，且普查面受深度与目录命名限制——「向全下游复制承诺」的受管块，
+  其**分发状态本身不在任何门禁的视野内**。这与 §9-新查实（生成器分叉无来源级对账）是同一条链上的两个缺口：
+  前者管不到「发出去的是哪一版」，后者管不到「发的那份从哪来」。可选收口：给本包加一张 `provenance/DOWNSTREAMS.json`
+  （根／块版本／checksum／最近实跑时间）＋一步门禁，把「刷新所有下游」从口头承诺变成可对账项。属新增登记面，本批不擅自建。
+
+### 10-7 本轮三路对抗复核产物（下发件文本面／账本修复面／数字复算面）：当场修 1 处、登记 6 项
+
+三路各自独立跑数、不许引用本文已有结论。数字面查出 1 条写错的数（已订正在 §10-4）、
+定性面查出 2 条写重的口径（已订正在 §10-1／§10-3）；账本面查出 2 条**结构合法但语义错**的残留，其中 1 条当场修掉。
+
+1. **那份账本有并发写入者（实况，非推测）**。本批复验时 `docs/项目治理/经验治理.md` 的 `revision` 已从 512 自行涨到
+   **517**，`experiences` 新增 `EXP-330／331／332／333`、`processedEvents` 新增对应条目（`occurredAt` 全部落在
+   2026-10-01T17:22–17:26Z，即本批手工编辑的同一时间窗内）——fs-agent 侧有自己的自动写入路径在跑。
+   本次五处改动（4 处修复＋1 处 `count`）**复算后全部在场**、`check-experience-ledger.mjs` `ok:true`，因为那份写入者是
+   「解析 JSON 围栏→改对象→整体重序列化」，会带上磁盘上的既有字段；**但这是运气不是保证**：若它先解析后写、
+   或本包手改与它交错，我的修复会被**静默回退**且没有任何门会红。登记口径（属他人项目的自动化，本包不代改）：
+   手写他人账本前先复算字段、写完立即复验；要把这类竞态变成可对账项，得由**下游自己**加字段级回归钉或单写入者锁。
+2. **当场修：`EXP-257.count` 4 → 0**（本批第 5 处账本改动）。依据是账本自己的两条硬事实：
+   `experience-ledger-core.mjs:703` 升档时 `exp.count = 0; // 下级计数归零、从头累积`；不变量「`count` ＝ `confirmedAt`
+   之后的 `processedEvents` 条数」对三条机器写入的 L1 记录全部成立（实测 `EXP-010` 2/2、`EXP-077` 4/4、`EXP-212` 0/0）。
+   `EXP-257` 独错：它的 4 条事件全在 `2026-09-29T22:36:59.450Z` **之前**（16:25:52／16:48:53／20:29:11／22:33:15），
+   之后 **0** 条 → 正确值 0。不修的后果是真实的：L1→L2 阈值 5，`isAtThreshold` 会把它报成「再命中 1 次可升 L2」，
+   而它 L1 阶段的真实命中为 0——下一次升档提案将建立在幻影计数上。且**没有任何门能抓到**：`assertValidCount` 只验非负整数，
+   实测改前改后 `check-experience-ledger.mjs` 都是 `ok:true`。改后复验：`--check` → `changes 0 / failures 0`、
+   `check-doc-governance`／`check-caliber-ledger`／`check-doc-script-refs` 各 exit 0、`--fix` 重录索引后三查通过。
+3. **登记不修（需 owner 拍，动的是他人项目的规则内容）：`EXP-257` 是 L1 却不在 L1 registry 里**。
+   `docs/项目治理/宪法设计.md:58-78` 的 `target-experience-registry` 只有 3 条规则（`EXP-010`／`EXP-077`／`EXP-212`，
+   全 `status: "candidate"`），因此 AGENTS／CLAUDE 的第二受管块投影照原文渲染 `- 当前没有已激活的项目经验规则。`
+   （`AGENTS.md:114`）——账本声称 4 条 L1，门面一条都不出。机器路径 `experience-governance.mjs:632-635` 要求升档**必须带
+   `ruleText`** 并追加 registry 条目；那份账本的升档是手写的，跳过了这步。补全需要四件事：① 依 `EXP-257.summary`
+   （「挂账清单转述前须逐条对main落库证据现查现列，记忆与索引钩子会过期」）定一条 `ruleText`；② `landing` 由 `null`
+   改为 `docs/项目治理/宪法设计.md#target-experience-registry`（另三条 L1 皆如此）；③ 重录 registry checksum 与
+   `l1RegistryAnchor.sourceHash`；④ 再刷两份门面的投影块。本批只把它的 schema 修合法，**没有替他人项目拟规则文本**。
+   为什么门看不见：`assertL1RegistryAnchorMatches`（`experience-anchor-contract.mjs:56-68`）比的是「账本存的锚点哈希 vs
+   registry 当前哈希」，两边同为 `sha256:a71087eb…`——**正因为这条规则从没进 registry，这对哈希才「一致」**。
+4. **如实登记一处证明力降级（不是新洞，是修法的代价）**：旧 `confirmationHash` 是对 `confirmationMaterial` 那段
+   **字符串本身**取 sha256（实测复算 `sha256("elevate|EXP-257|L0->L1|scope=target-project|trigger=8f46771f…|用户令「升」|2026-09-30")`
+   ＝ `7e8d23af…`，与旧值逐字符相等），也就是说它把用户那句原话「升」钉进了哈希；本批按 schema 删掉该字段、
+   改用 7 个 canonical 字段重算得 `b77b5d52…`，**新哈希不再绑定任何自由文本**——账本内部从此无法自证「用户确实说过升」，
+   只有 git 能（`git show 50dfbc12:docs/项目治理/经验治理.md`、`git log -S confirmationMaterial` 均可复原原文，
+   且他线已推送的 `f2abd8cc` 正文里逐字含「用户令「升」」与该旧哈希）。**下一次次在 fs-agent 提交时，commit message
+   必须写明这次重推导**（旧值＝对材料串取哈希→schema 不允许该字段→按 canonical 字段重算），否则审计链读起来像哈希被替换。
+   本批不替他仓写提交信息。同因残留一份会长期矛盾的运行态：`E:\fs-agent\.vibe-coding-skills\vibe-hook-state\
+   stop-credential-sess_56626e54-….json:11` 断言「EXP-257 tier L1、确认凭据 CONF-20260930-001 哈希复算一致」，
+   该说法只在旧口径下成立；该文件被 `.gitignore:85` 排除、不被任何门扫。属他人项目运行态，登记不改。
+5. **受管块文本里还剩三处同类谎报**（与 v24 那条死路径同一类：块内声称的能力本包不存在），修＝v26＋再刷下游，属 owner 可见面：
+   - `init-target-runtime.mjs:253`（＝`AGENTS.md:63`）写「只加载 `<skills-root>/.agents/skills/<skill>/SKILL.md` 或
+     `<skills-root>/skills/<skill>/SKILL.md`」——**两种形态在本包都不存在**：包根无 `.agents/`（`ls -d .agents` →
+     No such file），真实布局是 `skills/<分类>/<技能>/SKILL.md`（实测 `skills/checker/audit` 等）。
+   - `:255`（＝`AGENTS.md:65`）声称 never 文档只能经 resolver 的 `--allow-never --reason <理由>` 这道硬门访问，
+     而 `resolve-target-doc-context.mjs` **只存在于 `sources/` 快照**（`ls skills/*/*/tools/resolve-target-doc-context.mjs`
+     → 不存在；`find` 仅命中 `sources/vibe-coding-skills/tools/`）——即向下游承诺一个本包不下发的闸门。
+     此条本文 `:126` 早已登记，本次确认它同样被注入到他人门面里，属「登记了但下发件仍在说」的漏网面。
+   - `:268` 附近的「硬拦以 `check-hotspots.mjs` 与结构门禁为唯一真源」：本包把它放在 `skills/product/hotspot-governor/tools/`，
+     块内既不写「项目自备」也不写真实位置；下游恰好自带同名脚本才没判红，属 NIT 级同形问题。
+   - **为什么本包看不见这些（REAL 级门面缺位）**：本包**没有任何门检查受管块文本**——`scripts/check-skill-references.mjs:139`
+     只扫 `.md`，其头注 `:29-30` 明确把 `tools/...` 形态 token 划给「下游自有门禁负责」。于是块文本的假引用只有落到别人仓库、
+     被别人那道门撞上才暴露，而这次已经为此付过一轮 v24→v25 返工。候选收口（待拍）：给本包加一步「块文本自扫」——
+     把渲染出的受管块当作虚拟 `.md` 过同一套死引判据，让谎报在**下发前**红。
+6. **§10-5 的降级危害由预测升级为实测**：用 fs-agent 那份 v23 副本跑只读 `--check` →
+   `{"ok":false,"version":"23","exitCode":1}`，pending 三条＝`AGENTS.md version 25 -> 23`、`CLAUDE.md version 25 -> 23`、
+   `.vibe-runtime.json runtime registry changed`。换成 `--write` 会把 marker 退回 `version=23` 与 HEAD 那两个 checksum
+   （`e15269e0…`／`e986d1d2…`），并**把 `check-ui-reuse.mjs` 重新写回 `AGENTS.md:88`／`CLAUDE.md:88`**；而本批已按下游门的
+   原文要求删掉它那 2 条基线豁免，所以降级后下游 `check-doc-script-refs.mjs` 立刻判「R3 未登记新增」并**卡住 pre-commit**——
+   那份副本会自称在满足提交门、实际在打破它。两道隐形叠加让它无法被提前看见：`.gitignore:87` 忽略
+   `.vibe-coding-skills/experience-tools/`（`git check-ignore -v` 实证命中），`tools/doc-script-refs-core.mjs:30` 又把
+   `.vibe-coding-skills` 放进 `SKIP_DIRS`。块内指令形态是加重项：`:197`／`:282` 用裸名 `init-target-runtime.mjs`、
+   `:295` 用 `node <skills-root>/tools/init-target-runtime.mjs`（占位符前缀恰是下游判据跳过的那一类），
+   按裸名解析就可能命中陈旧副本。**降级硬拦**（§10-5）＋「块内刷新指令一律带 `<skills-root>` 前缀」一并待拍。
+   补充一条实测：不带 `--skills-root` 的裸调用是 fail-closed 的
+   （`[FAIL] Invalid skills root … Missing: skills/INDEX.md, tools/init-target-runtime.mjs`，exit 2），
+   所以危害只在「有人补了 `--skills-root` 又 `--write`」时落地。
+7. **新查实（登记待拍）：本包下发的账本核跑不动真实的下游账本**。用本包副本直接 `parseLedger(经验治理.md)` →
+   `parseLedger: processedEvents.experienceId 必须绑定现有经验或已登记的清扫日志条目`（该账本的清扫日志
+   `经验治理-清扫.md` 实测有 **200** 条 `## EXP-\d+ ·`，其中 id 既不在 `experiences[]` 也不在 archived）。
+   fs-agent 本地副本正是为这点打的补丁：`:619 assertConfirmation(…, sweptExperienceIds)`、`:649`、`:674 elevateExperience(…, sweptExperienceIds)`；
+   **本包副本这三处签名都没有该参数**（`sweptExperienceIds` 只出现在 `:330/:356/:475/:478/:485/:490`），也没有导出任何
+   清扫 id 读取器。后果：本包向下游承诺的「自动升档／写账本」在他人真实账本上**不可执行**，下游只能自 patch；
+   而 `check-experience-ledger.mjs` 两份**字节相同**，所以只读校验绿、写路径红。这正是「只读绿≠可用」的口径漏洞，
+   收口（贯穿参数＋补契约测试）属核心写路径改动，本批不擅自扩面。
+
+### 10-8 复核补记（第四路账本复核产物：订正本文 3 条，另登记 3 条）
+
+同一面再开一路独立复核（它被允许否证本文），产出如下。**其中第 1 条是本批自己的测法错误，先认。**
+
+1. **订正 §10-7 第 7 条的定性——我把「只读面跑不动」写重了，红只在写路径。** 我当时直接调
+   `parseLedger(markdown)`（不传第二个参数）→ 报 `processedEvents.experienceId 必须绑定现有经验或已登记的清扫日志条目`，
+   就据此写成「本包下发的账本核跑不动真实下游账本」。但**本包自己的 checker 会供这份 id**：
+   `skills/event/experience-elevator/tools/check-experience-ledger.mjs:84-93` 先读清扫日志（注释原文
+   「与 `init-target-runtime.readSweptExperienceIds` 同口径」）再 `parseLedger(…, sweptExperienceIds)`。
+   即：**只读校验面对这类账本是绿的**，真正的洞在写路径——本包副本 `experience-ledger-core.mjs:674`
+   `elevateExperience(ledger, id, { landing, timestamp, confirmation })` 与 `assertConfirmation` 两处签名
+   **都没有 `sweptExperienceIds`**，写路径内的 `validateGovernedLedger(ledger, action)` 是裸调（清扫集为空），
+   而 `experience-governance.mjs:668` 正是走这条路径升档。fs-agent 的本地补丁补的就是这三处
+   （`:619`／`:649`／`:674`）。所以准确说法是：**「本包能验别人的账本，但用不了自己的写路径去动它」**，
+   下游只能自 patch 才能自动升档。收口面（贯穿写路径参数＋契约测试）仍属核心写路径改动，维持「登记待拍」。
+2. **订正一处证据路径（避免后人照抄打不通的命令）**：本文 §10-1／§10-4 写的 `check-experience-ledger.mjs .`
+   在 fs-agent 里**不存在 `E:\fs-agent\tools\check-experience-ledger.mjs`**（`fs.existsSync` → false）。
+   实跑路径是该项目自备副本 `E:\fs-agent\.vibe-coding-skills\experience-tools\check-experience-ledger.mjs .`
+   （exit 0；无参数调用是 exit 2 usage），或本包副本带目标根 `node skills/event/experience-elevator/tools/check-experience-ledger.mjs E:/fs-agent`。
+   读数本身两路都成立，但**登记的命令形态不可照抄**，这属本仓库一直防的那类「指令指向不存在的位置」。
+3. **订正 §10-7 第 2 条的时间线（并发写入者让「谁改的」变得说不清，必须写死）**：另一路复核在同一窗口读到
+   `revision 515 → 517`、`experiences 132 → 134`（`EXP-330／331／332`）、文件 `184112 → 185415` 字节、
+   mtime `2026-10-02 01:27:08`，并据此推断 `EXP-257.count` 的 4→0 是那个并发写入者干的。**不是**：
+   这一处是本批用编辑工具按字段路径改的（改前后各解析一次，见 §10-7 第 2 条的读数），
+   且它当时的观察点里 `EXP-333` 已在、`revision` 已 517，属同一竞态窗口的不同时刻。
+   **由此得一条对本包有用的口径**：下游那份账本正在被自动写入，任何「手改＋登记一个具体数字」的证据都会随树移动而失效
+   （本批的 `revision 511 → 512` 就是这样在下一次复验时变成 `→ 517`）。所以 §10-4／§10-7 里凡涉及该文件的数，
+   一律按**字段路径＋复算命令**读，不把某个 `revision` 值当锚点。
+4. **新登记：账本修复**没有下游提交门兜**。`core.hooksPath = E:\fs-agent\tools\githooks`，其 `pre-commit` 的
+   `run_check` 实跑清单为 **10 条**（`tools/check-doc-index`、`check-doc-governance`、`check-dep-boundaries`、
+   `check-hotspots`、`check-style-vars`、`guardrails/secret-scan`、`check-caliber-ledger`、`check-doc-script-refs`、
+   `check-style-families` 等），**其中没有 `check-experience-ledger.mjs`**——即那四处结构缺陷当初不会被任何提交门拦住，
+   修完之后回退同样不会被拦。属他人项目的门禁面，本包不代加，登记为「下游账本面无棘轮」。
+5. **新登记（同一类缺陷的类级证据）：修复只收了「一个实例」，但这一类已由机器契约收口，不是靠我逐条查**。
+   现树 134 条 `experiences` 里带确认凭据的只有 4 条（`EXP-010`／`EXP-077`／`EXP-212`／`EXP-257`）：
+   全局 `consumedConfirmations` 哈希重算不符 **0／4**，内嵌 `confirmationHistory` 不符 0，非 schema 额外键 0；
+   同一测试打在 HEAD 上得 2 处不符、且两条都是 `EXP-257`。原因是结构性的：`assertValidConsumedConfirmation`
+   逐条重算全局哈希、`:309` 强制内嵌≡全局，**`parseLedger` 通过就不可能同时留着坏哈希**。
+   轨迹面同理：HEAD 133 条轨迹串里非规范 1 条（正是 `EXP-257` 那句带括号的原话），现树 138 条为 0。
+6. **新登记（下发件与自备副本的三文件分叉，带 sha）**：两棵树**不是同一份代码**——
+   `experience-ledger-core.mjs` 本包 `8ab3927728cfd0a5…` vs fs-agent `006e9bc40a4bc1e0…`（24 行差异／6 个 hunk，全在 swept 贯穿）；
+   `experience-governance.mjs` `9ae1a3d08668…` vs `fa2eb4c9e7af…`；`init-target-runtime.mjs` `6358d8b6859c…`（＝本包 catalog 现登记值）
+   vs `80cb5e4b44bf…`（其 `:53` 仍 `"23"`）；该目录另有本包没有的 `README.md`。这与 §10-5 是同一件事的两面：
+   版本面差 2 个档（23 vs 25），**契约面差的是能力**（写路径能不能动真实账本）。
+
+### 10-9 数字复算路复核产物（当场追平 1 条、订正 3 条、标注 4 条不可复算）
+
+1. **并发写入把下游门自己搞红了——本批当场追平。** 本批 `--fix` 之后、复核独立复跑期间，
+   `node tools/check-doc-index.mjs` **exit 1**：`manifest cb8f3a369dba… → 实际 fa7a394cc06f…`、
+   令牌 `54151 → 54534`（账本又被写入：`revision` 稳定在 **517**、`experiences` **134** 条）。
+   即：**那份账本不需要我改，也会让它自己的文档索引门变红**。本批重跑 `--fix` → 三查通过、`check-doc-index` **exit 0**，
+   索引现为 `~54534`／`sha256:fa7a394cc06f…`；`EXP-257.count` 复验仍为 0、五处改动全在场。
+   口径据此定死：**凡自动写入者的文件，登记「复算命令」而不是登记「读数」**——本批已三次看到登记值在两次复验之间移动。
+2. **订正 §10-5 的「13 文件」**：`ls -1` 实为 **14**（13 个 `.mjs` ＋ 1 份 `README.md`，而同一句正好引用了那份 README）。
+3. **补 `check-doc-index` 的 12／13 口径**：工具输出原文「12 份登记文档指纹一致」，而 `.vibe-docs.json` 的
+   `documents.length = 13`——多出的 1 项是 `文档索引.md` 自身、不入比对。两数并存不是漂移，但原文未写排除口径，已补。
+4. **补一处裸字面计数口径**：v25 里裸字面 `已安装` 命中 **2** 处（`AGENTS.md:34` 另有一句与 UI 复用无关的同词句子），
+   `已扫描` 1 处；本文与 HANDOFF 的「新句各 1 次」指的是 `未自备时不得声称` 这一**句形态**（每份确实 1 次），不是裸字面计数。
+   按裸字面去配对读数会得出「2 → ？」这种没法解释的数，所以把口径写死在这一条里。
+5. **本包步数 26 的结构复算（把「26」从时点读数变成可复算口径）**：`scripts/verify.ps1` 里字面 `-Step '…'` **25** 个
+   ＋ 投影类动态 `StepName` **3** 个 － 默认关闭的 2 个可选步（`-IncludeHostEvidence` 的宿主证据门、`-IncludePackage` 的
+   发布候选包装配）＝ 默认 **26**；全开 **28**。与 README:74 的锚点句一致。§10-3 的 `24/26`／`26/26 全绿` 是**当次运行读数**，
+   机制可复算（catalog 里 HEAD 钉 `b60fd18e…`＝已提交 v24 的 sha，工作树 sha 变 `6358d8b6…` → 步 1b 判红），
+   但「几条绿」本身不可事后复算，属 §10-1 已声明的那类中间态。
+6. **不可复算项集中标注（不再逐处解释）**：`version=24` 时期两个 checksum（`7fc25284…`／`46c10067…`）、
+   `--check changes 3 / failures 1`、`命中 50／未登记 2`、`verify.ps1 24/26`、`tsc -b exit 0`、
+   `contracts tests 100 / pass 100`（静态数 `test(` 声明确为 **100**，但整套件未复跑）、
+   `parseArgs 期望 3／实得 4`（该 4 是**下游豁免名单口径**；用更宽的正则在本仓可数出 5 处定义，
+   故引用它时必须带上「按 `hotspot-policy.mjs` 的登记表口径」这一句）。
+   以上都发生在同一批的时间窗内、只有间接证据（v24 确随 `883c198` 入库）支撑，**不得当作可复算读数引用**。
+
+### 10-10 共享下游的 HEAD 在本批中途移动：当场拦住一次「提交即删他人成果」，并登记第二盏无关红灯
+
+本批在 fs-agent 留下的 6 项改动一直**未提交**，而该仓在我干活期间自己前进了两笔：
+`060d2464`（2026-10-02 01:11，登记 098 边车握手契约与文档门禁例外）与 `c03a5589`（01:32，合并 098 路线二边车控制层 M1 收尾）。
+
+1. **当场查出的真实事故（不是风险，是已经发生在我工作树里的状态）**：我的 `tools/doc-script-ref-baseline.json`
+   是在 01:11 之前从旧 HEAD 改出来的（删掉那 2 条 `check-ui-reuse.mjs` 豁免），所以他线新增的 **2 条豁免不在我的工作树副本里**；
+   照当时的状态提交，等于**替他们把那两行删掉**。检出方法不是看 `git diff --numstat`（它只给 `0/32`，看不出少的是谁的），
+   而是**逐条 set-diff** HEAD 版与工作树版的 `entries`：
+   `in HEAD not in WORK` 得 4 条＝我有意删的 2 条（`R3|AGENTS.md|check-ui-reuse.mjs`／`R3|CLAUDE.md|…`）
+   ＋ 我漏掉的 2 条（`R3|docs/项目治理/验收记录.md|a5-rerun-walkthrough.mjs`／`R3|docs/项目治理/自动扫修/001-总指挥手册.md|…`）；
+   `in WORK not in HEAD` 为空。修法：把工作树文件**还原成新 HEAD 的内容**，再在其上重放我那 2 条删除
+   → 条目 **40 → 38**（R3 35／R1 3），`git diff --numstat` 回到 `0/16`（＝只删我那 2 条、每条 8 行），
+   他们那 2 行逐字在场（`grep -c a5-rerun-walkthrough.mjs` ＝ 3：2 条登记行 ＋ 1 处 why 文本）。
+   **动手前先自证格式无损**：该文件 `json.load` 后 `json.dumps(indent=2, ensure_ascii=False)+'\n'` 与原文**逐字节相同**
+   （`12205 == 12205`），所以按对象删条目不会带来任何格式化噪声；第一次我用「按行回溯找 `{`」的文本切法，
+   第二个块多吃了 1 行、`json.loads` 当场抛错——**因为断言在写文件之前，树没被写坏**（`git diff` 为空可证），
+   改走对象层删除才对。这条测法教训记在这儿：改他人 JSON 真源一律走解析层，不走行号。
+2. **登记第二盏与本批无关的既有红灯**：`node tools/check-doc-script-refs.mjs` 现 **exit 1**，两条
+   `✗ 基线登记已过期：R3|…|a5-rerun-walkthrough.mjs（该死引实际不存在，请删除此条——基线不是永久免检牌）`。
+   成因不在本批：那两条例外是他线 01:11 按 owner 2026-09-30 的 C 案登记的，理由原文写「脚本在主工区被 gitignore 的
+   `.workbuddy/` 目录里，**隔离工区看不见**，所以被误判成死引」，并且同一句已经写明「**合回主线时须删除该条**」。
+   本次实测：`c03a5589` 正是那次合回；而主工区里 `find .workbuddy -maxdepth 4 -name 'a5-rerun-walkthrough*'`
+   → `.workbuddy/audit/a8c/a5-rerun-walkthrough.mjs` 真实在场（`.gitignore:69` 忽略该目录），
+   于是 R3 命中消失、例外转「过期」。**本包不代删**：删了会把他们隔离工区（那里看不见 `.workbuddy`）的门禁直接弄红，
+   且那是他们的销账动作、归他们那条线。连同 §10-4 的 `hotspots:test`，下游现在有 **2 盏与本批无关的红灯**，
+   本批未修、已逐条给出归属证据链。
+3. **由这两条落一条对本包有用的口径（登记待拍，不擅自替他人项目改）**：同一份基线 JSON 同时服务「主工区」和「隔离工区」，
+   而判据依赖工区可见性（被 gitignore 的目录在一侧存在、另一侧不存在）——这样的基线**必然在一侧显示为「过期」**，
+   门禁的「过期即红」就退化成了按工区随机亮灭的噪声。可选做法是下游侧把例外按工区分档，或让 R3 在扫描面里
+   把「被 gitignore 但真实存在」的脚本单独归类。属他人项目设计，本包只登记。
+4. **复算其余 HEAD 相对读数，确认没被这次移动污染**：HEAD 版 `docs/项目治理/经验治理.md` 仍含 `confirmationMaterial`
+   2 处、`"revision": 511`（＝我修前的状态，说明他线那两笔没把我的账本修复吃掉）；HEAD 版 `AGENTS.md:3` marker 仍
+   `version=23`、`checksum=sha256:e15269e0…`（＝§10-5 说的降级落点仍然成立）。工作树侧 `--fix` 后
+   `check-doc-index` exit 0（原文「12 份登记文档指纹一致」，`documents.length = 13`、多出的是索引自身）、
+   `check-doc-governance` exit 0、`check-caliber-ledger` exit 0、`check-experience-ledger` → `ok:true`、
+   `EXP-257.count` 复验 0、`revision` 稳定在 517。本包 `scripts/verify.ps1` 全部文档改动落地后重跑 **26/26 全绿**。
+5. **同一盏索引门在不到一小时内自己红了第二次，成因与他线合并有关、与账本无关**：第二次 `✗ 指纹过期：docs/接口契约.md`
+   （`manifest 60ac9cb34190… → 实际 2eacc4e90989…`、令牌 `44880 → 45750`、分卷 `1-701 → 1-707`）——
+   该文件最后一次提交是他线 `060d2464`（01:11），而它的工作树 mtime ＝ **01:34:18**，
+   即 `c03a5589`（01:32 那笔合并）**把这份文档原地重写了一遍**，于是把我上一次 `--fix` 录进去的指纹打掉。
+   重跑 `--fix` → exit 0，且 20 秒后复查仍 exit 0（这次不是活写入者在动，是合并的一次性重写）。
+   **最终落点读数**：`experienceGovernance ~54534／sha256:fa7a394cc06f…`、`interfaceContracts ~45750／sha256:2eacc4e90989…`；
+   三查绿（index／governance／caliber 各 exit 0）、`check-experience-ledger` `ok:true`、块 `--check` exit 0、
+   唯 `check-doc-script-refs` 仍 exit 1（第 2 条那两盏无关红灯）。
+   **给本包的口径**：在共享仓上「跑绿一次」不等于交付时还是绿的——落点状态必须由**下游自己的 pre-commit（`--staged` 口径）**
+   在提交那一刻再判一次；我们这边只登记复算命令，不把任何一次绿当承诺。
