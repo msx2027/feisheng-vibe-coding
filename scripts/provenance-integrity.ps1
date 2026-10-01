@@ -518,3 +518,143 @@ function Test-RuntimePatchStructureInvariants {
         errors = @($errors)
     }
 }
+
+function Test-RuntimePatchLineCounts {
+    param([Parameter(Mandatory = $true)][string]$RepositoryRoot)
+
+    # 登记项的 linesChanged 必须等于「来源原文 → 补丁后副本」的实算加删行数之和。
+    #
+    # 为什么要机械强制：这个字段此前没有任何消费者（grep 全部 .ps1/.mjs/.py 零命中），44 个
+    # runtime-import 登记项里三种口径并存——30 项记加删之和、9 项只记新增、5 项两者都不是
+    # （evidence/20261001-skill-body-dead-command-cleanup.md §4b 末条）。没有消费者的数字必然漂，
+    # 而它一旦被引进取决（本次就是）就会给出错答案。
+    # 口径（owner 2026-10-01 第 ④ 项统一，写进 LOCAL-PATCHES.json 的 note）：
+    #   git diff --no-index --numstat 的 added + deleted，即对来源快照原文的加删之和。
+    # 例外：snapshotPath == path 的条目（sliver-core 的 catalog 投影双通道登记）没有可活的原文副本，
+    # 活树无法复算，计入 exempt 并在读数里显式打印——「检查不了」必须可见，不得静默当成通过。
+    # fail-closed：原文/副本缺失、字段缺失、git 退出 128 一律失败。sliver-core 命名空间（原文只有哈希）不覆盖。
+
+    $repoRoot = [System.IO.Path]::GetFullPath($RepositoryRoot)
+    $registryPath = Join-Path $repoRoot 'provenance/LOCAL-PATCHES.json'
+    if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
+        # 登记文件缺失＝对账前提不成立，不是「没有要对的账」。本包一定有这份登记
+        # （provenance/LOCAL-PATCHES.json 是受跟踪文件），缺了只可能是被删或路径变了，必须判红。
+        return [pscustomobject]@{
+            ok = $false
+            checked = 0
+            exempt = @()
+            errors = @('对账前提不成立：provenance/LOCAL-PATCHES.json 登记文件缺失')
+        }
+    }
+    $doc = Get-Content -Raw -Encoding UTF8 -LiteralPath $registryPath | ConvertFrom-Json
+    if ($doc.schema -ne 'feisheng-local-patches/v1') { throw "不支持的 LOCAL-PATCHES schema: $($doc.schema)" }
+
+    $errors = @()
+    $exempt = @()
+    $checked = 0
+    # 扫到的 runtime-import 文件条目总数：为 0 不是「没有账要对」而是「对账前提塌了」
+    # （命名空间改名、登记被清空、patches 结构变了都会静默归零），必须与 exempt 一样显式判红。
+    $scanned = 0
+    # 扫到的 runtime-import 文件条目总数：为 0 时本步什么都没对，属「对账前提不成立」而非通过。
+    # 为什么必须单列这一条：缺 linesChanged／缺 snapshotPath／原文或副本缺失 的条目都走 continue，
+    # 不进 $checked，所以只看 $checked 的调用方会把「全批条目字段名变了」读成「没有要对的账」。
+    $scanned = 0
+    # 同一 path 在 runtime-import 命名空间下只允许一条活登记（OWNER-LEDGER 的 local-patch-registry 规则）。
+    # 这条必须机械查：下游消费方 Get-RuntimeCopyPatches 用哈希表按 path 收条目，重复登记不是「多记一遍」
+    # 而是**后一条静默覆盖前一条**——2026-10-01 实测两处重复让结构不变量步的条数比登记条数少 2，
+    # 两个门禁步各报各的分母（74 与 75）却全绿，没有任何一处把「少算了两条」当故障。
+    $pathOwners = @{}
+    $duplicates = @()
+
+    foreach ($patch in @($doc.patches)) {
+        if ([string]$patch.snapshot -ne 'runtime-import') { continue }
+        foreach ($file in @($patch.files)) {
+            $scanned++
+            $relative = ([string]$file.path).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+            if ($pathOwners.ContainsKey($relative)) {
+                $duplicates += ($relative + ' [' + [string]$pathOwners[$relative] + ' + ' + [string]$patch.id + ']')
+            } else {
+                $pathOwners[$relative] = [string]$patch.id
+            }
+            $snapshotRel = ''
+            if ($file.PSObject.Properties.Name -contains 'snapshotPath') {
+                $snapshotRel = ([string]$file.snapshotPath).Replace([System.IO.Path]::DirectorySeparatorChar, '/')
+            }
+            if (-not ($file.PSObject.Properties.Name -contains 'linesChanged')) {
+                $errors += ($relative + ' (行数对账无法执行：登记项缺 linesChanged 字段)')
+                continue
+            }
+            $registered = [int]$file.linesChanged
+            if ([string]::IsNullOrWhiteSpace($snapshotRel)) {
+                $errors += ($relative + ' (行数对账无法执行：来源原文 snapshotPath 未登记)')
+                continue
+            }
+            if ($snapshotRel -eq $relative) {
+                $exempt += ($relative + '[' + [string]$patch.id + ']')
+                continue
+            }
+
+            $originalPath = Join-Path $repoRoot ($snapshotRel.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+            $patchedPath = Join-Path $repoRoot ($relative.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+            if (-not (Test-Path -LiteralPath $originalPath -PathType Leaf)) {
+                $errors += ($relative + ' (行数对账无法执行：来源原文缺失 ' + $snapshotRel + ')')
+                continue
+            }
+            if (-not (Test-Path -LiteralPath $patchedPath -PathType Leaf)) {
+                $errors += ($relative + ' (行数对账无法执行：补丁副本缺失)')
+                continue
+            }
+
+            # git diff --no-index 有差异时退出码为 1，这是正常结果而非失败；显式关掉 Stop 偏好，
+            # 否则 5.1 会把 stderr 的提示包成 ErrorRecord 抛在这里（与 verify.ps1 的 Invoke-Node 同理）。
+            $prevPreference = $ErrorActionPreference
+            $ErrorActionPreference = 'Continue'
+            try {
+                $global:LASTEXITCODE = 0
+                $numstat = & git -c core.autocrlf=false -c core.quotepath=false diff --no-index --numstat -- $originalPath $patchedPath 2>$null
+                $gitCode = $LASTEXITCODE
+            } finally {
+                $ErrorActionPreference = $prevPreference
+            }
+            if ($gitCode -eq 128) {
+                $errors += ($relative + ' (行数对账失败：git diff --no-index 退出 128)')
+                continue
+            }
+            $statLine = @($numstat | Where-Object { $_ -match '^\d+\t\d+\t' } | Select-Object -First 1)
+            if (@($statLine).Count -eq 0) {
+                if ($gitCode -eq 0) { $added = 0; $deleted = 0 }
+                else {
+                    $errors += ($relative + ' (行数对账失败：退出 ' + $gitCode + ' 但 numstat 无数字行——二进制或口径变了)')
+                    continue
+                }
+            } else {
+                $statParts = @($statLine[0] -split "`t")
+                $added = [int]$statParts[0]
+                $deleted = [int]$statParts[1]
+            }
+
+            $checked++
+            $actual = $added + $deleted
+            if ($actual -ne $registered) {
+                $errors += ($relative + ' (linesChanged 登记=' + $registered + ' 实算=加' + $added + '+删' + $deleted + '=' + $actual + '，口径=对来源快照的加删之和)')
+            }
+        }
+    }
+
+    # 重复登记必须判红：下游 Get-RuntimeCopyPatches 用哈希表按 path 收条目，重复＝后一条静默覆盖前一条。
+    # （此前 $duplicates 只收集不上报，本步对重复是盲的——门禁自己的消费者缺失，与被它抓的 bug 同类。）
+    if (@($duplicates).Count -gt 0) {
+        $errors += ('runtime-import 命名空间存在重复登记（同一 path 多条活条目，后者静默覆盖前者）: ' + ($duplicates -join ', '))
+    }
+    if ($scanned -eq 0) {
+        $errors += '对账前提不成立：runtime-import 命名空间扫到 0 个文件条目（本包有 38 个导入技能，归零只可能是命名空间改名、patches 结构变了或登记被清空）'
+    }
+
+    return [pscustomobject]@{
+        ok = ($errors.Count -eq 0)
+        checked = $checked
+        scanned = $scanned
+        exempt = @($exempt)
+        errors = @($errors)
+    }
+}

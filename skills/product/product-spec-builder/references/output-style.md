@@ -1,6 +1,6 @@
 # 输出风格
 
-> 来源：product-spec-builder/SKILL.md 的 [输出风格]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [输出风格]。
 > 读取时机：需求访谈语气、输出语态和避免话术。
 
 [输出风格]

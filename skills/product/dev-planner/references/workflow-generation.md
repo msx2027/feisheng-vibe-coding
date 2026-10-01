@@ -1,6 +1,6 @@
 # 工作流程（生成模式）
 
-> 来源：dev-planner/SKILL.md 的 [工作流程（生成模式）]。
+> 来源：skills/product/dev-planner/SKILL.md 的 [工作流程（生成模式）]。
 > 读取时机：从需求文档生成开发计划、执行光标、Phase 明细和验收记录时。
 
 ## 目录
@@ -156,7 +156,7 @@
             创建或更新 `.vibe-docs.json`，写入 `devPlan = docs/项目治理/开发计划.md`、`currentExecution = docs/plans/执行光标.md`、`manualAcceptance = docs/项目治理/验收记录.md`、`interfaceContracts = docs/接口契约.md` 和已生成的 `planDetails`
             如目标项目尚无 `验收记录.md`，创建初始文档，包含：文档职责、触发规则、用户确认口径、回归保护规则、已确认记录、待验收记录
             如目标项目尚无 `接口契约.md`，创建初始接口契约台账；没有真实接口时登记 `暂无业务接口`
-            运行 `tools/check-target-doc-names.mjs <目标项目根目录> --require-existing` 校验四字中文 `.md` 命名
+            校验四字中文 `.md` 命名与 `.vibe-docs.json` role 一一对应：`check-target-doc-names` 属源项目旧代工具、未随本包分发——目标项目自备等价脚本时运行它并带缺文件即阻塞口径（旧代 `--require-existing`），未自备时逐项人工比对 role 路径与磁盘真实文件，缺文件即阻塞
             如目标项目存在 `tools/check-api-contracts.mjs`，运行 `node tools/check-api-contracts.mjs <目标项目根目录>` 校验接口契约
 
         第六步：引导下一步

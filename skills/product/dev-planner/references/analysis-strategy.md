@@ -1,6 +1,6 @@
 # 分析策略
 
-> 来源：dev-planner/SKILL.md 的 [分析策略]。
+> 来源：skills/product/dev-planner/SKILL.md 的 [分析策略]。
 > 读取时机：需要构建依赖图、校准 Phase 粒度、风险前置或 WebSearch 验证时。
 
 [分析策略]

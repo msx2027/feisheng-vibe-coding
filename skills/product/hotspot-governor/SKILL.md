@@ -107,7 +107,7 @@ disable-model-invocation: true
     ```
 
 [行为验收样例]
-    真人话术级回归由 `tools/test-hotspot-governor-human-scenarios.mjs` 覆盖；该脚本必须使用临时项目和 `check-hotspots` fresh 扫描证据，不只检查关键词。
+    真人话术级回归脚本（源项目旧代 `tools/test-hotspot-governor-human-scenarios.mjs`）未随本包分发，实测按文件名在活树 `find` 零命中、活树无此文件，只有 `sources/` 快照里有——**本包内该回归没有机器覆盖**：下面的样例表是人工验收清单，逐条对照本技能正文与 `check-hotspots` 实际行为核对并留证据；目标项目自建等价冒烟时必须使用临时项目与 `check-hotspots` fresh 扫描证据，不只检查关键词。不得口头声明「行为回归已通过」。
 
     | 用户输入 | 必须行为 | 禁止行为 |
     | --- | --- | --- |

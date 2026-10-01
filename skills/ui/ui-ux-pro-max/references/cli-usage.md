@@ -4,8 +4,8 @@
 
 ## 基本原则
 
-- 数据文件位于 `skills/ui-ux-pro-max/data/`，默认不全文读取。
-- 查询入口是 `skills/ui-ux-pro-max/scripts/search.py`。
+- 数据文件位于 `skills/ui/ui-ux-pro-max/data/`，默认不全文读取。
+- 查询入口是 `skills/ui/ui-ux-pro-max/scripts/search.py`。
 - 设计建议先用 `--design-system` 得到整体方向，再用 `--domain` 或 `--stack` 针对性补充。
 - 只把命中的查询结果带回当前任务上下文。
 - `--persist` 会把 project / page 规范化为 portable 单路径段 slug，并把所有输出限制在 `<output-dir>/design-system` 内；空值、逃逸路径或不可移植名称必须失败，不得回退到任意文件路径。
@@ -13,12 +13,12 @@
 ## 常用命令
 
 ```bash
-python skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system -p "<Project Name>"
-python skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "<Project Name>"
-python skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "<Project Name>" --page "<page-name>"
-python skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> -n 3
-python skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack <stack> -n 3
-python skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system -f markdown
+python skills/ui/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system -p "<Project Name>"
+python skills/ui/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "<Project Name>"
+python skills/ui/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "<Project Name>" --page "<page-name>"
+python skills/ui/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> -n 3
+python skills/ui/ui-ux-pro-max/scripts/search.py "<keyword>" --stack <stack> -n 3
+python skills/ui/ui-ux-pro-max/scripts/search.py "<query>" --design-system -f markdown
 ```
 
 ## 推荐流程
@@ -52,8 +52,8 @@ python skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system -f markd
 ## 示例
 
 ```bash
-python skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
-python skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
-python skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
-python skills/ui-ux-pro-max/scripts/search.py "layout rendering navigation" --stack nextjs
+python skills/ui/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
+python skills/ui/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
+python skills/ui/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
+python skills/ui/ui-ux-pro-max/scripts/search.py "layout rendering navigation" --stack nextjs
 ```

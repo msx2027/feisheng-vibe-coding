@@ -13,7 +13,7 @@ disable-model-invocation: true
     必需：
     - 目标项目根目录和 `.vibe-docs.json`；缺失时先由 `product-spec-builder` 建立项目真源（项目画像 / 宪法设计由控制面的项目宪法路由产出）。
     - 需求文档；需求仍有影响行为、验收、数据、权限、接口或范围的 `未决 / blocked` 时，先回到 `product-spec-builder`。
-    - `<skills-root>/tools/architecture-foundation-policy.mjs`；先用其 `requiresArchitectureFoundation` 判定触发，避免把路径词或文件数量误当作高影响变更。
+    - 本技能「地基只管高代价决策」段所列触发判据：判定按那段文字走，先确认是新项目还是已有项目的语义变化，避免把路径词或文件数量误当作高影响变更。源项目旧代 `architecture-foundation-policy` 判定脚本未随本包分发，本包不为触发判定另设第二个 owner。
 
     按需：
     - 已有项目代码、接口契约、项目画像与宪法设计；本轮影响面不清时先用 `rg` 沿 callers/callees 与相关测试缩小范围（有可用的代码图工具时再用）。

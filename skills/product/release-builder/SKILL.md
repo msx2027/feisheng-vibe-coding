@@ -33,7 +33,7 @@ disable-model-invocation: true
     - 目标项目人工验收记录 → 优先用 `.vibe-docs.json` 的 `manualAcceptance`，默认 `验收记录.md`；发布前检查是否存在待验收或需回归复验范围
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：先解析 `.vibe-docs.json` 的 schema v2、文档索引和 `loadPolicy`，再通过 `resolve-target-doc-context.mjs` 显式请求 `documentIndex,currentExecution,devPlan,manualAcceptance`；只有本次发布涉及接口时才追加 `interfaceContracts`。只读取 resolver 返回的 selector；never 被拒绝即停止发布，本 Skill 不得绕过。发布前 `npm run check:docs` 必须通过，文档 drift 或索引 stale 都属于发布阻断。
+    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：先解析 `.vibe-docs.json` 的 schema v2、文档索引和 `loadPolicy`，再按显式 role 精准取读：`documentIndex,currentExecution,devPlan,manualAcceptance`；只有本次发布涉及接口时才追加 `interfaceContracts`。`resolve-target-doc-context` 属源项目旧代 resolver，未随本包分发——目标项目自备等价 resolver 时按其输出执行，未自备时由协作方按同一口径人工完成（门面 `文档索引.md` 选定文件 → 精确取一份正文）。只读取本轮选定到的 selector；请求 `never` 被拒绝即停止发布，本 Skill 不得使用 `--allow-never` 或等价绕过开关自行放行。发布前 `npm run check:docs` 必须通过，文档 drift 或索引 stale 都属于发布阻断。
 
     **目标项目文档解析原则**：发布用户目标项目时，先读 `.vibe-docs.json`，再按角色映射定位需求文档和人工验收记录；legacy `Product-Spec.md` 只作为读取迁移输入。
 

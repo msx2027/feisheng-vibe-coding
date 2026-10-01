@@ -131,7 +131,7 @@ description: Product Spec 输出模板。当需要生成目标项目产品需求
 | 契约台账 | `接口契约.md` | 通过 `.vibe-docs.json.interfaceContracts` 映射 |
 | 核心原则 | 同一业务能力一个统一契约入口 | 已有 endpoint / service / public entry / schema / event 能覆盖时，复用或扩展，不另造平行接口 |
 | 新增入口条件 | <明确能力边界差异 + 调用方影响 + 测试证据> | 不能说明和旧入口差异时不得新增 |
-| 门禁 | `check-api-contracts.mjs` | 新增 API route、service/public entry、fetch 调用、server action、IPC / event 通道或 schema 后运行 |
+| 门禁 | 接口契约门禁（`check-api-contracts`，源项目旧代脚本、未随本包分发） | 新增 API route、service/public entry、fetch 调用、server action、IPC / event 通道或 schema 后运行：项目自备等价脚本时跑到通过，未自备时人工核对「新增入口已先写进本契约、同一业务能力只留一个统一入口」并留下证据 |
 
 填写规则：
 - 如果第一版没有真实接口，写明“暂无业务接口”，但仍生成 `接口契约.md`。

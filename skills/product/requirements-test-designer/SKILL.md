@@ -197,8 +197,8 @@ disable-model-invocation: true
 
     [第六步：质量门禁]
         检查弱断言、缺字段、ID 不稳定、覆盖缺口、脑补需求、人工验收状态、自动化候选和领域专项断言。
-        如果生成了 CSV 测试用例表，运行 `node skills/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types "happy path,negative path,boundary value,permission,role,state transition,workflow,data persistence,API contract,error handling,security,accessibility,performance / reliability,compatibility,regression"`；高风险套件可追加 `--require-types-per-req "<types>"` 检查每个需求的关键类型覆盖；无法运行时按 `quality-gate.md` 做人工门禁。
-        需要验证 Skill 本身的生产级门禁时，运行 `node skills/requirements-test-designer/scripts/simulate-production-suite.mjs`。
+        如果生成了 CSV 测试用例表，运行 `node skills/product/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types "happy path,negative path,boundary value,permission,role,state transition,workflow,data persistence,API contract,error handling,security,accessibility,performance / reliability,compatibility,regression"`；高风险套件可追加 `--require-types-per-req "<types>"` 检查每个需求的关键类型覆盖；无法运行时按 `quality-gate.md` 做人工门禁。
+        需要验证 Skill 本身的生产级门禁时，运行 `node skills/product/requirements-test-designer/scripts/simulate-production-suite.mjs`。
 
     [第七步：自动化衔接]
         只给出 automation candidate、推荐测试层级、技术栈信号和 handoff packet。

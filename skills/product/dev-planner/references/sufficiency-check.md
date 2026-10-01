@@ -1,6 +1,6 @@
 # 信息充足度判断
 
-> 来源：dev-planner/SKILL.md 的 [信息充足度判断]。
+> 来源：skills/product/dev-planner/SKILL.md 的 [信息充足度判断]。
 > 读取时机：判断计划输入是否足够生成 `开发计划.md`。
 
 [信息充足度判断]

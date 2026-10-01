@@ -4,7 +4,7 @@
     层级：L4 / UI 系统治理参考
     模块：初始化、扩展、迁移和门禁流程
     依赖：
-    - `skills/ui-system-guardian/SKILL.md`
+    - `skills/product/ui-system-guardian/SKILL.md`
     - 目标项目 UI root
     - 目标项目 `.vibe-docs.json`
     - 目标项目设计令牌 / 组件盘点 / 复审报告
@@ -33,8 +33,8 @@
 3. 创建或补齐基础组件入口：`Button`、`Card`、必要的 `index.ts`。
 4. 让应用入口导入 token 文件，页面从 UI root 消费组件。
 5. 补 `.vibe-docs.json` 映射：`designLanguageTokens`、`componentInventory`、`designReviewReport`，需要长期治理时再补 `uiGovernanceReport = 界面治理.md`。
-6. 复制或接入 `tools/check-ui-reuse.mjs`，在 `package.json` 增加 `check:ui-reuse`；如有 build，build 先跑该脚本。
-7. 运行 `npm run check:ui-reuse` 或 `node tools/check-ui-reuse.mjs . --all`。
+6. 接入目标项目自有的 UI 复用门禁脚本，在 `package.json` 增加 `check:ui-reuse`；如有 build，build 先跑该脚本。该门禁属源项目旧代工具、未随本包分发，不得从分发包里取脚本拷入：项目内已有时只接脚本位，没有时按 `references/audit-rules.md` 清单先人工核对，确需自动化才自建一个最小的并登记为项目自有门禁。
+7. 运行 `npm run check:ui-reuse` 或 `node tools/check-ui-reuse.mjs . --all`（后者仅在项目内确有该脚本时）。
 
 ## 3. extend 流程
 
@@ -63,7 +63,7 @@
 
 适用：门禁缺失、失败、误报或需要解释。
 
-1. 确认是否已有 `tools/check-ui-reuse.mjs`，优先复用本分发包版本。
+1. 确认目标项目内是否已有 UI 复用门禁脚本（常见位置 `tools/check-ui-reuse.mjs`）。**本分发包不随发该脚本**：项目内已有则复用并按其实际用法跑，项目内没有时不得声称「已安装」，按 `references/audit-rules.md` 清单人工核对并说明未自动化。
 2. 确认 `package.json` 是否有 `check:ui-reuse`，正式项目 build 是否先执行它。
 3. 对失败项逐条分类：页面层裸视觉值、基础组件重复声明、原生控件、allow 注释缺 reason、UI root 识别错误。
 4. 能回到 UI 包的必须修；确需例外时加 allow 注释并写清 reason。

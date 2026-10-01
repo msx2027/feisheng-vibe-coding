@@ -1,6 +1,6 @@
 # 对话策略
 
-> 来源：product-spec-builder/SKILL.md 的 [对话策略]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [对话策略]。
 > 读取时机：用户需求模糊，需要追问、归纳隐性需求或控制追问深度时。
 
 [对话策略]

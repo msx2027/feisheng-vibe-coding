@@ -170,7 +170,7 @@ Embed conceptual DNA without announcing:
 - Large sizes for impact moments
 
 **Font integration:**
-- Search `skills/ui-styling/canvas-fonts` directory
+- Search `skills/ui/ui-styling/canvas-fonts` directory
 - Download needed fonts
 - Bring typography onto canvas
 - Part of art, not typeset digitally

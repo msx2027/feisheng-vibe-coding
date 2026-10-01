@@ -39,10 +39,10 @@ disable-model-invocation: true
 [最小使用流程]
     1. 明确 query：产品类型 + 行业 / 受众 + 设计关键词 + 当前 stack。
     2. 首选生成设计系统：
-       `python skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system -p "<Project Name>"`
+       `python skills/ui/ui-ux-pro-max/scripts/search.py "<query>" --design-system -p "<Project Name>"`
     3. 需要专项补充时再查 domain 或 stack：
-       `python skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> -n 3`
-       `python skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack <stack> -n 3`
+       `python skills/ui/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> -n 3`
+       `python skills/ui/ui-ux-pro-max/scripts/search.py "<keyword>" --stack <stack> -n 3`
     4. 只把命中的小结果用于当前任务；不要打开整份 CSV。
 
 [按需加载 references]

@@ -24,9 +24,9 @@ npm.cmd exec --offline -- shadcn init
 **Add specific components through the fail-closed helper:**
 
 ```bash
-python skills/ui-styling/scripts/shadcn_add.py button
-python skills/ui-styling/scripts/shadcn_add.py button card dialog  # Multiple
-python skills/ui-styling/scripts/shadcn_add.py --all               # All components
+python skills/ui/ui-styling/scripts/shadcn_add.py button
+python skills/ui/ui-styling/scripts/shadcn_add.py button card dialog  # Multiple
+python skills/ui/ui-styling/scripts/shadcn_add.py --all               # All components
 ```
 
 Components install to `components/ui/` with automatic dependency management.

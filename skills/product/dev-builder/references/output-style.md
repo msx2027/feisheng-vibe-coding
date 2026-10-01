@@ -1,6 +1,6 @@
 # 输出风格
 
-> 来源：dev-builder/SKILL.md 的 [输出风格]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [输出风格]。
 > 读取时机：汇报口径、最终回复格式、用户可见进度表达。
 
 [输出风格]

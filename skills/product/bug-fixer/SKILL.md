@@ -50,7 +50,7 @@ disable-model-invocation: true
     - 影响面侦察：跨模块、调用链不清、权限 / 数据 / 本地工具 / UI 流程等 T3 bug，先用 `rg` 沿 callers/callees 与相关测试侦察；有可用的代码图工具时再用
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时先解析 schema v2、`documentIndex/documents/loadPolicy`，再用 `resolve-target-doc-context.mjs` 从 `documentIndex,currentExecution` 开始，只按复现路径追加受影响的 `productSpec/devPlan/manualAcceptance/interfaceContracts` role；任务胶囊 manifest 通过 `--capsule` 注入。只读取 resolver 返回的 selector，never 被拒绝即阻塞，本 Skill 不得自行使用 `--allow-never`。
+    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时先解析 schema v2、`documentIndex/documents/loadPolicy`，再按「当前任务显式 role」精准取读：从 `documentIndex,currentExecution` 开始，只按复现路径追加受影响的 `productSpec/devPlan/manualAcceptance/interfaceContracts` role；启用任务胶囊时把其 manifest 一并作为输入。`resolve-target-doc-context` 属源项目旧代 resolver，未随本包分发——目标项目自备等价 resolver 时按其输出执行，未自备时由协作方按同一口径人工完成（门面 `文档索引.md` 选定文件 → 精确取一份正文）。只读取本轮选定到的 selector，请求 `never` 被拒绝即阻塞，本 Skill 不得使用 `--allow-never` 或等价绕过开关自行放行。
 
     **目标项目文档解析原则**：调试用户目标项目时，先读 `.vibe-docs.json`，再按角色映射定位需求文档、开发计划、当前执行光标和人工验收记录；legacy 英文文档名只作为读取迁移输入。
 

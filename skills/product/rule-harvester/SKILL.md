@@ -63,13 +63,13 @@ disable-model-invocation: true
 [宪法规则退役（人工复核）]
     这是"降级/淘汰"的第一期落地：对写进 vibe 源码 Agent 宪法的规则，找出"疑似过时/该退役"的，经用户逐条拍板后退役。**只做人工复核，不依赖自动计数**（自动冷热计数是第二、三期）。
     **地基（身份证 + 护栏）**：
-    - 每条宪法规则的身份证与护栏档位登记在 `tools/constitution-rules.mjs`，与正文一一对应，由 `tools/check-constitution-rules.mjs` 双向校验锁死（正文增删改名规则却没同步登记表 → 校验 FAIL）。
+    - 宪法规则的**文字**以受管块正文为唯一真源，正文可用 `skills/event/experience-elevator/tools/init-target-runtime.mjs` 的 `getConstitutionBody()` 整份提取（2026-10-01 实测：101 行，且正文不含任何规则身份证与档位标注）。规则身份证＋护栏档位的登记表与「登记表 vs 正文」双向校验脚本（源项目旧代 `constitution-rules`、`check-constitution-rules`）未随本包分发——**本包内没有机器化的身份证／档位真源**：判档只能由协作方按下一段三档定义对提取出的正文逐条人工标注并留证据，不得声称有机器校验；目标项目自建等价登记表时按其用法跑到 PASS。
     - 护栏三档：`protected`（生死线/安全/基础设施，永不退役）、`background`（呼吸级根本纪律如沟通习惯，AI 无感遵守、几乎不会主动报账，**不参与退役排名、不列候选**，防系统性少报误杀）、`candidate`（功能性/情境性规则，唯一可进退役池的档）。
     **三层护栏（防误杀，缺一不可）**：
-    1. 档位护栏：只有 `candidate` 档进退役池；`protected` / `background` 碰都不碰（用 `candidateRuleIds()` 取池）。
+    1. 档位护栏：只有 `candidate` 档进退役池；`protected` / `background` 碰都不碰（旧代 `candidateRuleIds()` 取池函数未随本包分发——按上一条的人工标注口径取池，并在证据里列出标注过程）。
     2. 呼吸级隔离：`background` 单独归类、不上称——它们被无感遵守，靠"是否被报账/是否高频出现"判断必然系统性偏低，一律不列候选。
     3. 人终审：退役只出候选、只做建议，用户逐条拍板才退；用户跳过的不再重复提议。数据/理由不足就不出候选。
-    **退役 = 从 vibe 源码删除该规则**，属改公共底座（影响所有项目），是 T3+ hazard：必须守 [第一性原则] 备份门 + [清理原地安全协议]（删前预览确切文本、精确匹配、删后给 diff、失败不静默）。删除后同步：升 `BLOCK_VERSION`（整批退役一次性 +1）→ 从 `constitution-rules.mjs` 登记表移除对应条目 → 跑 `check-constitution-rules.mjs` 必须 PASS → 对目标项目重跑 `--write` 刷新 → `--check` 验证 → 告知用户所有项目需各自重跑刷新才生效。
+    **退役 = 从 vibe 源码删除该规则**，属改公共底座（影响所有项目），是 T3+ hazard：必须守 [第一性原则] 备份门 + [清理原地安全协议]（删前预览确切文本、精确匹配、删后给 diff、失败不静默）。删除后同步：升 `BLOCK_VERSION`（整批退役一次性 +1）→ 若项目自建了规则登记表则移除对应条目并跑到 PASS（本包没有那份登记表：以受管块正文为唯一真源，并在证据里写明本轮没有机器校验，不得口头声称校验已通过）→ 对目标项目重跑 `--write` 刷新 → `--check` 验证 → 告知用户所有项目需各自重跑刷新才生效。
     **退役理由来源（本期人工，非自动）**：现扫时结合"该规则领域是否与本项目相关（比对 `.vibe-docs.json`）、是否长期未在项目中体现、是否已被更强规则取代"给出**候选 + 理由**，明确标注这是 AI 语义初筛、最终以用户核对理由为准，不得用"机械判断"话术诱导盲从。
 
 [归类判据]
@@ -136,8 +136,8 @@ disable-model-invocation: true
     ```
 
 [退役相关工具]
-    - `tools/constitution-rules.mjs`：宪法规则身份证 + 护栏档位登记表（唯一真源）。提供 `candidateRuleIds()` 取退役池、`auditRegistryAgainstBody()` 双向校验。
-    - `tools/check-constitution-rules.mjs`：登记表 vs 正文双向校验器，只报告不改文件；退役或回流改动宪法后必须跑到 PASS。
+    - `skills/event/experience-elevator/tools/init-target-runtime.mjs`：`getConstitutionBody()` 提取宪法正文（不含 marker）、`TARGET_RUNTIME_BLOCK_VERSION` 是受管块版本号；退役或回流改动宪法后按它的语义递增版本号并重跑 `--write` / `--check`。
+    - 规则身份证 + 护栏档位登记表、以及「登记表 vs 正文」双向校验脚本属源项目旧代工具（`constitution-rules`、`check-constitution-rules`），未随本包分发：目标项目自建等价校验时按其跑到 PASS，未自建时由协作方把提取出的正文逐条与规则清单比对并留人工核对证据，不得口头声称校验已通过。
 
 [按需加载 references]
     无，保持按需加载策略。本 Skill 当前不含 references 目录；未来若积累"归类边界疑难案例库""重措辞范例库"等长内容，优先迁入 `references/` 再在此表登记读取时机与触发条件。

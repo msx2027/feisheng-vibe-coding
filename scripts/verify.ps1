@@ -33,6 +33,7 @@ Set-StrictMode -Version Latest
 #   - runtime include 内容完整性（bundle 逐文件 sha256 + 全局路径唯一性）
 #   - 导入副本与快照一致性（Vibe 逐文件白名单 + Matt 侧，含登记补丁双向核对）
 #   - 已登记补丁结构不变量（runtime-import 补丁的围栏奇偶 / frontmatter 键集 / 路径 token 结构比对）
+#   - 已登记补丁行数与实算一致（runtime-import 登记项的 linesChanged == 对来源快照的 added+deleted）
 #   - 保真树换行可复现性（-text 且索引==工作树）
 #   - 控制面静态契约评测（governance/sliver-core 的开发执行 D0 / 有界 D1 加载体积预算，2026-09-28 接线）
 #   - 能力索引新鲜度（重生成后逐字节比对）
@@ -118,8 +119,28 @@ function Invoke-Node {
     }
 }
 
+function Get-NodeTestCount {
+    param(
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][array]$Output,
+        [Parameter(Mandatory = $true)][string]$Label
+    )
+    # node --test 的汇总行（`ℹ tests 30`）是交接文档里「N 单测／N 例」的唯一可复算来源。
+    # 取不到一律抛：返回 0 或 null 会把「没跑到」写成「实测 0」，那正是本批要消灭的第二类假数。
+    $match = [regex]::Match(($Output -join "`n"), '(?m)^\D*tests (\d+)\s*$')
+    if (-not $match.Success) {
+        throw ($Label + '：未取到 node --test 的 tests 汇总行，例数不可复算（输出格式变了就同步本处口径）')
+    }
+    return [int]$match.Groups[1].Value
+}
+
 try {
     New-Item -ItemType Directory -Force -Path $workRoot | Out-Null
+
+    # 两套 node --test 的例数：由 5e/5h 从各自汇总行现取，供 6b 与交接文档对账。
+    # 显式初始化为 null（StrictMode Latest 下读未赋值变量直接抛），失败时让 6b 报「实测值未获得」
+    # 而不是报一条变量未初始化异常。
+    $caliberTestCount = $null
+    $refTestCount = $null
 
     # 1) catalog 与分类真源同步
     try {
@@ -446,6 +467,24 @@ try {
         Add-Result -Step '已登记补丁结构不变量' -Passed $false -Detail $_.Exception.Message
     }
 
+    # 1c-4) 已登记补丁的 linesChanged 与实算一致（登记数字防漂，2026-10-01 接线）
+    #     这个字段此前没有任何消费者，44 个 runtime-import 登记项三种口径并存（30 加删之和／9 只记新增／
+    #     5 两者都不是），evidence/20261001-skill-body-dead-command-cleanup.md §4b 末条登记「查实不修、等 owner」，
+    #     本批 owner 令统一。口径现由本步强制：对来源快照原文的 added+deleted；
+    #     snapshotPath == path（本目录即快照本体、无可活原文）的条目不可复算，计入 exempt 并打印出来。
+    try {
+        $patchLines = Test-RuntimePatchLineCounts -RepositoryRoot $repoRoot
+        if ($patchLines.ok) {
+            Add-Result -Step '已登记补丁行数与实算一致' -Passed $true -Detail (
+                'scanned = ' + $patchLines.scanned + '; patches = ' + $patchLines.checked + '; exempt = ' + @($patchLines.exempt).Count +
+                $(if (@($patchLines.exempt).Count -gt 0) { ' (' + (@($patchLines.exempt) -join ', ') + ')' } else { '' }))
+        } else {
+            Add-Result -Step '已登记补丁行数与实算一致' -Passed $false -Detail (@($patchLines.errors) -join '; ')
+        }
+    } catch {
+        Add-Result -Step '已登记补丁行数与实算一致' -Passed $false -Detail $_.Exception.Message
+    }
+
     # 1d) 保真树的换行可复现性（把刚修好的不变量锁住，防回归）
     #     目标：不管 runner 的 core.autocrlf 是什么值，保真树在 clone 后都得到与登记 sha 一致的字节。
     #     做法：对保真树逐文件检查 ①属性确实是 -text（规则覆盖到、且没被删）
@@ -660,7 +699,8 @@ try {
     try {
         $caliberTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-check-caliber-ledger.mjs')
         if ($caliberTest.ExitCode -ne 0) { throw ('口径账本执行器单测失败（exit ' + $caliberTest.ExitCode + '）：' + (($caliberTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
-        Add-Result -Step '口径账本执行器单测' -Passed $true -Detail (($caliberTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; ')
+        $caliberTestCount = Get-NodeTestCount -Output $caliberTest.Output -Label '口径账本执行器单测'
+        Add-Result -Step '口径账本执行器单测' -Passed $true -Detail ('tests = ' + $caliberTestCount + '; ' + (($caliberTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
     } catch {
         Add-Result -Step '口径账本执行器单测' -Passed $false -Detail $_.Exception.Message
     }
@@ -680,10 +720,22 @@ try {
     #     棘轮口径：新增未登记命中阻断；登记过的存量必须仍出现（基线不是永久免检牌），逐条带收口法。
     try {
         $refCheck = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-skill-references.mjs') -Arguments @('--root', $repoRoot)
-        if ($refCheck.ExitCode -ne 0) { throw ('技能正文死引用检查未通过：' + (($refCheck.Output | Where-Object { $_ -match 'R[123]' } | Select-Object -First 3) -join '; ')) }
+        if ($refCheck.ExitCode -ne 0) { throw ('技能正文死引用检查未通过：' + (($refCheck.Output | Where-Object { $_ -match 'R[1-5]' } | Select-Object -First 3) -join '; ')) }
         Add-Result -Step '技能正文死引用棘轮' -Passed $true -Detail (($refCheck.Output | Select-Object -Last 1))
     } catch {
         Add-Result -Step '技能正文死引用棘轮' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5h) 技能正文死引用棘轮单测（scripts/check-skill-references.mjs 的行为契约回归门，2026-10-01 接线）
+    #     动机：本包这条棘轮出厂时自带计数缺陷——把「基线登记过期」并进「未登记新增」一起打印，
+    #     而它没有任何测试，缺陷在包内永远测不出来，只有下游实接才暴露（同 § 拆分被行数门禁拦下）。
+    try {
+        $refTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-check-skill-references.mjs')
+        if ($refTest.ExitCode -ne 0) { throw ('技能正文死引用棘轮单测失败（exit ' + $refTest.ExitCode + '）：' + (($refTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
+        $refTestCount = Get-NodeTestCount -Output $refTest.Output -Label '技能正文死引用棘轮单测'
+        Add-Result -Step '技能正文死引用棘轮单测' -Passed $true -Detail ('tests = ' + $refTestCount + '; ' + (($refTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
+    } catch {
+        Add-Result -Step '技能正文死引用棘轮单测' -Passed $false -Detail $_.Exception.Message
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）
@@ -822,6 +874,44 @@ try {
         $docSharedTotal = $projectionTotals['build-shared-runtime-projection.ps1']
         if ($null -eq $docSharedTotal) { throw '宿主中性投影实测总数未获得（第 6 步未通过，先修它）' }
 
+        # 四个存量目录与两套单测例数：此前只写在交接文档、自称实测，却不在任何锚点集内（靠人记）。
+        # owner 2026-10-01 第 ④ 项令收编，故此处现算；目录缺失视为对账前提不成立（抛，不静默计 0）。
+        $docDirCounts = @{}
+        foreach ($docInventoryDir in @('evidence', 'tasks', 'scripts', 'tests')) {
+            $docInventoryPath = Join-Path $repoRoot $docInventoryDir
+            if (-not (Test-Path -LiteralPath $docInventoryPath -PathType Container)) {
+                throw ('存量目录缺失：' + $docInventoryDir + '/（对账前提不成立，先修它）')
+            }
+            $docDirCounts[$docInventoryDir] = [pscustomobject]@{
+                files = @(Get-ChildItem -LiteralPath $docInventoryPath -File).Count
+                dirs = @(Get-ChildItem -LiteralPath $docInventoryPath -Directory).Count
+            }
+        }
+        # 本步自身的规模也进对账：交接文档写着「该步共 40 条锚点、66 个预期数字位、重算来源 18 个不同量」，
+        # 那是同一批数字的第四个副本，每加一条锚点就得追改一次。改读 $PSCommandPath 自己现算，
+        # 去重键沿用 evidence/20261001-skill-body-dead-command-cleanup.md §4c 末条的定稿口径：
+        # 按 Expect 里的来源表达式文本去重、按 PowerShell 变量名（剥掉索引器）去重，两数并存不是漂移。
+        $docSelfText = Get-Content -Raw -Encoding UTF8 -LiteralPath $PSCommandPath
+        $docAnchorCountErrors = @()
+        $docAnchorMatches = @([regex]::Matches($docSelfText, '(?m)^\s*\[pscustomobject\]@\{ File =.*$'))
+        $docAnchorCount = $docAnchorMatches.Count
+        $docNumberPositions = 0
+        $docSourceExprs = @()
+        foreach ($docAnchorLine in $docAnchorMatches) {
+            $docExpectMatch = [regex]::Match($docAnchorLine.Value, 'Expect = @\((.*?)\)\s*\}\s*$')
+            if (-not $docExpectMatch.Success) {
+                $docAnchorCountErrors += ('锚点行取不到 Expect 列表: ' + $docAnchorLine.Value.Substring(0, [Math]::Min(70, $docAnchorLine.Value.Length)))
+                continue
+            }
+            $docExpectParts = @($docExpectMatch.Groups[1].Value.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+            $docNumberPositions += $docExpectParts.Count
+            $docSourceExprs += $docExpectParts
+        }
+        if ($docAnchorCountErrors.Count -gt 0) { throw ('6b 自计失败（锚点表形状与口径不符）：' + (@($docAnchorCountErrors | Select-Object -First 3) -join '; ')) }
+        if ($docAnchorCount -lt 1) { throw '6b 自计失败：读本脚本源码未取到任何锚点行，对账前提不成立' }
+        $docDistinctSources = @($docSourceExprs | Select-Object -Unique).Count
+        $docDistinctVars = @($docSourceExprs | ForEach-Object { ($_ -replace '\[.*?\]', '').Trim() } | Select-Object -Unique).Count
+
         $docNumberRules = @(
             [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条\*\*来源技能全量登记定编'; Expect = @($docRecordsTotal) }
             [pscustomobject]@{ File = 'README.md'; Pattern = '\*\*(\d+) 条进入 runtime\*\*'; Expect = @($docRuntimeRecords) }
@@ -866,6 +956,13 @@ try {
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-shared-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($docSharedTotal) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '(\d+) 条记录 / (\d+) bundle 文件（控制面 (\d+) \+ Matt (\d+) \+ Vibe (\d+)'; Expect = @($docRuntimeRecords, $docBundleFiles, $docControlPlaneRecords, $docMattRecords, $docVibeRecords) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '部署态 (\d+) = \+根入口\+manifest'; Expect = @($docSharedTotal) }
+            # 两套单测例数与四个存量目录（owner 2026-10-01 第 ④ 项：自称实测的数字一律进对账，不再靠人记）
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '（(\d+) 单测，缺锚必须判畸形'; Expect = @($caliberTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '棘轮自身的单测（(\d+) 例'; Expect = @($refTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '存量：`evidence/` (\d+)、`tasks/` (\d+)、`scripts/` (\d+)（另有 (\d+) 个子目录）、`tests/` (\d+)'; Expect = @($docDirCounts['evidence'].files, $docDirCounts['tasks'].files, $docDirCounts['scripts'].files, $docDirCounts['scripts'].dirs, $docDirCounts['tests'].files) }
+            # 本步自身规模（第四条副本，由上面的 $PSCommandPath 现算，含这两条锚点自己）
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '该步共 (\d+) 条锚点、(\d+) 个预期数字位，重算来源是 \*\*(\d+) 个不同量\*\*'; Expect = @($docAnchorCount, $docNumberPositions, $docDistinctSources) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '按 PowerShell 变量名去重得 (\d+)'; Expect = @($docDistinctVars) }
         )
         $docNumberErrors = @()
         $docNumberChecked = 0

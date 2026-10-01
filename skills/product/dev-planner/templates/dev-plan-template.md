@@ -186,7 +186,7 @@ description: 开发计划输出模板。分析 Product Spec 后，按此模板�
 | 契约台账 | `接口契约.md` | 通过 `.vibe-docs.json.interfaceContracts` 映射 |
 | 默认原则 | 同一业务能力一个统一契约入口 | endpoint、service、public entry、server action、fetch wrapper、IPC / event、schema 都先查台账再新增 |
 | 新增条件 | <能力边界差异 / 迁移关系 / 调用方影响 / 测试证据> | 无法说明差异时不得新增平行接口 |
-| 门禁命令 | `node tools/check-api-contracts.mjs .` | 新增或修改 API route、fetch、service/public entry、server action、IPC / event、schema 后运行 |
+| 门禁命令 | 目标项目自备接口契约门禁时填其命令（旧代 `node tools/check-api-contracts.mjs .` 不随本包分发）；未自备时填「人工核对契约台账」并写清证据位置 | 新增或修改 API route、fetch、service/public entry、server action、IPC / event、schema 后运行 |
 
 填写规则：
 - 每个 Phase 如涉及接口，必须列出受影响的 `能力ID`。

@@ -66,17 +66,17 @@ Primitive (raw values)
 
 **Generate tokens:**
 ```bash
-node skills/design-system/scripts/generate-tokens.cjs --config assets/design-tokens.json -o assets/design-tokens.css
+node skills/ui/design-system/scripts/generate-tokens.cjs --config assets/design-tokens.json -o assets/design-tokens.css
 ```
 
 **Validate token usage in code:**
 ```bash
-node skills/design-system/scripts/validate-tokens.cjs --dir src/
+node skills/ui/design-system/scripts/validate-tokens.cjs --dir src/
 ```
 
 **Embed tokens into standalone HTML prototypes when needed:**
 ```bash
-node skills/design-system/scripts/embed-tokens.cjs --minimal --style
+node skills/ui/design-system/scripts/embed-tokens.cjs --minimal --style
 ```
 
 ## 按需加载 references
@@ -106,9 +106,9 @@ Do not load all references by default. Read only the file matching the active ta
 
 | Script | Purpose |
 |--------|---------|
-| `skills/design-system/scripts/generate-tokens.cjs` | Generate CSS from JSON token config |
-| `skills/design-system/scripts/validate-tokens.cjs` | Check for hardcoded values in code |
-| `skills/design-system/scripts/embed-tokens.cjs` | Inline tokens for standalone HTML prototypes |
+| `skills/ui/design-system/scripts/generate-tokens.cjs` | Generate CSS from JSON token config |
+| `skills/ui/design-system/scripts/validate-tokens.cjs` | Check for hardcoded values in code |
+| `skills/ui/design-system/scripts/embed-tokens.cjs` | Inline tokens for standalone HTML prototypes |
 
 ## Templates
 

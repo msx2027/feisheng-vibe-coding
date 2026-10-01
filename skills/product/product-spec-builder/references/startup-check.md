@@ -1,6 +1,6 @@
 # 启动检查
 
-> 来源：product-spec-builder/SKILL.md 的 [启动检查]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [启动检查]。
 > 读取时机：开始 0-1 或迭代模式前，定位现有文档和 `.vibe-docs.json`。
 
 [启动检查]

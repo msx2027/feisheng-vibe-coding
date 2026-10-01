@@ -56,7 +56,7 @@ Analyze what's weak about the current spatial design:
 
 ## Plan Layout Improvements
 
-Consult the impeccable spatial design reference (`skills/impeccable/reference/spatial-design.md`) for detailed guidance on grids, rhythm, and container queries.
+Consult the impeccable spatial design reference (`skills/ui/impeccable/reference/spatial-design.md`) for detailed guidance on grids, rhythm, and container queries.
 
 Create a systematic plan:
 

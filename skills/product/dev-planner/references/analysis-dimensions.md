@@ -1,6 +1,6 @@
 # 分析维度清单
 
-> 来源：dev-planner/SKILL.md 的 [分析维度清单]。
+> 来源：skills/product/dev-planner/SKILL.md 的 [分析维度清单]。
 > 读取时机：拆 Phase 前需要完整分析功能依赖、技术栈、术语、测试策略和验收标准时。
 
 [分析维度清单]

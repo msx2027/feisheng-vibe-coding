@@ -25,7 +25,7 @@
     运行：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/simulate-production-suite.mjs
+    node skills/product/requirements-test-designer/scripts/simulate-production-suite.mjs
     ```
 
     通过标准：

@@ -1,6 +1,6 @@
 # Phase 完成度判断
 
-> 来源：dev-builder/SKILL.md 的 [Phase 完成度判断]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [Phase 完成度判断]。
 > 读取时机：Task/Phase 收口、四步走验证、人工验收提醒和用户确认前。
 
 [Phase 完成度判断]

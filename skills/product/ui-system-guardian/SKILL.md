@@ -13,7 +13,7 @@ disable-model-invocation: true
     - 目标项目组件盘点文档
     - 目标项目设计复审报告
     - 目标项目 UI 包
-    - `tools/check-ui-reuse.mjs`
+    - 目标项目自有的 UI 复用门禁脚本与它的 `check:ui-reuse` 脚本位（属源项目旧代工具，未随本包分发；项目内没有时按 `references/audit-rules.md` 清单人工核对）
     输出：
     - UI 系统初始化结果
     - UI 债务审计清单
@@ -30,7 +30,7 @@ disable-model-invocation: true
 
     **迁移模式**：把页面层手搓的按钮、输入、弹窗、导航、标签、列表、卡片、状态、颜色、圆角、阴影迁回 UI 包和 design tokens。
 
-    **门禁模式**：安装、修复或解释 `tools/check-ui-reuse.mjs` / `check:ui-reuse`，让目标项目能自动拦截页面层绕过 UI 系统的问题。
+    **门禁模式**：修复或解释目标项目自有的 UI 复用门禁与其 `check:ui-reuse` 脚本位，让项目能自动拦截页面层绕过 UI 系统的问题。该门禁脚本属源项目旧代工具、未随本包分发：项目内已有时按它的实际用法运行与修，项目内没有时不得声称「已安装」——按 `references/audit-rules.md` 清单人工核对并说明未自动化。
 
 [依赖检测]
     Skill 启动时第一步自动执行。
@@ -46,13 +46,13 @@ disable-model-invocation: true
     - 目标项目设计复审报告 → 默认 `复审报告.md`
     - 目标项目 UI 治理报告 → 默认 `界面治理.md`
     - 目标项目 UI root → 常见为 `packages/ui`、`packages/design-system`、`src/shared/ui`、`src/ui`、`src/components/ui`、`libs/ui`、`libs/components`
-    - `tools/check-ui-reuse.mjs` 或 `npm run check:ui-reuse` → 有则作为 hard gate 验证
+    - 目标项目的 UI 复用门禁脚本或 `npm run check:ui-reuse` → 有则作为 hard gate 验证
     - 设计简报 / 设计稿 / 视觉参考 → 有则辅助 token 和组件语义命名
 
     安装策略：
     - 缺少 UI root 且本轮需要正式前端页面治理时，先执行 UI root 决策协议；只有证明没有可复用 UI root 后，才在目标 app 内创建最小 `src/shared/ui`
     - 缺少 token 或组件文档时，先补目标项目四字中文文档和 `.vibe-docs.json` 映射
-    - 缺少 `check-ui-reuse` 时，优先复用本分发包 `tools/check-ui-reuse.mjs`，不另造第二套门禁
+    - 缺少 UI 复用门禁时：本分发包不随发该脚本（源项目旧代工具未过本包准入），不得从包里取用或声称包内有；先在目标项目按 `references/audit-rules.md` 清单人工核对并留证据，确需自动化时由项目自建一套并登记为项目自有门禁，不另造第二套重复口径
     - 缺少设计源时，不阻塞技术治理，但必须标记为“无设计源降级模式”
 
 [本包治理继承]

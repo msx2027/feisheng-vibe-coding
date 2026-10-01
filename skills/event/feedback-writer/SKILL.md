@@ -63,13 +63,13 @@ disable-model-invocation: true
 - `global-codex` → 本包不写用户全局经验库，只向主 Agent 返回跨域提议。
 - 同时命中多个 scope → 只返回 `proposal-required`，由用户选一个；不得把同一事件同时写 feedback 与项目经验。
 
-[写入流程] 1. 读取 `.claude/feedback/FEEDBACK-INDEX.md`（如不存在，从 templates/feedback-index-template.md 创建）2. 检查是否已有同主题 feedback（去重）- 已有 → 更新内容 + occurrences +1 + 更新 updated - 没有 → 创建新文件 + 更新索引 3. 文件名用 kebab-case，简短描述主题 4. 按 templates/feedback-topic-template.md 格式写入 5. 更新 FEEDBACK-INDEX.md
+[写入流程] 1. 读取 `.claude/feedback/FEEDBACK-INDEX.md`（如不存在，按下方「索引格式」新建——本包不随发模板，源项目的 `templates/feedback-index-template.md` 只存在于 `sources/` 快照，不得当可执行路径引用）2. 检查是否已有同主题 feedback（去重）- 已有 → 更新内容 + occurrences +1 + 更新 updated - 没有 → 创建新文件 + 更新索引 3. 文件名用 kebab-case，简短描述主题 4. 按下方「条目格式」写入（模板同样只在快照，按列出的字段自拟，不缺字段）5. 更新 FEEDBACK-INDEX.md
 
 [文件规范]
 存放位置：`.claude/feedback/`
 索引文件：`.claude/feedback/FEEDBACK-INDEX.md`
-索引模板：`.claude/feedback/templates/feedback-index-template.md`
-内容模板：`.claude/feedback/templates/feedback-topic-template.md`
+索引格式：标题行 `# Feedback Index` + 一行说明「新建或更新 feedback 文件后同步更新此索引」，正文每条一行 `- [标题](文件名.md) — 一句话描述`
+条目格式：frontmatter 依次 `type: feedback`、`description`（一句话摘要，供索引快速扫描）、`created`、`updated`（均为 YYYY-MM-DD）、`occurrences`（首次为 1）、`graduated: false`、`source_skill`（技能名或 N/A）；`scores` 可选，只在技能已执行时填 `accuracy`/`coverage`/`efficiency`/`satisfaction` 各 1-5 加一句依据。正文三节：`**问题描述**`（发生了什么）、`**触发场景**`（什么情况下发生）、`**教训/建议**`（以后怎么做）
 
 [返回格式]
 执行完毕后返回给主 Agent：- 有新记录："记录了 1 条 feedback：[标题]（[文件名]）" - 更新已有："更新了 [文件名]，occurrences: N → N+1" - 无信号："无新 feedback"

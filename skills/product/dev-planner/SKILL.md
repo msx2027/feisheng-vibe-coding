@@ -24,7 +24,7 @@ disable-model-invocation: true
 
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时，先解析 schema v2、`documentIndex` 和 `loadPolicy`，再运行 `resolve-target-doc-context.mjs`，默认只显式请求 `documentIndex,productSpec`；只有当前计划确实涉及设计或接口时才追加 `designBrief/interfaceContracts`。只读取 resolver 返回的 selector，onDemand 不全文读取，never 被拒绝后立即停止且本 Skill 不得自行使用 `--allow-never`。计划写回后刷新 `文档索引.md` 并运行目标项目 `check:docs`。
+    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时，先解析 schema v2、`documentIndex` 和 `loadPolicy`，再按显式 role 精准取读，默认只请求 `documentIndex,productSpec`；只有当前计划确实涉及设计或接口时才追加 `designBrief/interfaceContracts`。`resolve-target-doc-context` 属源项目旧代 resolver，未随本包分发——目标项目自备等价 resolver 时按其输出执行，未自备时由协作方按同一口径人工完成（门面 `文档索引.md` 选定文件 → 精确取一份正文）。只读取本轮选定到的 selector，onDemand 不全文读取，请求 `never` 被拒绝后立即停止，本 Skill 不得使用 `--allow-never` 或等价绕过开关自行放行。计划写回后刷新 `文档索引.md` 并运行目标项目 `check:docs`。
 
     **可验证原则**：每个 Phase 完成后必须能编译、能运行、能看到效果。不允许"写一堆代码但什么都跑不起来"的 Phase。
 
@@ -36,7 +36,7 @@ disable-model-invocation: true
     - Phase 明细默认保存为 `docs/plans/第一阶段.md`、`docs/plans/第二阶段.md`、`docs/plans/第三阶段.md` 等四字中文文件名
     - `.vibe-docs.json` 必须登记 `devPlan = "docs/项目治理/开发计划.md"`、`currentExecution = "docs/plans/执行光标.md"`、`manualAcceptance = "docs/项目治理/验收记录.md"`、`interfaceContracts = "docs/接口契约.md"`，并在生成 Phase 明细时登记 `planDetails`
     - 不允许在新目标项目里生成 `DEV-PLAN.md`、`plans/CURRENT-EXECUTION.md` 或 `plans/phase-N.md`
-    - 保存后运行 `node <skills仓库>/tools/check-target-doc-names.mjs <目标项目根目录> --require-existing`；命名校验不通过不得声明完成
+    - 保存后校验生命周期文档命名与 `.vibe-docs.json` 的 role 一一对应：`check-target-doc-names` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时按其运行（缺文件即阻塞），未自备时由协作方逐项比对 role 路径与磁盘真实文件；命名校验不通过不得声明完成
 
     **依赖正序原则**：地基先打，房子后盖。基础设施（项目骨架、数据库、路由）永远排在业务功能前面。功能之间有依赖关系的，被依赖方先做。
 
@@ -71,14 +71,14 @@ disable-model-invocation: true
     - 先读取 `.vibe-docs.json.interfaceContracts` 映射的 `接口契约.md`
     - Phase 的模块设计或验收标准必须列出受影响 `能力ID` 和契约入口
     - 已有契约能覆盖时，计划写“复用 / 扩展”；确需新增时，计划写清边界差异、迁移关系和验证命令
-    - 新 Web / Desktop / Node CLI 计划默认把 `check-api-contracts.mjs` 纳入 `check:health` / build 验证链路；其他平台可复用接口契约门禁，但不承诺由现有模板自动复制
+    - 新 Web / Desktop / Node CLI 计划默认把接口契约门禁纳入 `check:health` / build 验证链路：`check-api-contracts` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时接入并跑到通过，未自备时至少人工核对「新增入口已先写进 `接口契约.md`、且只保留一个统一契约入口」并留下核对证据；其他平台可复用接口契约门禁，但不承诺由现有模板自动复制
 
     **技术栈 Profile 规划原则**：开发计划必须继承或补齐目标项目需求文档里的 `platform profile`、`language adapter`、`architecture profile`、`scaffold policy` 和 `fallback stack`。
     - Spec 已明确 Profile 时，计划直接继承，不重新静默推荐 Web / Node
     - Spec 只写产品形态时，先扫描已有代码和工程文件；仍无法判断语言 / 架构时，只问一个会改变脚手架和验证路径的问题
     - 只有明确匹配 Web / Desktop / Node CLI 的新项目，才规划现有 JS / TS 内置模板
     - Backend、Library、Mobile、非 Node CLI 默认规划为 `platform-default` 或 `existing-incremental`，不生成 `src/shared/ui` 或 Web UI 门禁
-    - 技术栈 Profile 详细矩阵以 `docs/language-platform-profiles.md` 为准
+    - 技术栈 Profile 按目标项目自己的 platform profile / language adapter / architecture profile 登记项推导；源项目的 `docs/language-platform-profiles.md` 详细矩阵未随本包分发（只存在于 `sources/` 快照，不可当可执行引用），缺登记项时只问一个会改变验证路径的问题
 
     **人工验收规划原则**：每个 Phase 的验收标准必须区分自动化验证和人工验收。
     - UI、设计稿、CLI 人机流程、权限确认、端到端链路、安装启动、发布后 smoke 等自动化不能完全证明的内容，必须标记为需要人工验收

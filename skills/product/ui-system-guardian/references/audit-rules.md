@@ -4,8 +4,8 @@
     层级：L4 / UI 系统治理参考
     模块：UI 债务审计规则
     依赖：
-    - `skills/ui-system-guardian/SKILL.md`
-    - `tools/check-ui-reuse.mjs`
+    - `skills/product/ui-system-guardian/SKILL.md`
+    - 目标项目自有的 UI 复用门禁脚本（属源项目旧代工具，未随本包分发）
     输出：
     - UI 债务分类
     - 优先级

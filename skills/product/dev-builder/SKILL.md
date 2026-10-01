@@ -19,18 +19,18 @@ disable-model-invocation: true
 
     可选：
     - 设计简报：优先 `.vibe-docs.json.designBrief`，新项目默认 `docs/设计简报.md`；缺失则标记“无设计规范模式”。
-    - 目标项目任务胶囊：优先读取 `.vibe-docs.json.taskContext`；启用后当前任务目录为 `taskContext.currentTaskCapsule`，新项目默认根目录 `docs/plans/任务`。非快车道 T2/T3 Task 优先用 `node <skills-root>/tools/init-target-task-context.mjs <target-root> --slug <slug> --title "<title>" --write` 创建或读取；编码前读取 `任务状态.json` 和 `实现上下文.jsonl`。
+    - 目标项目任务胶囊：优先读取 `.vibe-docs.json.taskContext`；启用后当前任务目录为 `taskContext.currentTaskCapsule`，新项目默认根目录 `docs/plans/任务`。非快车道 T2/T3 Task 先创建或读取当前任务胶囊：`init-target-task-context` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时按其用法运行，未自备时在 `.vibe-docs.json.taskContext.currentTaskCapsule` 指向的目录里手工建齐 `任务状态.json` 与 `实现上下文.jsonl` 两件（字段按本技能「任务胶囊按需启用」与「目标状态写入协议」所列，不另造第三套结构）；编码前必读这两件。
     - 设计工具 MCP、Playwright、gh CLI：可用则增强交付；缺失则记录降级，不阻塞。
     - 影响面侦察：已有项目 T2/T3、跨模块、入口不明、调用链不清或影响面不清时，先用 `rg` 沿 callers/callees、入口与相关测试缩小范围；有可用的代码图工具时再用。
 
     安装策略：新增依赖前先检查标准库、平台自带能力和项目已安装依赖；确实不够时说明缺口，等待用户明确同意后才能安装。必需依赖未获授权时记录阻塞；可选依赖缺失只记录降级模式。
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时，先解析 `schemaVersion/documentIndex/documents/loadPolicy`，再运行 `node <skills-root>/tools/resolve-target-doc-context.mjs <target-root> --roles documentIndex,currentExecution,productSpec,devPlan --budget <本轮预算> --json`。只读取 resolver 返回的文件与 selector；某个 Task 不需要的 role 不加载，onDemand 不得因为“开发通常需要”而全文读取，never 被 resolver 拒绝后立即停止且不得由本 Skill 使用 `--allow-never` 绕过。启用任务胶囊时，把 `实现上下文.jsonl` 作为 `--capsule` 输入交给 resolver，而不是自行遍历胶囊或项目文档。
+    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：存在 `.vibe-docs.json` 时，先解析 `schemaVersion/documentIndex/documents/loadPolicy`，再按「当前任务显式 role（默认 `documentIndex,currentExecution,productSpec,devPlan`）+ 本轮预算」精准取读：集合文档先从 `文档索引.md` 选定文件，再精确取一份正文。`resolve-target-doc-context` 属源项目旧代 resolver，未随本包分发——目标项目自备等价 resolver 时按其输出执行，未自备时由协作方按同一口径人工完成（读 `.vibe-docs.json` 的 schema v2 与 `loadPolicy` → `rg` 定位 → 门面索引 → 单份正文）。只读取本次选定到的文件与 selector；某个 Task 不需要的 role 不加载，onDemand 不得因为“开发通常需要”而全文读取，请求 `never` 被拒绝后立即停止，不得使用 `--allow-never` 或等价绕过开关自行放行。启用任务胶囊时，把 `实现上下文.jsonl` 作为胶囊输入交给 resolver 或按它逐行取读，而不是自行遍历胶囊或项目文档。
 
-    **目标状态写入协议**：Phase / Task / checkpoint / nextStep 变化时使用 `update-target-task-state.mjs` 做 revision-aware 更新；文档写回后运行 `build-target-doc-index.mjs --write`，并以 `npm run check:docs` 或 `check-target-doc-drift.mjs --quick --strict` 收口，禁止只改 Markdown 后口头声明索引与状态已同步。
+    **目标状态写入协议**：`update-target-task-state`、`build-target-doc-index`、`check-target-doc-drift` 属源项目旧代工具族，未随本包分发——目标项目自备等价脚本时按其用法运行，未自备时由协作方按同一口径人工完成：Phase / Task / checkpoint / nextStep 变化时先读 `任务状态.json` 里现有 revision（内容哈希）作为期望值，只在它未变时原位改写状态（`todo|doing|blocked|done`）并重算 revision，期望值不符即停止并说明并发冲突，不覆盖他人写入；生命周期文档写回后按 `文档索引.md` 既有条目逐项核对路径与标题并再生索引；最后以目标项目自己的 `npm run check:docs` 收口。禁止只改 Markdown 后口头声明索引与状态已同步。
 
-    **文档真源**：所有目标项目生命周期文档先通过 `.vibe-docs.json` 解析。新目标项目默认：`docs/需求文档.md`、`docs/需求变更.md`、`docs/设计简报.md`、`docs/项目治理/开发计划.md`、`docs/plans/执行光标.md`、`docs/项目治理/验收记录.md`、`docs/接口契约.md`；根目录 Markdown 仅保留 `AGENTS.md`、`CLAUDE.md`、`文档索引.md`。新生成或写回生命周期文档后运行 `node <skills仓库>/tools/check-target-doc-names.mjs <目标项目根目录> --require-existing`。
+    **文档真源**：所有目标项目生命周期文档先通过 `.vibe-docs.json` 解析。新目标项目默认：`docs/需求文档.md`、`docs/需求变更.md`、`docs/设计简报.md`、`docs/项目治理/开发计划.md`、`docs/plans/执行光标.md`、`docs/项目治理/验收记录.md`、`docs/接口契约.md`；根目录 Markdown 仅保留 `AGENTS.md`、`CLAUDE.md`、`文档索引.md`。新生成或写回生命周期文档后必须校验文档名与 `.vibe-docs.json` 的 role 一一对应：`check-target-doc-names` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时运行它（缺文件即阻塞），未自备时由协作方按上面默认清单逐项比对 manifest role 路径并确认文件真实存在，不得只凭肉眼扫一遍就声明通过。
 
     **执行语境优先**：先读需求和计划里的执行语境、术语、测试策略和当前 Phase，再决定实现粒度；`vibe` 模式按单人短反馈推进，但不降低 Plan、验证、review、doc-sync 标准。
 
@@ -40,7 +40,7 @@ disable-model-invocation: true
 
     **歧义与影响面**：非低风险歧义先写清假设、备选解释和阻塞点；每次改代码前评估影响范围，不顺手重构，不清理无关文件；每一行改动都应能追溯到用户请求、当前 Task 或验证修复所必需的最小清理。T2/T3 且影响面不明时先用 `rg` 沿 callers/callees 与相关测试缩小范围（有可用的代码图工具时再用）。
 
-    **执行强度与审查强度正交**：开工前先判定 `execution tier`，再独立计算 `review profile`。T0 低风险文字可直接改；T1 微计划 + 定向验证；T2 必须写短工程计划：目标、影响面、RED 测试、GREEN 验证路径、升级 T3 触发条件，并使用 `split-self-review`；高影响 T2 升为 `independent-two-stage`；T3 固定执行 `分类 -> 成功标准 -> 风险/影响面 -> RED -> GREEN -> REFACTOR -> fresh 验证 -> 独立 Spec review -> 独立 quality review -> doc-sync -> finish checklist`。高影响触发、Reviewer 隔离、finding 状态机、最小审查包、Phase ledger 与 Review Receipt 以 `code-review/references/review-profiles.md` 为统一协议。
+    **执行强度与审查强度正交**：开工前先判定 `execution tier`，再独立计算 `review profile`。T0 低风险文字可直接改；T1 微计划 + 定向验证；T2 必须写短工程计划：目标、影响面、RED 测试、GREEN 验证路径、升级 T3 触发条件，并使用 `split-self-review`；高影响 T2 升为 `independent-two-stage`；T3 固定执行 `分类 -> 成功标准 -> 风险/影响面 -> RED -> GREEN -> REFACTOR -> fresh 验证 -> 独立 Spec review -> 独立 quality review -> doc-sync -> finish checklist`。高影响触发、Reviewer 隔离、finding 状态机、最小审查包、Phase ledger 与 Review Receipt 的协议在本包活树三处：双轴审查与 Reviewer 隔离见 `skills/engineering/code-review/SKILL.md`，Phase ledger 与两个 review receipt 见本技能 `references/phase-completion.md`，跨 Task 的审查强度与 ledger 合并规则见 `references/workflow-continuous-development.md`。源项目 code-review 技能下那份 review-profiles 参考文档未随本包分发（原件只在 `sources/` 快照），不要按可执行引用去找它。
 
     **T3+ hazard mode**：命中 auth、permission、security、token、secret、payment、database、migration、data loss、filesystem、shell、network、eval、hook、agent routing、Skill/Hook/Tool 规则、release/deploy/publish、删除/重命名/迁移行为文件，或影响面无法可靠判断时，先写 Hazard Task Packet：目标/非目标、风险类型、影响面、允许/禁止修改文件、RED 证据或用户明确批准的例外、验证命令、rollback、finish checklist。
 
@@ -69,7 +69,7 @@ disable-model-invocation: true
 
     **人工验收**：自动化不等于用户真实验收。页面、交互、CLI 人机流程、权限确认、端到端链路、发布安装等需要用户观察/操作的内容，交付前标记人工验收状态：`不适用 / 待用户验收 / 用户已确认 / 需回归复验`。没有用户明确确认，不得写成 `用户已确认`。
 
-    **脚手架策略**：只有 `scaffold policy = template` 且平台匹配 Web / Desktop / Node CLI 时使用现有 JS/TS 模板；Backend、Library、Mobile、非 Node CLI 默认沿用平台生态或既有结构。模板入口从 skills root 执行：Windows PowerShell 先用 `$bash = (Get-Command bash).Source` 并确认它是真实 Git Bash，不是 WSL 占位程序，再运行 `& $bash "<skills-root>/tools/render-project-scaffold.sh" --template <template> --project-name "<name>" --output "<dir>"`；POSIX shell 使用 `bash "<skills-root>/tools/render-project-scaffold.sh" --template <template> --project-name "<name>" --output "<dir>"`。
+    **脚手架策略**：只有 `scaffold policy = template` 且平台匹配 Web / Desktop / Node CLI 时使用现有 JS/TS 模板；Backend、Library、Mobile、非 Node CLI 默认沿用平台生态或既有结构。模板入口：本包只随发模板资产（`templates/project-scaffolds/<template>/`、`_target-docs/`、`_shared-ui/`），不随发渲染脚本——`render-project-scaffold` 属源项目旧代工具，未随本包分发（实测活树没有这个脚本文件，它只作为文字出现在本包若干文档里，文件本身仅在 `sources/` 快照）。目标项目自备等价渲染脚本时按其用法运行；未自备时手工渲染，先确认目标位置尚不存在同名目录（旧代渲染器对已存在的输出路径直接拒绝，手工渲染同样不得覆盖既有项目），再按旧代渲染器的实际动作逐项做到：① 先合成 `_target-docs/`（`_vibe-docs.json.template`＋`文档索引.md.template`＋`docs/` 下九份生命周期文档模板），Web / Desktop 三个模板再合成 `_shared-ui/src/shared/ui/`（button/card/index/tokens），Node CLI 不合成 UI 包；② 再整树复制所选模板目录；③ 改名规则是通用的：去掉 `.template` 后缀，且文件名以 `_` 起头者把开头的 `_` 换成 `.`（故 `_vibe-docs.json.template` → `.vibe-docs.json`、`_gitignore.template` → `.gitignore`）；④ 在含 `__PROJECT_NAME__` / `__PROJECT_TITLE__` / `__NPM_PACKAGE_NAME__` 的文件里逐项替换（包名取项目名小写、非字母数字换成 `-`、去掉首尾与连续的多余 `-`）；⑤ 运行时块用本包真有的入口 `node <skills-root>/tools/init-target-runtime.mjs <target-root> --skills-root <skills-root> --write`，提交护栏用 `node <skills-root>/skills/product/hotspot-governor/tools/install-hotspot-gate.mjs <target-root>`；注意旧代末步实为四件事串跑（写目标项目宪法、重建文档索引、装受管块、装提交钩子），本包只随发其中的装受管块入口，另三件（`init-target-constitution`／`build-target-doc-index`／`setup-target-hooks`，实测仅存在于 `sources/` 快照）同样不随发，不得因为跑完本步就认为末步已齐；⑥ 安装依赖并跑目标项目自有门禁。旧代渲染器还会把 33 个目标项目工具（文档索引／漂移／命名、接口契约、runtime-sync、health-check 等）拷进 `<target>/tools/`（这步在它渲染所选模板之前，本包无物可拷，故不在上列六步之内），**这些工具本包一律不随发**：模板 `package.json` 里指向它们的脚本位（`check:docs`／`check:health`／`check:api-contracts`／`check:runtime-sync`／`check:ui-reuse`）在新项目里默认是空的，`build` 又先跑 `check:health`，所以新项目要么自备等价脚本，要么由协作方按同一口径人工完成相应校验——不得把这些脚本位的存在当成「门禁已生效」，也不得因为缺渲染脚本就跳过改名与占位符替换，或把模板目录原样当项目根。
 
     **源码纪律**：人工维护生产文件超过 300 行、React 组件超过 180 行、函数与 class method 超过 100 行时由 staged 结构门禁硬拦；历史超标只减不增，测试文件 300 行开始提醒、超过 800 行进入同一棘轮，生成文件与第三方资源排除。优先既有项目风格和 SDK/框架能力，不提前抽象，不为未来假设加配置层；单次使用的扩展点、策略层、provider 或配置项默认视为过早抽象，除非它复用既有架构或直接降低当前复杂度。涉及外部库/API 时查当前官方资料。source change gate 以 behavior path 或 protected source doc 为对象；T2/T3 必须有匹配当前改动的验证、review/doc-sync 证据。
 

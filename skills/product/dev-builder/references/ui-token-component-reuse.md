@@ -79,4 +79,4 @@
 - 一个 token 文档记录唯一参数口径。
 - 一个组件盘点记录真实组件族和尺寸收口。
 - 一个复审报告记录设计源、前端预览、组件级证据和旧标准裁撤。
-- 一个门禁脚本阻止页面层绕过 UI 包和 token；新 Web / Desktop 脚手架默认使用 `tools/check-ui-reuse.mjs`。
+- 一个门禁脚本阻止页面层绕过 UI 包和 token。新 Web / Desktop 模板只带 `check:ui-reuse` 脚本位，**不随发该门禁脚本**（属源项目旧代工具，实测按文件名在活树 `find` 零命中、活树无此文件）：项目自备等价脚本时接进脚本位并让 build 先跑它，未自备时按 `skills/product/ui-system-guardian/references/audit-rules.md` 清单人工核对，不得把脚本位的存在当成门禁已生效。

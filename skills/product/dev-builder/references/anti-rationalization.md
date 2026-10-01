@@ -1,6 +1,6 @@
 # 反合理化清单
 
-> 来源：dev-builder/SKILL.md 的 [反合理化清单]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [反合理化清单]。
 > 读取时机：判断是否能跳过计划、验证、review、doc-sync 或完成证据时。
 
 [反合理化清单]

@@ -1,6 +1,6 @@
 # 需求维度清单
 
-> 来源：product-spec-builder/SKILL.md 的 [需求维度清单]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [需求维度清单]。
 > 读取时机：生成或补全需求文档，需要逐项覆盖产品、用户、流程、技术、测试。
 
 [需求维度清单]

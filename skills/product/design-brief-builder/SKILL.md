@@ -29,7 +29,7 @@ disable-model-invocation: true
     - 新目标项目设计简报默认保存为 `docs/设计简报.md`；启用 `markdownGovernance` 后，达到上限时该文件必须变为只含导航的门面，正文拆入 `docs/设计简报/`，不得保留两份正文；子简报用 `062-中文主题.md`，附录用 `附录-001-中文主题.md`，机器编号只留在 `vibe-section` 与索引且全项目不得重复；任一子简报仍超过上限时，继续改为小门面并按主题拆入其专属子目录。
     - `.vibe-docs.json` 必须登记 `designBrief = "docs/设计简报.md"`
     - 不允许在新目标项目里生成 `Design-Brief.md`
-    - 保存后运行 `node <skills仓库>/tools/check-target-doc-names.mjs <目标项目根目录> --require-existing`
+    - 保存后校验生命周期文档命名与 `.vibe-docs.json` 的 role 一一对应：`check-target-doc-names` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时按其运行，未自备时由协作方逐项比对 role 路径与磁盘真实文件；缺文件即阻塞（旧代 `--require-existing` 的口径），不得带着缺失的文档声明完成
 
     **选择题优先**：永远给 2-3 个具体选项，不给开放题。用户不是设计师，问"你要什么风格"等于没问。
 
@@ -265,7 +265,7 @@ disable-model-invocation: true
         第三步：输出文件
             保存为 `docs/设计简报.md`
             创建或更新 `.vibe-docs.json`，写入 `designBrief = docs/设计简报.md`
-            运行 `tools/check-target-doc-names.mjs <目标项目根目录> --require-existing` 校验四字中文 `.md` 命名
+            按上文「必需」段所列口径校验四字中文 `.md` 命名（本包不随发该校验脚本：项目自备等价脚本时运行它，未自备时逐项人工比对 role 路径与磁盘真实文件，缺文件即阻塞）
 
         第四步：引导下一步
             "✅ Design Brief 已生成！

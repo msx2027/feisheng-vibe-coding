@@ -46,19 +46,19 @@
     如果生成了 CSV 测试用例表，运行：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv>
+    node skills/product/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv>
     ```
 
     对生产级套件要求覆盖指定类型时，追加：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types "happy path,negative path,boundary value,permission,role,state transition,workflow,data persistence,API contract,error handling,security,accessibility,performance / reliability,compatibility,regression"
+    node skills/product/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types "happy path,negative path,boundary value,permission,role,state transition,workflow,data persistence,API contract,error handling,security,accessibility,performance / reliability,compatibility,regression"
     ```
 
     对高风险套件要求每个 `REQ-ID` 都至少有领域相关的类型覆盖时，追加：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types-per-req "happy path,negative path,API contract,error handling,security"
+    node skills/product/requirements-test-designer/scripts/validate-test-suite.mjs <test-cases.csv> --trace <traceability.csv> --require-types-per-req "happy path,negative path,API contract,error handling,security"
     ```
 
     注意：`--require-types-per-req` 只证明每个需求都有必要类型或 blocked / needs clarification 的测试记录；领域专项语义仍需结合 `domain-risk-catalog.md` 和人工 review 判断。
@@ -66,13 +66,13 @@
     自测脚本：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/validate-test-suite.mjs --self-test
+    node skills/product/requirements-test-designer/scripts/validate-test-suite.mjs --self-test
     ```
 
     生产级模拟门禁：
 
     ```powershell
-    node skills/requirements-test-designer/scripts/simulate-production-suite.mjs
+    node skills/product/requirements-test-designer/scripts/simulate-production-suite.mjs
     ```
 
     脚本能检查：

@@ -92,7 +92,7 @@ configures both shadcn/ui and Tailwind CSS.
 
 **Add components:**
 ```bash
-python skills/ui-styling/scripts/shadcn_add.py button card dialog form
+python skills/ui/ui-styling/scripts/shadcn_add.py button card dialog form
 ```
 
 `shadcn_add.py` requires a project lock file and an installed `node_modules/shadcn`
@@ -247,13 +247,13 @@ Covers:
 ### shadcn_add.py
 Add shadcn/ui components with dependency handling:
 ```bash
-python skills/ui-styling/scripts/shadcn_add.py button card dialog
+python skills/ui/ui-styling/scripts/shadcn_add.py button card dialog
 ```
 
 ### tailwind_config_gen.py
 Generate tailwind.config.js with custom theme:
 ```bash
-python skills/ui-styling/scripts/tailwind_config_gen.py --colors brand:blue --fonts display:Inter
+python skills/ui/ui-styling/scripts/tailwind_config_gen.py --colors brand:blue --fonts display:Inter
 ```
 
 ## Best Practices

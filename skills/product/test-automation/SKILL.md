@@ -42,7 +42,7 @@ disable-model-invocation: true
     - 可选依赖缺失时，标记降级模式并继续输出可执行的验证路径
 
 [第一性原则]
-    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：先解析 `.vibe-docs.json` 的 schema v2、文档索引与 `loadPolicy`，再用 `resolve-target-doc-context.mjs` 显式请求 `documentIndex,currentExecution` 及当前测试真正需要的 `productSpec/devPlan/manualAcceptance/interfaceContracts`。启用胶囊时把 `验收上下文.jsonl` 作为 `--capsule` 输入；只读取 resolver 返回的 selector。onDemand 不得全量读取，never 被拒绝后立即停止且本 Skill 不得自行绕过。
+    **目标项目上下文加载协议（优先级高于下列文档读取描述）**：先解析 `.vibe-docs.json` 的 schema v2、文档索引与 `loadPolicy`，再按显式 role 精准取读：`documentIndex,currentExecution` 及当前测试真正需要的 `productSpec/devPlan/manualAcceptance/interfaceContracts`。`resolve-target-doc-context` 属源项目旧代 resolver，未随本包分发——目标项目自备等价 resolver 时按其输出执行，未自备时由协作方按同一口径人工完成（门面 `文档索引.md` 选定文件 → 精确取一份正文）。启用胶囊时把 `验收上下文.jsonl` 作为胶囊输入；只读取本轮选定到的 selector。onDemand 不得全量读取，请求 `never` 被拒绝后立即停止，本 Skill 不得使用 `--allow-never` 或等价绕过开关自行放行。
 
     **严格 TDD 铁律**：`NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST`。除下述受控 T1 外，所有新功能、bug 修复、重构和行为变更强制 `RED-GREEN-REFACTOR`；目标项目文档不得降低这条默认纪律。如果生产代码已经先写，删除该实现并从 RED 重新开始，不保留作参考。
 

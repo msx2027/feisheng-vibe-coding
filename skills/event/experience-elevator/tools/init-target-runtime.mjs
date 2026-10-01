@@ -50,7 +50,7 @@ const DEFAULT_SKILLS_ROOT = (() => {
   }
   return legacyRoot;
 })();
-export const TARGET_RUNTIME_BLOCK_VERSION = "23";
+export const TARGET_RUNTIME_BLOCK_VERSION = "24";
 const RUNTIME_REGISTRY_FILE = ".vibe-runtime.json";
 const RUNTIME_REGISTRY_VERSION = 1;
 const START_PREFIX = "<!-- vibe-coding-skills:target-runtime:start";
@@ -275,7 +275,7 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     `- 先契约后代码：新增接口先登记 \`能力ID / 入口类型 / 契约入口 / 调用方 / 状态\` 再写实现。`,
     `- 改接口先查调用方：改已存在接口的形状（入口名、参数、返回结构、schema 字段、事件负载）前，先读台账 \`调用方\` 列确认全部下游，同步更新契约与调用方，不只改一端。`,
     `- 接口状态流转：能力状态按 \`planned → 实现中 → 已实现 → 已废弃\` 流转；废弃旧接口要标注并处理调用方，不留悬空契约。`,
-    `- UI 复用：UI / token 复用硬拦以 \`check-ui-reuse.mjs\` 与 \`ui-system-guardian\` 为执行口径，本宪法只定项目级边界不重复其检查项；项目建立统一 UI 组件库后，正式前端优先复用它与设计 token，基础件（按钮、输入、弹窗、导航、标签、列表行、卡片、状态、颜色、圆角、阴影）不在页面层手搓第二套（待生效：项目出现统一 UI 组件库，如根目录 \`package.json\` 引入 UI 包或建立组件库目录时激活，在 block 外的项目规则区登记真实包名与 token 前缀）。`,
+    `- UI 复用：UI / token 复用口径以本包 \`ui-system-guardian\` 为准，本宪法只定项目级边界不重复其检查项；机器化扫描按目标项目自备的门禁脚本执行（常见位置 \`tools/check-ui-reuse.mjs\`，该脚本不随本包分发，项目内已有则按其实际用法跑，未自备时不得声称「已安装」，改按 \`ui-system-guardian\` 清单人工核对并留证据）；项目建立统一 UI 组件库后，正式前端优先复用它与设计 token，基础件（按钮、输入、弹窗、导航、标签、列表行、卡片、状态、颜色、圆角、阴影）不在页面层手搓第二套（待生效：项目出现统一 UI 组件库，如根目录 \`package.json\` 引入 UI 包或建立组件库目录时激活，在 block 外的项目规则区登记真实包名与 token 前缀）。`,
     `- 扩展优先：组件、slot、variant、token 不够用时先扩展统一 UI 包与设计文档再复用，不在页面层临时造（待生效：随统一 UI 组件库一起激活）。`,
     `- 统一网络客户端：正式前端不绕过统一网络客户端直接 \`fetch(\` 或 \`new WebSocket\`（待生效：项目建立统一网络客户端，如 typed client / api-client 类封装入口时激活，在 block 外的项目规则区或接口契约台账登记其真实名称与入口路径）。`,
     `- 接口错误结构统一：对外接口层错误结构在各运行时之间保持统一形状（待生效：接口契约台账出现统一对外错误封装能力，即 \`入口类型 = schema\` 的错误 envelope 时激活，在接口契约台账登记错误结构字段与能力 ID）。`,

@@ -12,13 +12,27 @@
 //      `<目标项目根>/…` 这类非包根占位符前缀不判——那是目标项目自己的文件。
 //   R2 依赖声明：SKILL.md 的 [DocMap] 依赖块里以 `tools/` 或 `scripts/` 起头的条目，
 //      必须在本包存在（依赖块是「本技能要用什么」的自述，指不出实体就是假依赖）。
-//   R3 裸脚本名：正文里出现 `foo.mjs` / `foo.ps1` / `foo.sh` / `foo.py` 这类不带目录的脚本名，
-//      且本包可执行面内没有任何同名文件——即指令指向一个不存在的工具。
+//   R3 裸脚本名：正文里出现 `foo.mjs` / `foo.ps1` / `foo.sh` / `foo.py` / `foo.cjs` 这类不带目录
+//      的脚本名，且本包可执行面内没有任何同名文件——即指令指向一个不存在的工具。
+//   R4 包内路径字面量：任何以 `skills/` 起头的路径（含 `.md`／`.json`／`.yaml` 这类非脚本目标，
+//      2026-10-01 前是盲区）必须**按字面**在本包存在。写法缺分类目录（`skills/brand/…` 而真身在
+//      `skills/ui/brand/…`）同样判红——命令照抄就是打不开，与「文件其实存在」无关。
+//      目录声明（`skills/brand/data/`、`skills/ui-styling/canvas-fonts` 这类无扩展名目标）同判：
+//      2026-10-01 实测两处扁平目录路径正因「必须带扩展名」这条从 R4 眼下漏过，报了残留 0。
+//      左边界必须是真分界，所以 `.vibe-coding-skills/vibe-hooks/`、快照路径与外链里的
+//      `…/skills/tree/…` 都不算本包声明（这三条是复算时真出现过的伪影）。
+//   R5 裸技能名路径：`<技能基名>/SKILL.md`、`<技能基名>/references/…` 这类省略了 `skills/<分类>/`
+//      的写法。只认技能目录里真实存在的那类子路径名（见 INNER_SHAPES），避免把目标项目产物
+//      （如 `design-system/MASTER.md`）当成本包路径。
 //
 // 覆盖边界（有意不报的形态，别把它们当成已通过）：
-//   · 带目录前缀但非 `<skills仓库>/` 的引用（如 `tools/check-ui-reuse.mjs`、`./tools/x.sh`）
-//     按口径视为**目标项目自己的**工具，本包不拥有也不该拥有，故不判死引。
-//   · 非脚本扩展名（.md / .json / .toml 等）不在本检查范围——那是文档面，归文档治理与口径账本。
+//   · 带目录前缀但非 `<skills仓库>/`、也非 `skills/` 的引用（如 `tools/check-ui-reuse.mjs`、
+//     `./tools/x.sh`、`docs/x.md`）按口径视为**目标项目自己的**工具与文档，本包不拥有也不该拥有，
+//     故不判死引；这类放行每次计数并打印（地面外 N 次），不做静默放宽。
+//   · 段名含中文的路径一律算目标项目命名面（本包文档惯用 `docs/项目治理/开发计划.md` 这类中文名），
+//     与 §4e 定的「排除中文」边界一致。
+//   · `.toml`／`.txt`／`.csv` 仍是盲区（未纳入 DOC 面扩展名集合）；无扩展名引用只有以 `skills/`
+//     起头的那一类已按目录形态判（见 R4），其它前缀的无扩展名写法仍不判。
 //   · `sources/**` 是保真快照，只读、不可执行、永不下发，故其内的同名脚本**不计入**可执行面：
 //     快照里有 ≠ 本包有。这正是本检查器要抓的那种偏差。
 //
@@ -50,11 +64,22 @@ const root = resolve(argValue('--root') ?? resolve(selfDir, '..'));
 const scopes = (argValue('--scope') ?? 'skills').split(',').map((s) => s.trim()).filter(Boolean);
 const includeRootSkill = !argValue('--scope');
 
-const EXTS = 'mjs|ps1|sh|py|cmd';
-// 目录前缀可反复，末尾必须是脚本扩展名；允许 <skills仓库> 这类含尖括号的段。
-const SCRIPT_TOKEN = new RegExp(`(?:<[^>]+>/)?(?:[\\w.\\-\\u4e00-\\u9fff]+/)*[\\w.\\-\\u4e00-\\u9fff]+\\.(?:${EXTS})\\b`, 'g');
+const EXTS = 'mjs|cjs|ps1|sh|py|cmd';
+const DOC_EXTS = 'md|json|yaml';
+// 主扫描面：脚本与文档扩展名都要收（`<skills仓库>/…` 占位符指的是文档还是脚本，正文分不出来，
+// 只收脚本就会漏掉占位符指向 `.md` 的那批——2026-10-01 实测正是如此）。
+// 目录前缀可反复，允许 <skills仓库> 这类含尖括号的段与中文段名。
+const ANY_TOKEN = new RegExp(`(?:<[^>]+>/)?(?:[\\w.\\-\\u4e00-\\u9fff]+/)*[\\w.\\-\\u4e00-\\u9fff]+\\.(?:${EXTS}|${DOC_EXTS})\\b`, 'g');
+const isScriptExt = (t) => /\.(?:mjs|cjs|ps1|sh|py|cmd)$/.test(t);
+// R4/R5 面：段名**不含**中文（中文段属目标项目命名面，见头注），扩展名同时覆盖脚本与文档目标。
+const PKG_PATH_TOKEN = new RegExp(`(?:[\\w.\\-]+/)+[\\w.\\-]+\\.(?:${EXTS}|${DOC_EXTS})\\b`, 'g');
+// 目录形态（无扩展名目标）：至少两段，段名不含中文；是否属本包由扫描处的「首段必须是 skills」收。
+const PKG_DIR_TOKEN = /(?:[\w.\-]+\/)+[\w.\-]+/g;
 
-const SKIP_DIRS = new Set(['.git', 'node_modules', 'sources', '__pycache__', '.venv', 'venv', 'dist', 'build']);
+// `.qoder` 是子代理 worktree 的落点：里面是整棵仓库的临时副本（含 skills/**.md 与一个名为 `.git`
+// 的指针文件）。不跳它，同一个包会在「有子代理在跑」和「没在跑」两种时刻报出不同的扫描数与
+// 可执行面基数，且副本里的正文会被当成本包正文判——门禁读数必须与自己正在查的内容无关。
+const SKIP_DIRS = new Set(['.git', 'node_modules', 'sources', '__pycache__', '.venv', 'venv', 'dist', 'build', '.qoder']);
 
 function walk(relDir, out) {
   let items;
@@ -78,6 +103,33 @@ function walk(relDir, out) {
 // 可执行面：本包内（不含保真快照）所有文件的基名。快照里有不算有。
 const execBasenames = new Set(walk('', []).map((f) => basename(f)));
 
+// 本包结构面（R4/R5 判据）：分类目录名与技能基名都从盘上现取，不写死清单——
+// 新增技能不需要改检查器，改检查器也不需要重录技能清单。
+const skillRoot = join(root, 'skills');
+const CATS = new Set();
+const SKILL_NAMES = new Set();
+if (existsSync(skillRoot)) {
+  for (const c of readdirSync(skillRoot)) {
+    if (SKIP_DIRS.has(c) || !statSync(join(skillRoot, c)).isDirectory()) continue;
+    CATS.add(c);
+    for (const s of readdirSync(join(skillRoot, c))) {
+      if (SKIP_DIRS.has(s) || !statSync(join(skillRoot, c, s)).isDirectory()) continue;
+      SKILL_NAMES.add(s);
+    }
+  }
+}
+// 刻意收窄：只有跟着这些子路径名的裸技能写法才算「声明本包路径」。动态取全部子项名会把
+// 目标项目产物（`design-system/MASTER.md` 这类与技能基名撞名的写法）误判成本包死引。
+const INNER_SHAPES = new Set(['SKILL.md', 'RUNTIME-NOTES.md', 'references', 'templates', 'scripts', 'tools', 'agents']);
+
+// 缺分类前缀的写法给出唯一解：正文补上即可，报红时不必让人自己去猜。
+function suggestFix(token) {
+  const norm = token.replace(/^\.\//, '');
+  const rest = norm.startsWith('skills/') ? norm.slice('skills/'.length) : norm;
+  const hits = [...CATS].filter((c) => existsSync(join(root, 'skills', c, rest)));
+  return hits.length === 1 ? `skills/${hits[0]}/${rest}` : null;
+}
+
 const scannedFiles = [];
 for (const s of scopes) {
   if (!existsSync(join(root, s))) continue;
@@ -98,6 +150,7 @@ const ANY_PREFIX = /^<[^>]+>\//;
 const errors = [];
 const hits = [];
 const seenKeys = new Set();
+let externalRefs = 0;
 for (const fileRel of scannedFiles) {
   const text = readFileSync(join(root, fileRel), 'utf8');
   const lines = text.split(/\r?\n/);
@@ -109,11 +162,11 @@ for (const fileRel of scannedFiles) {
     if (inDepBlock && /^\s*(输出|层级|模块|任务)：/.test(line)) inDepBlock = false;
 
     let m;
-    SCRIPT_TOKEN.lastIndex = 0;
-    while ((m = SCRIPT_TOKEN.exec(line)) !== null) {
+    ANY_TOKEN.lastIndex = 0;
+    while ((m = ANY_TOKEN.exec(line)) !== null) {
       const token = m[0];
       const where = `${fileRel}:${i + 1}`;
-      const bare = token.includes('/') ? null : token.replace(/\.(?:mjs|ps1|sh|py|cmd)$/, '');
+      const bare = token.includes('/') ? null : token.replace(/\.(?:mjs|cjs|ps1|sh|py|cmd)$/, '');
       if (SYSTEM_COMMANDS.has(bare)) continue;
       const pkgMatch = ANY_PREFIX.test(token) ? PKG_PREFIX.exec(token) : null;
       if (ANY_PREFIX.test(token)) {
@@ -124,7 +177,7 @@ for (const fileRel of scannedFiles) {
         continue;
       }
       if (token.includes('/')) {
-        if (inDepBlock) {
+        if (inDepBlock && isScriptExt(token)) {
           // 依赖块认「本包有这个工具」：路径写错但同名工具确实存在，只纠路径不判假依赖。
           if (!existsSync(join(root, token)) && !execBasenames.has(basename(token))) {
             hits.push({ where, rule: 'R2', token, file: fileRel });
@@ -132,31 +185,91 @@ for (const fileRel of scannedFiles) {
         }
         continue;
       }
-      if (!execBasenames.has(token)) hits.push({ where, rule: 'R3', token, file: fileRel });
+      // 裸名只有脚本扩展名才判：`README.md` 这类裸文档名在本包里满地都是，不是指令指向的实体。
+      if (isScriptExt(token) && !execBasenames.has(token)) hits.push({ where, rule: 'R3', token, file: fileRel });
+    }
+
+    // R4/R5：包内路径字面量（含 `.md`/`.json`/`.yaml` 这些脚本面看不见的目标）与裸技能名写法。
+    PKG_PATH_TOKEN.lastIndex = 0;
+    let pm;
+    while ((pm = PKG_PATH_TOKEN.exec(line)) !== null) {
+      const pathToken = pm[0];
+      // `<skills仓库>/…` 的内层路径由 R1 负责（它判的是占位符展开后的整条路径），这里不重复报。
+      if (line.slice(0, pm.index).endsWith('>/')) continue;
+      const segs = pathToken.replace(/^\.\//, '').split('/');
+      const bareSkillRef = SKILL_NAMES.has(segs[0]) && INNER_SHAPES.has(segs[1]);
+      if (segs[0] !== 'skills' && !bareSkillRef) { externalRefs++; continue; }
+      const norm = pathToken.startsWith('./') ? pathToken.slice(2) : pathToken;
+      if (existsSync(join(root, norm))) continue;
+      const where2 = `${fileRel}:${i + 1}`;
+      hits.push({
+        where: where2, rule: segs[0] === 'skills' ? 'R4' : 'R5', token: pathToken, file: fileRel,
+        fix: suggestFix(pathToken),
+      });
+    }
+
+    // R4 目录形态：正文也会把「某个目录在这儿」写成指令（`skills/ui-ux-pro-max/data/`、
+    // `skills/ui-styling/canvas-fonts` 这类不带扩展名的目标）。此前只有带扩展名的写法进 R4，
+    // 于是同一批扁平旧路径里恰好是目录声明的两条漏在门外——「检查不了」必须变成可见判据。
+    // 口径：先把上一轮判过的文件形态 token 从行里摘掉（避免 `skills/ui/x.mjs` 的前缀 `skills/ui/`
+    // 被重复报），再要求整条路径的**第一段字面就是 `skills`**，且左侧紧邻不是路径字符
+    // （`.vibe-coding-skills/vibe-hooks/`、URL 里的 `…/skills/tree/` 都是子串而非本包声明）。
+    const dirFace = line.replace(PKG_PATH_TOKEN, ' ');
+    PKG_DIR_TOKEN.lastIndex = 0;
+    let dmm;
+    while ((dmm = PKG_DIR_TOKEN.exec(dirFace)) !== null) {
+      const before = dmm.index === 0 ? '' : dirFace[dmm.index - 1];
+      if (/[A-Za-z0-9._\-\/]/.test(before)) continue;
+      const pathToken = dmm[0];
+      const segs = pathToken.replace(/^\.\//, '').split('/').filter(Boolean);
+      if (segs[0] !== 'skills') continue;
+      if (existsSync(join(root, segs.join('/')))) continue;
+      hits.push({
+        where: `${fileRel}:${i + 1}`, rule: 'R4', token: pathToken, file: fileRel,
+        fix: suggestFix(pathToken), dirForm: true,
+      });
     }
   }
 }
 
 // ---- 棘轮基线：存量登记可见、新增一律阻断、登记过期同样阻断 ----
 const baselinePath = join(root, 'scripts', 'skill-reference-baseline.json');
-const baseline = existsSync(baselinePath) ? JSON.parse(readFileSync(baselinePath, 'utf8')) : { entries: [] };
+let baseline;
+if (existsSync(baselinePath)) {
+  try {
+    baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
+  } catch {
+    // 头注承诺「基线畸形非零并点名」：裸堆栈会让下游把它当成检查器崩了而不是自己有活要修。
+    console.error(`✗ 基线文件不可读或 JSON 畸形：${baselinePath}`);
+    console.error('  修复：恢复到上个提交的基线版本（该文件只登记存量死引，不含可执行逻辑）。');
+    process.exit(1);
+  }
+} else {
+  baseline = { entries: [] };
+}
 if (!Array.isArray(baseline.entries)) {
-  console.error(`✗ 基线文件畸形：${baselinePath} 缺 entries 数组`);
+  console.error(`✗ 基线文件畸形：${baselinePath} 缺 entries 数组（修复：恢复到上个提交的基线版本，或按 --print-baseline 重新播种）`);
   process.exit(1);
 }
 const baselineKeys = new Map(
   baseline.entries.map((e) => [`${e.rule}|${e.file}|${e.token}`, e]),
 );
 
+let unregisteredHits = 0;
+let staleRegistrations = 0;
 for (const h of hits) {
   const key = `${h.rule}|${h.file}|${h.token}`;
   seenKeys.add(key);
   if (baselineKeys.has(key)) continue;
-  errors.push(`${h.where} 死引·${h.rule} 未登记新增：\`${h.token}\`（收口正文，或在 scripts/skill-reference-baseline.json 登记理由）`);
+  unregisteredHits++;
+  errors.push(`${h.where} 死引·${h.rule} 未登记新增：\`${h.token}\`` +
+    (h.fix ? `（本包唯一解是 \`${h.fix}\`，照抄的写法打不开）` : '') +
+    '（收口正文，或在 scripts/skill-reference-baseline.json 登记理由）');
 }
 for (const e of baseline.entries) {
   const key = `${e.rule}|${e.file}|${e.token}`;
   if (!seenKeys.has(key)) {
+    staleRegistrations++;
     errors.push(`基线登记已过期：${key}（该死引实际不存在，请删除此条——基线不是永久免检牌）`);
   }
 }
@@ -183,6 +296,8 @@ if (argv.includes('--print-baseline')) {
 for (const e of errors) console.error(`✗ ${e}`);
 console.log(
   `技能正文死引用检查：扫描 ${scannedFiles.length} 个文件，可执行面基名 ${execBasenames.size} 个，` +
-  `命中 ${hits.length} 处（未登记 ${errors.length} 处，基线存量 ${registered.length} 处）。`,
+  `技能面 ${SKILL_NAMES.size} 个，地面外路径 ${externalRefs} 处不计，` +
+  `命中 ${hits.length} 处（未登记新增 ${unregisteredHits} 处、基线存量 ${registered.length} 处）` +
+  (staleRegistrations ? `，基线登记过期 ${staleRegistrations} 条须删除` : '') + '。',
 );
 process.exit(errors.length ? 1 : 0);

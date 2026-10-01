@@ -34,19 +34,19 @@ Brand identity, voice, messaging, asset management, and consistency frameworks f
 
 **Inject brand context into prompts (Windows PowerShell default):**
 ```powershell
-node "<skills-root>/skills/brand/scripts/inject-brand-context.cjs"
-node "<skills-root>/skills/brand/scripts/inject-brand-context.cjs" --json
+node "<skills-root>/skills/ui/brand/scripts/inject-brand-context.cjs"
+node "<skills-root>/skills/ui/brand/scripts/inject-brand-context.cjs" --json
 ```
 
 **Validate an asset:**
 ```powershell
-node "<skills-root>/skills/brand/scripts/validate-asset.cjs" "<asset-path>"
+node "<skills-root>/skills/ui/brand/scripts/validate-asset.cjs" "<asset-path>"
 ```
 
 **Extract/compare colors:**
 ```powershell
-node "<skills-root>/skills/brand/scripts/extract-colors.cjs" --palette
-node "<skills-root>/skills/brand/scripts/extract-colors.cjs" "<image-path>"
+node "<skills-root>/skills/ui/brand/scripts/extract-colors.cjs" --palette
+node "<skills-root>/skills/ui/brand/scripts/extract-colors.cjs" "<image-path>"
 ```
 
 ## Brand Sync Workflow
@@ -54,9 +54,9 @@ node "<skills-root>/skills/brand/scripts/extract-colors.cjs" "<image-path>"
 ```powershell
 # 1. Edit docs/brand-guidelines.md (or use /brand update)
 # 2. Sync to design tokens
-node "<skills-root>/skills/brand/scripts/sync-brand-to-tokens.cjs"
+node "<skills-root>/skills/ui/brand/scripts/sync-brand-to-tokens.cjs"
 # 3. Verify
-node "<skills-root>/skills/brand/scripts/inject-brand-context.cjs" --json | Select-Object -First 20
+node "<skills-root>/skills/ui/brand/scripts/inject-brand-context.cjs" --json | Select-Object -First 20
 ```
 
 Resolve `<skills-root>` using the package runtime rule before running these commands; do not assume the current working directory is the skills package. Keep all path arguments quoted so Windows paths containing spaces remain one argument. On POSIX, the same quoted `node` commands work unchanged; only the optional output-truncation command is shell-specific.

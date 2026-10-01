@@ -1,6 +1,6 @@
 # 信息充足度判断
 
-> 来源：product-spec-builder/SKILL.md 的 [信息充足度判断]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [信息充足度判断]。
 > 读取时机：判断需求是否足够落盘，是否能生成 `需求文档.md`。
 
 [信息充足度判断]

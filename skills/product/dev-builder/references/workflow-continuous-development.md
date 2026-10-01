@@ -1,6 +1,6 @@
 # 工作流程（持续开发模式）
 
-> 来源：dev-builder/SKILL.md 的 [工作流程（持续开发模式）]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [工作流程（持续开发模式）]。
 > 读取时机：已有项目继续开发、恢复 doing/blocked 任务、逐 Task 实现时。
 
 ## 目录

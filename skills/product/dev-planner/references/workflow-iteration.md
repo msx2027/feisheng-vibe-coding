@@ -1,6 +1,6 @@
 # 工作流程（迭代模式）
 
-> 来源：dev-planner/SKILL.md 的 [工作流程（迭代模式）]。
+> 来源：skills/product/dev-planner/SKILL.md 的 [工作流程（迭代模式）]。
 > 读取时机：需求变化后更新已有开发计划和 Phase 明细时。
 
 [工作流程（迭代模式）]
@@ -55,5 +55,5 @@
         第四步：保存文件
             保存更新后的 `docs/项目治理/开发计划.md`
             更新 `.vibe-docs.json` 中的计划文档映射，并保持 `interfaceContracts = 接口契约.md`
-            运行 `tools/check-target-doc-names.mjs <目标项目根目录> --require-existing` 校验四字中文 `.md` 命名
-            如本次变更涉及真实接口，运行 `tools/check-api-contracts.mjs <目标项目根目录>` 校验契约台账
+            校验四字中文 `.md` 命名与 `.vibe-docs.json` role 一一对应：`check-target-doc-names` 属源项目旧代工具、未随本包分发——目标项目自备等价脚本时运行它并带缺文件即阻塞口径（旧代 `--require-existing`），未自备时逐项人工比对 role 路径与磁盘真实文件，缺文件即阻塞
+            如本次变更涉及真实接口，校验契约台账：`check-api-contracts` 属源项目旧代工具、未随本包分发——目标项目自备等价脚本时运行它，未自备时人工核对「新增入口已先写进 `接口契约.md`、同一业务能力只留一个统一入口」并留证据

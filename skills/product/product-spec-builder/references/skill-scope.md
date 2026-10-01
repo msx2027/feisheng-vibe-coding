@@ -1,6 +1,6 @@
 # 技能
 
-> 来源：product-spec-builder/SKILL.md 的 [技能]。
+> 来源：skills/product/product-spec-builder/SKILL.md 的 [技能]。
 > 读取时机：需要理解 product-spec-builder 的能力边界或适用场景时。
 
 [技能]

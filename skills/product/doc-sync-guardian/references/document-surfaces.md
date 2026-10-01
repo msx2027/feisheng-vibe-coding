@@ -7,8 +7,8 @@
 - 全局地图：`DOC-MAP.md`
 - 仓库级术语源：`TERMINOLOGY-AND-NAMING.md`
 - 口径账本：目标项目 `tools/caliber-ledger.json`（会复发的词位／数字登记面；改真源须同批同步镜像，跑 `check-caliber-ledger.mjs` 判）
-- 需求源头：本分发包的 `Product-Spec.md` / `Product-Spec-CHANGELOG.md`；目标项目 `.vibe-docs.json` 映射的 `需求文档.md` / `需求变更.md`
-- 计划源头：本分发包的 `DEV-PLAN.md` / `plans/CURRENT-EXECUTION.md`；目标项目映射的 `docs/项目治理/开发计划.md` / `docs/plans/执行光标.md` / 必要 Phase 明细
+- 需求源头：目标项目 `.vibe-docs.json` 映射的 `需求文档.md` / `需求变更.md`（源项目旧代命名 `Product-Spec.md` / `Product-Spec-CHANGELOG.md` 只在 `sources/` 快照，本分发包仓库根实测没有这两份文件，不得写成「本包真源」）
+- 计划源头：目标项目映射的 `docs/项目治理/开发计划.md` / `docs/plans/执行光标.md` / 必要 Phase 明细（旧代命名 `DEV-PLAN.md` / `plans/CURRENT-EXECUTION.md` / `plans/phase-N.md` 同上——本包不含，`dev-planner` 并明确禁止在新目标项目生成它们，两套写法不得并存）
 - 人工验收：目标项目映射的 `验收记录.md`
 - 接口契约：目标项目映射的 `接口契约.md`
 - 任务胶囊：启用后检查 `任务状态.json`、`需求摘录.md`、`实现计划.md`、`研究记录.md`、`实现上下文.jsonl`、`验收上下文.jsonl`

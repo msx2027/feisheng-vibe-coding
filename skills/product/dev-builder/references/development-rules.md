@@ -1,6 +1,6 @@
 # 开发规则清单
 
-> 来源：dev-builder/SKILL.md 的 [开发规则清单]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [开发规则清单]。
 > 读取时机：开始编码、修改源码、配置门禁、结构规范、Git 工作流或进程管理前。
 
 ## 目录
@@ -60,7 +60,7 @@
         - T2/T3 staged source changes 对应的 `.claude/.needs-review` 必须是 `clean`，且 review 快照必须和当前 staged source changes 一致
         - 最小自动门禁由当前 platform profile、language adapter 和项目已有脚本决定；优先运行已有 build / typecheck / lint / test 入口
         - TypeScript 项目才检查本地 `tsc --noEmit`、显式 `any`、`@ts-ignore` 与 `@ts-nocheck`；没有 `tsconfig.json` 或本地 CLI 时不得临时下载，标记未验证
-        - 非 TypeScript 项目按 `docs/language-platform-profiles.md` 的验证选择矩阵执行，不把 TypeScript 规则当成通用编译门禁
+        - 非 TypeScript 项目按目标项目自己登记的技术栈 Profile 选验证入口（读取顺序见 `references/development-strategy.md`：platform profile → language adapter → architecture profile）；源项目的 `docs/language-platform-profiles.md` 未随本包分发（只存在于 `sources/` 快照），不得当成必跑依据；目标项目没有该登记项时向用户确认，不把 TypeScript 规则当成通用编译门禁
         - 人工维护生产文件超过 300 行时阻断；历史超标文件只减不增，测试文件 300 行开始提醒、超过 800 行时阻断，生成文件与第三方资源排除
         - 目标项目存在 `tools/check-api-contracts.mjs` 且本轮涉及 API route、fetch、service/public entry、server action、IPC / event、schema 时，接口契约门禁必须通过
 
@@ -92,7 +92,7 @@
         - 历史超标按 Git HEAD 基线执行“只减不增”；缩小或保持不增长可继续拆分，新文件超标或既有项继续增长时失败
         - 自动生成目录、vendor、字体资源和 minified 产物不参与人工源码门禁
         - 没有可扫描的受支持源码，或当前 staged 没有受支持源码时直接跳过；Shell / Bash / Zsh / PowerShell 仍属于扫描范围
-        - UI 复用检查默认通过 `tools/check-ui-reuse.mjs` 扫描 staged 前端文件；目标项目 build 可用 `node tools/check-ui-reuse.mjs . --all` 做全量检查
+        - UI 复用检查在目标项目自备门禁脚本时按其扫描 staged 前端文件（常见位置 `tools/check-ui-reuse.mjs`，本包不随发该脚本）；未自备时按 `skills/product/ui-system-guardian/references/audit-rules.md` 清单人工核对并留证据 做全量检查
         - 函数门禁覆盖普通函数、箭头函数与 class method；动态 import 和运行时生成代码不作为静态函数边界
 
         继续交给 Plan + Review 的事：

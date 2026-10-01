@@ -1,6 +1,6 @@
 # 开发策略
 
-> 来源：dev-builder/SKILL.md 的 [开发策略]。
+> 来源：skills/product/dev-builder/SKILL.md 的 [开发策略]。
 > 读取时机：Plan Mode、任务清单、中断恢复、设计稿参照、联网搜索、技术栈选择。
 
 [开发策略]

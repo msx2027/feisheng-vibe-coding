@@ -39,7 +39,7 @@ disable-model-invocation: true
     - 所有由本 Skill 新建或更新的目标项目生命周期 `.md` 文件名必须匹配 `^[\u4e00-\u9fff]{4}\.md$`
     - 不允许在新目标项目里新建 `Product-Spec.md` 或 `Product-Spec-CHANGELOG.md`
     - 发现 legacy 项目已有 `Product-Spec.md` 时，可以作为输入读取；完成更新时必须写入 `需求文档.md`，同步 `.vibe-docs.json`，并提示 legacy 文件需要迁移或停止继续作为真源
-    - 保存后运行 `node <skills仓库>/tools/check-target-doc-names.mjs <目标项目根目录> --require-existing`；命名校验不通过不得声明完成
+    - 保存后校验生命周期文档命名与 `.vibe-docs.json` 的 role 一一对应：`check-target-doc-names` 属源项目旧代工具，未随本包分发——目标项目自备等价脚本时按其运行（缺文件即阻塞），未自备时由协作方逐项比对 role 路径与磁盘真实文件；命名校验不通过不得声明完成
 
     **执行语境优先原则**：先判断用户是在做新手单人 `vibe coding`，还是标准团队开发，并把这个判断写进目标项目需求文档。
 
@@ -121,7 +121,7 @@ disable-model-invocation: true
     - 新目标项目默认生成四字中文生命周期文档和 `.vibe-docs.json`。
     - 默认映射包含 `productSpec/productSpecChangelog/designBrief/devPlan/currentExecution/manualAcceptance/interfaceContracts`。
     - 需求文档必须写清执行语境、术语、非目标（本期明确不做）、技术方向、接口契约治理、测试与验证策略、人工验收记录和需求澄清记录。
-    - 保存后运行 `check-target-doc-names.mjs --require-existing`。
+    - 保存后按同一口径校验文档命名与 role 一一对应（`check-target-doc-names` 未随本包分发：项目自备等价脚本时跑到通过，未自备时逐项人工比对，缺文件即阻塞）。
 
 [初始化]
 
