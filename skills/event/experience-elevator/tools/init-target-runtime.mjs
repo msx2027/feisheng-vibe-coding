@@ -50,7 +50,7 @@ const DEFAULT_SKILLS_ROOT = (() => {
   }
   return legacyRoot;
 })();
-export const TARGET_RUNTIME_BLOCK_VERSION = "25";
+export const TARGET_RUNTIME_BLOCK_VERSION = "27";
 const RUNTIME_REGISTRY_FILE = ".vibe-runtime.json";
 const RUNTIME_REGISTRY_VERSION = 1;
 const START_PREFIX = "<!-- vibe-coding-skills:target-runtime:start";
@@ -142,6 +142,15 @@ function checksum(body) {
   return crypto.createHash("sha256").update(normalizeBody(body), "utf8").digest("hex");
 }
 
+// 已装块版本与本生成器版本的偏序：只在两边都是整数时给出方向，其余（含 `2.5`、非数字）返回 0 视为不可比。
+// 不可比时沿用原口径（当普通 update），不为此发明第二套升级协议。
+function blockVersionOrder(installed, generator) {
+  const a = Number(installed);
+  const b = Number(generator);
+  if (!Number.isInteger(a) || !Number.isInteger(b)) return 0;
+  return Math.sign(a - b);
+}
+
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/u, ""));
 }
@@ -194,11 +203,11 @@ export function renderBody({ runtime, entry }, skillsRoot) {
   return [
     `## Agent 宪法`,
     ``,
-    `此块由 vibe-coding-skills 管理。项目自己的规则请写在本块外；需要刷新本块时，重新运行 \`init-target-runtime.mjs\`。`,
+    `此块由 vibe-coding-skills 管理。项目自己的规则请写在本块外；需要刷新本块时，按本块末尾「刷新本块」那条给出的完整命令重跑。`,
     ``,
     `- 运行时：${runtime} 会读取本项目根目录的 \`${entry}\`。`,
     `- Skills 包位置：由本包根目录自证（工具自动定位，环境变量不参与）；如需临时指向其他副本，用 \`--skills-root\` 显式指定。`,
-    `- 真源入口：先读 \`.vibe-docs.json\`，再按「当前任务显式角色 + 本轮预算」精准取读文档：集合文档先从 \`文档索引.md\` 选定文件，再精确取一份。\`resolve-target-doc-context.mjs\` 属旧代 resolver，未随本包分发：项目自备等价工具时按其输出执行，未自备时由协作方按同一口径人工执行（rg 定位 → 门面索引 → 单份正文）。启用 \`markdownGovernance\` 后，非生命周期 Markdown 先用 \`rg --files -g '*.md'\` 定位，再申请单份读取。只读取所需文档与 selector，不因进入 T2/T3 固定全文读取画像、需求、计划或契约。`,
+    `- 真源入口：先读 \`.vibe-docs.json\`，再按「当前任务显式角色 + 本轮预算」精准取读文档：集合文档先从 \`文档索引.md\` 选定文件，再精确取一份。旧代 resolver 未随本包分发，本块也不写它的脚本名（写进来就成了下游仓库的死引用）：项目自备等价工具时按其输出执行，未自备时由协作方按同一口径人工执行（rg 定位 → 门面索引 → 单份正文）。启用 \`markdownGovernance\` 后，非生命周期 Markdown 先用 \`rg --files -g '*.md'\` 定位，再申请单份读取。只读取所需文档与 selector，不因进入 T2/T3 固定全文读取画像、需求、计划或契约。`,
     `- 项目画像：当前项目事实以 \`.vibe-docs.json.projectProfile\` 实际指向的文件为准（新项目默认 \`docs/项目治理/项目画像.md\`）；未在项目画像、源码、配置、命令输出或用户确认中出现的技术栈、命令、接口、schema 不得假设存在。`,
     `- 宪法设计：规则来源以 \`.vibe-docs.json.constitutionDesign\` 实际指向的文件为准（新项目默认 \`docs/项目治理/宪法设计.md\`）；缺少 evidence、owner map、停止条件或验证命令时，标记 \`未验证\`，不得声明接入完成。`,
     `- 文件落位：根目录 Markdown 白名单仅 \`AGENTS.md\`、\`CLAUDE.md\`、\`文档索引.md\`；其他新建 Markdown 必须进入 \`docs/\` 并按职责分类。已有文档先沿用 manifest 映射，不擅自移动。`,
@@ -241,19 +250,19 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     ``,
     `### 文档真源与 Markdown 治理`,
     `- 文档索引：默认先使用 \`.vibe-docs.json.documentIndex\` 映射的 \`文档索引.md\` 获取角色、owner、状态和定位；索引只负责导航，不复制需求、计划、契约或验收正文。`,
-    `- 受管文档一致性：Claude / Codex 修改 \`.vibe-docs.json.documents[]\` 已登记文档后，须同步刷新 manifest metadata 与 \`文档索引.md\`，并在提交前对受管正文、metadata、索引和任务胶囊漂移做硬检查。\`setup-target-hooks.mjs\` 的 PostToolUse 自动同步与 \`check-target-doc-precommit.mjs\` 属旧代工具，未随本包分发：项目自备等价工具（如本地文档索引门禁）时按其执行，未自备时由协作方在交付前人工完成同口径核对。同步与核对只更新可再生 metadata / index，绝不改写正文、Git 暂存区或旧任务胶囊的 \`sourceRevision\`；正文变化使旧证据过期时必须重新核对。`,
+    `- 受管文档一致性：Claude / Codex 修改 \`.vibe-docs.json.documents[]\` 已登记文档后，须同步刷新 manifest metadata 与 \`文档索引.md\`，并在提交前对受管正文、metadata、索引和任务胶囊漂移做硬检查。旧代的 PostToolUse 自动同步与 pre-commit 文档核对工具未随本包分发，本块也不写它们的脚本名（写进来就成了下游仓库的死引用）：项目自备等价工具（如本地文档索引门禁）时按其执行，未自备时由协作方在交付前人工完成同口径核对。同步与核对只更新可再生 metadata / index，绝不改写正文、Git 暂存区或旧任务胶囊的 \`sourceRevision\`；正文变化使旧证据过期时必须重新核对。`,
     `- Markdown 分卷命名：正文文件名使用中文短编号加主题（如 \`062-输出式学习.md\`、\`附录-001-术语说明.md\`）；机器编号只留在 \`vibe-section\` 和索引，不得出现在人看的文件名中，且全项目正文不得重复。`,
     `- Markdown 专属文件夹：每个导航门面 \`X.md\` 的正文只能放入同名 \`X/\` 文件夹；正文再次拆分时仍用该子门面的完整同名文件夹，不得散落到别处。一级总目录优先用四个中文概括并与文档同名；确实无法概括时可加“补充”，但文档和文件夹必须同步同名。`,
-    `- Markdown 治理：启用 \`markdownGovernance\` 的项目中，每次新建、改写、移动或拆分 Markdown 后，交付前须完成超长、失链、重复编号等项检查；\`check-markdown-governance.mjs\` 属旧代工具，未随本包分发：项目自备等价工具时按其执行，未自备时由协作方按同一清单人工核对。检查只报告和拦截问题，不得自行拆分、移动、合并或删除。结构性整理必须等写入停止并取得用户明确确认；读取仍先取门面、再精确取一份正文。`,
+    `- Markdown 治理：启用 \`markdownGovernance\` 的项目中，每次新建、改写、移动或拆分 Markdown 后，交付前须完成超长、失链、重复编号等项检查；本包不下发 Markdown 治理检查器，本块也不写它的脚本名（写进来就成了下游仓库的死引用）：项目自备等价工具时按其执行，未自备时由协作方按同一清单人工核对。检查只报告和拦截问题，不得自行拆分、移动、合并或删除。结构性整理必须等写入停止并取得用户明确确认；读取仍先取门面、再精确取一份正文。`,
     `- Markdown 链接与备份：项目内 Markdown 链接必须指向实际存在的文件；用户删掉或移出备份时，必须同步删除 \`archiveDirectories\` 登记和所有指向该路径的项目内链接，不得恢复用户移出的备份。`,
     `- 治理账本预算（2026-09-29 登记）：治理/台账类 Markdown 的 LLM 消费面必须有界——检索类工具默认只出索引与计数，条目明细按需定向获取，禁止全量 dump 进上下文；账本类真源须登记衰减（清扫）政策，条目数或体积异常增长时先向用户提议衰减，不得静默堆叠。`,
     ``,
     `### 加载策略与任务续接`,
     `- 小任务快车道优先：当用户已经明确文件、路径、组件、当前选区、查询范围或非破坏性命令，且任务可判为 T0/T1 时，直接做定向读写和定向验证；快车道仍必须遵守本宪法。`,
-    `- 非快车道任务：只加载当前任务需要的 \`<skills-root>/.agents/skills/<skill>/SKILL.md\` 或 \`<skills-root>/skills/<skill>/SKILL.md\`，再按需读取 reference。`,
+    `- 非快车道任务：只加载当前任务需要的技能正文 \`<skills-root>/skills/<分类>/<技能>/SKILL.md\`（本包技能目录固定两级：先分类、后技能，没有更浅的一层写法），再按需读取同一技能目录下的 reference。`,
     `- \`.vibe-docs.json\` 必须使用 schema v2，并由 \`loadPolicy\` 区分 always / onDemand / never；always 默认只含 \`documentIndex\`，最多 3 个角色、合计不超过 12,000 token。`,
-    `- 加载策略硬边界：resolver 未返回的 onDemand 文档不读取；never 文档不得由 Skill 自行绕过，只有用户明确授权的迁移 / 归档 / 审计任务才能通过 resolver 的 \`--allow-never --reason <理由>\` 访问。`,
-    `- 继续任务探针：用户说“继续 / 下一步 / 当前做到哪”时，先用 \`rg -n --max-count 3 "^(## 当前任务|- 状态：|- 下一步：)" <执行光标>\` 定位稳定字段，再小块读取命中附近内容；光标不足时才让 resolver 增加显式 role，禁止直接全文恢复需求和计划。`,
+    `- 加载策略硬边界：\`loadPolicy = onDemand\` 的文档只有在被当前任务的解析结果选中时才读，未选中不读；\`never\` 文档不得由 Skill 自行绕过，只有用户明确授权的迁移 / 归档 / 审计任务才可读，且授权凭据与理由要写在交付说明里。旧代解析器用 \`--allow-never --reason <理由>\` 承载这条授权，该工具未随本包分发：项目自备等价解析器时按其同名开关执行，未自备时不得静默读取 never 文档。`,
+    `- 继续任务探针：用户说“继续 / 下一步 / 当前做到哪”时，先用 \`rg -n --max-count 3 "^(## 当前任务|- 状态：|- 下一步：)" <执行光标>\` 定位稳定字段，再小块读取命中附近内容；光标不足时才让项目自备的等价取读工具增加显式 role（未自备时由协作方按同一口径人工补光标），禁止直接全文恢复需求和计划。`,
     ``,
     `### 任务上下文`,
     `- 任务胶囊：如果 \`.vibe-docs.json.taskContext.enabled = true\`，非快车道 T2/T3 任务优先读取 \`taskContext.currentTaskCapsule\` 指向的任务胶囊；实现阶段读取 \`实现上下文.jsonl\`，验收 / 测试 / review 阶段读取 \`验收上下文.jsonl\`。`,
@@ -261,7 +270,7 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     `- 经验治理受控例外：如果项目通过 \`.vibe-docs.json.experienceGovernance\` 启用 \`docs/项目治理/经验治理.md\`，它是 L0 唯一计数与状态真源；显性纠错事件只能进入一个 scope（global-codex / target-project / package-feedback），禁止自动跨域双写。自动检测与 eventId 幂等计数可以执行，升档、删除、退役和 L3 硬化必须有用户确认凭据；L1 registry 确定性生成 AGENTS/CLAUDE 第二受管投影，Skill 本身不等于 L3 checker。`,
     ``,
     `### 结构与耦合门禁`,
-    `- 结构阈值真源：文件行数、函数 / 组件行数、参数个数、圈复杂度、嵌套层数、循环依赖硬拦以 \`check-hotspots.mjs\` 与结构门禁为唯一真源，不另设冲突数字，只补其未覆盖的判断维度。`,
+    `- 结构阈值真源：文件行数、函数 / 组件行数、参数个数、圈复杂度、嵌套层数、循环依赖的硬拦阈值以本包热点扫描器为唯一真源，不另设冲突数字，只补其未覆盖的判断维度；对目标项目的跑法是 \`node <skills-root>/skills/product/hotspot-governor/tools/check-hotspots.mjs <目标项目根> --strict\`，项目自备等价门禁时按自己的阈值执行。`,
     `- 阈值例外：生成代码、纯声明式配置、类型、协议、映射表可登记为结构阈值例外，但例外不得容纳业务逻辑；一旦出现分支或业务规则即按生产代码计入门禁。`,
     `- 耦合边界：不以调用链深度设硬限；一次需求稳定传播到 3 个以上独立业务边界时，审计职责边界是否切错。`,
     `- 循环依赖：生产模块循环依赖目标为零；改依赖前先确认不引入新循环。`,
@@ -279,7 +288,7 @@ export function renderBody({ runtime, entry }, skillsRoot) {
     `- 扩展优先：组件、slot、variant、token 不够用时先扩展统一 UI 包与设计文档再复用，不在页面层临时造（待生效：随统一 UI 组件库一起激活）。`,
     `- 统一网络客户端：正式前端不绕过统一网络客户端直接 \`fetch(\` 或 \`new WebSocket\`（待生效：项目建立统一网络客户端，如 typed client / api-client 类封装入口时激活，在 block 外的项目规则区或接口契约台账登记其真实名称与入口路径）。`,
     `- 接口错误结构统一：对外接口层错误结构在各运行时之间保持统一形状（待生效：接口契约台账出现统一对外错误封装能力，即 \`入口类型 = schema\` 的错误 envelope 时激活，在接口契约台账登记错误结构字段与能力 ID）。`,
-    `- 待生效条款自助激活：本 managed block 由脚本管理、受 checksum 保护，任何运行时都不得手改 block 内文字（含删除“（待生效：…）”标注）。读到含“（待生效：…）”的条款、或改动涉及其领域时，先判断触发条件是否满足；满足则在 block 外登记激活——把项目真实的包名 / 路径 / 名称写入本文件 managed block 之外的项目规则区，或写入 \`.vibe-docs.json.interfaceContracts\` 指向的接口契约台账，再继续原任务，此后按已登记的真实名称执行该条款。需要同时更新 block 内措辞时，改本包生成器并重跑 \`init-target-runtime.mjs\`，不手改目标文件。用户也可手动点名激活。`,
+    `- 待生效条款自助激活：本 managed block 由脚本管理、受 checksum 保护，任何运行时都不得手改 block 内文字（含删除“（待生效：…）”标注）。读到含“（待生效：…）”的条款、或改动涉及其领域时，先判断触发条件是否满足；满足则在 block 外登记激活——把项目真实的包名 / 路径 / 名称写入本文件 managed block 之外的项目规则区，或写入 \`.vibe-docs.json.interfaceContracts\` 指向的接口契约台账，再继续原任务，此后按已登记的真实名称执行该条款。需要同时更新 block 内措辞时，改本包生成器，再按本块末尾「刷新本块」那条的完整命令重跑，不手改目标文件。用户也可手动点名激活。`,
     ``,
     `### 发布与合规门禁（商业级上线必守，任何要真实交付 / 收费的项目适用）`,
     `- 开源许可证合规：引入任何开源依赖、代码片段、字体、图标或 AI 模型 / 权重前，必须先确认其许可证是否允许商用、是否为 copyleft（GPL/AGPL/LGPL 等）传染性协议、是否对分发或收费有限制；\`代码开源许可 ≠ 模型权重可商用\`，两者分别确认。要真实收费 / 分发的项目须建立一张“开源资产许可证台账”（仿接口契约台账：资产名 / 用途 / 许可证 / 是否可商用 / 是否 copyleft / 来源链接 / 状态），登记后再使用；无法确认可商用的一律标 \`未验证\` 并停止打包引入。`,
@@ -438,6 +447,25 @@ function planFile(targetRoot, targetFile, skillsRoot) {
       action: "conflict",
       status: "fail",
       reason: "managed block checksum mismatch; preserve user edits and resolve manually",
+      version: TARGET_RUNTIME_BLOCK_VERSION,
+      checksum: desiredChecksum,
+      nextContent: current,
+    };
+  }
+
+  // 降级硬拦：已装块版本高于本生成器，说明用的是陈旧的 skills 副本。此前这条与正常升级同形
+  // （--check 只打一行 `version 25 -> 23` 的 pending），--write 会把新代条款静默写回旧文本，
+  // 且下游卡点（目标项目自己的 pre-commit 文档门禁）照样放行——陈旧副本因此可以无声降级别人。
+  // 只有自证完整的块才走到这里：上一分支已用 checksum 排除了手改内容。
+  if (blockVersionOrder(block.version, TARGET_RUNTIME_BLOCK_VERSION) > 0) {
+    return {
+      file: targetFile.file,
+      action: "conflict",
+      status: "fail",
+      reason:
+        `降级刷新被阻断：目标项目已装受管块 version=${block.version} 高于本生成器 version=${TARGET_RUNTIME_BLOCK_VERSION}。` +
+        "当前 skills 副本比目标项目的宪法旧，照此 --write 会把新代条款写回旧文本。" +
+        "请改用不低于该版本的 skills-root（先在本包 git pull 或核对副本来源）；确认目标项目确实要退回这代时，在 block 外留审计记录后再由人工处理。",
       version: TARGET_RUNTIME_BLOCK_VERSION,
       checksum: desiredChecksum,
       nextContent: current,

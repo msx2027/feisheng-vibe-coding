@@ -10,6 +10,8 @@
 //   R1 显式包内引用：以**包根占位符**起头的 token（`<skills仓库>/tools/foo.mjs`、
 //      `<skills-root>/tools/foo.mjs` 等，见 PKG_PREFIX），其包内路径必须真实存在。
 //      `<目标项目根>/…` 这类非包根占位符前缀不判——那是目标项目自己的文件。
+//      「真实存在」还不得算进不下发的面：路 A 复核实测 `<skills-root>/sources/…` 只查 existsSync
+//      时命中 0，等于把「快照里有」当「本包有」，与本文件头注那条边界矛盾（现同 R6 判红）。
 //   R2 依赖声明：SKILL.md 的 [DocMap] 依赖块里以 `tools/` 或 `scripts/` 起头的条目，
 //      必须在本包存在（依赖块是「本技能要用什么」的自述，指不出实体就是假依赖）。
 //   R3 裸脚本名：正文里出现 `foo.mjs` / `foo.ps1` / `foo.sh` / `foo.py` / `foo.cjs` 这类不带目录
@@ -24,6 +26,22 @@
 //   R5 裸技能名路径：`<技能基名>/SKILL.md`、`<技能基名>/references/…` 这类省略了 `skills/<分类>/`
 //      的写法。只认技能目录里真实存在的那类子路径名（见 INNER_SHAPES），避免把目标项目产物
 //      （如 `design-system/MASTER.md`）当成本包路径。
+//   R6 占位符路径：路径里含 `<…>` 占位段时，把占位段当单层
+//      通配展开，必须至少有一个真实落点；展开的首段或命中名不得落在不下发的面（`sources/**` 快照、
+//      `.qoder`、`node_modules` 等，见 SKIP_DIRS）——那条路径盘上存在但不在 bundle 里，照抄必打不开。
+//      判据来源是受管块 2026-10-02 实测的两条谎报
+//      （`<skills-root>/.agents/skills/<skill>/SKILL.md`、`<skills-root>/skills/<skill>/SKILL.md`）：
+//      占位段会打断 R1／R4 的 token 正则，扁平旧写法在两条判据下都是 0 命中——「自己扫自己」的门
+//      若看不见本门要防的那类病，就只是把谎报换个地方藏起来。本条对**所有面**生效（盘上正文实测
+//      162 个文件 0 命中，无存量要盘查；路 A 复核后由「只判虚拟面」扩到全量面）。
+//      面判定（R1 与 R6 共用 `skipFace`）先解析再比首段：丢 `.`、按 `..` 回退、比小写。
+//      路 B 复核实测过只比字面首段的四种放行写法——`./sources/…`、`skills/../sources/…`、
+//      `tools/../sources/…`、`SOURCES/…`（Windows 大小写不敏感时后者真能打开，故更危险）。
+//
+// 虚拟面（--virtual-md / --virtual-only）：下发件（受管块、脚手架模板）的真身在生成器里，
+//   只有落到目标仓库才有文件名，故本包的棘轮此前看不见注入后果。--virtual-md 给一份盘外内容
+//   起一个面名（`--virtual-md <面名> <内容文件>`，可重复），它与真实正文过同一套判据；
+//   --virtual-only 表示本次只扫虚拟面、不扫盘上面。虚拟面的命中按面名进基线键。
 //
 // 覆盖边界（有意不报的形态，别把它们当成已通过）：
 //   · 带目录前缀但非 `<skills仓库>/`、也非 `skills/` 的引用（如 `tools/check-ui-reuse.mjs`、
@@ -40,9 +58,15 @@
 //   scripts/skill-reference-baseline.json 登记（file+token+rule 三键），只计数不阻断；
 //   未登记的新一律 error 阻断。**登记了但实际已不存在＝登记过期，同样 error**——基线不许变成
 //   永久免检牌，每条必须在收口后被删掉。
+//   「登记过期」只在**该条所属扫描面本次真被扫到时**才判（2026-10-02 加虚拟面时的必要约束）：
+//   限定扫描面或只扫虚拟面时，把别面的登记报成过期会让门禁读数取决于「这次扫了谁」，
+//   技能正文登记一条存量就会把下发件自扫门打假红。判据是「路径属于当前扫描面」而非「文件还在」，
+//   所以删掉正文文件仍会报过期——收口了却忘了删登记，照样响。
 //
 // 用法：node scripts/check-skill-references.mjs [--root <项目根>] [--scope <相对目录>]
+//   [--virtual-md <面名> <内容文件>] [--virtual-only]
 //   默认扫描 skills/**/*.md 与根 SKILL.md；--scope 可换扫描面（测试夹具用）。
+//   --virtual-only 时 --scope 与根 SKILL.md 都不参与，只判 --virtual-md 给出的内容。
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -64,6 +88,25 @@ const root = resolve(argValue('--root') ?? resolve(selfDir, '..'));
 const scopes = (argValue('--scope') ?? 'skills').split(',').map((s) => s.trim()).filter(Boolean);
 const includeRootSkill = !argValue('--scope');
 
+// 虚拟面：--virtual-md <面名> <内容文件>，可重复；--virtual-only 表示只扫虚拟面。
+// 面名就是命中报告与基线键里的 file，所以必须稳定、可读、不与盘上路径撞名。
+const virtualSpecs = [];
+for (let i = 0; i < argv.length; i += 1) {
+  if (argv[i] !== '--virtual-md') continue;
+  const [label, contentPath] = [argv[i + 1], argv[i + 2]];
+  if (!label || !contentPath || label.startsWith('--')) {
+    console.error('✗ --virtual-md 需要两个参数：--virtual-md <面名> <内容文件>（缺一个就判用法错误，不静默跳过）');
+    process.exit(2);
+  }
+  virtualSpecs.push({ label, path: resolve(contentPath) });
+  i += 2;
+}
+const virtualOnly = argv.includes('--virtual-only');
+if (virtualOnly && virtualSpecs.length === 0) {
+  console.error('✗ --virtual-only 必须与至少一个 --virtual-md 同时给（否则本次没有任何扫描面，空跑不算通过）');
+  process.exit(2);
+}
+
 const EXTS = 'mjs|cjs|ps1|sh|py|cmd';
 const DOC_EXTS = 'md|json|yaml';
 // 主扫描面：脚本与文档扩展名都要收（`<skills仓库>/…` 占位符指的是文档还是脚本，正文分不出来，
@@ -75,11 +118,45 @@ const isScriptExt = (t) => /\.(?:mjs|cjs|ps1|sh|py|cmd)$/.test(t);
 const PKG_PATH_TOKEN = new RegExp(`(?:[\\w.\\-]+/)+[\\w.\\-]+\\.(?:${EXTS}|${DOC_EXTS})\\b`, 'g');
 // 目录形态（无扩展名目标）：至少两段，段名不含中文；是否属本包由扫描处的「首段必须是 skills」收。
 const PKG_DIR_TOKEN = /(?:[\w.\-]+\/)+[\w.\-]+/g;
+// R6 面：允许 `<…>` 占位段的整条路径；至少两段，否则一个裸占位符（`<理由>`）也会被卷进来。
+const PLACEHOLDER_PATH_TOKEN =
+  /(?:<[^>]+>|[\w.\-\u4e00-\u9fff]+)\/(?:(?:<[^>]+>|[\w.\-\u4e00-\u9fff]+)\/?)+/g;
+// 把一个路径段编译成匹配器：`<…>` 段整体或片段都退化为单层通配（`docs/<主题>.md` 也要能展开）。
+function segmentMatcher(segment) {
+  let pattern = '';
+  let wildcard = false;
+  for (const part of segment.split(/(<[^>]*>)/)) {
+    if (!part) continue;
+    if (/^<[^>]*>$/.test(part)) {
+      pattern += '[^/]*';
+      wildcard = true;
+    } else {
+      pattern += part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+  }
+  return { re: new RegExp(`^${pattern}$`), wildcard };
+}
 
 // `.qoder` 是子代理 worktree 的落点：里面是整棵仓库的临时副本（含 skills/**.md 与一个名为 `.git`
 // 的指针文件）。不跳它，同一个包会在「有子代理在跑」和「没在跑」两种时刻报出不同的扫描数与
 // 可执行面基数，且副本里的正文会被当成本包正文判——门禁读数必须与自己正在查的内容无关。
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'sources', '__pycache__', '.venv', 'venv', 'dist', 'build', '.qoder']);
+// 「盘上存在」不等于「本包下发」：保真快照与依赖／构建目录都在扫描面之外，指进它们的路径照抄必打不开。
+const SKIP_FACE_NOTE = '首段落在不下发的面（保真快照／依赖与构建目录），盘上存在也不构成本包落点';
+// 面判定要先解析（路 B 复核 2026-10-02 查出的绕过面）：只按字面 `split('/')[0]` 判时，
+// `./sources/…`、`skills/../sources/…`、`tools/../sources/…` 首段都是别的目录，`SOURCES/…` 在
+// Windows（大小写不敏感）上又能真打开——四种写法落的是同一个不下发的面，却全部放行。
+// 这里只做「解析等价」这一件事：丢掉 `.`、按 `..` 回退，再比首段（SKIP_DIRS 全小写，故 lower）。
+// 通配段（`<技能>`）不是目录名，不参与折叠判定；它落在不下发的面由展开时的逐项过滤兜住。
+const skipFace = (pathLike) => {
+  const folded = [];
+  for (const seg of String(pathLike).split('/')) {
+    if (seg === '' || seg === '.') continue;
+    if (seg === '..') folded.pop();
+    else folded.push(seg);
+  }
+  return folded.length > 0 && SKIP_DIRS.has(folded[0].toLowerCase());
+};
 
 function walk(relDir, out) {
   let items;
@@ -131,15 +208,31 @@ function suggestFix(token) {
 }
 
 const scannedFiles = [];
-for (const s of scopes) {
-  if (!existsSync(join(root, s))) continue;
-  if (statSync(join(root, s)).isFile()) {
-    scannedFiles.push(s);
-    continue;
+if (!virtualOnly) {
+  for (const s of scopes) {
+    if (!existsSync(join(root, s))) continue;
+    if (statSync(join(root, s)).isFile()) {
+      scannedFiles.push(s);
+      continue;
+    }
+    for (const f of walk(s, [])) if (f.endsWith('.md')) scannedFiles.push(f);
   }
-  for (const f of walk(s, [])) if (f.endsWith('.md')) scannedFiles.push(f);
+  if (includeRootSkill && existsSync(join(root, 'SKILL.md'))) scannedFiles.push('SKILL.md');
 }
-if (includeRootSkill && existsSync(join(root, 'SKILL.md'))) scannedFiles.push('SKILL.md');
+// 虚拟面：正文来自盘外（生成器渲染结果），面名参与命中定位与基线键；内容缺失一律 fail-closed。
+const virtualTexts = new Map();
+for (const v of virtualSpecs) {
+  if (scannedFiles.includes(v.label)) {
+    console.error(`✗ --virtual-md 面名与扫描面内的真实文件重名：${v.label}（换一个可区分的面名）`);
+    process.exit(2);
+  }
+  if (!existsSync(v.path)) {
+    console.error(`✗ --virtual-md 内容文件不存在：${v.path}（面 ${v.label}）`);
+    process.exit(2);
+  }
+  virtualTexts.set(v.label, readFileSync(v.path, 'utf8'));
+  scannedFiles.push(v.label);
+}
 
 // 包根占位符白名单：只有这几种写法声明的是「本包自己」的路径，必须真实存在。
 // 其余 `<...>/` 前缀（如 `<目标项目根>/tools/x.mjs`）按口径属于目标项目 surface，不判死引——
@@ -152,7 +245,8 @@ const hits = [];
 const seenKeys = new Set();
 let externalRefs = 0;
 for (const fileRel of scannedFiles) {
-  const text = readFileSync(join(root, fileRel), 'utf8');
+  const isVirtual = virtualTexts.has(fileRel);
+  const text = isVirtual ? virtualTexts.get(fileRel) : readFileSync(join(root, fileRel), 'utf8');
   const lines = text.split(/\r?\n/);
   let inDepBlock = false;
   for (let i = 0; i < lines.length; i++) {
@@ -171,8 +265,11 @@ for (const fileRel of scannedFiles) {
       const pkgMatch = ANY_PREFIX.test(token) ? PKG_PREFIX.exec(token) : null;
       if (ANY_PREFIX.test(token)) {
         // 只有包根占位符前缀才是对本包的引用；其它 `<…>/` 前缀属目标项目，不判死引。
-        if (pkgMatch && !existsSync(join(root, pkgMatch[1]))) {
-          hits.push({ where, rule: 'R1', token, file: fileRel });
+        // 路 A 复核补的第二半：占位符指向 `sources/**` 这类不下发的面时，路径**盘上存在**但不在 bundle 里，
+        // 只查 existsSync 等于把「快照里有」当「本包有」——与本文件头注那条边界正面矛盾。
+        const intoSkipFace = pkgMatch && skipFace(pkgMatch[1]);
+        if (pkgMatch && (intoSkipFace || !existsSync(join(root, pkgMatch[1])))) {
+          hits.push({ where, rule: 'R1', token, file: fileRel, note: intoSkipFace ? SKIP_FACE_NOTE : '' });
         }
         continue;
       }
@@ -229,6 +326,63 @@ for (const fileRel of scannedFiles) {
         fix: suggestFix(pathToken), dirForm: true,
       });
     }
+
+    // R6：含 `<…>` 占位段的本包路径必须至少有一个真实展开（2026-10-02 起判所有面，含盘上正文）。
+    // 为什么单独一条：占位段会打断 R1／R4 的 token 正则（段名里不许出现 `<`），所以
+    // 「块内把技能写成一层」这种谎报在 R1／R4 下是 0 命中——门必须能看见它要防的那类病。
+    {
+      PLACEHOLDER_PATH_TOKEN.lastIndex = 0;
+      let hm;
+      while ((hm = PLACEHOLDER_PATH_TOKEN.exec(line)) !== null) {
+        const token = hm[0];
+        if (!token.includes('<')) continue; // 无占位段的整条路径归 R1／R4
+        const before = hm.index === 0 ? '' : line[hm.index - 1];
+        if (/[A-Za-z0-9._\u4e00-\u9fff]/.test(before)) continue; // 左邻是路径字符＝子串，不是本包声明
+        let rest = token.replace(/\/$/, '');
+        if (ANY_PREFIX.test(token)) {
+          const pkg = PKG_PREFIX.exec(token);
+          if (!pkg) continue; // 非包根占位符前缀属目标项目命名面
+          rest = pkg[1].replace(/\/$/, '');
+        } else if (!/^skills(?:\/|$)/.test(rest)) {
+          continue; // 只有声明本包路径的写法才是对本包的承诺
+        }
+        const segs = rest.split('/').filter(Boolean);
+        const matchers = segs.map(segmentMatcher);
+        if (!matchers.some((m) => m.wildcard)) continue; // 展开后与原文同形，交给 R1／R4
+        // 首段落在不下发的面上（`sources/**` 保真快照、`.qoder` 子代理副本、`node_modules` 等）
+        // 就是对本包可执行面的谎报：那条路径盘上「存在」，但它不在 bundle 里，照抄到目标项目必打不开。
+        // 复核（路 A，2026-10-02）实测不排除时 `<skills-root>/sources/…/skills/<技能>/SKILL.md` 命中 0，
+        // 与头注「快照里有 ≠ 本包有」这条边界自相矛盾。放在通配检查之后：无占位段的整条路径仍归 R1，不重复报。
+        if (skipFace(rest)) {
+          hits.push({ where: `${fileRel}:${i + 1}`, rule: 'R6', token, file: fileRel, note: SKIP_FACE_NOTE });
+          continue;
+        }
+        let candidates = [root];
+        let dead = false;
+        for (let depth = 0; depth < segs.length; depth += 1) {
+          const { re, wildcard } = matchers[depth];
+          const next = [];
+          for (const dir of candidates) {
+            if (!wildcard) {
+              const exact = join(dir, segs[depth]);
+              if (existsSync(exact)) next.push(exact);
+              continue;
+            }
+            let names;
+            try {
+              names = readdirSync(dir);
+            } catch {
+              names = [];
+            }
+            // 通配展开同样不得吃进不下发的目录（`<分类>` 匹配到 `sources` 这类也算死落点）。
+            for (const name of names) if (re.test(name) && !SKIP_DIRS.has(name.toLowerCase())) next.push(join(dir, name));
+          }
+          candidates = next;
+          if (!candidates.length) { dead = true; break; }
+        }
+        if (dead) hits.push({ where: `${fileRel}:${i + 1}`, rule: 'R6', token, file: fileRel });
+      }
+    }
   }
 }
 
@@ -257,6 +411,16 @@ const baselineKeys = new Map(
 
 let unregisteredHits = 0;
 let staleRegistrations = 0;
+// 登记过期只在「该条所属扫描面本次真被扫到」时判：限定扫描面或只扫虚拟面时，别面的登记
+// 不能报成过期——否则技能正文登记一条存量，就会把「下发件自扫门」打成与它无关的假红。
+// 判据是路径属于当前面（不是文件是否还在盘上），所以正文文件被删掉仍会报过期。
+const facePrefixes = virtualOnly ? [] : scopes.map((s) => `${s.replace(/\/$/, '')}/`);
+function registrationInCurrentFace(file) {
+  if (virtualTexts.has(file)) return true;
+  if (virtualOnly) return false;
+  if (includeRootSkill && file === 'SKILL.md') return true;
+  return facePrefixes.some((p) => file.startsWith(p));
+}
 for (const h of hits) {
   const key = `${h.rule}|${h.file}|${h.token}`;
   seenKeys.add(key);
@@ -264,10 +428,13 @@ for (const h of hits) {
   unregisteredHits++;
   errors.push(`${h.where} 死引·${h.rule} 未登记新增：\`${h.token}\`` +
     (h.fix ? `（本包唯一解是 \`${h.fix}\`，照抄的写法打不开）` : '') +
+    (h.rule === 'R6' && !h.note ? '（占位符展开后在本包没有任何真实落点）' : '') +
+    (h.note ? `（${h.note}）` : '') +
     '（收口正文，或在 scripts/skill-reference-baseline.json 登记理由）');
 }
 for (const e of baseline.entries) {
   const key = `${e.rule}|${e.file}|${e.token}`;
+  if (!registrationInCurrentFace(e.file)) continue;
   if (!seenKeys.has(key)) {
     staleRegistrations++;
     errors.push(`基线登记已过期：${key}（该死引实际不存在，请删除此条——基线不是永久免检牌）`);
@@ -295,7 +462,9 @@ if (argv.includes('--print-baseline')) {
 
 for (const e of errors) console.error(`✗ ${e}`);
 console.log(
-  `技能正文死引用检查：扫描 ${scannedFiles.length} 个文件，可执行面基名 ${execBasenames.size} 个，` +
+  `技能正文死引用检查：扫描 ${scannedFiles.length} 个文件` +
+  (virtualTexts.size ? `（含虚拟面 ${virtualTexts.size} 份）` : '') +
+  `，可执行面基名 ${execBasenames.size} 个，` +
   `技能面 ${SKILL_NAMES.size} 个，地面外路径 ${externalRefs} 处不计，` +
   `命中 ${hits.length} 处（未登记新增 ${unregisteredHits} 处、基线存量 ${registered.length} 处）` +
   (staleRegistrations ? `，基线登记过期 ${staleRegistrations} 条须删除` : '') + '。',

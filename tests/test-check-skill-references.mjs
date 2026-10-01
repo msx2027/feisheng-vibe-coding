@@ -353,3 +353,208 @@ test('无基线文件：按空基线跑，命中即未登记新增', () => {
   assert.equal(r.code, 1, r.out);
   assert.match(r.out, /未登记新增 1 处/);
 });
+
+// ---------- 虚拟面（--virtual-md／--virtual-only）与 R6：下发件自扫的两条新判据 ----
+//
+// 为什么要这一组：受管块由生成器渲染后直接写进别人仓库，本包棘轮只扫 `skills/**/*.md`，
+// 2026-10-02 之前对注入后果是盲的（v24→v25 那轮返工就是别人仓库的门先响）。
+// 面名是命中定位与基线键的一部分，所以「虚拟面能不能进基线、会不会过期」必须单独钉。
+
+function vrun(label, content, extra = []) {
+  const p = w('_faces/labelled.md', content);
+  return run(['--virtual-only', '--virtual-md', label, p, ...extra]);
+}
+
+test('R6 红（虚拟面）：块内把技能写成一层，占位符展开后本包无落点', () => {
+  w('skills/ui/brand/SKILL.md', '// 两级真身\n');
+  const r = vrun('受管块/block.md', '只加载 `<skills-root>/skills/<skill>/SKILL.md`。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R6/);
+  assert.match(r.out, /占位符展开后在本包没有任何真实落点/);
+});
+
+test('R6 绿（虚拟面）：写成两级时占位符能展开到真实路径', () => {
+  w('skills/ui/brand/SKILL.md', '// 两级真身\n');
+  const r = vrun('受管块/block.md', '只加载 `<skills-root>/skills/<分类>/<技能>/SKILL.md`。\n');
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /命中 0 处/);
+});
+
+test('R6 红（虚拟面）：末段是部分占位也判（`docs/<主题>.md` 型写法）', () => {
+  mkdirSync(join(root, 'tools', 'x'), { recursive: true });
+  // 路径前两段真实存在，最后一段 `<名>.mjs` 展开后无任何文件命中。
+  const r = vrun('受管块/block.md', '运行 `node <skills-root>/tools/x/<名>.mjs`。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R6/);
+});
+
+test('R6 与 R1／R4 不重复报：无占位段的整条路径仍只由原判据负责', () => {
+  const r = vrun('受管块/block.md', '运行 `node <skills-root>/tools/ghost.mjs .`。\n');
+  assert.equal(r.code, 1, r.out);
+  const rules = (r.out.match(/死引·R\d/g) ?? []);
+  assert.deepEqual(rules, ['死引·R1'], r.out);
+});
+
+test('R6 不吞目标项目命名面：非包根占位符与非 skills 起头的写法都不判', () => {
+  const r = vrun('受管块/block.md', [
+    '在 `<目标项目根>/docs/<模块>.md` 记需求，正文另见 `docs/项目治理/<主题>.md`。',
+    '授权理由写在 `<理由>` 里。',
+    '',
+  ].join('\n'));
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /命中 0 处/);
+});
+
+test('R3 在虚拟面同样生效：块里写本包不下发的脚本名即红', () => {
+  const r = vrun('受管块/block.md', '交付前跑 `resolve-target-doc-context.mjs` 收口。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R3/);
+});
+
+test('虚拟面命中可登记为存量：登记后不阻断，且读数写明是虚拟面', () => {
+  const label = '受管块/block.md';
+  const p = w('_faces/labelled.md', '运行 `ghost-in-block.mjs` 收口。\n');
+  baseline([{ rule: 'R3', file: label, token: 'ghost-in-block.mjs', why: '待收口的块文本谎报' }]);
+  const r = run(['--virtual-only', '--virtual-md', label, p]);
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /含虚拟面 1 份/);
+  assert.match(r.out, /基线存量 1 处/);
+});
+
+test('虚拟面的登记照样会过期：块文本改干净却不删条目就判红（基线不是永久免检牌）', () => {
+  const label = '受管块/block.md';
+  const abs = join(root, '_faces', 'labelled.md');
+  w('_faces/labelled.md', '运行 `ghost-in-block.mjs` 收口。\n');
+  baseline([{ rule: 'R3', file: label, token: 'ghost-in-block.mjs', why: '已收口，条目忘了删' }]);
+  let r = run(['--virtual-only', '--virtual-md', label, abs]);
+  assert.equal(r.code, 0, r.out);
+  writeFileSync(abs, '运行本包工具收口。\n');
+  r = run(['--virtual-only', '--virtual-md', label, abs]);
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /基线登记已过期/);
+});
+
+test('登记过期按面判：限定扫描面时别面的登记不报过期（否则自扫门会被技能正文的存量打假红）', () => {
+  w('skills/demo/SKILL.md', '运行 `ghost-a.mjs`。\n');
+  w('skills/demo/other.md', '正常运行。\n');
+  baseline([{ rule: 'R3', file: 'skills/demo/SKILL.md', token: 'ghost-a.mjs', why: '存量待收口' }]);
+  // 当前面只扫 other.md：SKILL.md 那条既不报命中，也不得报「过期」。
+  const r = run(['--scope', 'skills/demo/other.md']);
+  assert.equal(r.code, 0, r.out);
+  assert.doesNotMatch(r.out, /基线登记已过期/, `限定扫描面不该把别面登记判成过期：${r.out}`);
+  // 同一条登记在默认面（含 skills/**）下仍是过期判据——面感知不得把棘轮本身放宽。
+  const full = run();
+  assert.equal(full.code, 0, full.out);
+  assert.match(full.out, /基线存量 1 处/);
+  w('skills/demo/SKILL.md', '正常运行。\n');
+  const fullClean = run();
+  assert.equal(fullClean.code, 1, fullClean.out);
+  assert.match(fullClean.out, /基线登记已过期/, '全量面下「登记了但已不存在」必须仍响');
+});
+
+test('--virtual-md 少给一个参数：用法错误非零并点名，不静默按盘上面跑', () => {
+  w('skills/demo/SKILL.md', '运行 `ghost.mjs`。\n');
+  const r = run(['--virtual-md', '受管块/block.md']);
+  assert.equal(r.code, 2, r.out);
+  assert.match(r.out, /需要两个参数/);
+});
+
+test('--virtual-md 指向不存在的内容文件：非零并给出面名与路径', () => {
+  const r = run(['--virtual-only', '--virtual-md', '受管块/block.md', join(root, '_faces', 'absent.md')]);
+  assert.equal(r.code, 2, r.out);
+  assert.match(r.out, /内容文件不存在/);
+  assert.match(r.out, /受管块\/block\.md/);
+});
+
+test('--virtual-only 不带任何虚拟面：判用法错误，空跑不算通过', () => {
+  w('skills/demo/SKILL.md', '本包正文没有死引。\n');
+  const r = run(['--virtual-only']);
+  assert.equal(r.code, 2, r.out);
+  assert.match(r.out, /没有任何扫描面|必须与至少一个 --virtual-md/);
+});
+
+test('--virtual-md 面名与盘上面重名：判用法错误，不让两份正文共用一个基线键', () => {
+  w('skills/demo/SKILL.md', '本包正文没有死引。\n');
+  const p = w('_faces/labelled.md', '正常运行。\n');
+  const r = run(['--virtual-md', 'skills/demo/SKILL.md', p]);
+  assert.equal(r.code, 2, r.out);
+  assert.match(r.out, /重名/);
+});
+
+test('虚拟面与盘上面同跑：两边的命中各自定位，互不覆盖', () => {
+  w('skills/demo/SKILL.md', '运行 `ghost-on-disk.mjs`。\n');
+  const p = w('_faces/labelled.md', '运行 `ghost-on-block.mjs`。\n');
+  const r = run(['--virtual-md', '受管块/block.md', p]);
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /skills\/demo\/SKILL\.md:1 死引·R3 未登记新增：`ghost-on-disk\.mjs`/);
+  assert.match(r.out, /受管块\/block\.md:1 死引·R3 未登记新增：`ghost-on-block\.mjs`/);
+  assert.match(r.out, /未登记新增 2 处/);
+});
+
+// 路 A 复核（2026-10-02）补的两条：R6 原来「只判虚拟面」，且展开能吃进 `sources/**` 保真快照。
+// 两处都会让门说「没有死引」而其实没判——盘上正文的一层写法完全在眼下之外，
+// 而「落点在快照里」被当成了「本包有」，与头注「快照里有 ≠ 本包有」这条边界正面矛盾。
+test('R6 判盘上面：技能正文里把技能写成一层，同样必红（不再只判虚拟面）', () => {
+  w('skills/ui/brand/SKILL.md', '// 两级真身\n');
+  w('skills/ui/brand/notes.md', '只加载 `<skills-root>/skills/<skill>/SKILL.md`。\n');
+  const r = run(); // 不带 --virtual-only：盘上面
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /skills\/ui\/brand\/notes\.md:1 死引·R6/, `盘面命中要定位到盘上文件：${r.out}`);
+});
+
+test('R6 不吃不下发的面（首段）：占位符路径以 `sources/` 起头即判红，哪怕快照里那条文件真实存在', () => {
+  // 快照里那条路径盘上真实存在——不排除时它是「真实落点」、门报绿。
+  w('sources/vibe-coding-skills/skills/demo/SKILL.md', '// 快照原文\n');
+  const r = vrun('受管块/block.md', '照抄 `<skills-root>/sources/vibe-coding-skills/skills/<技能>/SKILL.md` 的写法。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R6/, `快照面落点必须判红：${r.out}`);
+});
+
+test('R6 不吃不下发的面（通配展开）：`<分类>` 只能展开到 `node_modules` 时同样判红', () => {
+  w('skills/node_modules/pkg/SKILL.md', '// 依赖副本，不在 bundle 里\n');
+  const r = vrun('受管块/block.md', '加载 `<skills-root>/skills/<分类>/<技能>/SKILL.md`。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R6/, `通配展开不得吃进不下发的目录：${r.out}`);
+  // 对照：同一写法在活树有非跳过目录的落点时必须放行，证明上面的红来自排除而非夹具自己坏了。
+  w('skills/ui/brand/SKILL.md', '// 两级真身\n');
+  const ok = vrun('受管块/block.md', '加载 `<skills-root>/skills/<分类>/<技能>/SKILL.md`。\n');
+  assert.equal(ok.code, 0, ok.out);
+});
+
+test('R1 不吃不下发的面：包根占位符指向快照里的真实文件也判红（「快照里有 ≠ 本包有」这条边界要能机器判）', () => {
+  w('sources/vibe-coding-skills/tools/legacy.mjs', '// 快照原文，不随包分发\n');
+  w('skills/demo/SKILL.md', '运行 `node <skills-root>/sources/vibe-coding-skills/tools/legacy.mjs`。\n');
+  const r = run();
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /死引·R1/, `只查 existsSync 会把快照当本包：${r.out}`);
+  assert.match(r.out, /首段落在不下发的面/, '诊断要说清为什么「盘上存在」仍判红');
+  const rules = (r.out.match(/死引·R\d/g) ?? []);
+  assert.deepEqual(rules, ['死引·R1'], '同一条路径不得被 R1／R3／R6 重复报');
+});
+
+// 路 B 对抗复核（2026-10-02）实测的绕过面：面判定过去只比 `split('/')[0]` 的字面，于是
+// `./sources/…`、`skills/../sources/…`、`tools/../sources/…`、`SOURCES/…`（Windows 大小写不敏感）
+// 四种写法解析后落的都是同一个不下发的快照面，却全部放行——其中前三种在任意平台都成立，
+// `SOURCES` 那条在大小写敏感的平台会由 existsSync 失败兜住（照样判 R1，只是原因不同，故不断诊断措辞）。
+test('面判定先解析：./ 与 .. 写法指向快照面必判红（过去按字面首段判，四种写法全放行）', () => {
+  w('sources/vibe-coding-skills/tools/legacy.mjs', '// 快照原文，不随包分发\n');
+  const forms = [
+    ['<skills-root>/./sources/vibe-coding-skills/tools/legacy.mjs', 'R1'],
+    ['<skills-root>/SOURCES/vibe-coding-skills/tools/legacy.mjs', 'R1'],
+    ['<skills-root>/skills/../sources/vibe-coding-skills/tools/legacy.mjs', 'R1'],
+    ['<skills-root>/tools/../sources/vibe-coding-skills/tools/legacy.mjs', 'R1'],
+    ['<skills-root>/./sources/<技能>/SKILL.md', 'R6'],
+    ['<skills-root>/skills/../sources/<技能>/SKILL.md', 'R6'],
+  ];
+  for (const [path, rule] of forms) {
+    const r = vrun('受管块/block.md', `执行：\`node ${path}\`。\n`);
+    assert.equal(r.code, 1, `${path}：折叠后再判面，落进快照就是谎报：${r.out}`);
+    assert.match(r.out, new RegExp(`死引·${rule}`), `${path}：应按 ${rule} 判：${r.out}`);
+  }
+  // 对照：同一条真实下发的路径不得被折叠逻辑误伤。
+  w('tools/real-tool.mjs', '// ok\n');
+  const ok = vrun('受管块/block.md', '执行：`node <skills-root>/skills/../tools/real-tool.mjs`。\n');
+  assert.equal(ok.code, 0, `折叠后落回真实下发面的写法必须放行：${ok.out}`);
+});
+
+

@@ -47,6 +47,10 @@ Set-StrictMode -Version Latest
 #   - 口径账本执行器单测（scripts/check-caliber-ledger.mjs 四类断言行为契约，2026-10-01 接线）
 #   - 口径账本断言（本包自食：tools/caliber-ledger.json 禁出／镜像同步／真源锚点全量跑）
 #   - 技能正文死引用棘轮（scripts/check-skill-references.mjs：正文指向本包不存在的工具，新增即阻断）
+#   - 受管块正文自扫（scripts/check-runtime-block-refs.mjs：渲染出的目标运行时受管块过同一套死引判据，
+#     2026-10-02 接线；此前受管块正文是棘轮盲区，v24/v25 两代连续把本包不下发的脚本名写进下发件）
+#   - 受管块正文自扫单测（同一套判据对块正文的红/绿突变用例，防「渲染塌了却仍报 0 命中」）
+#   - 受管块降级硬拦契约测试（planFile 版本方向：已装块高于本生成器即 conflict 且不落盘，2026-10-02 接线）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
 #   - 文档数字与实测一致（README / 交接文档自称「catalog 实测」的计数逐条重算比对，2026-09-28 接线）
 #   - 文档步数与实际步数一致（末步自计：README 徽章与正文、交接文档全部「默认 N 步 / 全开 N 步」自称不得靠人抄）
@@ -720,7 +724,7 @@ try {
     #     棘轮口径：新增未登记命中阻断；登记过的存量必须仍出现（基线不是永久免检牌），逐条带收口法。
     try {
         $refCheck = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-skill-references.mjs') -Arguments @('--root', $repoRoot)
-        if ($refCheck.ExitCode -ne 0) { throw ('技能正文死引用检查未通过：' + (($refCheck.Output | Where-Object { $_ -match 'R[1-5]' } | Select-Object -First 3) -join '; ')) }
+        if ($refCheck.ExitCode -ne 0) { throw ('技能正文死引用检查未通过：' + (($refCheck.Output | Where-Object { $_ -match 'R[1-6]' } | Select-Object -First 3) -join '; ')) }
         Add-Result -Step '技能正文死引用棘轮' -Passed $true -Detail (($refCheck.Output | Select-Object -Last 1))
     } catch {
         Add-Result -Step '技能正文死引用棘轮' -Passed $false -Detail $_.Exception.Message
@@ -736,6 +740,43 @@ try {
         Add-Result -Step '技能正文死引用棘轮单测' -Passed $true -Detail ('tests = ' + $refTestCount + '; ' + (($refTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
     } catch {
         Add-Result -Step '技能正文死引用棘轮单测' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5i) 受管块正文自扫（scripts/check-runtime-block-refs.mjs：把渲染出的受管块当虚拟 .md 过同一套死引判据）
+    #     动机：5g 只扫 skills/**.md 与根 SKILL.md，受管块正文藏在下发器字符串里，是棘轮的盲区；
+    #     v24/v25 两代连续把本包不下发的脚本名写进下发件，下游按自己的门判红、本包全绿。
+    #     落点规矩：下发到别人仓库的正文不得写本包不存在的工具名——「诚实提及」也算死引用。
+    try {
+        $blockCheck = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-runtime-block-refs.mjs') -Arguments @('--root', $repoRoot)
+        if ($blockCheck.ExitCode -ne 0) { throw ('受管块正文自扫未通过：' + (($blockCheck.Output | Where-Object { $_ -match 'R[1-6]|✗|这不是' } | Select-Object -First 3) -join '; ')) }
+        Add-Result -Step '受管块正文自扫' -Passed $true -Detail (($blockCheck.Output | Select-Object -Last 1))
+    } catch {
+        Add-Result -Step '受管块正文自扫' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5j) 受管块正文自扫单测（scripts/check-runtime-block-refs.mjs 的行为契约回归门，2026-10-02 接线）
+    #     动机：一条「扫自己写的正文」的门若渲染步骤塌了却仍报 0 命中，就是永久免检牌；
+    #     本步用突变夹具钉住「块里真写下谎报时必红」，并钉住临时渲染件不落在工作树里。
+    try {
+        $blockTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-check-runtime-block-refs.mjs')
+        if ($blockTest.ExitCode -ne 0) { throw ('受管块正文自扫单测失败（exit ' + $blockTest.ExitCode + '）：' + (($blockTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
+        $blockTestCount = Get-NodeTestCount -Output $blockTest.Output -Label '受管块正文自扫单测'
+        Add-Result -Step '受管块正文自扫单测' -Passed $true -Detail ('tests = ' + $blockTestCount + '; ' + (($blockTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
+    } catch {
+        Add-Result -Step '受管块正文自扫单测' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5k) 受管块降级硬拦契约测试（planFile 的版本方向判据，2026-10-02 接线）
+    #     动机：陈旧 skills 副本对着新版目标项目跑 --write，过去与正常升级同形（一行 pending），
+    #     新代条款会被静默写回旧文本。守卫是纯决策逻辑，没有测试就会在下次改 planFile 时被顺手摘掉；
+    #     突变实测：把守卫条件改成永不成立，本步 6／11 例判红。
+    try {
+        $downgradeTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-init-target-runtime-downgrade.mjs')
+        if ($downgradeTest.ExitCode -ne 0) { throw ('受管块降级硬拦契约测试失败（exit ' + $downgradeTest.ExitCode + '）：' + (($downgradeTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
+        $downgradeTestCount = Get-NodeTestCount -Output $downgradeTest.Output -Label '受管块降级硬拦契约测试'
+        Add-Result -Step '受管块降级硬拦契约测试' -Passed $true -Detail ('tests = ' + $downgradeTestCount + '; ' + (($downgradeTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
+    } catch {
+        Add-Result -Step '受管块降级硬拦契约测试' -Passed $false -Detail $_.Exception.Message
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）
@@ -959,6 +1000,8 @@ try {
             # 两套单测例数与四个存量目录（owner 2026-10-01 第 ④ 项：自称实测的数字一律进对账，不再靠人记）
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '（(\d+) 单测，缺锚必须判畸形'; Expect = @($caliberTestCount) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '棘轮自身的单测（(\d+) 例'; Expect = @($refTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '受管块自扫自身的单测（(\d+) 例'; Expect = @($blockTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '降级硬拦自身的契约测试（(\d+) 例'; Expect = @($downgradeTestCount) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '存量：`evidence/` (\d+)、`tasks/` (\d+)、`scripts/` (\d+)（另有 (\d+) 个子目录）、`tests/` (\d+)'; Expect = @($docDirCounts['evidence'].files, $docDirCounts['tasks'].files, $docDirCounts['scripts'].files, $docDirCounts['scripts'].dirs, $docDirCounts['tests'].files) }
             # 本步自身规模（第四条副本，由上面的 $PSCommandPath 现算，含这两条锚点自己）
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '该步共 (\d+) 条锚点、(\d+) 个预期数字位，重算来源是 \*\*(\d+) 个不同量\*\*'; Expect = @($docAnchorCount, $docNumberPositions, $docDistinctSources) }
@@ -1026,10 +1069,18 @@ try {
     #    步数是这批数字里最后一个还在手抄的：README 徽章、README 正文、交接文档各写一遍，
     #    每次增删门禁都得追着改（2026-09-12、2026-09-25 各补过一次）。还原口径：
     #    已登记步数 - 本次真跑过的可选步 + 本步自身 = 默认档步数。
+    #    可选步不手抄（路 C 复核 2026-10-02 查出）：过去这里写死 `if ($IncludeHostEvidence)… / if ($IncludePackage)…`
+    #    两行、全开档又写死「默认 + 2」，于是「全开 31 步」这句从来不是实测——再加第 3 个可选步时本步照绿、
+    #    README 与交接文档照旧写 31。现口径：本脚本里「独立成行的 `if ($Include…) {`」计为一个可选步，
+    #    本次真跑了几个由同名开关现算，全开档 = 默认档 + 开关个数。
     try {
+        $selfText = Get-Content -Raw -Encoding UTF8 -LiteralPath $PSCommandPath
+        $optionalStepGuards = @([regex]::Matches($selfText, '(?m)^[ \t]*if \(\$Include\w+\) \{[ \t]*\r?$'))
         $optionalStepsRun = 0
-        if ($IncludeHostEvidence) { $optionalStepsRun++ }
-        if ($IncludePackage) { $optionalStepsRun++ }
+        foreach ($guard in $optionalStepGuards) {
+            $switchName = [regex]::Match($guard.Value, '\$Include\w+').Value.Substring(1)
+            if (Get-Variable -Name $switchName -ValueOnly) { $optionalStepsRun++ }
+        }
         $defaultStepCount = (@($results).Count - $optionalStepsRun) + 1
         $stepReadmeText = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'README.md')
         $stepBadgeMatch = [regex]::Match($stepReadmeText, 'static%20gates-verify\.ps1%20(\d+)%20steps')
@@ -1044,14 +1095,14 @@ try {
         }
         # 交接文档的步数自 2026-09-28 起一并核对：同一份文档里「默认 21 步」与「默认 15 步」曾并存
         # （入口速查与起点检查清单两处停在 2026-09-12 口径），而本步原先只锚 README。
-        # 口径：默认档取所有「默认 N 步」命中；全开档 = 默认档 + 两个可选步，取所有「全开 N 步」命中。
+        # 口径：默认档取所有「默认 N 步」命中；全开档 = 默认档 + 本脚本自扫出的可选步个数，取所有「全开 N 步」命中。
         # 命中数为 0 同样判失败——改写文案不能把这条对账静默摘掉。
         $stepHandoffPath = Join-Path $repoRoot 'docs/HANDOFF-NEXT.md'
         if (-not (Test-Path -LiteralPath $stepHandoffPath -PathType Leaf)) {
             throw "缺少交接文档: $stepHandoffPath"
         }
         $stepHandoffText = Get-Content -Raw -Encoding UTF8 -LiteralPath $stepHandoffPath
-        $fullOpenStepCount = $defaultStepCount + 2
+        $fullOpenStepCount = $defaultStepCount + $optionalStepGuards.Count
         $handoffDefaultMatches = @([regex]::Matches($stepHandoffText, '默认\s*\**(\d+)\s*\**步'))
         $handoffFullMatches = @([regex]::Matches($stepHandoffText, '全开\s*\**(\d+)\s*\**步'))
         if ($handoffDefaultMatches.Count -lt 1) { $stepCountErrors += '交接文档默认步数锚点未命中（改写文案请同步本步）' }
