@@ -1,6 +1,6 @@
 {
   "schema": "feisheng-canonical-skill-catalog/v1",
-  "generatedAt": "2026-10-01T20:44:12.6716670Z",
+  "generatedAt": "2026-10-02T00:44:05.3305732Z",
   "owner": "skill-catalog",
   "projectEntry": "SKILL.md",
   "routeOwner": "governance/sliver-core/references/routes-index.md",
@@ -739,7 +739,7 @@
           },
           {
             "path": "skills/product/dev-builder/templates/project-scaffolds/_target-docs/文档索引.md.template",
-            "sha256": "fc684b8626149cbae6a216903fe2dd56e0d3aed3869a71ded3b718bf13bc3cca"
+            "sha256": "8004e833533a7d3ae762c5971fe26c93a6ddb44fc322127a71bac481b771e8ab"
           },
           {
             "path": "skills/product/dev-builder/templates/project-scaffolds/cli-feature-first/_gitignore.template",
@@ -1187,7 +1187,7 @@
           },
           {
             "path": "skills/event/experience-elevator/tools/init-target-runtime.mjs",
-            "sha256": "99876c40d31d2ab84af8b6de6a9704ae6ee9a99a682b1d13dbe5fac32e90f69d"
+            "sha256": "91c7680cc0d57dd5ae1ca0ff08277069f91110409201c074aea98cfaab7bc23f"
           },
           {
             "path": "skills/event/experience-elevator/tools/safe-target-fs.mjs",

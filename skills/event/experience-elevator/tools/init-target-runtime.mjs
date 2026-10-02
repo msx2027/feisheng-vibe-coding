@@ -508,11 +508,24 @@ function desiredRegistryFromPlans(plans, currentRegistry, generatedAt, experienc
     currentRegistry?.runtimeBlocks && typeof currentRegistry.runtimeBlocks === "object"
       ? currentRegistry.runtimeBlocks
       : {};
+  const plansByFile = new Map(plans.map((plan) => [plan.file, plan]));
   const runtimeBlocks = {};
   let changed = false;
 
-  for (const plan of plans) {
-    const current = currentBlocks[plan.file] || {};
+  // 以 TARGET_FILES 为骨架遍历（而不是遍历 plans）：登记键集由循环结构本身决定，不靠 plans 恰好齐全。
+  // 如实登记：路 A 突变实测「把骨架换成 plans」后 15 例仍全绿——现有用例区分不了这两种写法，
+  // 保留骨架取的是这条不变量，不得当成已被用例钉住的判据。
+  for (const targetFile of TARGET_FILES) {
+    const plan = plansByFile.get(targetFile.file);
+    const current = currentBlocks[targetFile.file] || {};
+    // 判定失败的文件本次不落盘，也不得改写已登记的状态：照抄上一轮的已装记录。
+    // 此前这里凭空写 version=<本代>＋checksum=<失败计划带的空串>，实测（2026-10-02）
+    // AGENTS.md 路径判定失败时登记计划把上一轮的真 checksum 抹成空串，
+    // 而 --check 会把它当成「registry 待刷新」打印出来——承诺一份永远装不出来的登记。
+    if (!plan || plan.status === "fail") {
+      if (current.kind === "target-runtime") runtimeBlocks[targetFile.file] = current;
+      continue;
+    }
     const next = {
       kind: "target-runtime",
       version: TARGET_RUNTIME_BLOCK_VERSION,
@@ -536,7 +549,7 @@ function desiredRegistryFromPlans(plans, currentRegistry, generatedAt, experienc
     ) {
       changed = true;
     }
-    runtimeBlocks[plan.file] = next;
+    runtimeBlocks[targetFile.file] = next;
   }
 
   const currentKeys = Object.keys(currentBlocks).sort();
@@ -550,8 +563,40 @@ function desiredRegistryFromPlans(plans, currentRegistry, generatedAt, experienc
       !changed && typeof currentRegistry?.updatedAt === "string" ? currentRegistry.updatedAt : generatedAt,
     runtimeBlocks,
   };
-  if (experienceProjection) desired.experienceProjection = experienceProjection;
+  if (experienceProjection) {
+    // 同上：判定失败的文件本次没渲染出投影（applyExperienceProjectionToPlan 对 fail 计划一律返回
+    // projection:null，所以 outputs 里必然没有它这一条），但盘上仍是上一轮那一份。registry 的自校验
+    // 要求 outputs 键集恰为 TARGET_FILES，删条目会让 --check 把「这个文件读不了」读成「投影登记面漂移」。
+    // 注意这里只改读数：`--write` 有失败即整笔不落盘，删了的条目不会先落盘再在下一轮变成漂移。
+    const recordedOutputs = currentRegistry?.experienceProjection?.outputs;
+    const outputs = { ...experienceProjection.outputs };
+    for (const targetFile of TARGET_FILES) {
+      if (plansByFile.get(targetFile.file)?.status !== "fail") continue;
+      const recorded = recordedOutputs?.[targetFile.file];
+      if (recorded && typeof recorded === "object" && !Array.isArray(recorded)) outputs[targetFile.file] = recorded;
+    }
+    desired.experienceProjection = { ...experienceProjection, outputs };
+  }
   return desired;
+}
+
+// 本轮判定失败、却把上一轮登记照抄下来的文件清单（受管块与投影登记两类都算）。
+// 照抄本身是对的（盘上仍是那一份），但 --check 只剩一个 action=none 会把「这个文件读不了」
+// 显示成「一切正常」；这里把它单独点名出来，让降级在读数面可见（2026-10-02 路 A 复核第 4 条）。
+function carriedForwardRegistryEntries(runtimePlans, currentRegistry, experienceProjection) {
+  const plansByFile = new Map(runtimePlans.map((plan) => [plan.file, plan]));
+  const blocks = currentRegistry?.runtimeBlocks;
+  const outputs = experienceProjection ? currentRegistry?.experienceProjection?.outputs : null;
+  const carried = [];
+  for (const targetFile of TARGET_FILES) {
+    const plan = plansByFile.get(targetFile.file);
+    if (plan && plan.status !== "fail") continue;
+    const hasBlock = blocks?.[targetFile.file]?.kind === "target-runtime";
+    const recorded = outputs?.[targetFile.file];
+    const hasProjection = !!recorded && typeof recorded === "object" && !Array.isArray(recorded);
+    if (hasBlock || hasProjection) carried.push(targetFile.file);
+  }
+  return carried;
 }
 
 function planRuntimeRegistry(targetRoot, runtimePlans, generatedAt, experienceProjection) {
@@ -587,6 +632,8 @@ function planRuntimeRegistry(targetRoot, runtimePlans, generatedAt, experiencePr
 
   const desired = desiredRegistryFromPlans(runtimePlans, current, generatedAt, experienceProjection);
   const nextContent = writeJson(desired);
+  const carried = carriedForwardRegistryEntries(runtimePlans, current, experienceProjection);
+  const carriedNote = carried.length === 0 ? "" : `（沿用上一轮：${carried.join("、")} 本轮判定失败未核对）`;
   if (!state.exists) {
     return {
       file: RUNTIME_REGISTRY_FILE,
@@ -602,7 +649,7 @@ function planRuntimeRegistry(targetRoot, runtimePlans, generatedAt, experiencePr
       file: RUNTIME_REGISTRY_FILE,
       action: "none",
       status: "pass",
-      reason: "runtime registry current",
+      reason: `runtime registry current${carriedNote}`,
       nextContent: currentContent,
     };
   }
@@ -610,7 +657,7 @@ function planRuntimeRegistry(targetRoot, runtimePlans, generatedAt, experiencePr
     file: RUNTIME_REGISTRY_FILE,
     action: "update",
     status: "pending",
-    reason: "runtime registry changed",
+    reason: `runtime registry changed${carriedNote}`,
     nextContent,
     expectedContent: currentContent,
   };

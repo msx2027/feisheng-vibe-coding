@@ -15,7 +15,12 @@ param(
     [switch]$IncludeHostEvidence,
 
     [Parameter(Mandatory = $false)]
-    [int]$HostEvidenceMaxAgeDays = 7
+    [int]$HostEvidenceMaxAgeDays = 7,
+
+    # 可选：下游登记盘上对账。逐根读 E:/fs-agent 等绝对路径上的受管块标记行，与 provenance/DOWNSTREAMS.json
+    # 登记的 version／checksum 对账。默认不跑：CI 是 ubuntu-latest，没有这些盘根（判红不等于判对，见该脚本头注）。
+    [Parameter(Mandatory = $false)]
+    [switch]$IncludeDownstreamDisk
 )
 
 $ErrorActionPreference = 'Stop'
@@ -50,11 +55,16 @@ Set-StrictMode -Version Latest
 #   - 受管块正文自扫（scripts/check-runtime-block-refs.mjs：渲染出的目标运行时受管块过同一套死引判据，
 #     2026-10-02 接线；此前受管块正文是棘轮盲区，v24/v25 两代连续把本包不下发的脚本名写进下发件）
 #   - 受管块正文自扫单测（同一套判据对块正文的红/绿突变用例，防「渲染塌了却仍报 0 命中」）
-#   - 受管块降级硬拦契约测试（planFile 版本方向：已装块高于本生成器即 conflict 且不落盘，2026-10-02 接线）
+#   - 受管块降级硬拦契约测试（planFile 版本方向：已装块高于本生成器即 conflict 且不落盘，2026-10-02 接线；
+#     同批 D4 组再钉 runtime registry：某入口判定失败时登记面照抄已装值，不得凭空造本代版本／抹掉条目）
+#   - 下游登记对账·结构档（provenance/DOWNSTREAMS.json：谁装了受管块、停在第几代，登记面必须与生成器同源
+#     且不得空／畸形／高于本代，2026-10-02 接线；此前下游清单只活在一次性普查的证据文里）
+#   - 下游登记对账单测（同一门的两档退出码分工与判红分支回归门）
 #   - Codex / Claude / 宿主中性静态投影 Build + Validate
 #   - 文档数字与实测一致（README / 交接文档自称「catalog 实测」的计数逐条重算比对，2026-09-28 接线）
 #   - 文档步数与实际步数一致（末步自计：README 徽章与正文、交接文档全部「默认 N 步 / 全开 N 步」自称不得靠人抄）
 #   - 可选：宿主证据门（-IncludeHostEvidence，把 host-discovery-evidenced 纸面门变成机器门）
+#   - 可选：下游登记盘上对账（-IncludeDownstreamDisk，逐根读别人仓库里的标记行；CI 无盘根故独立成档）
 #   - 可选：发布候选包装配（-IncludePackage）
 #
 # 本脚本只读仓库、只在临时目录写入（collector 单测的日志除外，见上）；不安装依赖、不写入宿主目录。
@@ -140,11 +150,16 @@ function Get-NodeTestCount {
 try {
     New-Item -ItemType Directory -Force -Path $workRoot | Out-Null
 
-    # 两套 node --test 的例数：由 5e/5h 从各自汇总行现取，供 6b 与交接文档对账。
-    # 显式初始化为 null（StrictMode Latest 下读未赋值变量直接抛），失败时让 6b 报「实测值未获得」
-    # 而不是报一条变量未初始化异常。
+    # 各套 node --test 的例数与下游登记读数：由 5x 从各自汇总行现取，供 6b 与交接文档对账。
+    # 显式初始化为 null（StrictMode Latest 下读未赋值变量直接抛），失败时让 6b 报「实测值未获得（第 6 步未通过？）」
+    # 而不是在建锚点数组时就炸一条变量未初始化异常——路 B 复核 2026-10-02 实测：少一个 $null 就会让那条友好分支永久不可达。
     $caliberTestCount = $null
     $refTestCount = $null
+    $blockTestCount = $null
+    $downgradeTestCount = $null
+    $dsTestCount = $null
+    $dsRoots = $null
+    $dsPrefixes = $null
 
     # 1) catalog 与分类真源同步
     try {
@@ -766,10 +781,15 @@ try {
         Add-Result -Step '受管块正文自扫单测' -Passed $false -Detail $_.Exception.Message
     }
 
-    # 5k) 受管块降级硬拦契约测试（planFile 的版本方向判据，2026-10-02 接线）
+    # 5k) 受管块降级硬拦契约测试（planFile 的版本方向判据，2026-10-02 接线；同批 D4 组钉 registry 计划面）
     #     动机：陈旧 skills 副本对着新版目标项目跑 --write，过去与正常升级同形（一行 pending），
     #     新代条款会被静默写回旧文本。守卫是纯决策逻辑，没有测试就会在下次改 planFile 时被顺手摘掉；
-    #     突变实测：把守卫条件改成永不成立，本步 6／11 例判红。
+    #     突变实测：把守卫条件改成永不成立，本步 6／15 例判红。
+    #     D4 组同理想防的是同一个出口的第二个谎：某入口判定失败时，desiredRegistryFromPlans 过去把
+    #     该文件写成 version=本代＋checksum=""（并把上一轮真值抹掉、把整条删掉），突变实测（2026-10-02 原地改一行、
+    #     跑完按 sha256 复原）摘掉「status === "fail" 即照抄已装记录」这道护栏后 D4 三条各判红（3／15）、
+    #     投影 outputs 那条单独摘掉后仅 D4-4 判红（1／15）；照抄会把降级读成 [PASS] none，故 reason 里点名
+    #     「沿用上一轮：…本轮判定失败未核对」——把点名串置空后点名的两条断言判红、两条「不得出现点名」的对照仍绿（2／15）。
     try {
         $downgradeTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-init-target-runtime-downgrade.mjs')
         if ($downgradeTest.ExitCode -ne 0) { throw ('受管块降级硬拦契约测试失败（exit ' + $downgradeTest.ExitCode + '）：' + (($downgradeTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
@@ -777,6 +797,57 @@ try {
         Add-Result -Step '受管块降级硬拦契约测试' -Passed $true -Detail ('tests = ' + $downgradeTestCount + '; ' + (($downgradeTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
     } catch {
         Add-Result -Step '受管块降级硬拦契约测试' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5l) 下游登记对账·结构档（provenance/DOWNSTREAMS.json，2026-10-02 接线，owner 拍板「建，按路径登记」）
+    #     动机：受管块从 v23 一路改到 v27，每批都靠一次性磁盘普查才知道「谁装了、停在哪代」，读数只活在
+    #     证据文里（evidence/20261002-runtime-registry-mirror.md §7），下一批又回到零 Known——这就是下游侧的口径漂移。
+    #     本步只判登记面自身：登记缺失／畸形／空清单／版本高于本生成器／登记的标记正则与入口清单和生成器
+    #     不同源，一律判红；盘上对账（逐根读别人仓库的标记行）在 -IncludeDownstreamDisk 可选档，两句不是一句。
+    try {
+        $dsCheck = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-downstream-registry.mjs') -Arguments @('--repo', $repoRoot, '--structure-only')
+        if ($dsCheck.ExitCode -ne 0) { throw ('下游登记对账（结构档）未通过：' + (($dsCheck.Output | Where-Object { $_ -match '✗|高于本生成器|不同源|空数组' } | Select-Object -First 3) -join '; ')) }
+        $dsReading = [regex]::Match(($dsCheck.Output -join "`n"), '登记 (\d+) 根、排除前缀 (\d+) 个')
+        if (-not $dsReading.Success) { throw '下游登记门读数缺「登记 N 根、排除前缀 M 个」——本步没拿到可对账的判据，不算通过' }
+        $dsRoots = [int]$dsReading.Groups[1].Value
+        $dsPrefixes = [int]$dsReading.Groups[2].Value
+        if ($dsRoots -lt 1) { throw ('下游登记根数为 ' + $dsRoots + '，结构档却给了 0：空账本不得换绿') }
+        # 排除面同样有下限（路 B 复核 2026-10-02 查出）：结构档只判排除项的形状与理由，「零命中＝排除空气」
+        # 那条要等盘上档才判。少这一句，默认档可以被「删掉一条排除登记」换绿，而只有非默认的 5n 才发现。
+        if ($dsPrefixes -lt 1) { throw ('排除前缀数为 ' + $dsPrefixes + '，结构档却给了 0：worktree 分身与评测夹具不会自己从账上消失，删登记要连着改本步') }
+        Add-Result -Step '下游登记对账（结构档）' -Passed $true -Detail (($dsCheck.Output | Select-Object -Last 1))
+    } catch {
+        Add-Result -Step '下游登记对账（结构档）' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5m) 下游登记对账单测（scripts/check-downstream-registry.mjs 的行为契约回归门，同批接线）
+    #     动机：本门判的是「登记表与生成器／盘上标记行是否同一句话」，它自己若把「没判成」报成「判过了」，
+    #     下游侧就重新回到无人值守。两档退出码分工（2＝门没跑成／1＝判红／0＝一致）与各判红分支逐条钉住。
+    try {
+        $dsTest = Invoke-Node -Script (Join-Path $repoRoot 'tests/test-check-downstream-registry.mjs')
+        if ($dsTest.ExitCode -ne 0) { throw ('下游登记对账单测失败（exit ' + $dsTest.ExitCode + '）：' + (($dsTest.Output | Where-Object { $_ -match 'fail|not ok|Error' } | Select-Object -First 3) -join '; ')) }
+        $dsTestCount = Get-NodeTestCount -Output $dsTest.Output -Label '下游登记对账单测'
+        Add-Result -Step '下游登记对账单测' -Passed $true -Detail ('tests = ' + $dsTestCount + '; ' + (($dsTest.Output | Where-Object { $_ -match '(tests|pass) [0-9]+' } | Select-Object -First 2) -join '; '))
+    } catch {
+        Add-Result -Step '下游登记对账单测' -Passed $false -Detail $_.Exception.Message
+    }
+
+    # 5n) 可选：下游登记盘上对账（-IncludeDownstreamDisk，2026-10-02 接线）
+    #     逐根读别人仓库里标记行的 version／checksum，与登记面对账；闭合只判**稳定面**
+    #     （登记面 ⊎ git 跟踪的夹具面 == 读数里对应的两面），易逝面（别人的 worktree 分身）只报数不判等。
+    #     独立成档的原因写在脚本头注：CI 是 ubuntu-latest，没有 E:/ 与 G:/；把它塞进常驻步要么让 CI 永久红，
+    #     要么让常驻步「盘够不到就当没有下游」——后者正是本包 2026-10-02 一批门禁在拆的「空判即绿」。
+    if ($IncludeDownstreamDisk) {
+        try {
+            $dsDisk = Invoke-Node -Script (Join-Path $repoRoot 'scripts/check-downstream-registry.mjs') -Arguments @('--repo', $repoRoot)
+            if ($dsDisk.ExitCode -ne 0) { throw ('下游登记盘上对账未通过：' + (($dsDisk.Output | Where-Object { $_ -match '✗' } | Select-Object -First 3) -join '; ')) }
+            $dsDiskMode = [regex]::Match(($dsDisk.Output -join "`n"), '本次=盘上档（实对 (\d+) 根／(\d+) 份入口）')
+            if (-not $dsDiskMode.Success) { throw '盘上档读数缺「本次=盘上档（实对 N 根／M 份入口）」——盘没扫成不算对账通过' }
+            if ([int]$dsDiskMode.Groups[1].Value -ne $dsRoots) { throw ('盘上实对根数 ' + [int]$dsDiskMode.Groups[1].Value + ' ≠ 结构档登记根数 ' + $dsRoots) }
+            Add-Result -Step '下游登记盘上对账' -Passed $true -Detail ($dsDiskMode.Value + '; ' + (($dsDisk.Output | Select-Object -Last 1)))
+        } catch {
+            Add-Result -Step '下游登记盘上对账' -Passed $false -Detail $_.Exception.Message
+        }
     }
 
     # 5b) 可选：宿主证据门（把 runtimePromotionPolicy 的 host-discovery-evidenced 纸面门变成机器门）
@@ -915,8 +986,10 @@ try {
         $docSharedTotal = $projectionTotals['build-shared-runtime-projection.ps1']
         if ($null -eq $docSharedTotal) { throw '宿主中性投影实测总数未获得（第 6 步未通过，先修它）' }
 
-        # 四个存量目录与两套单测例数：此前只写在交接文档、自称实测，却不在任何锚点集内（靠人记）。
+        # 四个存量目录与五套单测例数：此前只写在交接文档、自称实测，却不在任何锚点集内（靠人记）。
         # owner 2026-10-01 第 ④ 项令收编，故此处现算；目录缺失视为对账前提不成立（抛，不静默计 0）。
+        # 「两套」是 2026-10-01 收口批的数，此后受管块自扫批加到三套、D4 批加到四套、下游登记批加到五套；
+        # 注释停在旧数不会有任何门来抓——它不在锚点集里，所以这里写明它是历史值。
         $docDirCounts = @{}
         foreach ($docInventoryDir in @('evidence', 'tasks', 'scripts', 'tests')) {
             $docInventoryPath = Join-Path $repoRoot $docInventoryDir
@@ -928,7 +1001,8 @@ try {
                 dirs = @(Get-ChildItem -LiteralPath $docInventoryPath -Directory).Count
             }
         }
-        # 本步自身的规模也进对账：交接文档写着「该步共 40 条锚点、66 个预期数字位、重算来源 18 个不同量」，
+        # 本步自身的规模也进对账：交接文档当时写着「该步共 40 条锚点、66 个预期数字位、重算来源 18 个不同量」
+        # （2026-10-01 收口批口径，现为历史值；这三个数一直在跟着批增，逐批现值见交接文档该行），
         # 那是同一批数字的第四个副本，每加一条锚点就得追改一次。改读 $PSCommandPath 自己现算，
         # 去重键沿用 evidence/20261001-skill-body-dead-command-cleanup.md §4c 末条的定稿口径：
         # 按 Expect 里的来源表达式文本去重、按 PowerShell 变量名（剥掉索引器）去重，两数并存不是漂移。
@@ -997,11 +1071,13 @@ try {
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = 'build-shared-runtime-projection\.ps1\s*→ (\d+) 文件'; Expect = @($docSharedTotal) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '(\d+) 条记录 / (\d+) bundle 文件（控制面 (\d+) \+ Matt (\d+) \+ Vibe (\d+)'; Expect = @($docRuntimeRecords, $docBundleFiles, $docControlPlaneRecords, $docMattRecords, $docVibeRecords) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '部署态 (\d+) = \+根入口\+manifest'; Expect = @($docSharedTotal) }
-            # 两套单测例数与四个存量目录（owner 2026-10-01 第 ④ 项：自称实测的数字一律进对账，不再靠人记）
+            # 五套单测例数与四个存量目录（owner 2026-10-01 第 ④ 项：自称实测的数字一律进对账，不再靠人记）
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '（(\d+) 单测，缺锚必须判畸形'; Expect = @($caliberTestCount) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '棘轮自身的单测（(\d+) 例'; Expect = @($refTestCount) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '受管块自扫自身的单测（(\d+) 例'; Expect = @($blockTestCount) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '降级硬拦自身的契约测试（(\d+) 例'; Expect = @($downgradeTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '下游登记门自身的单测（(\d+) 例'; Expect = @($dsTestCount) }
+            [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '下游登记面：登记 (\d+) 根、排除前缀 (\d+) 个'; Expect = @($dsRoots, $dsPrefixes) }
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '存量：`evidence/` (\d+)、`tasks/` (\d+)、`scripts/` (\d+)（另有 (\d+) 个子目录）、`tests/` (\d+)'; Expect = @($docDirCounts['evidence'].files, $docDirCounts['tasks'].files, $docDirCounts['scripts'].files, $docDirCounts['scripts'].dirs, $docDirCounts['tests'].files) }
             # 本步自身规模（第四条副本，由上面的 $PSCommandPath 现算，含这两条锚点自己）
             [pscustomobject]@{ File = 'docs/HANDOFF-NEXT.md'; Pattern = '该步共 (\d+) 条锚点、(\d+) 个预期数字位，重算来源是 \*\*(\d+) 个不同量\*\*'; Expect = @($docAnchorCount, $docNumberPositions, $docDistinctSources) }
@@ -1085,10 +1161,14 @@ try {
         $stepReadmeText = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot 'README.md')
         $stepBadgeMatch = [regex]::Match($stepReadmeText, 'static%20gates-verify\.ps1%20(\d+)%20steps')
         $stepTableMatch = [regex]::Match($stepReadmeText, '`verify\.ps1` 默认 (\d+) 步')
+        # 英文那张表是同一句话的第三份副本，此前不在锚点集内：2026-10-02 复核时中文两处已跟着改到 31，
+        # 英文行还停在 24——正是本步存在的理由（手抄的那一份最晚发现自己在说谎）。补成第三个锚点。
+        $stepReadmeEnMatch = [regex]::Match($stepReadmeText, 'verify\.ps1`, (\d+) steps by default')
         $stepCountErrors = @()
         if (-not $stepBadgeMatch.Success) { $stepCountErrors += 'README 徽章步数锚点未命中（改写文案请同步本步）' }
         if (-not $stepTableMatch.Success) { $stepCountErrors += 'README 正文步数锚点未命中（改写文案请同步本步）' }
-        foreach ($stepClaim in @($stepBadgeMatch, $stepTableMatch)) {
+        if (-not $stepReadmeEnMatch.Success) { $stepCountErrors += 'README 英文句步数锚点未命中（改写文案请同步本步）' }
+        foreach ($stepClaim in @($stepBadgeMatch, $stepTableMatch, $stepReadmeEnMatch)) {
             if ($stepClaim.Success -and [int]$stepClaim.Groups[1].Value -ne $defaultStepCount) {
                 $stepCountErrors += ('README 登记=' + [int]$stepClaim.Groups[1].Value + ' 实测默认档=' + $defaultStepCount)
             }

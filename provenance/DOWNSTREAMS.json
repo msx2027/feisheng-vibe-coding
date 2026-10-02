@@ -1,0 +1,148 @@
+{
+  "schema": "vibe-coding-skills/downstreams@1",
+  "owner": "provenance",
+  "status": "active",
+  "note": "受管块（AGENTS.md／CLAUDE.md 里由 skills/event/experience-elevator/tools/init-target-runtime.mjs 下发的那一段）的**下游清单与已装版本登记**。2026-10-02 owner 拍板「建，按路径登记」。 动机：本包把块版本从 v23 一路改到 v27，每次都要靠一次性磁盘普查才知道「谁装了、装到哪代」，而普查产物只活在证据文里——下一批改动重新出现同一个盲区，这就是 owner 说的「文档口径漂移」。登记成机器可读面之后，门禁 scripts/check-downstream-registry.mjs 每次全量跑都能读出「几个下游、各自第几代、正文哈希与登记是否一致」。 口径边界（本文件刻意**不**判的东西，避免与本包已有的第二套判定逻辑打架）：块正文的 checksum 是否等于本代渲染结果，由 init-target-runtime.mjs 的 --check／--strict 判；本文件只登记盘上标记行里**写着**的 version 与 checksum，用于把「下游实际停在第几代」变成可对账的账。 checksum 逐根不同是允许的：AGENTS.md 与 CLAUDE.md 两份正文本来就不同，目标项目的运行时名／入口文件名字段也可以不同——所以「同一版本必须同一哈希」不是本包的口径，跨根哈希差异只作读数打印，不判红。 登记的代价（owner 拍板时已讲明）：按绝对路径登记意味着换机器、改盘符或把项目挪位之后，本文件必须同步改，否则门禁判红。这是有意选择 fail-closed：宁可让「下游不见了」暴露成一条失败，也不要它静默变成「零个下游 = 全绿」。新下游不会被本门自动发现，只能重跑 census.command 的普查再登记——这条已写成显式代价，见 census.cost。",
+  "policy": {
+    "missingFile": "登记缺失即判红（exit 2），不降级为「没有下游」",
+    "emptyRegistry": "downstreams 为空数组同样判红（空判即绿是本包 2026-10-02 一批门禁的靶子）",
+    "rootNotFound": "登记路径在盘上不存在 → 判红：要么项目挪走／改机，要么目录被删，两种都必须先改登记再跑门",
+    "staleRegistration": "盘上标记行的 version 或 checksum 与登记不符 → 判红（登记不得过期；基线不是免检牌，本门不设豁免）",
+    "versionAheadOfGenerator": "盘上版本高于生成器 TARGET_RUNTIME_BLOCK_VERSION → 判红（本包副本陈旧，D 批那类「旧代工具对着新下游回写旧文本」事故的另一半）",
+    "versionBehindGenerator": "盘上版本低于生成器 → 只报「落后 N 个」不判红：刷不刷下游是 owner 的发布决策，不是本包改一行就能替别人决定的",
+    "nestedUnregisteredBlock": "已登记根内（深度见 scan.depth）出现未登记的带块入口文件 → 判红「登记不全」",
+    "absoluteRoot": "downstreams[].root 必须是绝对路径（盘符开头或 / 开头）→ 相对路径判红：本门的设计前提就是「按路径登记」，写成相对路径会在不同调用目录下指到不同项目",
+    "relativeEntryFile": "entries[].file 必须是根内的相对路径名 → 含 ..、带反斜杠或盘符、以 / 开头一律判红：盘上档拿它和扫描出的相对名逐字对位，加料的登记永远显示「盘上没有」",
+    "markerSingleSource": "census.command 必须含由本文件 block.startMarkerRegex 取出的标记串 → 门脚本里不留第二份标记字面，改了口径两处不会各说一半",
+    "markerLiteralShape": "block.startMarkerRegex 必须是生成器源码里**完整那一条**正则字面（以 /…/ 整体出现），且两端锚定（^…$）→ 只对上子串也算「逐字出现」的旧判据会放过放宽版：不锚定的正则吃得住畸形标记行，版本与哈希就无从认定",
+    "markerNamedGroups": "登记的标记正则必须带 file／version／checksum 三个命名组 → 缺组时盘上档读不出字段，判红而不是当场崩（崩出去的退码是 1，会被误读成「判红」）",
+    "absolutePrefix": "excluded[].pathPrefix 也必须是绝对路径 → 与 root 同一条口径；相对前缀随调用目录换义，「排除空气」和「误排除真下游」都判不出来",
+    "mutableFace": "每个排除项必须写 mutable 布尔：true＝随别人日常动作增减（工作副本），false＝git 跟踪、数量稳定（夹具）→ 只有稳定面进闭合等式；易逝面改用「出现运行时登记就判红」这类不随数量变的判据",
+    "stableFaceClosure": "盘上档的闭合等式只算稳定面：登记的入口实见数 ＋ 稳定排除命中数 == 读数 face.registered.files ＋ face.excludedStable.files（根数同理）→ 读数里的 face.registered 还要与登记表自身的条目数相等，这条不需要盘、CI 上也能判",
+    "censusDepthAlignment": "census.command 的 -maxdepth 必须 ≥ scan.depth → 否则闭合等式两边的面不是同一个大小，门能看见普查从没看过的深度",
+    "incompleteScan": "走树时目录或文件读不出来（断链、权限、中途被删）→ exit 2「门没跑成」，绝不把「看不见」当成「查过了」；一条也不静默跳过",
+    "runtimeRegistryPerRoot": ".vibe-runtime.json 在不在是按**根**判的：一个根最多一条红，不随入口份数重复报",
+    "exclusionStale": "排除项前缀在盘上已不存在 → 判红：排除清单不得长成无人清理的垃圾场",
+    "judgmentOwner": "块正文哈希真伪的唯一判定者是 init-target-runtime.mjs --check／--strict；本门不复算内容，故两处不会给出互相矛盾的版本结论"
+  },
+  "block": {
+    "generator": "skills/event/experience-elevator/tools/init-target-runtime.mjs",
+    "versionConstant": "TARGET_RUNTIME_BLOCK_VERSION",
+    "startMarkerRegex": "^<!-- vibe-coding-skills:target-runtime:start file=(?<file>[^ ]+) version=(?<version>[^ ]+) checksum=sha256:(?<checksum>[a-f0-9]{64}) -->$",
+    "entryFiles": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "scan": {
+    "depth": 3,
+    "skipDirs": [
+      "node_modules",
+      ".git",
+      "dist",
+      "build",
+      "sources"
+    ]
+  },
+  "census": {
+    "purpose": "新下游只能靠重跑这条普查发现；每次重跑都要回头核对 readings 还对不对得上，对不上就说明下游面已经漂了。",
+    "command": "find /e /f /g -maxdepth 6 -type f \\( -name AGENTS.md -o -name CLAUDE.md \\) -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null | tr '\\n' '\\0' | xargs -0 grep -l 'vibe-coding-skills:target-runtime:start'",
+    "capturedAt": "2026-10-02",
+    "readings": {
+      "candidateFiles": 146,
+      "filesWithBlock": 28,
+      "rootsWithBlock": 14,
+      "face": {
+        "registered": { "files": 8, "roots": 4 },
+        "excludedStable": { "files": 6, "roots": 3 },
+        "excludedVolatile": { "files": 14, "roots": 7 }
+      }
+    },
+    "faceNote": "闭合账只算稳定面：登记面（4 根／8 份入口，由人手登记）＋ git 跟踪的夹具面（3 根／6 份）。易逝面（fs-agent 的 git worktree 分身）随开随关，2026-10-02 两路复核当场实测到它在半小时里从 14 份／7 根掉到 12 份／6 根——把它和冻结常数做等式，这道门会因为与本包无关的动作自己变红，红多了的门没人信。故它只进读数打印，等式两边都不沾；同时在盘上档里它换了两个判据：易逝面里的根若带 .vibe-runtime.json（活现场形态而非检出形态）判红，前缀整体消失判红。filesWithBlock／rootsWithBlock 两个总数自此只作「重跑普查时对照」，不参与判定。",
+    "cost": "普查是一次性人工动作，不进门禁：它要扫 /e /f /g 三个盘根、深度 6，本机实测数秒到数十秒，且换机后盘符根本不存在。把它做成常驻步骤等于把门禁绑死在一台机器上，故只留可照抄命令 + 当次读数，靠每批复核时重跑对账。 代价（如实写明）：读数会随盘上动作过期而门不会自愈——capturedAt 只打印不比（比了就成了「按日历变红」），稳定性只由稳定面的闭合等式承担；新下游不会触发任何判红，因为门只走登记面与排除面，普查读数里多出根这件事在等式里没有位置。这是「按路径登记」换来的必然后果，owner 拍板时已讲明。"
+  },
+  "downstreams": [
+    {
+      "root": "E:/fs-agent",
+      "kind": "owner 主用项目（本包能力的实接下游，2026-10-01／10-02 两批返工都在这里发生）",
+      "runtimeRegistry": true,
+      "entries": [
+        {
+          "file": "AGENTS.md",
+          "blockVersion": "27",
+          "checksum": "sha256:3480e4e4c803fbaa9846dff34e22632dfdd3ccff9c8c70ad74dc76ea84a7df7e"
+        },
+        {
+          "file": "CLAUDE.md",
+          "blockVersion": "27",
+          "checksum": "sha256:7c7561031da0b1a36b01a4a6127a583ba781083b695c95c2def64083fe9c306e"
+        }
+      ]
+    },
+    {
+      "root": "F:/skiils/sess-find",
+      "kind": "同代实接下游（与 fs-agent 同一批刷到 v27，正文哈希逐份相同）",
+      "runtimeRegistry": true,
+      "entries": [
+        {
+          "file": "AGENTS.md",
+          "blockVersion": "27",
+          "checksum": "sha256:3480e4e4c803fbaa9846dff34e22632dfdd3ccff9c8c70ad74dc76ea84a7df7e"
+        },
+        {
+          "file": "CLAUDE.md",
+          "blockVersion": "27",
+          "checksum": "sha256:7c7561031da0b1a36b01a4a6127a583ba781083b695c95c2def64083fe9c306e"
+        }
+      ]
+    },
+    {
+      "root": "G:/历史项目/deyy",
+      "kind": "历史项目，停在 v21（落后本代 6 个版本；刷不刷由 owner 定，本门只报不判红）",
+      "runtimeRegistry": true,
+      "entries": [
+        {
+          "file": "AGENTS.md",
+          "blockVersion": "21",
+          "checksum": "sha256:85c9fbdbe330858122e4907178590974283ec920b507707e2ff7a5e63f6e49c2"
+        },
+        {
+          "file": "CLAUDE.md",
+          "blockVersion": "21",
+          "checksum": "sha256:e6f4fc975d2c2fc6ec67c8aafc69126135c3fb87604f753cb0cbb887eb641c27"
+        }
+      ]
+    },
+    {
+      "root": "G:/历史项目/ddzj",
+      "kind": "历史项目，停在 v3（落后本代 24 个版本；最老的一份在装块，留作版本方向的对照）",
+      "runtimeRegistry": true,
+      "entries": [
+        {
+          "file": "AGENTS.md",
+          "blockVersion": "3",
+          "checksum": "sha256:53d071f6af41979f35be5334f167ae280b370529f45746d0249af649d276e325"
+        },
+        {
+          "file": "CLAUDE.md",
+          "blockVersion": "3",
+          "checksum": "sha256:ffa0234340ace18e0f08ea9965c885c6a96d0a8755e6d99c0c780fc9073c9403"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "pathPrefix": "E:/fs-agent-worktrees/",
+      "mutable": true,
+      "reason": "fs-agent 的 git worktree 分身（2026-10-02 实测 7 个：098-claude-sidecar-validation／bug-sweep-backend／bug-sweep-frontend／bug-sweep-verify／fabao-real／fsa-task-card-grouping／lingmai-oauth，版本停在 v23 与 v25）。它们是同一份工作内容的另一份检出，不是独立下游：刷它们等于替别人的在途分支改文件，且 main 一 merge 就自然跟着走。",
+      "note": "7 个分身全部没有 .vibe-runtime.json——worktree 检出只带被 git 跟踪的入口文件，运行时登记本就不入库。 这一面随 owner 开关分身而增减（同日复核实测 7→6 个根），故不参与闭合等式，只进读数；反过来，它里面只要出现 .vibe-runtime.json，盘上档就判红——那说明它已经是活现场，不再是检出。"
+    },
+    {
+      "pathPrefix": "G:/历史项目/vibe/examples/golden-path/",
+      "mutable": false,
+      "reason": "评测夹具（2026-10-02 实测 3 个：cli-node-mini／desktop-electron-mini／web-vite-mini，均 v21 且哈希与 deyy 逐字相同）。它们被 git 跟踪，克隆仓库会把旧块搬到任意新路径——那些路径既不是下游，也不该被登记成下游，故按前缀排除并在门禁读数里如实计数。",
+      "note": "夹具带 .vibe-runtime.json 是因为它们是「装好块的样子」的样板，不是活的协作现场；git 跟踪所以数量稳定，这一面参与闭合等式（3 根／6 份入口）。"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ One public entry · One main route · Exactly one owner per rule
 ![phase](https://img.shields.io/badge/phase-controlled%20run-3F6212)
 ![runtime](https://img.shields.io/badge/skills-52%20runtime%20%2F%2082%20registered-0E7490)
 ![hosts](https://img.shields.io/badge/hosts-Claude%20Code%20%7C%20Codex-7C3AED)
-![gates](https://img.shields.io/badge/static%20gates-verify.ps1%2029%20steps-16A34A)
+![gates](https://img.shields.io/badge/static%20gates-verify.ps1%2031%20steps-16A34A)
 ![runtime](https://img.shields.io/badge/PowerShell-7%20%7C%205.1-5391FE?logo=powershell&logoColor=white)
 
 **简体中文** · [English](#english) · [架构图 Architecture](#architecture)
@@ -71,7 +71,7 @@ User goal → one main route → conditional lens / one or more internal capabil
 | 来源技能登记 / runtime / 退役 / 排除 | 82 / **52** / 23 / 7 |
 | Runtime bundle | 453 文件（catalog 逐文件 sha256 实测；安装态 455 = +根入口 +manifest。此数由 `verify.ps1` 数字对账步重算强制，改内容后忘记刷新即红） |
 | 主路由 / Operation / Lens | 22 / 31 / 8 |
-| 静态门禁 | `verify.ps1` 默认 29 步（`-IncludeHostEvidence` / `-IncludePackage` 各 +1）；本表计数由「文档数字与实测一致」步重算、步数由末步自计，增删门禁不必再手抄 |
+| 静态门禁 | `verify.ps1` 默认 31 步（`-IncludeHostEvidence` / `-IncludeDownstreamDisk` / `-IncludePackage` 各 +1）；本表计数由「文档数字与实测一致」步重算、步数由末步自计，增删门禁不必再手抄 |
 | 本地提交关卡 | pre-commit 两项（密钥两档扫描 + 清单自检）；本机一次性接线 `git config core.hooksPath scripts/githooks`，fresh clone 需重跑；宿主 hook 接线与重挂手册见 `evidence/20260925-gate-hardening.md` |
 | CI | GitHub Actions · `ubuntu-latest` · 全绿 |
 
@@ -202,7 +202,7 @@ A unified AI collaboration runtime package for software projects. Externally the
 | Registered / runtime / retired / excluded | 82 / **52** / 23 / 7 |
 | Runtime bundle | 453 files (per-file sha256 measured in the catalog; installed projection 455 = + root entry + manifest. Recomputed by the `verify.ps1` number-reconciliation gate, so a stale figure fails the run) |
 | Main routes / operations / lenses | 22 / 31 / 8 |
-| Static gates | `verify.ps1`, 24 steps by default (`-IncludeHostEvidence` / `-IncludePackage` add 1 each); the step count and the catalog-derived figures in this table are re-checked by those gates |
+| Static gates | `verify.ps1`, 31 steps by default (`-IncludeHostEvidence` / `-IncludeDownstreamDisk` / `-IncludePackage` add 1 each); the step count and the catalog-derived figures in this table are re-checked by those gates |
 | CI | GitHub Actions · `ubuntu-latest` · green |
 
 > [!WARNING]

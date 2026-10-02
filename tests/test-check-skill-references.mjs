@@ -558,3 +558,64 @@ test('面判定先解析：./ 与 .. 写法指向快照面必判红（过去按�
 });
 
 
+
+// ---------- 下发面：脚手架模板（2026-10-02 接入默认扫描面） ----------
+// 病：模板会整份拷进每一个新项目，它承诺的脚本本包若不下发，新项目一开工就拿到一句谎。
+// 2026-10-02 普查实测：55 份 `.template` 里 1 处硬命中（`_target-docs/文档索引.md.template`
+// 写「内容由 build-target-doc-index.mjs 刷新」，而该脚本只存在于 `sources/` 快照）。
+// 此前棘轮只看 `.md`，这 55 份文件从头到尾不在任何常驻断言眼下。
+
+test('模板面在默认扫描面内：.template 里的裸死脚本名判红（摘掉 template 这一支就测不出来）', () => {
+  w('skills/demo/SKILL.md', '正文干净。\n');
+  w('skills/demo/templates/x.md.template', '本表内容由 `ghost-index-builder.mjs` 刷新。\n');
+  const r = run();
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /skills\/demo\/templates\/x\.md\.template:1 死引·R3/, `模板正文必须按同一判据判：${r.out}`);
+});
+
+test('模板面的豁免无效：把下发面死引登记进基线仍判红，并点名「下发面」', () => {
+  w('skills/demo/SKILL.md', '正文干净。\n');
+  w('skills/demo/templates/x.md.template', '本表内容由 `ghost-index-builder.mjs` 刷新。\n');
+  // 登记的是模板面那一条——技能正文面的登记逻辑不得外溢到下发面。
+  baseline([{ rule: 'R3', file: 'skills/demo/templates/x.md.template', token: 'ghost-index-builder.mjs', why: '想拿登记换绿' }]);
+  const r = run();
+  assert.equal(r.code, 1, `下发面命中不能被基线洗绿：${r.out}`);
+  assert.match(r.out, /下发面/, `必须点名是「下发面不吃豁免」这条规矩拦的，而不是笼统一句未登记：${r.out}`);
+  assert.match(r.out, /\.template/u, '点名要落到那条模板文件名');
+});
+
+test('对照：同一份登记给技能正文面用着仍然有效（下发面规则没把整套豁免打死）', () => {
+  w('skills/demo/SKILL.md', '运行 `ghost.mjs` 收口。\n');
+  baseline([{ rule: 'R3', file: 'skills/demo/SKILL.md', token: 'ghost.mjs', why: '存量待收口' }]);
+  const r = run();
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /基线存量 1 处/);
+});
+
+// ---------- 空跑不算通过（本批接模板面时补的两道自证） ----------
+// 洞：`--scope` 指到不存在的目录时，旧写法是 `continue`——本次什么都不扫，汇总行照打
+// 「扫描 0 个文件…命中 0 处」并 exit 0。面名写错、目录被搬走、扩展名集合被改窄，三种塌法
+// 给出的都是「通过」。这与本包已登记过的四起「无声摘门」同形，故按 exit 2 判「门没跑起来」。
+
+test('扫描面不存在判 exit 2 并点名面名，不再静默跳过', () => {
+  w('skills/demo/SKILL.md', '运行 `ghost.mjs`。\n');
+  const r = run(['--scope', 'nosuchface']);
+  assert.equal(r.code, 2, `面名写错必须是「门没跑起来」的 2：${r.out}`);
+  assert.match(r.out, /扫描面不存在/u);
+  assert.doesNotMatch(r.out, /命中 0 处/, '没跑成的检查不得打印任何扫描读数');
+});
+
+test('面存在但一个可扫文件都没有判 exit 2（扩展名集合塌了只有这里能露出来）', () => {
+  mkdirSync(join(root, 'skills', 'demo'), { recursive: true });
+  w('skills/demo/notes.txt', '这不是 .md 也不是 .template。\n');
+  const r = run(['--scope', 'skills']);
+  assert.equal(r.code, 2, `零文件扫描面不能算通过：${r.out}`);
+  assert.match(r.out, /扫描面为空/u);
+});
+
+test('只扫虚拟面时不受盘面空判影响（下发件自扫门仍按 1 份虚拟面判）', () => {
+  // 盘面上一个 .md/.template 都没有，但 --virtual-only 给的正是本次要判的面。
+  const r = vrun('受管块/block.md', '执行：`node <skills-root>/tools/ghost.mjs`。\n');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /扫描 1 个文件（含虚拟面 1 份）/);
+});

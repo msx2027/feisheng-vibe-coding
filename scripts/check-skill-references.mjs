@@ -38,10 +38,13 @@
 //      路 B 复核实测过只比字面首段的四种放行写法——`./sources/…`、`skills/../sources/…`、
 //      `tools/../sources/…`、`SOURCES/…`（Windows 大小写不敏感时后者真能打开，故更危险）。
 //
-// 虚拟面（--virtual-md / --virtual-only）：下发件（受管块、脚手架模板）的真身在生成器里，
-//   只有落到目标仓库才有文件名，故本包的棘轮此前看不见注入后果。--virtual-md 给一份盘外内容
-//   起一个面名（`--virtual-md <面名> <内容文件>`，可重复），它与真实正文过同一套判据；
-//   --virtual-only 表示本次只扫虚拟面、不扫盘上面。虚拟面的命中按面名进基线键。
+// 虚拟面（--virtual-md / --virtual-only）：受管块的正身是生成器里的模板字符串，
+//   盘上没有对应文件，只有落到目标仓库才有文件名，故本包的棘轮此前看不见注入后果。
+//   --virtual-md 给一份盘外内容起一个面名（`--virtual-md <面名> <内容文件>`，可重复），
+//   它与真实正文过同一套判据；--virtual-only 表示本次只扫虚拟面、不扫盘上面。
+//   虚拟面的命中按面名进基线键。
+//   （2026-10-02 更正本注释早先的口径：脚手架模板 `.template` 的正身就在盘上，不需要虚拟面，
+//    已直接收进默认扫描面；此处只保留受管块一类「渲染出来的正文」用得到虚拟面。）
 //
 // 覆盖边界（有意不报的形态，别把它们当成已通过）：
 //   · 带目录前缀但非 `<skills仓库>/`、也非 `skills/` 的引用（如 `tools/check-ui-reuse.mjs`、
@@ -210,14 +213,28 @@ function suggestFix(token) {
 const scannedFiles = [];
 if (!virtualOnly) {
   for (const s of scopes) {
-    if (!existsSync(join(root, s))) continue;
+    if (!existsSync(join(root, s))) {
+      // 面名写错或目录被移走时必须响：静默 continue 会让本次只扫剩下的面，
+      // 汇总行照样打「命中 0 处」并 exit 0——那是一次没跑成的检查，不是一次通过的检查。
+      console.error(`✗ 扫描面不存在：${join(root, s)}（--scope ${scopes.join(',')}）`);
+      console.error('  改对名或把该面加回来；本检查器不把「扫不到东西」当成通过。');
+      process.exit(2);
+    }
     if (statSync(join(root, s)).isFile()) {
       scannedFiles.push(s);
       continue;
     }
-    for (const f of walk(s, [])) if (f.endsWith('.md')) scannedFiles.push(f);
+    // `.md` 之外还要收 `.template`：脚手架模板的正文会整份拷进每一个新项目，
+    // 它承诺的脚本本包若不下发，新项目一上来就拿到一句谎（2026-10-02 实测 55 份里 1 处硬命中）。
+    for (const f of walk(s, [])) if (/\.(md|template)$/u.test(f)) scannedFiles.push(f);
   }
   if (includeRootSkill && existsSync(join(root, 'SKILL.md'))) scannedFiles.push('SKILL.md');
+  if (scannedFiles.length === 0) {
+    console.error(`✗ 扫描面为空：--scope ${scopes.join(',')} 下没有任何 .md／.template 文件` +
+      (includeRootSkill ? '（根 SKILL.md 也不存在）' : ''));
+    console.error('  空跑不算通过：面、目录或本检查器的扩展名集合任一塌了，只有这里能露出来。');
+    process.exit(2);
+  }
 }
 // 虚拟面：正文来自盘外（生成器渲染结果），面名参与命中定位与基线键；内容缺失一律 fail-closed。
 const virtualTexts = new Map();
@@ -408,6 +425,15 @@ if (!Array.isArray(baseline.entries)) {
 const baselineKeys = new Map(
   baseline.entries.map((e) => [`${e.rule}|${e.file}|${e.token}`, e]),
 );
+// 下发面不吃基线豁免（与 scripts/check-runtime-block-refs.mjs 第 21-24 行同一条规矩，2026-10-02 接模板面时补）：
+// `.template` 的正文会整份拷进每一个新项目，把它的死引登记成「存量」只等于承认知道是谎报还要发。
+// 这里在扫之前就点名并非零，是为了让「想靠登记换绿」这个动作本身响一次，而不是静默地不生效。
+const deliveryRegistrations = baseline.entries.filter((e) => /\.template$/u.test(String(e.file ?? '')));
+if (deliveryRegistrations.length > 0) {
+  console.error(`✗ 基线里出现了下发面条目（${deliveryRegistrations.length} 条）：${deliveryRegistrations.map((e) => `${e.rule}|${e.file}|${e.token}`).join('、')}`);
+  console.error('  脚手架模板属下发面，死引用必须收口正文，不得用登记换绿——请删掉这些条目。');
+  process.exit(1);
+}
 
 let unregisteredHits = 0;
 let staleRegistrations = 0;
